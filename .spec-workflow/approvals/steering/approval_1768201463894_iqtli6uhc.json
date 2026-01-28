@@ -1,0 +1,29 @@
+{
+  "id": "approval_1768201463894_iqtli6uhc",
+  "title": "Structure Document (structure.md)",
+  "filePath": ".spec-workflow/steering/structure.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2026-01-12T07:04:23.894Z",
+  "category": "steering",
+  "categoryName": "steering",
+  "response": "Feedback Summary (1 comments):\n\nSpecific Text Comments:\n1. \"│   ├── controllers/            # コントローラー\n│   │   ...\": admin、apiの他、運営者、一般コンテスト参加者、一般サイト訪問者向けのコントローラ分類を追加してください。\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"selection\",\n      \"comment\": \"admin、apiの他、運営者、一般コンテスト参加者、一般サイト訪問者向けのコントローラ分類を追加してください。\",\n      \"timestamp\": \"2026-01-12T07:05:44.769Z\",\n      \"selectedText\": \"│   ├── controllers/            # コントローラー\\n│   │   ├── concerns/           # 共通コントローラーロジック\\n│   │   ├── admin/              # 管理者向けコントローラー\\n│   │   └── api/                # API用コントローラー\",\n      \"highlightColor\": {\n        \"bg\": \"rgba(255, 235, 59, 0.3)\",\n        \"border\": \"#FFEB3B\",\n        \"name\": \"#ffeb3b\"\n      },\n      \"id\": \"comment_1768201544769_63n7ietwa\",\n      \"startOffset\": 119,\n      \"endOffset\": 301\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nSpecific Text Comments:\\n1. \\\"│   ├── controllers/            # コントローラー\\n│   │   ...\\\": admin、apiの他、運営者、一般コンテスト参加者、一般サイト訪問者向けのコントローラ分類を追加してください。\\n\",\n  \"timestamp\": \"2026-01-12T07:07:31.041Z\"\n}",
+  "respondedAt": "2026-01-12T07:07:31.049Z",
+  "comments": [
+    {
+      "type": "selection",
+      "comment": "admin、apiの他、運営者、一般コンテスト参加者、一般サイト訪問者向けのコントローラ分類を追加してください。",
+      "timestamp": "2026-01-12T07:05:44.769Z",
+      "selectedText": "│   ├── controllers/            # コントローラー\n│   │   ├── concerns/           # 共通コントローラーロジック\n│   │   ├── admin/              # 管理者向けコントローラー\n│   │   └── api/                # API用コントローラー",
+      "highlightColor": {
+        "bg": "rgba(255, 235, 59, 0.3)",
+        "border": "#FFEB3B",
+        "name": "#ffeb3b"
+      },
+      "id": "comment_1768201544769_63n7ietwa",
+      "startOffset": 119,
+      "endOffset": 301
+    }
+  ]
+}

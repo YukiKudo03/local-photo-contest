@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/contest-templates/tasks.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-20T12:27:51.735Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768912071732_2pxvbqvzi",
+      "approvalTitle": "Contest Templates - Tasks Document"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-20T12:33:31.932Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768912071732_2pxvbqvzi",
+      "approvalTitle": "Contest Templates - Tasks Document"
+    }
+  ]
+}

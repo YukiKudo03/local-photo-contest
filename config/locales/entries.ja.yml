@@ -1,0 +1,101 @@
+ja:
+  activerecord:
+    models:
+      entry: 応募
+    attributes:
+      entry:
+        photo: 写真
+        title: タイトル
+        description: 説明
+        location: 撮影場所
+        taken_at: 撮影日
+        user: 応募者
+        contest: コンテスト
+        created_at: 応募日時
+        updated_at: 更新日時
+    errors:
+      models:
+        entry:
+          attributes:
+            photo:
+              blank: を入力してください
+              content_type_invalid: はJPEG、PNG、GIF形式のみ対応しています
+              file_size_too_large: は10MB以下にしてください
+            title:
+              too_long: は%{count}文字以内で入力してください
+            location:
+              too_long: は%{count}文字以内で入力してください
+            base:
+              contest_not_accepting: このコンテストは現在応募を受け付けていません
+
+  entries:
+    new:
+      title: 写真を応募
+    edit:
+      title: 応募を編集
+    show:
+      title: 応募詳細
+      edit: 編集する
+      delete: 削除する
+      delete_confirm: この応募を削除しますか？この操作は取り消せません。
+    form:
+      upload_photo: 写真をアップロード
+      upload_hint: JPEG、PNG、GIF形式（10MB以下）
+      current_photo: 現在の写真
+      click_to_select: クリックして写真を選択
+      or_drag_drop: またはドラッグ＆ドロップ
+      work_info: 作品情報
+      optional: 任意入力
+      title_placeholder: 作品のタイトル（任意）
+      title_hint: 100文字以内
+      description_placeholder: 写真についての説明（任意）
+      location_placeholder: 例：東京都渋谷区
+      submit_create: 応募する
+      submit_update: 更新する
+      cancel: キャンセル
+
+  my:
+    entries:
+      index:
+        title: マイ応募一覧
+        description: あなたが応募した作品の一覧です
+        no_entries: 応募作品がありません
+        encourage: コンテストに応募してみましょう
+        find_contests: コンテストを探す
+        submitted_at: に応募
+
+  organizers:
+    entries:
+      index:
+        title: 応募一覧
+        entries_count: 件の応募
+        no_entries: 応募がありません
+        no_entries_description: まだこのコンテストへの応募はありません
+        table:
+          photo: 写真
+          title: タイトル
+          submitter: 応募者
+          submitted_at: 応募日時
+          actions: 操作
+          view: 詳細
+          untitled: 無題
+      show:
+        title: 応募詳細
+        back: 応募一覧に戻る
+        entry_info: 応募情報
+        submitter: 応募者
+        submitted_at: 応募日時
+        location: 撮影場所
+        taken_at: 撮影日
+        description: 説明
+        contest_info: コンテスト情報
+        untitled: 無題
+
+  flash:
+    entries:
+      created: 応募が完了しました。
+      updated: 応募内容を更新しました。
+      destroyed: 応募を削除しました。
+      not_authorized: この操作を行う権限がありません。
+      not_editable: 応募期間が終了しているため編集できません。
+      not_deletable: 応募期間が終了しているため削除できません。

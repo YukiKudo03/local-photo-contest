@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "spot_vote_button_#{@spot.id}" do %>
+  <%= render "spots/vote_button", spot: @spot.reload %>
+<% end %>

@@ -1,0 +1,88 @@
+<!-- Page Header -->
+<div class="mb-8">
+  <h1 class="text-2xl font-bold text-gray-900">テンプレートとして保存</h1>
+  <p class="mt-1 text-sm text-gray-500">「<%= @contest.title %>」の設定をテンプレートとして保存します</p>
+</div>
+
+<div class="max-w-2xl">
+  <%= form_with model: @template, url: organizers_contest_templates_path(contest_id: @contest.id), class: "space-y-6" do |form| %>
+    <% if @template.errors.any? %>
+      <div class="rounded-md bg-red-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">エラーがあります</h3>
+            <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+              <% @template.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Template Name -->
+    <div>
+      <%= form.label :name, "テンプレート名", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500", placeholder: "例: 月例フォトコンテスト設定" %>
+      <p class="mt-1 text-xs text-gray-500">分かりやすい名前を付けてください（最大100文字）</p>
+    </div>
+
+    <!-- Preview of saved settings -->
+    <div class="bg-gray-50 rounded-lg p-4">
+      <h3 class="text-sm font-medium text-gray-900 mb-3">保存される設定</h3>
+      <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
+        <div>
+          <dt class="font-medium text-gray-500">テーマ</dt>
+          <dd class="text-gray-900"><%= @contest.theme.presence || "(未設定)" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">説明</dt>
+          <dd class="text-gray-900 line-clamp-2"><%= @contest.description.presence || "(未設定)" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">審査方法</dt>
+          <dd class="text-gray-900">
+            <%= case @contest.judging_method
+                when "judge_only" then "審査員のみ"
+                when "vote_only" then "投票のみ"
+                when "hybrid" then "ハイブリッド (#{@contest.judge_weight}%)"
+                end %>
+          </dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">入賞者数</dt>
+          <dd class="text-gray-900"><%= @contest.prize_count || 3 %>名</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">モデレーション</dt>
+          <dd class="text-gray-900"><%= @contest.moderation_enabled? ? "有効 (閾値: #{@contest.moderation_threshold}%)" : "無効" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">スポット必須</dt>
+          <dd class="text-gray-900"><%= @contest.require_spot? ? "必須" : "任意" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">カテゴリー</dt>
+          <dd class="text-gray-900"><%= @contest.category&.name || "(未設定)" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-500">エリア</dt>
+          <dd class="text-gray-900"><%= @contest.area&.name || "(未設定)" %></dd>
+        </div>
+      </dl>
+      <p class="mt-3 text-xs text-gray-500">※ タイトル、応募期間、ステータスは保存されません</p>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex items-center justify-end space-x-4">
+      <%= link_to "キャンセル", organizers_contest_path(@contest), class: "text-sm font-medium text-gray-600 hover:text-gray-700" %>
+      <%= form.submit "テンプレートを保存", class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

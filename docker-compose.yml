@@ -1,0 +1,141 @@
+# Docker Compose configuration for development
+# Usage:
+#   docker compose up              - Start all services
+#   docker compose up -d           - Start in detached mode
+#   docker compose down            - Stop all services
+#   docker compose logs -f web     - Follow web logs
+#   docker compose exec web bash   - Access web container shell
+#   docker compose exec web rails c - Access Rails console
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: lpc_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-local_photo_contest_development}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for caching and Action Cable)
+  redis:
+    image: redis:7-alpine
+    container_name: lpc_redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Rails Web Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: lpc_web
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
+      - rails_cache:/rails/tmp/cache
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_NAME: ${DB_NAME:-local_photo_contest_development}
+      REDIS_URL: redis://redis:6379/0
+      # AWS Rekognition (optional for local development)
+      AWS_REGION: ${AWS_REGION:-ap-northeast-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      # Moderation settings
+      MODERATION_ENABLED: ${MODERATION_ENABLED:-true}
+      MODERATION_PROVIDER: ${MODERATION_PROVIDER:-rekognition}
+      MODERATION_THRESHOLD: ${MODERATION_THRESHOLD:-60.0}
+    stdin_open: true
+    tty: true
+
+  # Background Job Worker (Solid Queue)
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: lpc_worker
+    command: bundle exec rails solid_queue:start
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_NAME: ${DB_NAME:-local_photo_contest_development}
+      REDIS_URL: redis://redis:6379/0
+      SKIP_DB_PREPARE: "true"
+      # AWS Rekognition
+      AWS_REGION: ${AWS_REGION:-ap-northeast-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      # Moderation settings
+      MODERATION_ENABLED: ${MODERATION_ENABLED:-true}
+      MODERATION_PROVIDER: ${MODERATION_PROVIDER:-rekognition}
+      MODERATION_THRESHOLD: ${MODERATION_THRESHOLD:-60.0}
+
+  # Tailwind CSS watcher (for development)
+  css:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: lpc_css
+    command: bundle exec rails tailwindcss:watch
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
+    environment:
+      RAILS_ENV: development
+      SKIP_DB_PREPARE: "true"
+    tty: true
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  bundle_cache:
+    driver: local
+  node_modules:
+    driver: local
+  rails_cache:
+    driver: local

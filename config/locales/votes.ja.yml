@@ -1,0 +1,42 @@
+ja:
+  activerecord:
+    models:
+      vote: 投票
+    attributes:
+      vote:
+        user: 投票者
+        entry: 作品
+        created_at: 投票日時
+    errors:
+      models:
+        vote:
+          attributes:
+            user_id:
+              taken: は既にこの作品に投票しています
+            base:
+              cannot_vote_own_entry: 自分の作品には投票できません
+              contest_not_accepting: このコンテストは現在投票を受け付けていません
+
+  votes:
+    button:
+      vote: 投票
+      unvote: 投票済み
+      cannot_vote_own: 自分の作品
+      login_required: ログインして投票
+    create:
+      success: 投票しました。
+      already_voted: 既に投票しています。
+    destroy:
+      success: 投票を取り消しました。
+      failed: 投票の取り消しに失敗しました。
+    voting_closed: 投票期間が終了しています。
+
+  my:
+    votes:
+      index:
+        title: 投票した作品
+        description: あなたが投票した作品の一覧です
+        no_votes: 投票した作品がありません
+        encourage: 気に入った作品に投票してみましょう
+        find_contests: コンテストを見る
+        voted_at: に投票

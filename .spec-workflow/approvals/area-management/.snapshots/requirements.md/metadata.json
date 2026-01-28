@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/area-management/requirements.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-19T14:02:26.642Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768831346637_acy4kf6pe",
+      "approvalTitle": "Area Management Requirements"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-19T14:05:15.277Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768831346637_acy4kf6pe",
+      "approvalTitle": "Area Management Requirements"
+    }
+  ]
+}

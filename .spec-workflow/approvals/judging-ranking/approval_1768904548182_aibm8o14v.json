@@ -1,0 +1,12 @@
+{
+  "id": "approval_1768904548182_aibm8o14v",
+  "title": "審査・ランキング機能 - 要件定義書",
+  "filePath": ".spec-workflow/specs/judging-ranking/requirements.md",
+  "type": "document",
+  "status": "approved",
+  "createdAt": "2026-01-20T10:22:28.182Z",
+  "category": "spec",
+  "categoryName": "judging-ranking",
+  "response": "ダッシュボードから承認",
+  "respondedAt": "2026-01-20T10:25:13.855Z"
+}

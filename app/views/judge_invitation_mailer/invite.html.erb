@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #3b82f6; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9fafb; }
+    .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .footer { padding: 20px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>審査員への招待</h1>
+    </div>
+    <div class="content">
+      <p>こんにちは、</p>
+
+      <p>あなたはフォトコンテスト「<strong><%= @contest.title %></strong>」の審査員として招待されました。</p>
+
+      <% if @contest.theme.present? %>
+        <p><strong>テーマ:</strong> <%= @contest.theme %></p>
+      <% end %>
+
+      <p>審査員として参加いただける場合は、以下のボタンをクリックして招待を承諾してください。</p>
+
+      <p style="text-align: center;">
+        <a href="<%= @accept_url %>" class="button">招待を確認する</a>
+      </p>
+
+      <p>この招待は<strong><%= JudgeInvitation::TOKEN_EXPIRY_DAYS %>日間</strong>有効です。</p>
+
+      <p>
+        ご不明な点がございましたら、コンテスト主催者にお問い合わせください。
+      </p>
+    </div>
+    <div class="footer">
+      <p>このメールは自動送信されています。心当たりがない場合は無視してください。</p>
+    </div>
+  </div>
+</body>
+</html>

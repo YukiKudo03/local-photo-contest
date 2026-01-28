@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/content-moderation/tasks.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-19T16:32:31.484Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768840351482_g5k5rjrwe",
+      "approvalTitle": "Content Moderation Tasks"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-19T16:32:57.250Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768840351482_g5k5rjrwe",
+      "approvalTitle": "Content Moderation Tasks"
+    }
+  ]
+}

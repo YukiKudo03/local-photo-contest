@@ -1,0 +1,21 @@
+{
+  "id": "approval_1768201170703_jscm3ifqg",
+  "title": "Tech Document (tech.md)",
+  "filePath": ".spec-workflow/steering/tech.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2026-01-12T06:59:30.703Z",
+  "category": "steering",
+  "categoryName": "steering",
+  "response": "Feedback Summary (1 comments):\n\nGeneral Comments:\n1. Ruby on Railsのみを用いる構成で再検討してください。\n\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"general\",\n      \"comment\": \"Ruby on Railsのみを用いる構成で再検討してください。\",\n      \"timestamp\": \"2026-01-12T07:01:38.844Z\",\n      \"id\": \"comment_1768201298844_wbccay6o1\"\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nGeneral Comments:\\n1. Ruby on Railsのみを用いる構成で再検討してください。\\n\\n\",\n  \"timestamp\": \"2026-01-12T07:01:43.367Z\"\n}",
+  "respondedAt": "2026-01-12T07:01:43.376Z",
+  "comments": [
+    {
+      "type": "general",
+      "comment": "Ruby on Railsのみを用いる構成で再検討してください。",
+      "timestamp": "2026-01-12T07:01:38.844Z",
+      "id": "comment_1768201298844_wbccay6o1"
+    }
+  ]
+}

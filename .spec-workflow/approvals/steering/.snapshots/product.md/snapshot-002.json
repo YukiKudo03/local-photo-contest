@@ -1,0 +1,16 @@
+{
+  "id": "snapshot_1768200917508_hoimc4j41",
+  "approvalId": "approval_1768200805370_jl0g0w67a",
+  "approvalTitle": "Product Document (product.md)",
+  "version": 2,
+  "timestamp": "2026-01-12T06:55:17.508Z",
+  "trigger": "revision_requested",
+  "status": "pending",
+  "content": "# Product Overview\n\n## Product Purpose\nローカル環境で動作する写真コンテスト管理システム。友人・家族・コミュニティ内での写真コンテストを簡単に開催・管理できるWebアプリケーション。インターネット接続を必要とせず、プライバシーを保護しながら楽しめる。\n\n## Target Users\n- **コミュニティ主催者**: 地域イベントや趣味グループで写真コンテストを開催したい人\n- **家族・友人グループ**: プライベートな写真コンテストを楽しみたい人\n- **教育機関**: 写真クラブやアートクラスでのコンテスト運営者\n- **企業内イベント**: 社内イベントとして写真コンテストを実施したい担当者\n\n## Key Features\n\n1. **コンテスト作成・管理**: テーマ設定、期間設定、ルール設定が可能なコンテスト管理機能\n2. **写真投稿**: 参加者が簡単に写真をアップロード・登録できる機能\n3. **投票システム**: 公平な投票と集計を行う機能（匿名投票、複数投票方式対応）\n4. **結果発表・表彰**: ランキング表示と結果の共有機能\n5. **ギャラリー表示**: 投稿された写真を美しく閲覧できるビューア\n\n## Business Objectives\n\n- ローカル環境で完結するプライベートな写真コンテスト体験を提供\n- 技術的な知識がなくても簡単にセットアップ・運営できる\n- 拡張可能で将来的な機能追加に対応できるアーキテクチャ\n\n## Success Metrics\n\n- **セットアップ完了時間**: 5分以内\n- **コンテスト作成時間**: 3分以内\n- **参加者の操作習得時間**: 初回利用でも直感的に操作可能\n\n## Product Principles\n\n1. **シンプルさ優先**: 複雑な設定なしで始められる\n2. **プライバシー第一**: 全てのデータはローカルに保存、外部送信なし\n3. **オフライン対応**: インターネット接続不要で動作\n\n## Monitoring & Visibility (if applicable)\n\n- **Dashboard Type**: Web-based（ブラウザからアクセス）\n- **Real-time Updates**: リアルタイム投票結果更新\n- **Key Metrics Displayed**: 投稿数、投票数、参加者数、ランキング\n- **Sharing Capabilities**: 結果のエクスポート（PDF/画像）\n\n## Future Vision\n\n### Potential Enhancements\n- **Remote Access**: 同一ネットワーク内の他デバイスからのアクセス\n- **Analytics**: 過去コンテストの統計・傾向分析\n- **Collaboration**: 複数の審査員による評価システム\n",
+  "fileStats": {
+    "size": 2631,
+    "lines": 51,
+    "lastModified": "2026-01-12T06:53:14.684Z"
+  },
+  "comments": []
+}

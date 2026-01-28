@@ -1,0 +1,163 @@
+/* Custom Leaflet map styles for Local Photo Contest */
+
+/* Base map container - ensure explicit height for Leaflet to work */
+.leaflet-container {
+  font-family: inherit;
+}
+
+/* Map container styles */
+.map-container {
+  width: 100%;
+  min-height: 300px;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Small map for forms and previews */
+.map-container-sm {
+  min-height: 200px;
+  height: 200px;
+}
+
+/* Medium map for detail views */
+.map-container-md {
+  min-height: 300px;
+  height: 300px;
+}
+
+/* Large map for full page views */
+.map-container-lg {
+  min-height: 400px;
+  height: 400px;
+}
+
+/* Extra large map for entries overview */
+.map-container-xl {
+  min-height: 500px;
+  height: 500px;
+}
+
+/* Responsive map container */
+@media (min-width: 768px) {
+  .map-container-md {
+    height: 350px;
+  }
+
+  .map-container-lg {
+    height: 450px;
+  }
+
+  .map-container-xl {
+    height: 600px;
+  }
+}
+
+/* Map loading state */
+.map-container--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-container--loading::after {
+  content: "地図を読み込み中...";
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Custom marker styles */
+.leaflet-marker-icon.selected {
+  filter: hue-rotate(120deg);
+}
+
+/* Popup styling to match app design */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.leaflet-popup-content {
+  margin: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.leaflet-popup-content .popup-title {
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.leaflet-popup-content .popup-subtitle {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+/* Coordinate display in forms */
+.coordinate-display {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: #6b7280;
+  padding: 0.25rem 0.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.25rem;
+}
+
+/* Custom marker icon (divIcon) */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.custom-marker svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s ease;
+}
+
+.custom-marker:hover svg {
+  transform: scale(1.1);
+}
+
+/* Selected marker state */
+.custom-marker.selected svg {
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.5));
+}
+
+/* Popup description style */
+.leaflet-popup-content .popup-description {
+  color: #4b5563;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Custom cluster marker */
+.custom-cluster-marker {
+  background: transparent;
+  border: none;
+}
+
+.custom-cluster-marker > div {
+  transition: transform 0.2s ease;
+}
+
+.custom-cluster-marker:hover > div {
+  transform: scale(1.15);
+}
+
+/* Entry popup styles */
+.entry-popup a {
+  text-decoration: none;
+}
+
+.entry-popup a:hover {
+  text-decoration: underline;
+}
+
+.cluster-popup {
+  max-width: 280px;
+}
+
+.cluster-popup > div:last-child > div:last-child {
+  border-bottom: none;
+}

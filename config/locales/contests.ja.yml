@@ -1,0 +1,31 @@
+ja:
+  activerecord:
+    models:
+      contest: コンテスト
+    attributes:
+      contest:
+        title: タイトル
+        description: 説明
+        theme: テーマ
+        status: ステータス
+        entry_start_at: 応募開始日時
+        entry_end_at: 応募終了日時
+        thumbnail: サムネイル画像
+        deleted_at: 削除日時
+    errors:
+      models:
+        contest:
+          attributes:
+            title:
+              blank: を入力してください
+              too_long: は%{count}文字以内で入力してください
+            theme:
+              too_long: は%{count}文字以内で入力してください
+            entry_end_at:
+              invalid: は開始日時より後にしてください
+  enums:
+    contest:
+      status:
+        draft: 下書き
+        published: 公開中
+        finished: 終了

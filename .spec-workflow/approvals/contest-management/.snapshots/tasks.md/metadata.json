@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/contest-management/tasks.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-12T12:01:33.208Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768219293205_g3n2ebtah",
+      "approvalTitle": "Tasks: 運営組織アカウント認証システム実装タスク"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-12T12:07:35.323Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768219293205_g3n2ebtah",
+      "approvalTitle": "Tasks: 運営組織アカウント認証システム実装タスク"
+    }
+  ]
+}

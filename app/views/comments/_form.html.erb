@@ -1,0 +1,18 @@
+<% comment ||= Comment.new %>
+<%= turbo_frame_tag "comment_form" do %>
+  <%= form_with model: [entry, comment], class: "space-y-4" do |f| %>
+    <div>
+      <% has_error = comment.errors[:body].present? %>
+      <%= f.text_area :body,
+          rows: 3,
+          placeholder: "コメントを入力...",
+          class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm #{has_error ? 'border-red-500' : ''}" %>
+      <% if has_error %>
+        <p class="mt-1 text-sm text-red-600"><%= comment.errors[:body].join(", ") %></p>
+      <% end %>
+    </div>
+    <div class="flex justify-end">
+      <%= f.submit "コメントする", class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
+<% end %>

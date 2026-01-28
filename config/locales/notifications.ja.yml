@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    models:
+      notification: 通知
+    attributes:
+      notification:
+        user: ユーザー
+        notifiable: 関連オブジェクト
+        notification_type: 通知タイプ
+        title: タイトル
+        body: 本文
+        read_at: 既読日時
+        created_at: 作成日時
+
+  my:
+    notifications:
+      index:
+        title: 通知
+        description: お知らせの一覧です
+        mark_all_as_read: すべて既読にする
+        no_notifications: 通知はありません
+        unread: 未読
+      mark_all_as_read:
+        success: すべての通知を既読にしました。
+
+  notifications:
+    types:
+      results_announced: 結果発表
+      entry_ranked: 入賞

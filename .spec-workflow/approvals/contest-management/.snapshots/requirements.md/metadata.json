@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/contest-management/requirements.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-12T11:32:36.095Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768217556090_6ezaw52eu",
+      "approvalTitle": "Requirements: 運営組織アカウントのログインシステム"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-12T11:34:51.349Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768217556090_6ezaw52eu",
+      "approvalTitle": "Requirements: 運営組織アカウントのログインシステム"
+    }
+  ]
+}

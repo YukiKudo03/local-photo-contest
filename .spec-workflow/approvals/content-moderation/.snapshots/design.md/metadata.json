@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/content-moderation/design.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-19T16:27:59.933Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768840079930_6ga7zwh96",
+      "approvalTitle": "Content Moderation Design"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-19T16:30:32.268Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768840079930_6ga7zwh96",
+      "approvalTitle": "Content Moderation Design"
+    }
+  ]
+}

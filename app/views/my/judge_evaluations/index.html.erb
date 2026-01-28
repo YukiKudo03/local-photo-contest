@@ -1,0 +1,44 @@
+<% content_for :title, "#{@contest.title} - 評価一覧" %>
+
+<!-- Breadcrumb -->
+<div class="mb-6">
+  <%= link_to my_judge_assignment_path(@contest_judge), class: "inline-flex items-center text-sm text-gray-500 hover:text-gray-700" do %>
+    <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    コンテスト詳細に戻る
+  <% end %>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= @contest.title %></h1>
+  <p class="text-gray-500 mb-6">評価する作品を選択してください</p>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <% @entries.each do |entry| %>
+      <% is_own = entry.user == current_user %>
+      <% is_evaluated = @contest_judge.fully_evaluated_entry?(entry) %>
+
+      <%= link_to(is_own ? "#" : my_judge_assignment_evaluation_path(@contest_judge, entry),
+                  class: "block rounded-lg overflow-hidden border-2 transition-all #{is_own ? 'opacity-50 cursor-not-allowed border-gray-200' : (is_evaluated ? 'border-green-500 hover:border-green-600' : 'border-gray-200 hover:border-indigo-500')}") do %>
+        <div class="aspect-square bg-gray-100">
+          <% if entry.photo.attached? %>
+            <%= image_tag entry.photo.variant(resize_to_fill: [200, 200]),
+                          class: "w-full h-full object-cover",
+                          loading: "lazy" %>
+          <% end %>
+        </div>
+        <div class="p-2 text-center">
+          <p class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || "無題" %></p>
+          <% if is_own %>
+            <span class="text-xs text-gray-500">自分の作品</span>
+          <% elsif is_evaluated %>
+            <span class="text-xs text-green-600">評価済み</span>
+          <% else %>
+            <span class="text-xs text-amber-600">未評価</span>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

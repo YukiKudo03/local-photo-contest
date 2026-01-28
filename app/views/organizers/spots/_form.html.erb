@@ -1,0 +1,111 @@
+<%= form_with model: [@contest, spot], url: spot.persisted? ? organizers_contest_spot_path(@contest, spot) : organizers_contest_spots_path(@contest), class: "space-y-6" do |f| %>
+  <% if spot.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= spot.errors.count %>件のエラーがあります
+          </h3>
+          <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+            <% spot.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">基本情報</h2>
+    </div>
+    <div class="p-6 space-y-6">
+      <!-- Name -->
+      <div>
+        <%= f.label :name, "スポット名", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :name, placeholder: "例：〇〇商店、△△神社、□□公園", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500">100文字以内で入力してください（必須）</p>
+      </div>
+
+      <!-- Category -->
+      <div>
+        <%= f.label :category, "カテゴリ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :category,
+          Spot::CATEGORY_NAMES.map { |k, v| [v, k] },
+          { include_blank: "選択してください" },
+          class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+        %>
+        <p class="mt-1 text-xs text-gray-500">スポットの種類を選択してください（必須）</p>
+      </div>
+
+      <!-- Address -->
+      <div>
+        <%= f.label :address, "住所", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :address, placeholder: "例：東京都渋谷区道玄坂1-1-1", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500">200文字以内（任意）</p>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <%= f.label :description, "説明", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_area :description, rows: 3, placeholder: "このスポットについての説明を入力してください", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
+        <p class="mt-1 text-xs text-gray-500">1000文字以内（任意）</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">座標設定</h2>
+      <p class="mt-1 text-sm text-gray-500">地図上をクリックしてスポットの座標を設定してください</p>
+    </div>
+    <div class="p-6 space-y-4">
+      <!-- Map for coordinate selection -->
+      <%
+        # Use contest's area coordinates as default center if available
+        default_lat = @contest.area&.latitude || 35.6812
+        default_lng = @contest.area&.longitude || 139.7671
+      %>
+      <div data-controller="coordinate-picker"
+           data-coordinate-picker-latitude-value="<%= spot.latitude || default_lat %>"
+           data-coordinate-picker-longitude-value="<%= spot.longitude || default_lng %>"
+           data-coordinate-picker-zoom-value="15"
+           class="space-y-4">
+        <div data-coordinate-picker-target="container" class="map-container map-container-md rounded-lg"></div>
+
+        <!-- Coordinate display -->
+        <div class="flex items-center space-x-4">
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">選択された座標</label>
+            <div data-coordinate-picker-target="display" class="<%= spot.latitude.present? ? 'text-gray-700' : 'text-gray-400' %> text-sm">
+              <% if spot.latitude.present? && spot.longitude.present? %>
+                緯度: <%= spot.latitude %>, 経度: <%= spot.longitude %>
+              <% else %>
+                地図をクリックして座標を選択してください
+              <% end %>
+            </div>
+          </div>
+          <button type="button"
+                  data-action="coordinate-picker#clear"
+                  class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            クリア
+          </button>
+        </div>
+
+        <!-- Hidden fields for coordinates -->
+        <%= f.hidden_field :latitude, data: { coordinate_picker_target: "latitudeInput" } %>
+        <%= f.hidden_field :longitude, data: { coordinate_picker_target: "longitudeInput" } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex items-center justify-end space-x-4">
+    <%= link_to "キャンセル", organizers_contest_spots_path(@contest), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
+    <%= f.submit spot.persisted? ? "更新する" : "登録する", class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+  </div>
+<% end %>

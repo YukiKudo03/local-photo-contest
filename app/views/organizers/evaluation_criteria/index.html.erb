@@ -1,0 +1,101 @@
+<!-- Page Header -->
+<div class="mb-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <%= link_to organizers_contest_path(@contest), class: "inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-2" do %>
+        <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <%= @contest.title %>に戻る
+      <% end %>
+      <h1 class="text-2xl font-bold text-gray-900">評価基準管理</h1>
+    </div>
+    <% unless @contest.results_announced? %>
+      <%= link_to new_organizers_contest_evaluation_criterium_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
+        <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        新規追加
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-semibold text-gray-900">評価基準一覧</h2>
+    <p class="mt-1 text-sm text-gray-500">審査員が作品を評価する際に使用する基準を設定します</p>
+  </div>
+
+  <% if @criteria.any? %>
+    <div class="divide-y divide-gray-100">
+      <% @criteria.each do |criterion| %>
+        <div class="p-6 flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center">
+              <span class="inline-flex items-center justify-center w-8 h-8 bg-indigo-100 rounded-full text-indigo-600 font-medium text-sm">
+                <%= criterion.position %>
+              </span>
+              <h3 class="ml-3 text-base font-medium text-gray-900"><%= criterion.name %></h3>
+              <span class="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                最大 <%= criterion.max_score %> 点
+              </span>
+            </div>
+            <% if criterion.description.present? %>
+              <p class="mt-2 ml-11 text-sm text-gray-500"><%= criterion.description %></p>
+            <% end %>
+          </div>
+          <% unless @contest.results_announced? %>
+            <div class="ml-4 flex items-center space-x-2">
+              <%= link_to edit_organizers_contest_evaluation_criterium_path(@contest, criterion),
+                  class: "text-indigo-600 hover:text-indigo-800 text-sm font-medium" do %>
+                編集
+              <% end %>
+              <%= button_to organizers_contest_evaluation_criterium_path(@contest, criterion),
+                  method: :delete,
+                  data: { turbo_confirm: "この評価基準を削除しますか？" },
+                  class: "text-red-600 hover:text-red-800 text-sm font-medium" do %>
+                削除
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="p-12 text-center">
+      <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900">評価基準がありません</h3>
+      <p class="mt-2 text-sm text-gray-500">評価基準を追加して審査の指標を設定しましょう</p>
+      <% unless @contest.results_announced? %>
+        <div class="mt-6">
+          <%= link_to new_organizers_contest_evaluation_criterium_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
+            <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            最初の評価基準を追加
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Info Card -->
+<div class="mt-6 bg-blue-50 rounded-xl p-6">
+  <div class="flex">
+    <svg class="h-6 w-6 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-blue-800">評価基準について</h3>
+      <p class="mt-2 text-sm text-blue-700">
+        評価基準は審査員が作品を採点する際の指標となります。
+        「構図」「色彩」「テーマへの適合性」など、複数の観点から評価を行うことができます。
+        各基準には最大スコアを設定でき、審査員は0から最大スコアまでの範囲で採点します。
+      </p>
+    </div>
+  </div>
+</div>

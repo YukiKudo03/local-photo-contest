@@ -1,0 +1,21 @@
+{
+  "id": "approval_1768200805370_jl0g0w67a",
+  "title": "Product Document (product.md)",
+  "filePath": ".spec-workflow/steering/product.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2026-01-12T06:53:25.370Z",
+  "category": "steering",
+  "categoryName": "steering",
+  "response": "Feedback Summary (1 comments):\n\nGeneral Comments:\n1. local-photo-contestの意味ですが、「地域を限定して開催する写真コンテストの支援と管理システム」となります。必要に応じてプロジェクト名の再提案をお願いします。\n\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"general\",\n      \"comment\": \"local-photo-contestの意味ですが、「地域を限定して開催する写真コンテストの支援と管理システム」となります。必要に応じてプロジェクト名の再提案をお願いします。\",\n      \"timestamp\": \"2026-01-12T06:55:10.338Z\",\n      \"id\": \"comment_1768200910338_ul21jo1lq\"\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nGeneral Comments:\\n1. local-photo-contestの意味ですが、「地域を限定して開催する写真コンテストの支援と管理システム」となります。必要に応じてプロジェクト名の再提案をお願いします。\\n\\n\",\n  \"timestamp\": \"2026-01-12T06:55:17.497Z\"\n}",
+  "respondedAt": "2026-01-12T06:55:17.509Z",
+  "comments": [
+    {
+      "type": "general",
+      "comment": "local-photo-contestの意味ですが、「地域を限定して開催する写真コンテストの支援と管理システム」となります。必要に応じてプロジェクト名の再提案をお願いします。",
+      "timestamp": "2026-01-12T06:55:10.338Z",
+      "id": "comment_1768200910338_ul21jo1lq"
+    }
+  ]
+}

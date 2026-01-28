@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/judging-ranking/requirements.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-20T10:22:28.185Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768904548182_aibm8o14v",
+      "approvalTitle": "審査・ランキング機能 - 要件定義書"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-20T10:25:13.853Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768904548182_aibm8o14v",
+      "approvalTitle": "審査・ランキング機能 - 要件定義書"
+    }
+  ]
+}

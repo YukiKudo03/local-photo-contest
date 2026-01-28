@@ -1,0 +1,45 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "← コンテスト詳細に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">統計ダッシュボード</h1>
+    <span class="text-gray-500"><%= @contest.title %></span>
+  </div>
+
+  <!-- サマリーカード -->
+  <%= render "summary_cards", summary: @summary %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- 左カラム -->
+    <div>
+      <!-- 応募数推移グラフ -->
+      <%= render "entry_trend_chart",
+                 daily_entries: @daily_entries,
+                 weekly_entries: @weekly_entries,
+                 show_weekly_option: @show_weekly_option %>
+
+      <!-- 人気スポット -->
+      <%= render "spot_chart", spot_rankings: @spot_rankings %>
+    </div>
+
+    <!-- 右カラム -->
+    <div>
+      <!-- 投票分析 -->
+      <%= render "vote_analysis",
+                 voting_started: @voting_started,
+                 daily_votes: @daily_votes,
+                 vote_summary: @vote_summary,
+                 top_voted_entries: @top_voted_entries %>
+
+      <!-- エリア別円グラフ -->
+      <%= render "area_pie_chart", area_distribution: @area_distribution %>
+    </div>
+  </div>
+
+  <!-- 発掘統計 -->
+  <div class="mt-6">
+    <%= render "discovery", contest: @contest %>
+  </div>
+</div>

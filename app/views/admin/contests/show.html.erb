@@ -1,0 +1,154 @@
+<% content_for :title, @contest.title %>
+
+<div class="mb-6">
+  <%= link_to "← コンテスト一覧に戻る", admin_contests_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+</div>
+
+<div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+  <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+    <div>
+      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= @contest.title %></h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">主催者: <%= link_to @contest.user.display_name, admin_user_path(@contest.user), class: "text-indigo-600 hover:text-indigo-900" %></p>
+    </div>
+    <div class="flex space-x-3">
+      <% if @contest.accepting_entries? %>
+        <%= button_to "強制終了", force_finish_admin_contest_path(@contest), method: :patch,
+            data: { turbo_confirm: "このコンテストを強制終了しますか？" },
+            class: "inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700" %>
+      <% end %>
+      <%= button_to "削除", admin_contest_path(@contest), method: :delete,
+          data: { turbo_confirm: "本当にこのコンテストを削除しますか？" },
+          class: "inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700" %>
+    </div>
+  </div>
+  <div class="border-t border-gray-200">
+    <dl>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">テーマ</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @contest.theme %></dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">ステータス</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+            <%= case @contest.status
+                when 'draft' then 'bg-gray-100 text-gray-800'
+                when 'accepting_entries' then 'bg-green-100 text-green-800'
+                when 'finished' then 'bg-blue-100 text-blue-800'
+                else 'bg-gray-100 text-gray-800'
+                end %>">
+            <%= case @contest.status
+                when 'draft' then '下書き'
+                when 'accepting_entries' then '応募受付中'
+                when 'finished' then '終了'
+                else @contest.status
+                end %>
+          </span>
+        </dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">応募期間</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @contest.entry_start_at&.strftime("%Y/%m/%d %H:%M") || "-" %> 〜 <%= @contest.entry_end_at&.strftime("%Y/%m/%d %H:%M") || "-" %>
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">作成日</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @contest.created_at.strftime("%Y年%m月%d日 %H:%M") %></dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-4 mb-6">
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">総応募数</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= @stats[:total_entries] %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">総投票数</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= @stats[:total_votes] %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">審査員数</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= @stats[:judges_count] %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">モデレーション待ち</dt>
+            <dd class="text-2xl font-semibold <%= @stats[:pending_moderation] > 0 ? 'text-amber-600' : 'text-gray-900' %>"><%= @stats[:pending_moderation] %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Entries -->
+<% if @entries.any? %>
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">最近の応募</h3>
+    </div>
+    <ul class="divide-y divide-gray-200">
+      <% @entries.each do |entry| %>
+        <li class="px-4 py-4">
+          <div class="flex items-center space-x-4">
+            <% if entry.photo.attached? %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), class: "h-12 w-12 rounded object-cover" %>
+            <% end %>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900"><%= entry.title.presence || "無題" %></p>
+              <p class="text-sm text-gray-500">
+                <%= link_to entry.user.display_name, admin_user_path(entry.user), class: "text-indigo-600 hover:text-indigo-900" %>
+                - <%= entry.created_at.strftime("%Y/%m/%d %H:%M") %>
+              </p>
+            </div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              <%= case entry.moderation_status
+                  when 'moderation_approved' then 'bg-green-100 text-green-800'
+                  when 'moderation_hidden' then 'bg-red-100 text-red-800'
+                  when 'moderation_requires_review' then 'bg-yellow-100 text-yellow-800'
+                  else 'bg-gray-100 text-gray-800'
+                  end %>">
+              <%= case entry.moderation_status
+                  when 'moderation_approved' then '承認済み'
+                  when 'moderation_hidden' then '非表示'
+                  when 'moderation_requires_review' then '要確認'
+                  else '審査待ち'
+                  end %>
+            </span>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

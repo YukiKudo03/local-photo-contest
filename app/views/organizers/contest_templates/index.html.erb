@@ -1,0 +1,86 @@
+<!-- Page Header -->
+<div class="mb-8 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">テンプレート一覧</h1>
+    <p class="mt-1 text-sm text-gray-500">保存したテンプレートを管理します</p>
+  </div>
+</div>
+
+<!-- Template Grid -->
+<% if @templates.any? %>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @templates.each do |template| %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-5">
+          <!-- Template Name -->
+          <h3 class="text-lg font-semibold text-gray-900 line-clamp-1"><%= template.name %></h3>
+
+          <!-- Source Contest -->
+          <p class="mt-1 text-sm text-gray-500">
+            元コンテスト: <%= template.source_contest_title %>
+          </p>
+
+          <!-- Template Details -->
+          <div class="mt-4 space-y-2 text-sm text-gray-600">
+            <% if template.theme.present? %>
+              <div class="flex items-start">
+                <span class="font-medium text-gray-500 w-24 shrink-0">テーマ:</span>
+                <span class="line-clamp-1"><%= template.theme %></span>
+              </div>
+            <% end %>
+            <% if template.category.present? %>
+              <div class="flex items-start">
+                <span class="font-medium text-gray-500 w-24 shrink-0">カテゴリー:</span>
+                <span><%= template.category.name %></span>
+              </div>
+            <% end %>
+            <% if template.area.present? %>
+              <div class="flex items-start">
+                <span class="font-medium text-gray-500 w-24 shrink-0">エリア:</span>
+                <span><%= template.area.name %></span>
+              </div>
+            <% end %>
+            <div class="flex items-start">
+              <span class="font-medium text-gray-500 w-24 shrink-0">審査方法:</span>
+              <span>
+                <%= case template.judging_method
+                    when "judge_only" then "審査員のみ"
+                    when "vote_only" then "投票のみ"
+                    when "hybrid" then "ハイブリッド"
+                    end %>
+              </span>
+            </div>
+          </div>
+
+          <!-- Created At -->
+          <div class="mt-4 text-xs text-gray-400">
+            作成日: <%= template.created_at.strftime('%Y/%m/%d') %>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+          <%= link_to new_organizers_contest_path(template_id: template.id), class: "inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700" do %>
+            <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            このテンプレートから作成
+          <% end %>
+
+          <%= button_to organizers_contest_template_path(template), method: :delete, data: { turbo_confirm: "「#{template.name}」を削除してもよろしいですか？" }, class: "text-sm font-medium text-red-600 hover:text-red-700" do %>
+            削除
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <!-- Empty State -->
+  <div class="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
+    <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">テンプレートがありません</h3>
+    <p class="mt-2 text-sm text-gray-500">コンテスト詳細ページから「テンプレートとして保存」でテンプレートを作成できます</p>
+  </div>
+<% end %>

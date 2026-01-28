@@ -1,0 +1,82 @@
+<div class="container mx-auto max-w-3xl px-4 py-8">
+  <!-- Page Header -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">通知</h1>
+        <p class="mt-1 text-sm text-gray-500">お知らせの一覧です</p>
+      </div>
+      <% if @notifications.unread.any? %>
+        <%= button_to mark_all_as_read_my_notifications_path, method: :post, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" do %>
+          <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          すべて既読にする
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @notifications.any? %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+      <% @notifications.each do |notification| %>
+        <%= link_to my_notification_path(notification), class: "block p-4 hover:bg-gray-50 transition-colors #{notification.unread? ? 'bg-indigo-50/50' : ''}" do %>
+          <div class="flex items-start">
+            <!-- Icon -->
+            <div class="flex-shrink-0">
+              <% if notification.notification_type == "entry_ranked" %>
+                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <svg class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                </div>
+              <% else %>
+                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Content -->
+            <div class="ml-4 flex-1 min-w-0">
+              <div class="flex items-center">
+                <p class="text-sm font-medium text-gray-900 <%= notification.unread? ? 'font-semibold' : '' %>">
+                  <%= notification.title %>
+                </p>
+                <% if notification.unread? %>
+                  <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                    未読
+                  </span>
+                <% end %>
+              </div>
+              <% if notification.body.present? %>
+                <p class="mt-1 text-sm text-gray-500 line-clamp-2"><%= notification.body %></p>
+              <% end %>
+              <p class="mt-1 text-xs text-gray-400">
+                <%= time_ago_in_words(notification.created_at) %>前
+              </p>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flex-shrink-0 ml-4">
+              <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="p-12 text-center">
+        <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <p class="mt-4 text-gray-500">通知がありません</p>
+      </div>
+    </div>
+  <% end %>
+</div>

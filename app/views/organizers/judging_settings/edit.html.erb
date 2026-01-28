@@ -1,0 +1,141 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "← コンテスト詳細に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-6">審査設定: <%= @contest.title %></h1>
+
+  <% if @contest.published? || @contest.finished? %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4 mb-6">
+      <p class="text-yellow-800">
+        <strong>注意:</strong> コンテスト公開後は審査方式を変更できません。配点設定や入賞者数の調整のみ可能です。
+      </p>
+    </div>
+  <% end %>
+
+  <%= form_with model: @contest, url: organizers_contest_judging_settings_path(@contest), method: :patch, local: true, data: { controller: "judging-settings" } do |f| %>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- 審査方式設定 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">審査方式</h2>
+
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <%= f.radio_button :judging_method, "judge_only",
+                class: "mt-1 mr-3",
+                data: { action: "change->judging-settings#methodChanged", judging_settings_target: "methodRadio" },
+                disabled: !@contest.draft? %>
+            <div>
+              <label for="contest_judging_method_judge_only" class="font-medium cursor-pointer">審査員評価のみ</label>
+              <p class="text-sm text-gray-500">審査員のスコアのみでランキングを決定します</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <%= f.radio_button :judging_method, "vote_only",
+                class: "mt-1 mr-3",
+                data: { action: "change->judging-settings#methodChanged", judging_settings_target: "methodRadio" },
+                disabled: !@contest.draft? %>
+            <div>
+              <label for="contest_judging_method_vote_only" class="font-medium cursor-pointer">一般投票のみ</label>
+              <p class="text-sm text-gray-500">投票数のみでランキングを決定します</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <%= f.radio_button :judging_method, "hybrid",
+                class: "mt-1 mr-3",
+                data: { action: "change->judging-settings#methodChanged", judging_settings_target: "methodRadio" },
+                disabled: !@contest.draft? %>
+            <div>
+              <label for="contest_judging_method_hybrid" class="font-medium cursor-pointer">ハイブリッド</label>
+              <p class="text-sm text-gray-500">審査員評価と投票数を組み合わせてランキングを決定します</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ハイブリッド時の配分設定 -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-md" data-judging-settings-target="hybridSettings" style="<%= 'display: none;' unless @contest.judging_hybrid? %>">
+          <h3 class="font-medium mb-3">配分比率</h3>
+
+          <div class="mb-4">
+            <%= f.range_field :judge_weight,
+                min: 0, max: 100, step: 5,
+                class: "w-full",
+                data: { action: "input->judging-settings#weightChanged", judging_settings_target: "weightSlider" } %>
+          </div>
+
+          <div class="flex justify-between text-sm">
+            <span>審査員: <span data-judging-settings-target="judgeWeight"><%= @contest.judge_weight || 70 %></span>%</span>
+            <span>投票: <span data-judging-settings-target="voteWeight"><%= 100 - (@contest.judge_weight || 70) %></span>%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 結果発表設定 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">結果発表設定</h2>
+
+        <div class="space-y-4">
+          <div>
+            <%= f.label :prize_count, "入賞者数", class: "block font-medium mb-1" %>
+            <%= f.select :prize_count, (1..10).map { |n| ["#{n}位まで", n] },
+                { selected: @contest.prize_count || 3 },
+                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+            <p class="text-sm text-gray-500 mt-1">入賞として表彰する順位の数</p>
+          </div>
+
+          <div class="flex items-center">
+            <%= f.check_box :show_detailed_scores, class: "mr-3 h-4 w-4" %>
+            <%= f.label :show_detailed_scores, "詳細スコアを参加者に公開", class: "font-medium" %>
+          </div>
+          <p class="text-sm text-gray-500 ml-7">有効にすると、参加者は各評価項目のスコア内訳を確認できます</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 評価基準 -->
+    <div class="mt-8 bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h2 class="text-lg font-semibold">評価基準</h2>
+        <%= link_to "評価基準を管理", organizers_contest_evaluation_criteria_path(@contest),
+            class: "text-blue-600 hover:text-blue-800 text-sm" %>
+      </div>
+
+      <% if @evaluation_criteria.any? %>
+        <div class="divide-y divide-gray-200">
+          <% @evaluation_criteria.each do |criterion| %>
+            <div class="px-6 py-4 flex items-center justify-between">
+              <div>
+                <p class="font-medium"><%= criterion.name %></p>
+                <% if criterion.description.present? %>
+                  <p class="text-sm text-gray-500"><%= criterion.description %></p>
+                <% end %>
+              </div>
+              <div class="text-right">
+                <span class="text-lg font-semibold"><%= criterion.max_score %></span>
+                <span class="text-sm text-gray-500">点</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div class="flex justify-between">
+            <span class="font-medium">合計</span>
+            <span class="font-semibold"><%= @evaluation_criteria.sum(:max_score) %>点</span>
+          </div>
+        </div>
+      <% else %>
+        <div class="px-6 py-8 text-center text-gray-500">
+          <p>まだ評価基準が設定されていません</p>
+          <%= link_to "評価基準を追加する", new_organizers_contest_evaluation_criterium_path(@contest),
+              class: "inline-block mt-2 text-blue-600 hover:text-blue-800" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+      <%= f.submit "設定を保存", class: "bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

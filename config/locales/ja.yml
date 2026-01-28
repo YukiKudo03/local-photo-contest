@@ -1,0 +1,156 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      terms_of_service: 利用規約
+      terms_acceptance: 利用規約同意
+      category: カテゴリ
+      area: 地域
+      contest: コンテスト
+      entry: 応募作品
+    attributes:
+      category:
+        name: カテゴリ名
+        description: 説明
+        position: 表示順
+      area:
+        name: 地域名
+        position: 表示順
+      contest:
+        category: カテゴリ
+        category_id: カテゴリ
+        judging_method: 審査方式
+        judge_weight: 審査員評価の重み
+        prize_count: 入賞者数
+        show_detailed_scores: 詳細スコアを表示
+        results_announced_at: 結果発表日時
+      contest_ranking:
+        rank: 順位
+        total_score: 総合スコア
+        judge_score: 審査員スコア
+        vote_count: 投票数
+      judge_invitation:
+        email: メールアドレス
+        status: ステータス
+        invited_at: 招待日時
+        responded_at: 回答日時
+        expires_at: 有効期限
+      entry:
+        area: 地域
+        area_id: 地域
+      user:
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+        role: 権限
+        current_password: 現在のパスワード
+        remember_me: ログイン状態を保持する
+      terms_of_service:
+        version: バージョン
+        content: 内容
+        published_at: 公開日時
+      terms_acceptance:
+        accepted_at: 同意日時
+        ip_address: IPアドレス
+    errors:
+      messages:
+        record_invalid: "バリデーションに失敗しました: %{errors}"
+      models:
+        user:
+          attributes:
+            email:
+              blank: を入力してください
+              taken: はすでに使用されています
+              invalid: は有効なメールアドレスではありません
+            password:
+              blank: を入力してください
+              too_short: は%{count}文字以上で入力してください
+            password_confirmation:
+              confirmation: とパスワードが一致しません
+  errors:
+    messages:
+      blank: を入力してください
+      taken: はすでに使用されています
+      too_short: は%{count}文字以上で入力してください
+      too_long: は%{count}文字以下で入力してください
+      invalid: は有効ではありません
+      confirmation: と%{attribute}が一致しません
+  helpers:
+    submit:
+      create: 作成する
+      update: 更新する
+      submit: 送信する
+    label:
+      user:
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+  date:
+    formats:
+      default: "%Y年%m月%d日"
+      short: "%m/%d"
+      long: "%Y年%m月%d日(%a)"
+  time:
+    formats:
+      default: "%Y年%m月%d日 %H:%M"
+      short: "%m/%d %H:%M"
+      long: "%Y年%m月%d日(%a) %H:%M"
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: 約1時間
+        other: 約%{count}時間
+      about_x_months:
+        one: 約1ヶ月
+        other: 約%{count}ヶ月
+      about_x_years:
+        one: 約1年
+        other: 約%{count}年
+      almost_x_years:
+        one: 1年弱
+        other: "%{count}年弱"
+      half_a_minute: 30秒前後
+      less_than_x_minutes:
+        one: 1分以内
+        other: "%{count}分以内"
+      less_than_x_seconds:
+        one: 1秒以内
+        other: "%{count}秒以内"
+      over_x_years:
+        one: 1年以上
+        other: "%{count}年以上"
+      x_days:
+        one: 1日
+        other: "%{count}日"
+      x_minutes:
+        one: 1分
+        other: "%{count}分"
+      x_months:
+        one: 1ヶ月
+        other: "%{count}ヶ月"
+      x_seconds:
+        one: 1秒
+        other: "%{count}秒"
+      x_years:
+        one: 1年
+        other: "%{count}年"
+  enums:
+    contest:
+      judging_method:
+        judge_only: 審査員評価のみ
+        vote_only: 一般投票のみ
+        hybrid: ハイブリッド
+    judge_invitation:
+      status:
+        pending: 招待中
+        accepted: 承諾済み
+        declined: 辞退
+        expired: 期限切れ
+  flash:
+    actions:
+      create:
+        success: 正常に作成されました
+      update:
+        success: 正常に更新されました
+      destroy:
+        success: 正常に削除されました

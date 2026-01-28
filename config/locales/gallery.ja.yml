@@ -1,0 +1,30 @@
+ja:
+  gallery:
+    index:
+      title: フォトギャラリー
+      subtitle: すべてのコンテスト作品をご覧いただけます
+      filter:
+        contest_label: コンテスト
+        all_contests: すべてのコンテスト
+        sort_label: 並び順
+        newest: 新着順
+        popular: 人気順
+        oldest: 古い順
+        submit: 絞り込む
+        clear: クリア
+      results_count: "%{count}作品"
+      empty:
+        title: 作品がありません
+        description: まだ応募作品がありません
+        filtered_description: このコンテストにはまだ応募作品がありません
+        action: コンテスト一覧を見る
+      entry:
+        untitled: 無題
+
+  views:
+    pagination:
+      first: 最初
+      last: 最後
+      previous: 前へ
+      next: 次へ
+      truncate: "..."

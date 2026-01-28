@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/content-moderation/requirements.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-19T16:22:22.730Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768839742728_ksuzr9aak",
+      "approvalTitle": "Content Moderation Requirements"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-19T16:26:26.251Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768839742728_ksuzr9aak",
+      "approvalTitle": "Content Moderation Requirements"
+    }
+  ]
+}

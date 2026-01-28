@@ -1,0 +1,247 @@
+<%= form_with model: [:organizers, contest], class: "space-y-6" do |f| %>
+  <% if contest.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(contest.errors.count, "件のエラー") %>があります
+          </h3>
+          <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+            <% contest.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">基本情報</h2>
+    </div>
+    <div class="p-6 space-y-6">
+      <!-- Title -->
+      <div>
+        <%= f.label :title, "タイトル", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :title, placeholder: "コンテストのタイトルを入力", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500">100文字以内で入力してください（必須）</p>
+      </div>
+
+      <!-- Theme -->
+      <div>
+        <%= f.label :theme, "テーマ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :theme, placeholder: "例：春の風景、地元の祭り", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500">255文字以内（任意）</p>
+      </div>
+
+      <!-- Category -->
+      <div>
+        <%= f.label :category_id, "カテゴリ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.select :category_id,
+          options_for_select(
+            [["カテゴリを選択（任意）", ""]] + @categories.map { |c| [c.name, c.id] },
+            contest.category_id
+          ),
+          {},
+          class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+        %>
+        <p class="mt-1 text-xs text-gray-500">コンテストの分類を選択してください</p>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <%= f.label :description, "説明", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_area :description, rows: 5, placeholder: "コンテストの詳細な説明を入力してください", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">応募期間</h2>
+    </div>
+    <div class="p-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Entry Start Date -->
+        <div>
+          <%= f.label :entry_start_at, "応募開始日時", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.datetime_local_field :entry_start_at, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        </div>
+
+        <!-- Entry End Date -->
+        <div>
+          <%= f.label :entry_end_at, "応募終了日時", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.datetime_local_field :entry_end_at, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-gray-500">未設定の場合、応募期間の制限なしとなります</p>
+    </div>
+  </div>
+
+  <% if @areas.present? %>
+    <%
+      areas_json = @areas.map { |a|
+        {
+          id: a.id,
+          name: a.name,
+          latitude: a.latitude&.to_f,
+          longitude: a.longitude&.to_f,
+          boundary_geojson: a.boundary_geojson
+        }
+      }
+    %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+         data-controller="area-select"
+         data-area-select-areas-value="<%= areas_json.to_json %>">
+      <div class="px-6 py-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-900">エリア設定</h2>
+        <p class="mt-1 text-sm text-gray-500">コンテストの撮影エリアを指定します（任意）</p>
+      </div>
+      <div class="p-6 space-y-6">
+        <!-- Area Select -->
+        <div>
+          <%= f.label :area_id, "エリア", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.select :area_id,
+            options_for_select(
+              [["エリアを選択（任意）", ""]] + @areas.map { |a| [a.name, a.id] },
+              contest.area_id
+            ),
+            {},
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors",
+            data: { area_select_target: "select", action: "change->area-select#areaChanged" }
+          %>
+          <p class="mt-1 text-xs text-gray-500">
+            登録済みのエリアから選択してください。
+            <%= link_to "新しいエリアを作成", new_organizers_area_path, class: "text-indigo-600 hover:text-indigo-800", target: "_blank" %>
+          </p>
+        </div>
+
+        <!-- Map Preview -->
+        <div data-area-select-target="mapWrapper" class="<%= contest.area_id.blank? ? 'hidden' : '' %>">
+          <label class="block text-sm font-medium text-gray-700 mb-2">エリアプレビュー</label>
+          <div data-area-select-target="mapContainer" class="map-container map-container-sm rounded-lg"></div>
+        </div>
+
+        <!-- Require Spot Checkbox -->
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :require_spot, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :require_spot, "スポット指定を必須にする", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">チェックすると、投稿時にスポットの選択が必須になります</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">サムネイル画像</h2>
+    </div>
+    <div class="p-6">
+      <% if contest.thumbnail.attached? %>
+        <div class="mb-4">
+          <p class="text-sm text-gray-500 mb-2">現在の画像：</p>
+          <%= image_tag contest.thumbnail, class: "max-w-xs rounded-lg" %>
+        </div>
+      <% end %>
+
+      <%= f.label :thumbnail, class: "block" do %>
+        <div class="flex items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+          <div class="text-center">
+            <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <p class="mt-1 text-sm text-gray-500">クリックして画像を選択</p>
+            <p class="text-xs text-gray-400">PNG, JPG, GIF（5MB以下）</p>
+          </div>
+        </div>
+        <%= f.file_field :thumbnail, accept: "image/*", class: "hidden" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Moderation Settings -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+       data-controller="moderation-settings">
+    <div class="px-6 py-4 border-b border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-900">コンテンツ審査設定</h2>
+      <p class="mt-1 text-sm text-gray-500">応募作品の自動審査機能を設定します</p>
+    </div>
+    <div class="p-6 space-y-6">
+      <!-- Enable Moderation -->
+      <div class="flex items-start">
+        <div class="flex items-center h-5">
+          <%= f.check_box :moderation_enabled,
+              class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500",
+              data: { moderation_settings_target: "enableCheckbox", action: "change->moderation-settings#toggleSettings" } %>
+        </div>
+        <div class="ml-3 text-sm">
+          <%= f.label :moderation_enabled, "自動コンテンツ審査を有効にする", class: "font-medium text-gray-700" %>
+          <p class="text-gray-500">有効にすると、応募時に画像の自動審査が行われます。不適切なコンテンツは自動的に非表示または要確認になります。</p>
+        </div>
+      </div>
+
+      <!-- Threshold Settings -->
+      <div data-moderation-settings-target="thresholdSection" class="<%= contest.moderation_enabled? ? '' : 'hidden' %> ml-7 p-4 bg-gray-50 rounded-lg space-y-4">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <%= f.label :moderation_threshold, "検出閾値", class: "block text-sm font-medium text-gray-700" %>
+            <span class="text-sm text-gray-500" data-moderation-settings-target="thresholdValue"><%= contest.moderation_threshold || 60.0 %>%</span>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-xs text-gray-500">緩い (0%)</span>
+            <%= f.range_field :moderation_threshold,
+                min: 0,
+                max: 100,
+                step: 5,
+                value: contest.moderation_threshold || 60.0,
+                class: "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600",
+                data: { moderation_settings_target: "thresholdSlider", action: "input->moderation-settings#updateThresholdDisplay" } %>
+            <span class="text-xs text-gray-500">厳格 (100%)</span>
+          </div>
+          <p class="mt-2 text-xs text-gray-500">
+            検出信頼度がこの値以上の場合、コンテンツは非表示になります。値が低いほど多くのコンテンツが非表示対象になります。
+            <br>推奨値: 50%〜70%
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-gray-200">
+          <h4 class="text-sm font-medium text-gray-700 mb-2">審査について</h4>
+          <ul class="text-xs text-gray-500 space-y-1">
+            <li class="flex items-start">
+              <svg class="h-4 w-4 text-gray-400 mr-1.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              審査は応募時に非同期で実行されます（数秒〜数分）
+            </li>
+            <li class="flex items-start">
+              <svg class="h-4 w-4 text-gray-400 mr-1.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              問題が検出された応募は「モデレーション」ページで確認・管理できます
+            </li>
+            <li class="flex items-start">
+              <svg class="h-4 w-4 text-gray-400 mr-1.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              審査中も投稿者は応募を確認できます
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex items-center justify-end space-x-4">
+    <%= link_to "キャンセル", contest.persisted? ? organizers_contest_path(contest) : organizers_contests_path, class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
+    <%= f.submit contest.persisted? ? "更新する" : "作成する", class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+  </div>
+<% end %>

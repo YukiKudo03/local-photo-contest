@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/judging-ranking/design.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-20T10:27:04.084Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768904824081_lz2bi4wco",
+      "approvalTitle": "審査・ランキング機能 - 設計書"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-20T10:31:18.122Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768904824081_lz2bi4wco",
+      "approvalTitle": "審査・ランキング機能 - 設計書"
+    }
+  ]
+}

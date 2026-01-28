@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+  <head>
+    <title>管理画面 - <%= content_for(:title) || "Local Photo Contest" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="h-full bg-gray-100">
+    <div class="min-h-full">
+      <!-- Admin Navigation -->
+      <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <%= link_to admin_dashboard_path, class: "flex items-center" do %>
+                  <svg class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span class="ml-2 text-white font-bold">管理画面</span>
+                <% end %>
+              </div>
+              <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                  <%= link_to "ダッシュボード", admin_dashboard_path,
+                      class: "rounded-md px-3 py-2 text-sm font-medium #{request.path == admin_dashboard_path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
+                  <%= link_to "ユーザー", admin_users_path,
+                      class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_users_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
+                  <%= link_to "コンテスト", admin_contests_path,
+                      class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_contests_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
+                  <%= link_to "カテゴリ", admin_categories_path,
+                      class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_categories_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
+                  <%= link_to "監査ログ", admin_audit_logs_path,
+                      class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_audit_logs_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
+                </div>
+              </div>
+            </div>
+            <div class="hidden md:block">
+              <div class="ml-4 flex items-center md:ml-6">
+                <span class="text-gray-300 text-sm mr-4"><%= current_user.email %></span>
+                <%= link_to "サイトに戻る", root_path, class: "text-gray-300 hover:text-white text-sm mr-4" %>
+                <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+                    class: "rounded-md bg-gray-700 px-3 py-2 text-sm font-medium text-white hover:bg-gray-600" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Flash Messages -->
+      <% if flash[:notice] %>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+          <div class="rounded-md bg-green-50 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-green-800"><%= flash[:notice] %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+          <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-red-800"><%= flash[:alert] %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Main Content -->
+      <main>
+        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <%= yield %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

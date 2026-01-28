@@ -1,0 +1,216 @@
+class Contest < ApplicationRecord
+  # Associations
+  belongs_to :user
+  belongs_to :category, optional: true
+  belongs_to :area, optional: true
+  has_many :entries, dependent: :destroy
+  has_many :spots, dependent: :destroy
+  has_many :contest_judges, dependent: :destroy
+  has_many :judges, through: :contest_judges, source: :user
+  has_many :judge_invitations, dependent: :destroy
+  has_many :evaluation_criteria, class_name: "EvaluationCriterion", dependent: :destroy
+  has_many :contest_rankings, dependent: :destroy
+  has_many :discovery_challenges, dependent: :destroy
+  has_many :discovery_badges, dependent: :destroy
+  has_one_attached :thumbnail
+
+  # Enums
+  enum :status, { draft: 0, published: 1, finished: 2 }
+  enum :judging_method, { judge_only: 0, vote_only: 1, hybrid: 2 }, prefix: :judging
+
+  # Validations
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :theme, length: { maximum: 255 }, allow_blank: true
+  validates :status, presence: true
+  validates :moderation_threshold,
+            numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
+            allow_nil: true
+  validates :judge_weight,
+            numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
+            allow_nil: true
+  validates :prize_count,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 },
+            allow_nil: true
+  validate :entry_dates_validity
+  validate :area_belongs_to_user
+  validate :judging_method_not_changed_after_publish
+
+  # Scopes
+  scope :active, -> { where(deleted_at: nil) }
+  scope :by_status, ->(status) { where(status: status) }
+  scope :recent, -> { order(created_at: :desc) }
+
+  # Instance Methods
+  def publish!
+    raise "Cannot publish: not a draft" unless draft?
+    raise "Cannot publish: title is required" if title.blank?
+    update!(status: :published)
+  end
+
+  def finish!
+    raise "Cannot finish: not published" unless published?
+    update!(status: :finished)
+  end
+
+  def announce_results!
+    raise "Cannot announce results: contest is not finished" unless finished?
+    raise "Results already announced" if results_announced?
+    update!(results_announced_at: Time.current)
+    send_results_notifications
+  end
+
+  def results_announced?
+    results_announced_at.present?
+  end
+
+  def ranked_entries
+    entries.left_joins(:votes)
+           .group(:id)
+           .order("COUNT(votes.id) DESC", "entries.created_at ASC")
+  end
+
+  def top_entries(limit = 3)
+    ranked_entries.limit(limit)
+  end
+
+  def judge?(other_user)
+    contest_judges.exists?(user: other_user)
+  end
+
+  def contest_judge_for(other_user)
+    contest_judges.find_by(user: other_user)
+  end
+
+  def judge_ranked_entries
+    entries.left_joins(judge_evaluations: :evaluation_criterion)
+           .group(:id)
+           .select(
+             "entries.*",
+             "COALESCE(AVG(judge_evaluations.score), 0) as average_score",
+             "COUNT(DISTINCT judge_evaluations.contest_judge_id) as judge_count"
+           )
+           .order("average_score DESC", "entries.created_at ASC")
+  end
+
+  def top_judge_entries(limit = 3)
+    judge_ranked_entries.limit(limit)
+  end
+
+  def soft_delete!
+    raise "Cannot delete: contest is published" if published?
+    update!(deleted_at: Time.current)
+  end
+
+  def accepting_entries?
+    return false unless published?
+    return true if entry_start_at.nil? && entry_end_at.nil?
+
+    now = Time.current
+    (entry_start_at.nil? || now >= entry_start_at) &&
+      (entry_end_at.nil? || now <= entry_end_at)
+  end
+
+  def owned_by?(other_user)
+    user_id == other_user.id
+  end
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  def moderation_enabled?
+    moderation_enabled
+  end
+
+  def effective_moderation_threshold
+    moderation_threshold || 60.0
+  end
+
+  def judge_completion_rate
+    return 100 unless judging_judge_only? || judging_hybrid?
+    return 100 if contest_judges.empty? || entries.empty? || evaluation_criteria.empty?
+
+    total_evaluations_needed = contest_judges.count * entries.count * evaluation_criteria.count
+    return 100 if total_evaluations_needed.zero?
+
+    actual_evaluations = JudgeEvaluation.joins(:contest_judge)
+                                        .where(contest_judges: { contest_id: id })
+                                        .count
+
+    (actual_evaluations.to_f / total_evaluations_needed * 100).round
+  end
+
+  def ranking_calculatable?
+    return false if entries.empty?
+    return true if judging_vote_only?
+
+    # For judge_only or hybrid, need at least some evaluations
+    judge_completion_rate > 0
+  end
+
+  def calculated_rankings
+    contest_rankings.ordered.includes(entry: [ :user, { photo_attachment: :blob } ])
+  end
+
+  def prize_entries
+    calculated_rankings.where("rank <= ?", prize_count || 3)
+  end
+
+  def effective_prize_count
+    prize_count || 3
+  end
+
+  private
+
+  def entry_dates_validity
+    return if entry_start_at.blank? || entry_end_at.blank?
+    if entry_end_at <= entry_start_at
+      errors.add(:entry_end_at, "は開始日時より後にしてください")
+    end
+  end
+
+  def area_belongs_to_user
+    return if area_id.blank?
+    return if area&.user_id == user_id
+
+    errors.add(:area_id, "は自分が作成したエリアを選択してください")
+  end
+
+  def judging_method_not_changed_after_publish
+    return unless persisted?
+    return if draft?
+    return unless judging_method_changed?
+
+    errors.add(:judging_method, "はコンテスト公開後は変更できません")
+  end
+
+  def send_results_notifications
+    # Get all participants (users who have entries in this contest)
+    participant_ids = entries.pluck(:user_id).uniq
+
+    # Get ranked entries for top 3
+    ranked = ranked_entries.to_a
+
+    participant_ids.each do |participant_id|
+      # Send general results announcement
+      Notification.create_results_announced!(
+        user_id: participant_id,
+        contest: self
+      )
+
+      # Check if user has entries in top 3
+      ranked.each_with_index do |entry, index|
+        rank = index + 1
+        break if rank > 3
+
+        if entry.user_id == participant_id
+          Notification.create_entry_ranked!(
+            user: entry.user,
+            entry: entry,
+            rank: rank
+          )
+        end
+      end
+    end
+  end
+end

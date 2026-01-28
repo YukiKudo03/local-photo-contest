@@ -1,0 +1,142 @@
+<!-- Page Header -->
+<div class="mb-8">
+  <%= link_to organizers_contest_path(@contest), class: "inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-2" do %>
+    <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    コンテストに戻る
+  <% end %>
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">スポット管理</h1>
+      <p class="mt-1 text-sm text-gray-500"><%= @contest.title %> の撮影スポットを管理します</p>
+    </div>
+    <%= link_to new_organizers_contest_spot_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
+      <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      スポット追加
+    <% end %>
+  </div>
+</div>
+
+<% if @spots.any? %>
+  <!-- Spots Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            スポット名
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            カテゴリ
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            住所
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            座標
+          </th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">操作</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @spots.each do |spot| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                  <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900"><%= spot.name %></div>
+                  <% if spot.description.present? %>
+                    <div class="text-xs text-gray-500 line-clamp-1"><%= spot.description %></div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                <%= spot.category_name %>
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <%= spot.address.presence || "-" %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <% if spot.coordinates %>
+                <span class="font-mono text-xs">
+                  <%= number_with_precision(spot.latitude, precision: 5) %>,
+                  <%= number_with_precision(spot.longitude, precision: 5) %>
+                </span>
+              <% else %>
+                <span class="text-gray-400">未設定</span>
+              <% end %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <div class="flex items-center justify-end space-x-2">
+                <%= link_to edit_organizers_contest_spot_path(@contest, spot), class: "text-indigo-600 hover:text-indigo-900" do %>
+                  <span class="sr-only">編集</span>
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                <% end %>
+                <%= button_to organizers_contest_spot_path(@contest, spot), method: :delete, form: { data: { turbo_confirm: "#{spot.name}を削除しますか？" } }, class: "text-red-600 hover:text-red-900" do %>
+                  <span class="sr-only">削除</span>
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Map Preview -->
+  <% spots_with_coords = @spots.select(&:coordinates) %>
+  <% if spots_with_coords.any? %>
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">スポット位置マップ</h2>
+      <%
+        markers_data = spots_with_coords.map { |s| { latitude: s.latitude.to_f, longitude: s.longitude.to_f, popup: s.name } }
+        center = spots_with_coords.first
+      %>
+      <div data-controller="map"
+           data-map-latitude-value="<%= center.latitude %>"
+           data-map-longitude-value="<%= center.longitude %>"
+           data-map-zoom-value="14"
+           data-map-markers-value="<%= markers_data.to_json %>"
+           data-map-interactive-value="true">
+        <div data-map-target="container" class="map-container-lg rounded-xl overflow-hidden"></div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <!-- Empty State -->
+  <div class="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
+    <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">スポットがありません</h3>
+    <p class="mt-2 text-sm text-gray-500">コンテストに撮影スポットを登録しましょう</p>
+    <div class="mt-6">
+      <%= link_to new_organizers_contest_spot_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
+        <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        スポット追加
+      <% end %>
+    </div>
+  </div>
+<% end %>

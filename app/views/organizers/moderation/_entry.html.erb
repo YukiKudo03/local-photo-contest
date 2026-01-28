@@ -1,0 +1,89 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="p-6">
+    <div class="flex gap-6">
+      <!-- Photo -->
+      <div class="flex-shrink-0">
+        <div class="w-48 h-48 rounded-lg overflow-hidden bg-gray-100">
+          <% if entry.photo.attached? %>
+            <%= image_tag entry.photo.variant(resize_to_fill: [384, 384]), class: "w-full h-full object-cover" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Entry Info -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">
+              <%= entry.title.presence || "無題" %>
+            </h3>
+            <p class="text-sm text-gray-500">
+              応募者: <%= entry.user.email %>
+            </p>
+            <p class="text-sm text-gray-400">
+              <%= entry.created_at.strftime('%Y/%m/%d %H:%M') %>
+            </p>
+          </div>
+
+          <!-- Status Badge -->
+          <% case entry.moderation_status %>
+          <% when "moderation_hidden" %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+              自動非表示
+            </span>
+          <% when "moderation_requires_review" %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+              要確認
+            </span>
+          <% end %>
+        </div>
+
+        <!-- Detected Labels -->
+        <% if entry.moderation_result&.labels.present? %>
+          <div class="mt-4">
+            <p class="text-sm font-medium text-gray-700 mb-2">検出されたラベル:</p>
+            <div class="flex flex-wrap gap-2">
+              <% entry.moderation_result.labels.each do |label| %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium
+                  <%= label['Confidence'].to_f >= @contest.effective_moderation_threshold ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800' %>">
+                  <%= label['Name'] %>
+                  <span class="ml-1 text-gray-500">(<%= label['Confidence'].to_f.round(1) %>%)</span>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Max Confidence -->
+        <% if entry.moderation_result&.max_confidence.present? %>
+          <div class="mt-2">
+            <p class="text-sm text-gray-600">
+              最大信頼度:
+              <span class="font-medium <%= entry.moderation_result.max_confidence >= @contest.effective_moderation_threshold ? 'text-red-600' : 'text-amber-600' %>">
+                <%= entry.moderation_result.max_confidence.round(1) %>%
+              </span>
+              <span class="text-gray-400">(閾値: <%= @contest.effective_moderation_threshold %>%)</span>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+      <div>
+        <%= link_to "詳細を見る", organizers_contest_entry_path(@contest, entry),
+            class: "text-sm text-indigo-600 hover:text-indigo-900" %>
+      </div>
+      <div class="flex gap-3">
+        <%= button_to "却下", reject_organizers_contest_moderation_path(@contest, entry),
+            method: :patch,
+            class: "inline-flex items-center px-4 py-2 border border-red-300 text-sm font-medium rounded-lg text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500",
+            data: { turbo_confirm: "このエントリーを却下しますか？" } %>
+        <%= button_to "承認", approve_organizers_contest_moderation_path(@contest, entry),
+            method: :patch,
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<%= turbo_stream.prepend "comments" do %>
+  <%= render @comment %>
+<% end %>
+
+<%= turbo_stream.replace "comment_form" do %>
+  <%= render "comments/form", entry: @entry, comment: Comment.new %>
+<% end %>
+
+<%= turbo_stream.replace "comments_count" do %>
+  <span id="comments_count"><%= @entry.comments.count %></span>
+<% end %>

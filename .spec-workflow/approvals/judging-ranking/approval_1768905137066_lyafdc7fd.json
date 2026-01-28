@@ -1,0 +1,12 @@
+{
+  "id": "approval_1768905137066_lyafdc7fd",
+  "title": "審査・ランキング機能 - タスク一覧",
+  "filePath": ".spec-workflow/specs/judging-ranking/tasks.md",
+  "type": "document",
+  "status": "approved",
+  "createdAt": "2026-01-20T10:32:17.066Z",
+  "category": "spec",
+  "categoryName": "judging-ranking",
+  "response": "ダッシュボードから承認",
+  "respondedAt": "2026-01-20T10:32:40.228Z"
+}

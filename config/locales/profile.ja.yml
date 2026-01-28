@@ -1,0 +1,55 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        name: 表示名
+        bio: 自己紹介
+        avatar: プロフィール画像
+
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              too_long: は50文字以内で入力してください
+            bio:
+              too_long: は500文字以内で入力してください
+            avatar:
+              content_type_invalid: はJPEG、PNG、GIF形式のみ対応しています
+              file_size_too_large: は5MB以下にしてください
+
+  my:
+    profile:
+      show:
+        title: マイプロフィール
+        subtitle: あなたのプロフィール情報
+        bio_label: 自己紹介
+        bio_placeholder: 自己紹介が設定されていません
+        activity_title: 活動情報
+        entries_count: 応募作品
+        votes_count: 投票
+        comments_count: コメント
+        account_title: アカウント情報
+        registered_at: 登録日
+        last_login: 最終ログイン
+        edit_button: プロフィールを編集
+
+      edit:
+        title: プロフィール編集
+        subtitle: あなたのプロフィール情報を編集できます
+        avatar_label: プロフィール画像
+        avatar_select: 画像を選択
+        avatar_hint: JPEG、PNG、GIF形式（5MB以下）
+        name_label: 表示名
+        name_placeholder: 例：田中太郎
+        name_hint: 50文字以内（未設定の場合はメールアドレスの一部が表示されます）
+        bio_label: 自己紹介
+        bio_placeholder: 自己紹介を入力...
+        bio_hint: 500文字以内
+        email_label: メールアドレス
+        email_hint: メールアドレスの変更はアカウント設定から行えます
+        cancel: キャンセル
+        submit: 保存する
+
+      update:
+        success: プロフィールを更新しました。

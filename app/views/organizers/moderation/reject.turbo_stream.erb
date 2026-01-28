@@ -1,0 +1,2 @@
+<%= turbo_stream.remove dom_id(@entry) %>
+<%= turbo_stream.update "flash", partial: "shared/flash", locals: { notice: "エントリーを却下しました。" } %>

@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/tourism-integration/design.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-20T13:30:34.446Z",
+      "trigger": "initial",
+      "approvalId": "approval_1768915834443_6iumqu6m3",
+      "approvalTitle": "Tourism Integration Design"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-01-20T13:32:22.272Z",
+      "trigger": "approved",
+      "approvalId": "approval_1768915834443_6iumqu6m3",
+      "approvalTitle": "Tourism Integration Design"
+    }
+  ]
+}

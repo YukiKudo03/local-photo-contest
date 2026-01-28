@@ -1,0 +1,31 @@
+ja:
+  activerecord:
+    models:
+      comment: コメント
+    attributes:
+      comment:
+        user: 投稿者
+        entry: 作品
+        body: 本文
+        created_at: 投稿日時
+    errors:
+      models:
+        comment:
+          attributes:
+            body:
+              blank: を入力してください
+              too_long: は1000文字以内で入力してください
+
+  comments:
+    form:
+      placeholder: コメントを入力...
+      submit: コメントする
+    create:
+      success: コメントを投稿しました。
+    destroy:
+      success: コメントを削除しました。
+      unauthorized: この操作を行う権限がありません。
+    section:
+      title: コメント
+      no_comments: まだコメントがありません
+      login_required: コメントするにはログインしてください。

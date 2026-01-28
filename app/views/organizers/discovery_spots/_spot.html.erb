@@ -1,0 +1,123 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="p-6">
+    <div class="flex gap-6">
+      <!-- Photo (from first entry) -->
+      <div class="flex-shrink-0">
+        <div class="w-48 h-48 rounded-lg overflow-hidden bg-gray-100">
+          <% first_entry = spot.entries.includes(photo_attachment: :blob).first %>
+          <% if first_entry&.photo&.attached? %>
+            <%= image_tag first_entry.photo.variant(resize_to_fill: [384, 384]), class: "w-full h-full object-cover" %>
+          <% else %>
+            <div class="w-full h-full flex items-center justify-center text-gray-400">
+              <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Spot Info -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">
+              <%= spot.name %>
+            </h3>
+            <% if spot.discovered_by.present? %>
+              <p class="text-sm text-gray-500">
+                発見者: <%= spot.discovered_by.display_name %>
+              </p>
+            <% end %>
+            <p class="text-sm text-gray-400">
+              <%= spot.discovered_at&.strftime('%Y/%m/%d %H:%M') || spot.created_at.strftime('%Y/%m/%d %H:%M') %>
+            </p>
+          </div>
+
+          <!-- Status Badge -->
+          <% case status %>
+          <% when :pending %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+              審査待ち
+            </span>
+          <% when :certified %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              認定済み
+            </span>
+          <% when :rejected %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+              却下
+            </span>
+          <% end %>
+        </div>
+
+        <!-- Category -->
+        <div class="mt-2">
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+            <%= spot.category_name %>
+          </span>
+        </div>
+
+        <!-- Discovery Comment -->
+        <% if spot.discovery_comment.present? %>
+          <div class="mt-3 p-3 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600">
+              <span class="font-medium">発見コメント:</span> <%= spot.discovery_comment %>
+            </p>
+          </div>
+        <% end %>
+
+        <!-- Location -->
+        <% if spot.coordinates.present? %>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500">
+              <svg class="inline-block w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              <%= spot.latitude.round(5) %>, <%= spot.longitude.round(5) %>
+            </p>
+          </div>
+        <% end %>
+
+        <!-- Rejection Reason (for rejected spots) -->
+        <% if status == :rejected && spot.rejection_reason.present? %>
+          <div class="mt-3 p-3 bg-red-50 rounded-lg">
+            <p class="text-sm text-red-700">
+              <span class="font-medium">却下理由:</span> <%= spot.rejection_reason %>
+            </p>
+          </div>
+        <% end %>
+
+        <!-- Certified By (for certified spots) -->
+        <% if status == :certified && spot.certified_by.present? %>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500">
+              認定者: <%= spot.certified_by.display_name %> (<%= spot.certified_at&.strftime('%Y/%m/%d') %>)
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Actions (only for pending spots) -->
+    <% if status == :pending %>
+      <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+        <div class="text-sm text-gray-500">
+          エントリー数: <%= spot.entries.count %>
+        </div>
+        <div class="flex gap-3">
+          <button type="button"
+            onclick="openRejectModal('<%= spot.id %>', '<%= reject_organizers_contest_discovery_spot_path(@contest, spot) %>')"
+            class="inline-flex items-center px-4 py-2 border border-red-300 text-sm font-medium rounded-lg text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            却下
+          </button>
+          <%= button_to "認定", certify_organizers_contest_discovery_spot_path(@contest, spot),
+              method: :patch,
+              class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500",
+              data: { turbo_confirm: "「#{spot.name}」を認定しますか？" } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

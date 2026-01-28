@@ -1,0 +1,56 @@
+# Dockerfile.dev - Development environment
+# Usage: docker compose up
+
+ARG RUBY_VERSION=3.2.2
+FROM docker.io/library/ruby:$RUBY_VERSION-slim
+
+# Rails app lives here
+WORKDIR /rails
+
+# Install packages needed for development
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    git \
+    libpq-dev \
+    libvips \
+    libyaml-dev \
+    node-gyp \
+    pkg-config \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Install Node.js (for Tailwind CSS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Set development environment
+ENV RAILS_ENV="development" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT=""
+
+# Install bundler
+RUN gem install bundler
+
+# Copy Gemfile first for better caching
+COPY Gemfile Gemfile.lock ./
+
+# Install gems
+RUN bundle install
+
+# Copy the rest of the application
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p tmp/pids tmp/cache tmp/sockets log storage
+
+# Add a script to be executed every time the container starts
+COPY bin/docker-entrypoint-dev /usr/bin/
+RUN chmod +x /usr/bin/docker-entrypoint-dev
+ENTRYPOINT ["docker-entrypoint-dev"]
+
+# Start the main process
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]

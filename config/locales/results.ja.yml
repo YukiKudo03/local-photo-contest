@@ -1,0 +1,31 @@
+ja:
+  results:
+    show:
+      title: コンテスト結果発表
+      back_to_contest: コンテストに戻る
+      winners_title: 入賞作品
+      all_rankings: 全作品ランキング
+      no_entries: 作品がありません
+      votes: 票
+      announced_at: 結果発表日
+
+  organizers:
+    contests:
+      announce_results:
+        success: 結果を発表しました。
+        not_finished: コンテストが終了していません。
+        already_announced: 既に結果は発表されています。
+      show:
+        announce_results: 結果発表
+        announce_results_description: コンテスト結果を発表する
+        view_results: 結果ページを見る
+        view_results_description: 発表済みの結果を確認
+        results_announced: 結果発表済み
+        results_not_announced: 結果未発表
+
+  contests:
+    show:
+      results_announced: 結果が発表されました！
+      view_results: 結果を見る
+    results:
+      not_announced: 結果はまだ発表されていません。

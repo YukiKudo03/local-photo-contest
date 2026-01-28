@@ -1,0 +1,77 @@
+# Database Configuration
+#
+# This file supports two modes:
+# 1. SQLite (default) - For local development without Docker
+# 2. PostgreSQL - For Docker development and production
+#
+# To use PostgreSQL, set the DB_HOST environment variable.
+# Example: DB_HOST=localhost or DB_HOST=db (in Docker)
+
+<% if ENV['DB_HOST'].present? %>
+# PostgreSQL Configuration (Docker / Production)
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV.fetch("DB_USER", "postgres") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "password") %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME", "local_photo_contest_development") %>
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME_TEST", "local_photo_contest_test") %>
+
+production:
+  primary:
+    <<: *default
+    database: <%= ENV.fetch("DB_NAME", "local_photo_contest_production") %>
+  cache:
+    <<: *default
+    database: <%= ENV.fetch("DB_NAME", "local_photo_contest_production") %>_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: <%= ENV.fetch("DB_NAME", "local_photo_contest_production") %>_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: <%= ENV.fetch("DB_NAME", "local_photo_contest_production") %>_cable
+    migrations_paths: db/cable_migrate
+
+<% else %>
+# SQLite Configuration (Local development without Docker)
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: storage/development.sqlite3
+
+test:
+  <<: *default
+  database: storage/test.sqlite3
+
+production:
+  primary:
+    <<: *default
+    database: storage/production.sqlite3
+  cache:
+    <<: *default
+    database: storage/production_cache.sqlite3
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: storage/production_queue.sqlite3
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: storage/production_cable.sqlite3
+    migrations_paths: db/cable_migrate
+<% end %>

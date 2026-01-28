@@ -1,0 +1,82 @@
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <!-- 総応募数 -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500">総応募数</p>
+        <p class="text-2xl font-bold text-gray-900"><%= summary[:total_entries] %></p>
+      </div>
+      <div class="text-blue-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+    </div>
+    <% if summary[:entries_change] %>
+      <p class="text-xs mt-2 <%= summary[:entries_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= summary[:entries_change] >= 0 ? '+' : '' %><%= summary[:entries_change] %> 件（前日比）
+      </p>
+    <% end %>
+  </div>
+
+  <!-- 総投票数 -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500">総投票数</p>
+        <p class="text-2xl font-bold text-gray-900"><%= summary[:total_votes] %></p>
+      </div>
+      <div class="text-green-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+        </svg>
+      </div>
+    </div>
+    <% if summary[:votes_change] %>
+      <p class="text-xs mt-2 <%= summary[:votes_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= summary[:votes_change] >= 0 ? '+' : '' %><%= summary[:votes_change] %> 票（前日比）
+      </p>
+    <% end %>
+  </div>
+
+  <!-- 参加ユーザー数 -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500">参加ユーザー数</p>
+        <p class="text-2xl font-bold text-gray-900"><%= summary[:total_participants] %></p>
+      </div>
+      <div class="text-purple-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </div>
+    </div>
+    <% if summary[:participants_change] %>
+      <p class="text-xs mt-2 <%= summary[:participants_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= summary[:participants_change] >= 0 ? '+' : '' %><%= summary[:participants_change] %> 人（前日比）
+      </p>
+    <% end %>
+  </div>
+
+  <!-- 登録スポット数 -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500">登録スポット数</p>
+        <p class="text-2xl font-bold text-gray-900"><%= summary[:total_spots] %></p>
+      </div>
+      <div class="text-orange-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+      </div>
+    </div>
+    <% if summary[:spots_change] %>
+      <p class="text-xs mt-2 <%= summary[:spots_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= summary[:spots_change] >= 0 ? '+' : '' %><%= summary[:spots_change] %> 件（前日比）
+      </p>
+    <% end %>
+  </div>
+</div>
