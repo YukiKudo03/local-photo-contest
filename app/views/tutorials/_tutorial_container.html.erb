@@ -1,0 +1,37 @@
+<%# チュートリアルコンテナ %>
+<%# 使用例: <%= render 'tutorials/tutorial_container', tutorial_type: 'organizer_onboarding', auto_start: true %> %>
+
+<% tutorial_type ||= current_user&.onboarding_tutorial_type %>
+<% auto_start ||= false %>
+<% reduced_motion ||= current_user&.reduced_motion? %>
+
+<% if tutorial_type.present? && current_user&.tutorial_enabled? %>
+  <div data-controller="tutorial"
+       data-tutorial-tutorial-type-value="<%= tutorial_type %>"
+       data-tutorial-auto-start-value="<%= auto_start %>"
+       data-tutorial-reduced-motion-value="<%= reduced_motion %>"
+       class="tutorial-container">
+
+    <%# オーバーレイ %>
+    <div data-tutorial-target="overlay"
+         class="tutorial-overlay hidden"
+         aria-hidden="true">
+    </div>
+
+    <%# ツールチップ %>
+    <div data-tutorial-target="tooltip"
+         class="tutorial-tooltip hidden"
+         role="dialog"
+         aria-modal="true"
+         aria-label="チュートリアル">
+    </div>
+
+    <%# プログレスバー（オプション） %>
+    <div class="tutorial-progress-container hidden">
+      <div data-tutorial-target="progress"
+           class="tutorial-progress-bar"
+           style="width: 0%">
+      </div>
+    </div>
+  </div>
+<% end %>

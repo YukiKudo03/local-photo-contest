@@ -1,3 +1,9 @@
+<%# チュートリアル: 参加者オンボーディング %>
+<% if user_signed_in? && current_user.participant? %>
+  <%= render "tutorials/welcome_modal", tutorial_type: "participant_onboarding" if should_show_tutorial?("participant_onboarding") %>
+  <%= render "tutorials/tutorial_container", tutorial_type: "participant_onboarding", auto_start: false %>
+<% end %>
+
 <div class="container mx-auto max-w-6xl px-4 py-8">
   <!-- Page Header -->
   <div class="mb-8 text-center">
@@ -7,7 +13,7 @@
 
   <!-- Contest Grid -->
   <% if @contests.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-tutorial="contests-list">
       <% @contests.each do |contest| %>
         <%= link_to contest_path(contest), class: "block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow" do %>
           <!-- Thumbnail -->

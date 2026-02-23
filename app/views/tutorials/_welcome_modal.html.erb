@@ -1,0 +1,71 @@
+<%# ウェルカムモーダル %>
+<%# 使用例: <%= render 'tutorials/welcome_modal' if current_user&.should_show_onboarding? %> %>
+
+<% if current_user&.should_show_onboarding? %>
+  <div id="welcome-modal"
+       class="fixed inset-0 z-50 flex items-center justify-center"
+       data-controller="tutorial"
+       data-tutorial-tutorial-type-value="<%= current_user.onboarding_tutorial_type %>"
+       data-tutorial-reduced-motion-value="<%= current_user.reduced_motion? %>">
+
+    <%# 背景オーバーレイ %>
+    <div class="absolute inset-0 bg-black bg-opacity-50"
+         data-tutorial-target="overlay"></div>
+
+    <%# モーダルコンテンツ %>
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden">
+      <%# ヘッダー部分（グラデーション背景） %>
+      <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-12 text-center">
+        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">
+          Local Photo Contestへようこそ！
+        </h2>
+        <p class="text-indigo-100">
+          <% if current_user.organizer? %>
+            フォトコンテストの運営を簡単に
+          <% else %>
+            地域の魅力を写真で発信
+          <% end %>
+        </p>
+      </div>
+
+      <%# ボディ部分 %>
+      <div class="px-8 py-6">
+        <p class="text-gray-600 text-center mb-6">
+          <% if current_user.organizer? %>
+            このチュートリアルでは、コンテストの作成から運営までの基本的な使い方をご案内します。
+          <% else %>
+            このチュートリアルでは、写真の投稿や投票の方法をご案内します。
+          <% end %>
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button data-action="tutorial#start"
+                  class="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors">
+            チュートリアルを開始
+          </button>
+          <button data-action="tutorial#skip"
+                  class="flex-1 px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg font-medium transition-colors">
+            スキップ
+          </button>
+        </div>
+
+        <p class="text-xs text-gray-400 text-center mt-4">
+          チュートリアルは後からいつでも再開できます
+        </p>
+      </div>
+    </div>
+
+    <%# ツールチップ（ステップ表示用） %>
+    <div data-tutorial-target="tooltip"
+         class="tutorial-tooltip hidden"
+         role="dialog"
+         aria-modal="true">
+    </div>
+  </div>
+<% end %>

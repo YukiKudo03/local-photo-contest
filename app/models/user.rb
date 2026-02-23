@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include TutorialTrackable
+
   # Include devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
@@ -20,6 +22,7 @@ class User < ApplicationRecord
   has_many :certified_spots, class_name: "Spot", foreign_key: :certified_by_id, dependent: :nullify
   has_many :spot_votes, dependent: :destroy
   has_many :discovery_badges, dependent: :destroy
+  has_many :tutorial_progresses, dependent: :destroy
   has_one_attached :avatar
 
   # Role enum
@@ -72,6 +75,55 @@ class User < ApplicationRecord
       accepted_at: Time.current,
       ip_address: ip_address
     )
+  end
+
+  # Tutorial methods
+  def tutorial_progress_for(tutorial_type)
+    tutorial_progresses.find_or_initialize_by(tutorial_type: tutorial_type)
+  end
+
+  def tutorial_completed?(tutorial_type)
+    tutorial_progresses.exists?(tutorial_type: tutorial_type, completed: true)
+  end
+
+  def tutorial_skipped?(tutorial_type)
+    tutorial_progresses.exists?(tutorial_type: tutorial_type, skipped: true)
+  end
+
+  def should_show_tutorial?(tutorial_type)
+    return false unless tutorial_enabled?
+
+    progress = tutorial_progresses.find_by(tutorial_type: tutorial_type)
+    progress.nil? || (!progress.completed? && !progress.skipped?)
+  end
+
+  def onboarding_tutorial_type
+    TutorialStep.onboarding_type_for_role(role)
+  end
+
+  def should_show_onboarding?
+    return false unless tutorial_enabled?
+
+    onboarding_type = onboarding_tutorial_type
+    return false if onboarding_type.nil?
+
+    should_show_tutorial?(onboarding_type)
+  end
+
+  def tutorial_enabled?
+    tutorial_settings&.dig("show_tutorials") != false
+  end
+
+  def context_help_enabled?
+    tutorial_settings&.dig("show_context_help") != false
+  end
+
+  def reduced_motion?
+    tutorial_settings&.dig("reduced_motion") == true
+  end
+
+  def update_tutorial_settings(settings)
+    update(tutorial_settings: (tutorial_settings || {}).merge(settings))
   end
 
   private

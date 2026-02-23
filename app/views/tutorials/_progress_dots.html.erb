@@ -1,0 +1,20 @@
+<%# steps: TutorialStep[], current_index: Integer %>
+<% steps ||= [] %>
+<% current_index ||= 0 %>
+
+<% progress_state = ->(index, current) {
+  if index < current
+    'completed'
+  elsif index == current
+    'current'
+  else
+    'pending'
+  end
+} %>
+
+<div class="tutorial-progress-dots" aria-label="進捗: <%= current_index + 1 %>/<%= steps.count %>">
+  <% steps.each_with_index do |step, index| %>
+    <span class="tutorial-dot tutorial-dot--<%= progress_state.call(index, current_index) %>"
+          aria-hidden="true"></span>
+  <% end %>
+</div>

@@ -118,4 +118,7 @@ end
 
 puts "#{Area.count} areas created."
 
+# Load tutorial steps
+load Rails.root.join("db/seeds/tutorial_steps.rb")
+
 puts "Seed completed!"

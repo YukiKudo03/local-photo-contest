@@ -1,4 +1,4 @@
-<div class="container mx-auto max-w-6xl px-4 py-8">
+<div class="container mx-auto max-w-6xl px-4 py-8" data-tutorial="my-votes-page">
   <!-- Page Header -->
   <div class="mb-8">
     <h1 class="text-2xl font-bold text-gray-900">投票した作品</h1>
@@ -7,7 +7,7 @@
 
   <!-- Votes Grid -->
   <% if @votes.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-tutorial="my-votes-list">
       <% @votes.each do |vote| %>
         <% entry = vote.entry %>
         <%= link_to entry_path(entry), class: "block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow" do %>

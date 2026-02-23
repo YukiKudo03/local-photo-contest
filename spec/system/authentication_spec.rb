@@ -83,7 +83,7 @@ RSpec.describe "Authentication", type: :system do
 
   describe "user logout" do
     let!(:terms) { create(:terms_of_service, :current) }
-    let!(:user) { create(:user, :organizer, :confirmed) }
+    let!(:user) { create(:user, :organizer, :confirmed, tutorial_settings: { "show_tutorials" => false }) }
 
     before do
       create(:terms_acceptance, user: user, terms_of_service: terms)

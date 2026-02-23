@@ -170,7 +170,7 @@
       <% end %>
 
       <!-- Entry Button -->
-      <div class="mt-8">
+      <div class="mt-8" data-tutorial="submit-button">
         <% if @contest.accepting_entries? %>
           <% if user_signed_in? %>
             <%= link_to new_contest_entry_path(@contest), class: "inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl" do %>

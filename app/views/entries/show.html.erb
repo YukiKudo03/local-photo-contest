@@ -153,9 +153,9 @@
       <% end %>
 
       <!-- Vote Section -->
-      <div class="mt-6 pt-6 border-t border-gray-100">
+      <div class="mt-6 pt-6 border-t border-gray-100" data-tutorial="vote-section">
         <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-4" data-tutorial="vote-button">
             <%= render "votes/button", entry: @entry %>
             <span class="text-sm text-gray-500">
               <% if @entry.votes_count > 0 %>

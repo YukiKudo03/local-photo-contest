@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_23_150839) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -243,6 +243,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
     t.index ["contest_id"], name: "index_evaluation_criteria_on_contest_id"
   end
 
+  create_table "feature_unlocks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "feature_key", null: false
+    t.datetime "unlocked_at", null: false
+    t.string "unlock_trigger"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "feature_key"], name: "index_feature_unlocks_on_user_id_and_feature_key", unique: true
+    t.index ["user_id"], name: "index_feature_unlocks_on_user_id"
+  end
+
   create_table "judge_comments", force: :cascade do |t|
     t.integer "contest_judge_id", null: false
     t.integer "entry_id", null: false
@@ -376,6 +387,58 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
     t.index ["version"], name: "index_terms_of_services_on_version", unique: true
   end
 
+  create_table "tutorial_progresses", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "tutorial_type", null: false
+    t.string "current_step_id"
+    t.boolean "completed", default: false
+    t.boolean "skipped", default: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.json "step_data", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "step_times", default: {}
+    t.json "skipped_steps", default: []
+    t.string "completion_method"
+    t.index ["completed"], name: "index_tutorial_progresses_on_completed"
+    t.index ["user_id", "tutorial_type"], name: "index_tutorial_progresses_on_user_id_and_tutorial_type", unique: true
+    t.index ["user_id"], name: "index_tutorial_progresses_on_user_id"
+  end
+
+  create_table "tutorial_steps", force: :cascade do |t|
+    t.string "tutorial_type", null: false
+    t.string "step_id", null: false
+    t.integer "position", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.string "target_selector"
+    t.string "target_path"
+    t.string "tooltip_position", default: "bottom"
+    t.json "options", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "video_url"
+    t.string "video_title"
+    t.string "action_type", default: "observe"
+    t.json "success_feedback", default: {}
+    t.integer "recommended_duration", default: 5
+    t.boolean "skippable", default: true
+    t.index ["tutorial_type", "position"], name: "index_tutorial_steps_on_tutorial_type_and_position"
+    t.index ["tutorial_type", "step_id"], name: "index_tutorial_steps_on_tutorial_type_and_step_id", unique: true
+  end
+
+  create_table "user_milestones", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "milestone_type", null: false
+    t.datetime "achieved_at", null: false
+    t.json "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "milestone_type"], name: "index_user_milestones_on_user_id_and_milestone_type", unique: true
+    t.index ["user_id"], name: "index_user_milestones_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -399,8 +462,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.text "bio"
+    t.json "tutorial_settings", default: {"show_tutorials"=>true, "show_context_help"=>true, "reduced_motion"=>false}
+    t.string "feature_level", default: "beginner"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["feature_level"], name: "index_users_on_feature_level"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role"], name: "index_users_on_role"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -443,6 +509,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
   add_foreign_key "entries", "spots"
   add_foreign_key "entries", "users"
   add_foreign_key "evaluation_criteria", "contests"
+  add_foreign_key "feature_unlocks", "users"
   add_foreign_key "judge_comments", "contest_judges"
   add_foreign_key "judge_comments", "entries"
   add_foreign_key "judge_evaluations", "contest_judges"
@@ -461,6 +528,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_133925) do
   add_foreign_key "spots", "users", column: "discovered_by_id"
   add_foreign_key "terms_acceptances", "terms_of_services"
   add_foreign_key "terms_acceptances", "users"
+  add_foreign_key "tutorial_progresses", "users"
+  add_foreign_key "user_milestones", "users"
   add_foreign_key "votes", "entries"
   add_foreign_key "votes", "users"
 end

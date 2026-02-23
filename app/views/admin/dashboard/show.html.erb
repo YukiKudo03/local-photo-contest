@@ -1,12 +1,19 @@
 <% content_for :title, "ダッシュボード" %>
 
-<div class="mb-8">
-  <h1 class="text-2xl font-bold text-gray-900">管理者ダッシュボード</h1>
-  <p class="mt-1 text-sm text-gray-500">システム全体の統計と状況を確認できます</p>
+<%# チュートリアル: 管理者オンボーディング %>
+<%= render "tutorials/welcome_modal", tutorial_type: "admin_onboarding" if defined?(should_show_tutorial?) && should_show_tutorial?("admin_onboarding") %>
+<%= render "tutorials/tutorial_container", tutorial_type: "admin_onboarding", auto_start: false if defined?(should_show_tutorial?) %>
+
+<div class="mb-8 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">管理者ダッシュボード</h1>
+    <p class="mt-1 text-sm text-gray-500">システム全体の統計と状況を確認できます</p>
+  </div>
+  <%= render "tutorials/help_button", tutorial_type: "admin_onboarding" if defined?(render) %>
 </div>
 
 <!-- Stats Cards -->
-<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8" data-tutorial="admin-stats">
   <div class="bg-white overflow-hidden shadow rounded-lg">
     <div class="p-5">
       <div class="flex items-center">
@@ -100,7 +107,7 @@
 </div>
 
 <!-- Charts Section -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8" data-tutorial="admin-charts">
   <!-- User Growth Chart -->
   <div class="bg-white shadow rounded-lg p-6">
     <h3 class="text-lg font-medium text-gray-900 mb-4">ユーザー登録数（過去30日）</h3>
@@ -119,7 +126,7 @@
 </div>
 
 <!-- Recent Activity -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6" data-tutorial="admin-activity">
   <!-- Recent Users -->
   <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">

@@ -1,0 +1,121 @@
+<!-- Page Header -->
+<div class="mb-8">
+  <h1 class="text-2xl font-bold text-gray-900">チュートリアル設定</h1>
+  <p class="mt-1 text-sm text-gray-500">チュートリアルの表示設定と進捗状況を管理します</p>
+</div>
+
+<!-- Settings Form -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-semibold text-gray-900">表示設定</h2>
+  </div>
+  <div class="p-6">
+    <%= form_with url: my_tutorial_settings_path, method: :patch, local: true, class: "space-y-6" do |f| %>
+      <div class="space-y-4">
+        <!-- Show Tutorials -->
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box "tutorial_settings[show_tutorials]",
+                { checked: current_user.tutorial_enabled?, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" },
+                "true", "false" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label "tutorial_settings[show_tutorials]", "チュートリアルを表示する", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">新しい画面にアクセスした際に、機能説明のチュートリアルを表示します</p>
+          </div>
+        </div>
+
+        <!-- Context Help -->
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box "tutorial_settings[show_context_help]",
+                { checked: current_user.context_help_enabled?, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" },
+                "true", "false" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label "tutorial_settings[show_context_help]", "コンテキストヘルプを表示する", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">各画面で「？」アイコンをクリックした際にヘルプを表示します</p>
+          </div>
+        </div>
+
+        <!-- Reduced Motion -->
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box "tutorial_settings[reduced_motion]",
+                { checked: current_user.reduced_motion?, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" },
+                "true", "false" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label "tutorial_settings[reduced_motion]", "アニメーションを減らす", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">チュートリアルのアニメーション効果を控えめにします</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-100">
+        <%= f.submit "設定を保存", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Tutorial Progress -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-semibold text-gray-900">チュートリアル進捗</h2>
+    <p class="mt-1 text-sm text-gray-500">各チュートリアルの完了状況を確認・リセットできます</p>
+  </div>
+  <div class="divide-y divide-gray-100">
+    <% @tutorial_progresses.each do |item| %>
+      <div class="p-6 flex items-center justify-between">
+        <div class="flex-1">
+          <h3 class="font-medium text-gray-900"><%= item[:label] %></h3>
+          <p class="mt-1 text-sm text-gray-500"><%= item[:description] %></p>
+          <div class="mt-2 flex items-center space-x-4">
+            <!-- Progress Bar -->
+            <div class="flex-1 max-w-xs">
+              <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <% progress_percentage = item[:progress].persisted? ? item[:progress].progress_percentage : 0 %>
+                <div class="h-full bg-indigo-600 rounded-full transition-all duration-300"
+                     style="width: <%= progress_percentage %>%"></div>
+              </div>
+            </div>
+            <!-- Status -->
+            <span class="text-sm <%= tutorial_status_class(item[:type]) %> px-2 py-0.5 rounded-full">
+              <% if item[:progress].completed? %>
+                完了
+              <% elsif item[:progress].skipped? %>
+                スキップ済み
+              <% elsif item[:progress].persisted? && item[:progress].current_step_position > 1 %>
+                <%= item[:progress].current_step_position - 1 %>/<%= item[:step_count] %> 完了
+              <% else %>
+                未開始
+              <% end %>
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="ml-6 flex items-center space-x-2">
+          <% if item[:progress].completed? || item[:progress].skipped? || (item[:progress].persisted? && item[:progress].current_step_position > 1) %>
+            <%= button_to "リセット",
+                reset_tutorial_path(tutorial_type: item[:type]),
+                method: :post,
+                class: "px-3 py-1.5 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors",
+                data: { turbo_confirm: "このチュートリアルの進捗をリセットしますか？" } %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Back Link -->
+<div class="mt-6">
+  <%= link_to my_profile_path, class: "inline-flex items-center text-sm text-gray-500 hover:text-gray-700" do %>
+    <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    マイページに戻る
+  <% end %>
+</div>

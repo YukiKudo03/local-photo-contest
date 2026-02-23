@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       end
     end
     resource :profile, only: [ :show, :edit, :update ]
+    resource :tutorial_settings, only: [ :show, :update ]
 
     # Judge assignments dashboard
     resources :judge_assignments, only: [ :index, :show ] do
@@ -61,6 +62,7 @@ Rails.application.routes.draw do
     end
     resources :categories
     resources :audit_logs, only: [ :index, :show ]
+    resource :tutorial_analytics, only: [ :show ], controller: "tutorial_analytics"
   end
 
   # Organizers namespace
@@ -126,6 +128,22 @@ Rails.application.routes.draw do
       post :decline
     end
   end
+
+  # Tutorials API
+  resources :tutorials, param: :tutorial_type, only: [ :show, :update ] do
+    member do
+      post :start
+      post :skip
+      post :reset
+    end
+    collection do
+      get :status
+      patch :settings, action: :update_settings
+    end
+  end
+
+  # Feedback API
+  post "/feedback/action", to: "feedback#action"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

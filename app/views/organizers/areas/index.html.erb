@@ -1,15 +1,21 @@
+<%# チュートリアル: エリア管理 %>
+<%= render "tutorials/tutorial_container", tutorial_type: "area_management", auto_start: should_show_tutorial?("area_management") if defined?(should_show_tutorial?) %>
+
 <!-- Page Header -->
 <div class="mb-8 flex items-center justify-between">
   <div>
     <h1 class="text-2xl font-bold text-gray-900">エリア管理</h1>
     <p class="mt-1 text-sm text-gray-500">撮影エリアを管理します</p>
   </div>
-  <%= link_to new_organizers_area_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
-    <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-    </svg>
-    新規作成
-  <% end %>
+  <div class="flex items-center gap-3">
+    <%= render "tutorials/help_button", tutorial_type: "area_management" %>
+    <%= link_to new_organizers_area_path, data: { tutorial: "new-area-button" }, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
+      <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      新規作成
+    <% end %>
+  </div>
 </div>
 
 <!-- Area Grid -->
