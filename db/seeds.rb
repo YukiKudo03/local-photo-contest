@@ -98,6 +98,13 @@ puts "#{Category.count} categories created."
 # Create default areas (Japanese regions)
 puts "Creating default areas..."
 
+# エリア作成用のユーザーを取得（開発環境ではorganizer、本番では最初のadmin）
+area_owner = if Rails.env.development?
+               User.find_by(email: "organizer@example.com")
+             else
+               User.find_by(role: :admin) || User.first
+             end
+
 default_areas = [
   "北海道",
   "東北",
@@ -110,15 +117,19 @@ default_areas = [
   "その他"
 ]
 
-default_areas.each_with_index do |name, index|
-  Area.find_or_create_by!(name: name) do |area|
-    area.position = index + 1
+if area_owner
+  default_areas.each_with_index do |name, index|
+    Area.find_or_create_by!(name: name, user: area_owner) do |area|
+      area.position = index + 1
+    end
   end
+else
+  puts "Warning: No user found for area creation. Skipping areas."
 end
 
 puts "#{Area.count} areas created."
 
-# Load tutorial steps
-load Rails.root.join("db/seeds/tutorial_steps.rb")
+# Load tutorial steps (v2 - Sakurai philosophy based)
+load Rails.root.join("db/seeds/tutorial_steps_v2.rb")
 
 puts "Seed completed!"
