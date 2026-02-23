@@ -7,6 +7,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 40;
   transition: opacity 0.3s ease-out;
+  pointer-events: none; /* クリックを通過させる */
 }
 
 /* ハイライト要素 */
@@ -19,6 +20,8 @@
     0 0 20px rgba(79, 70, 229, 0.4);
   border-radius: 8px;
   animation: tutorial-pulse 2s ease-in-out infinite;
+  pointer-events: auto; /* クリックを受け付ける */
+  cursor: pointer;
 }
 
 @keyframes tutorial-pulse {
@@ -59,6 +62,7 @@
   max-width: 380px;
   min-width: 280px;
   animation: tutorial-fade-in 0.3s ease-out;
+  pointer-events: auto; /* ボタン操作を可能に */
 }
 
 @keyframes tutorial-fade-in {
@@ -452,6 +456,8 @@ label .context-help-trigger {
               0 0 0 6px rgba(79, 70, 229, 0.2);
   border-radius: 8px;
   animation: tutorial-subtle-pulse 2s ease-in-out infinite;
+  pointer-events: auto; /* クリックを受け付ける */
+  cursor: pointer;
 }
 
 /* パルスアニメーション（桜井流：控えめ） */

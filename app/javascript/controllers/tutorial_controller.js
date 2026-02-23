@@ -111,6 +111,23 @@ export default class extends Controller {
     this.clearHighlight()
     element.classList.add('tutorial-highlight')
     element.scrollIntoView({ behavior: this.reducedMotionValue ? 'auto' : 'smooth', block: 'center' })
+
+    // ターゲット要素のクリックでステップを進める
+    this.currentTargetElement = element
+    this.targetClickHandler = (e) => this.onTargetClick(e)
+    element.addEventListener('click', this.targetClickHandler)
+  }
+
+  onTargetClick(event) {
+    const step = this.steps[this.currentStepIndex]
+    if (!step) return
+
+    // アクションが必要なステップ（observe以外）なら自動的に次へ進む
+    if (step.action_type && step.action_type !== 'observe') {
+      // 元のクリックイベントは通常通り処理させる（リンク遷移など）
+      // 少し遅延してから次のステップへ
+      setTimeout(() => this.next(), 300)
+    }
   }
 
   showTooltip(target, step) {
@@ -372,6 +389,13 @@ export default class extends Controller {
   }
 
   clearHighlight() {
+    // イベントリスナーを削除
+    if (this.currentTargetElement && this.targetClickHandler) {
+      this.currentTargetElement.removeEventListener('click', this.targetClickHandler)
+      this.currentTargetElement = null
+      this.targetClickHandler = null
+    }
+
     document.querySelectorAll('.tutorial-highlight').forEach(el => {
       el.classList.remove('tutorial-highlight')
     })
