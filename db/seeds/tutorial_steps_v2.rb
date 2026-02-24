@@ -62,14 +62,27 @@ TutorialStep.create!([
 
 # ========================================
 # 運営者オンボーディング（3ステップ）
+# ダッシュボードで完結するシンプルなチュートリアル
 # ========================================
 TutorialStep.create!([
   {
     tutorial_type: "organizer_onboarding",
-    step_id: "create_button",
+    step_id: "welcome",
     position: 1,
-    title: "作成ボタン",
-    description: "コンテストを作りましょう",
+    title: "ダッシュボード",
+    description: "ここが運営の拠点です",
+    target_selector: nil,
+    tooltip_position: "center",
+    action_type: "observe",
+    recommended_duration: 5,
+    success_feedback: { type: "subtle" }
+  },
+  {
+    tutorial_type: "organizer_onboarding",
+    step_id: "create_contest",
+    position: 2,
+    title: "コンテスト作成",
+    description: "ここから作成できます",
     target_selector: '[data-tutorial="create-contest"]',
     tooltip_position: "bottom",
     action_type: "tap",
@@ -78,30 +91,17 @@ TutorialStep.create!([
   },
   {
     tutorial_type: "organizer_onboarding",
-    step_id: "template",
-    position: 2,
-    title: "テンプレート選択",
-    description: "おすすめ設定で簡単スタート",
-    target_selector: '[data-tutorial="contest-templates"]',
-    tooltip_position: "right",
-    action_type: "select",
-    recommended_duration: 5,
-    success_feedback: { type: "subtle" }
-  },
-  {
-    tutorial_type: "organizer_onboarding",
-    step_id: "publish",
+    step_id: "stats",
     position: 3,
-    title: "タイトルを入れて公開",
-    description: "これだけで公開できます",
-    target_selector: '[data-tutorial="publish-button"]',
-    tooltip_position: "top",
-    action_type: "tap",
+    title: "統計情報",
+    description: "ここで状況を確認",
+    target_selector: '[data-tutorial="stats-grid"]',
+    tooltip_position: "bottom",
+    action_type: "observe",
     recommended_duration: 5,
     success_feedback: {
-      type: "celebration",
-      message: "公開しました！",
-      animation: "confetti"
+      type: "completion",
+      message: "準備完了！"
     }
   }
 ])

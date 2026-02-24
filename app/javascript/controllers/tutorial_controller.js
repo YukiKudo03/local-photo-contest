@@ -87,22 +87,25 @@ export default class extends Controller {
 
     this.currentStepIndex = index
     this.stepStartTime = Date.now()
-
-    this.showOverlay()
     this.updateProgress(index)
 
     // ターゲット要素のハイライト
     if (step.target_selector) {
       const target = document.querySelector(step.target_selector)
       if (target) {
+        // ターゲットがある場合のみオーバーレイを表示
+        this.showOverlay()
         this.highlightElement(target)
         this.showTooltip(target, step)
       } else {
-        // ターゲットが見つからない場合は中央に表示
+        // ターゲットが見つからない場合はオーバーレイなしで中央表示
+        this.hideOverlay()
         this.showCenteredTooltip(step)
+        console.warn(`Tutorial target not found: ${step.target_selector}`)
       }
     } else {
-      // ターゲットセレクターがない場合は中央に表示
+      // ターゲットセレクターがない場合はオーバーレイなしで中央表示
+      this.hideOverlay()
       this.showCenteredTooltip(step)
     }
   }
@@ -315,7 +318,12 @@ export default class extends Controller {
     clearTimeout(this.autoAdvanceTimer)
 
     const step = this.steps[this.currentStepIndex]
-    if (!step) return
+
+    // ステップがない場合（チュートリアル開始前のスキップ）
+    if (!step) {
+      await this.skipAll()
+      return
+    }
 
     try {
       await this.skipStep(step.step_id)
@@ -324,12 +332,37 @@ export default class extends Controller {
 
       if (this.currentStepIndex >= this.steps.length - 1) {
         this.cleanup()
+        this.closeModal()
       } else {
         this.currentStepIndex++
         this.showStep(this.currentStepIndex)
       }
     } catch (error) {
       console.error('Tutorial skip failed:', error)
+    }
+  }
+
+  async skipAll() {
+    try {
+      await this.fetchWithCsrf(`/tutorials/${this.tutorialTypeValue}/skip`, {
+        method: 'POST',
+        body: JSON.stringify({ skip_all: true })
+      })
+    } catch (error) {
+      console.error('Tutorial skip all failed:', error)
+    } finally {
+      this.cleanup()
+      this.closeModal()
+    }
+  }
+
+  closeModal() {
+    // モーダル要素（#welcome-modal）がある場合は削除
+    const modal = this.element.closest('#welcome-modal') || this.element.querySelector('#welcome-modal')
+    if (modal) {
+      modal.remove()
+    } else if (this.element.id === 'welcome-modal') {
+      this.element.remove()
     }
   }
 
