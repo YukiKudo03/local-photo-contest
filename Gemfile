@@ -75,6 +75,9 @@ group :development, :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "shoulda-matchers"
+
+  # N+1 query detection
+  gem "bullet"
 end
 
 group :development do

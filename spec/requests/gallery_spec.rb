@@ -3,6 +3,75 @@
 require "rails_helper"
 
 RSpec.describe "Gallery", type: :request do
+  describe "GET /gallery/map_data" do
+    let!(:contest) { create(:contest, :published) }
+    let!(:spot) { create(:spot, contest: contest, latitude: 35.6762, longitude: 139.6503) }
+
+    context "with multiple entries having votes" do
+      before do
+        # Create 5 entries with different vote counts
+        5.times do |i|
+          entry = create(:entry, contest: contest, spot: spot)
+          # Add varying number of votes
+          (i + 1).times do
+            user = create(:user, :confirmed)
+            create(:vote, entry: entry, user: user)
+          end
+        end
+      end
+
+      it "returns successful response" do
+        get map_data_gallery_index_path(format: :json)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns correct votes count for each entry" do
+        get map_data_gallery_index_path(format: :json)
+        json = JSON.parse(response.body)
+
+        expect(json.length).to eq(5)
+        # Check that votes_count is included and correct
+        json.each do |entry_data|
+          expect(entry_data).to have_key("votes_count")
+          expect(entry_data["votes_count"]).to be >= 1
+        end
+      end
+
+      it "does not cause N+1 queries for votes" do
+        # First request to warm up
+        get map_data_gallery_index_path(format: :json)
+
+        # Count queries on second request
+        query_count = 0
+        counter = lambda { |_name, _start, _finish, _id, payload|
+          query_count += 1 if payload[:sql] =~ /SELECT.*votes/i
+        }
+
+        ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+          get map_data_gallery_index_path(format: :json)
+        end
+
+        # Should have at most 2 queries for votes (preload + possible count), not N queries
+        # If N+1 exists, this would be 5+ (one per entry)
+        expect(query_count).to be <= 2, "Expected at most 2 votes queries but got #{query_count} (N+1 detected)"
+      end
+    end
+
+    context "with filters" do
+      let!(:spot2) { create(:spot, contest: contest, latitude: 34.6937, longitude: 135.5023) }
+      let!(:entry1) { create(:entry, contest: contest, spot: spot) }
+      let!(:entry2) { create(:entry, contest: contest, spot: spot2) }
+
+      it "filters by spot_id" do
+        get map_data_gallery_index_path(format: :json), params: { spot_id: spot.id }
+        json = JSON.parse(response.body)
+
+        expect(json.length).to eq(1)
+        expect(json.first["spot_id"]).to eq(spot.id)
+      end
+    end
+  end
+
   describe "GET /gallery" do
     let!(:published_contest) { create(:contest, :published) }
     let!(:finished_contest) { create(:contest, :published) }

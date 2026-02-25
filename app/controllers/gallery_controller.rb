@@ -112,7 +112,7 @@ class GalleryController < ApplicationController
       spot_name: entry.spot.name,
       spot_id: entry.spot_id,
       contest_title: entry.contest.title,
-      votes_count: entry.votes.count,
+      votes_count: entry.votes.size,
       user_name: entry.user.display_name,
       photo_url: entry.photo.attached? ? url_for(entry.photo.variant(resize_to_fill: [ 150, 150 ])) : nil,
       entry_url: entry_path(entry),
