@@ -70,6 +70,22 @@ RSpec.describe "Votes", type: :request do
           }.not_to change(Vote, :count)
         end
       end
+
+      context "when race condition occurs (duplicate vote at database level)" do
+        it "handles RecordNotUnique gracefully" do
+          # Create existing vote
+          create(:vote, user: voter, entry: entry)
+
+          # Simulate race condition by making valid? return true but save raise RecordNotUnique
+          allow_any_instance_of(Vote).to receive(:save).and_raise(ActiveRecord::RecordNotUnique.new("Duplicate entry"))
+
+          # This should not raise an error, but handle gracefully
+          post entry_vote_path(entry)
+
+          expect(response).to redirect_to(entry_path(entry))
+          expect(flash[:alert]).to be_present
+        end
+      end
     end
   end
 

@@ -103,4 +103,31 @@ RSpec.describe Vote, type: :model do
       expect(vote.contest).to eq(entry.contest)
     end
   end
+
+  describe 'database constraints' do
+    let(:user) { create(:user, :confirmed) }
+    let(:entry) { create(:entry) }
+
+    it 'enforces uniqueness at database level' do
+      # Create first vote normally
+      create(:vote, user: user, entry: entry)
+
+      # Try to create duplicate by bypassing application validations
+      duplicate = Vote.new(user: user, entry: entry)
+
+      expect {
+        duplicate.save(validate: false)
+      }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'allows the same user to vote on different entries' do
+      other_entry = create(:entry)
+
+      vote1 = create(:vote, user: user, entry: entry)
+      vote2 = create(:vote, user: user, entry: other_entry)
+
+      expect(vote1).to be_persisted
+      expect(vote2).to be_persisted
+    end
+  end
 end

@@ -19,6 +19,12 @@ class VotesController < ApplicationController
         format.turbo_stream { render turbo_stream: turbo_stream.replace("vote_button_#{@entry.id}", partial: "votes/button", locals: { entry: @entry }) }
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    # Handle race condition - vote already exists at database level
+    respond_to do |format|
+      format.html { redirect_to @entry, alert: "既にこの作品に投票しています。" }
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("vote_button_#{@entry.id}", partial: "votes/button", locals: { entry: @entry }) }
+    end
   end
 
   def destroy
