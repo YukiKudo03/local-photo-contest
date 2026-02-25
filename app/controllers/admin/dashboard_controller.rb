@@ -3,16 +3,7 @@
 module Admin
   class DashboardController < BaseController
     def show
-      @stats = {
-        total_users: User.count,
-        users_today: User.where("created_at >= ?", Date.current.beginning_of_day).count,
-        total_contests: Contest.count,
-        active_contests: Contest.active.count,
-        total_entries: Entry.count,
-        entries_today: Entry.where("created_at >= ?", Date.current.beginning_of_day).count,
-        total_votes: Vote.count,
-        pending_moderation: Entry.needs_moderation_review.count
-      }
+      @stats = dashboard_stats_service.all_stats
 
       @recent_users = User.order(created_at: :desc).limit(10)
       @recent_contests = Contest.includes(:user).order(created_at: :desc).limit(10)
@@ -29,6 +20,12 @@ module Admin
                           .group("DATE(created_at)")
                           .count
                           .transform_keys { |k| k.to_s }
+    end
+
+    private
+
+    def dashboard_stats_service
+      @dashboard_stats_service ||= DashboardStatsService.new
     end
   end
 end
