@@ -52,6 +52,7 @@
             <div class="hidden md:block">
               <div class="ml-4 flex items-center md:ml-6">
                 <span class="text-gray-300 text-sm mr-4"><%= current_user.email %></span>
+                <%= link_to "管理者ガイド", help_guide_path(:admin), class: "text-gray-300 hover:text-white text-sm mr-4" %>
                 <%= link_to "サイトに戻る", root_path, class: "text-gray-300 hover:text-white text-sm mr-4" %>
                 <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
                     class: "rounded-md bg-gray-700 px-3 py-2 text-sm font-medium text-white hover:bg-gray-600" %>

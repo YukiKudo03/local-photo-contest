@@ -1,0 +1,48 @@
+<% content_for :title, "利用マニュアル" %>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">利用マニュアル</h1>
+    <p class="text-gray-600">Local Photo Contest の使い方をご案内します。</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <% @guides.each do |key, guide| %>
+      <%= link_to help_guide_path(key), class: "block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 group" do %>
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+            <%= guide_icon_svg(guide[:icon]) %>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+              <%= guide[:title] %>
+            </h2>
+            <p class="text-sm text-gray-600 line-clamp-2">
+              <%= guide[:description] %>
+            </p>
+          </div>
+          <div class="flex-shrink-0 text-gray-400 group-hover:text-blue-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if user_signed_in? %>
+    <div class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+      <h3 class="font-medium text-blue-900 mb-2">おすすめのマニュアル</h3>
+      <p class="text-sm text-blue-700">
+        <% if current_user.admin? %>
+          システム管理者の方は <%= link_to "管理者向けマニュアル", help_guide_path(:admin), class: "underline hover:text-blue-900" %> をご覧ください。
+        <% elsif current_user.organizer? %>
+          主催者の方は <%= link_to "主催者向けマニュアル", help_guide_path(:organizer), class: "underline hover:text-blue-900" %> をご覧ください。
+        <% else %>
+          コンテストへの参加方法は <%= link_to "参加者向けマニュアル", help_guide_path(:participant), class: "underline hover:text-blue-900" %> をご覧ください。
+        <% end %>
+      </p>
+    </div>
+  <% end %>
+</div>

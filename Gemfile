@@ -57,6 +57,10 @@ gem "groupdate"
 # AWS SDK for content moderation (Rekognition)
 gem "aws-sdk-rekognition"
 
+# Markdown rendering for help pages
+gem "redcarpet"
+gem "rouge"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

@@ -154,3 +154,34 @@ ja:
         success: 正常に更新されました
       destroy:
         success: 正常に削除されました
+  help:
+    index:
+      title: 利用ガイド
+      description: Local Photo Contestの使い方をご案内します
+      select_guide: 役割に応じたガイドをお選びください
+    show:
+      back_to_list: ガイド一覧に戻る
+      table_of_contents: 目次
+      toggle_toc: 目次を表示/非表示
+      not_found: 指定されたガイドが見つかりません
+    guides:
+      participant:
+        title: 参加者向けマニュアル
+        description: コンテストへの参加方法、写真の応募、投票の仕方など
+      organizer:
+        title: 主催者向けマニュアル
+        description: コンテストの作成・運営方法、審査員の招待など
+      judge:
+        title: 審査員向けマニュアル
+        description: 審査の流れ、評価基準、審査システムの使い方など
+      admin:
+        title: 管理者向けマニュアル
+        description: システム管理、ユーザー管理、監査ログの確認など
+    navigation:
+      help: ヘルプ
+      guide: ガイド
+      all_manuals: 全マニュアル
+      participant_guide: 参加者ガイド
+      organizer_guide: 主催者ガイド
+      judge_guide: 審査員ガイド
+      admin_guide: 管理者ガイド

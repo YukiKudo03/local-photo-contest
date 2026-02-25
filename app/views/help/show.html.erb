@@ -1,0 +1,84 @@
+<% content_for :title, @guide[:title] %>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <%# Back link %>
+  <div class="mb-6">
+    <%= link_to help_path, class: "inline-flex items-center text-sm text-gray-600 hover:text-blue-600 transition-colors" do %>
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      マニュアル一覧に戻る
+    <% end %>
+  </div>
+
+  <div class="lg:flex lg:gap-8">
+    <%# Table of Contents - Sidebar on desktop, collapsible on mobile %>
+    <aside class="lg:w-64 lg:flex-shrink-0 mb-6 lg:mb-0">
+      <div class="lg:sticky lg:top-4" data-controller="toc">
+        <%# Mobile toggle %>
+        <button
+          type="button"
+          class="lg:hidden w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 mb-2"
+          data-action="click->toc#toggle"
+          data-toc-target="toggleButton"
+          aria-expanded="false"
+        >
+          <span class="font-medium text-gray-700">目次</span>
+          <svg class="w-5 h-5 text-gray-500 transform transition-transform" data-toc-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <%# TOC content %>
+        <nav
+          class="hidden lg:block bg-gray-50 rounded-lg border border-gray-200 p-4 overflow-hidden transition-all duration-200"
+          data-toc-target="content"
+          aria-label="目次"
+        >
+          <h2 class="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">目次</h2>
+          <%= render "toc", toc: @toc %>
+        </nav>
+      </div>
+    </aside>
+
+    <%# Main content %>
+    <main class="flex-1 min-w-0">
+      <article class="bg-white rounded-lg border border-gray-200 p-6 lg:p-8">
+        <header class="mb-6 pb-6 border-b border-gray-200">
+          <h1 class="text-2xl lg:text-3xl font-bold text-gray-900"><%= @guide[:title] %></h1>
+          <p class="mt-2 text-gray-600"><%= @guide[:description] %></p>
+        </header>
+
+        <div class="prose prose-blue max-w-none
+          prose-headings:scroll-mt-4
+          prose-h2:text-xl prose-h2:font-bold prose-h2:text-gray-900 prose-h2:mt-8 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-200
+          prose-h3:text-lg prose-h3:font-semibold prose-h3:text-gray-800 prose-h3:mt-6 prose-h3:mb-3
+          prose-p:text-gray-700 prose-p:leading-relaxed
+          prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+          prose-ul:my-4 prose-li:text-gray-700
+          prose-ol:my-4
+          prose-table:border-collapse prose-table:w-full
+          prose-th:bg-gray-50 prose-th:p-3 prose-th:text-left prose-th:font-semibold prose-th:border prose-th:border-gray-200
+          prose-td:p-3 prose-td:border prose-td:border-gray-200
+          prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:text-gray-800
+          prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
+          prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic
+          prose-strong:text-gray-900
+          prose-hr:my-8 prose-hr:border-gray-200
+        ">
+          <%= @content %>
+        </div>
+      </article>
+
+      <%# Back to top %>
+      <div class="mt-6 text-center">
+        <%= link_to help_path, class: "inline-flex items-center text-sm text-gray-600 hover:text-blue-600 transition-colors" do %>
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          マニュアル一覧に戻る
+        <% end %>
+      </div>
+    </main>
+  </div>
+</div>

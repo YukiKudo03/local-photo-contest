@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # Help pages (public access, no authentication required)
+  get "help", to: "help#index", as: :help
+  get "help/:guide", to: "help#show", as: :help_guide,
+      constraints: { guide: /participant|organizer|judge|admin/ }
+
   # Participant-facing routes
   resources :contests, only: [ :index, :show ] do
     resources :entries, only: [ :new, :create ], shallow: true

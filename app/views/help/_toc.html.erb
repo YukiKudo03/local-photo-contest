@@ -1,0 +1,17 @@
+<% if toc.present? %>
+  <ul class="space-y-1 text-sm">
+    <% toc.each do |item| %>
+      <li class="<%= 'ml-4' if item[:depth] > 0 %>">
+        <a
+          href="#<%= item[:anchor] %>"
+          class="block py-1.5 px-2 rounded text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+          data-turbo="false"
+        >
+          <%= item[:title] %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-sm text-gray-500">目次はありません</p>
+<% end %>
