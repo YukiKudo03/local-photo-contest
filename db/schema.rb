@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_23_150839) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_25_214417) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -223,7 +223,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_23_150839) do
     t.integer "location_source", default: 0
     t.integer "moderation_status", default: 0, null: false
     t.index ["area_id"], name: "index_entries_on_area_id"
+    t.index ["contest_id", "moderation_status"], name: "index_entries_on_contest_id_and_moderation_status"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
+    t.index ["created_at"], name: "index_entries_on_created_at"
     t.index ["moderation_status"], name: "index_entries_on_moderation_status"
     t.index ["spot_id"], name: "index_entries_on_spot_id"
     t.index ["user_id", "contest_id"], name: "index_entries_on_user_id_and_contest_id"
