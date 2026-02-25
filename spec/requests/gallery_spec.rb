@@ -137,7 +137,7 @@ RSpec.describe "Gallery", type: :request do
     describe "pagination" do
       before do
         # Create many entries
-        20.times { create(:entry, contest: published_contest) }
+        30.times { create(:entry, contest: published_contest) }
       end
 
       it "paginates results" do
@@ -148,6 +148,37 @@ RSpec.describe "Gallery", type: :request do
       it "shows page 2" do
         get gallery_index_path, params: { page: 2 }
         expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "infinite scroll" do
+      before do
+        # Create entries that span multiple pages (24 per page)
+        30.times { |i| create(:entry, contest: published_contest, title: "Entry #{i + 1}") }
+      end
+
+      it "includes turbo frame for gallery entries" do
+        get gallery_index_path
+        expect(response.body).to include('id="gallery-entries"')
+        expect(response.body).to include("turbo-frame")
+      end
+
+      it "includes next page link with turbo frame" do
+        get gallery_index_path
+        expect(response.body).to include("page=2")
+      end
+
+      it "returns partial content for turbo frame requests" do
+        get gallery_index_path, params: { page: 2 }, headers: { "Turbo-Frame" => "gallery-entries" }
+        expect(response).to have_http_status(:success)
+        # Should not include the full page layout elements
+        expect(response.body).not_to include('class="container mx-auto max-w-7xl px-4 py-8">')
+      end
+
+      it "preserves filter params in next page link" do
+        get gallery_index_path, params: { contest_id: published_contest.id, sort: "popular" }
+        expect(response.body).to include("contest_id=#{published_contest.id}")
+        expect(response.body).to include("sort=popular")
       end
     end
 

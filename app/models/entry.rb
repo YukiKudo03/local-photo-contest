@@ -34,6 +34,7 @@ class Entry < ApplicationRecord
   # Callbacks
   after_create_commit :enqueue_moderation_job
   after_create_commit :broadcast_new_entry_notification
+  after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
   # Scopes
   scope :by_contest, ->(contest) { where(contest: contest) }
@@ -125,5 +126,11 @@ class Entry < ApplicationRecord
     NotificationBroadcaster.new_entry(self)
   rescue => e
     Rails.logger.error("Failed to broadcast new entry notification: #{e.message}")
+  end
+
+  def clear_statistics_cache
+    StatisticsService.clear_cache(contest)
+  rescue => e
+    Rails.logger.error("Failed to clear statistics cache: #{e.message}")
   end
 end

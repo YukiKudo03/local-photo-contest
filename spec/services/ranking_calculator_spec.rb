@@ -139,4 +139,188 @@ RSpec.describe RankingCalculator do
       expect(contest.contest_rankings.count).to eq(0)
     end
   end
+
+  describe "edge cases" do
+    context "when there are no judges" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+
+      it "handles entries without any judge evaluations" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        # All entries should have 0 judge score
+        expect(rankings.size).to eq(3)
+        rankings.each do |ranking|
+          expect(ranking[:judge_score]).to eq(0)
+          expect(ranking[:total_score]).to eq(0)
+        end
+      end
+
+      it "assigns ranks based on tiebreaker (created_at)" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        # With all scores at 0, ranks should be by created_at
+        expect(rankings[0][:entry]).to eq(entries[0])
+        expect(rankings[0][:rank]).to eq(1)
+        expect(rankings[1][:entry]).to eq(entries[1])
+        expect(rankings[1][:rank]).to eq(2)
+      end
+    end
+
+    context "when there are no entries" do
+      let(:contest_no_entries) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+
+      it "returns empty rankings" do
+        calculator = described_class.new(contest_no_entries)
+        rankings = calculator.calculate
+
+        expect(rankings).to be_empty
+        expect(contest_no_entries.contest_rankings.count).to eq(0)
+      end
+    end
+
+    context "when all entries have exact same score" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+      let(:judge) { create(:user) }
+      let!(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+      let!(:criterion) { create(:evaluation_criterion, contest: contest, max_score: 10) }
+
+      before do
+        entries.each do |entry|
+          create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 7)
+        end
+      end
+
+      it "assigns sequential ranks by tiebreaker" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        # All have same score (7 out of 10 = 70 normalized), so rank by created_at
+        expect(rankings[0][:rank]).to eq(1)
+        expect(rankings[1][:rank]).to eq(2)
+        expect(rankings[2][:rank]).to eq(3)
+        # All entries should have same normalized score
+        expect(rankings.map { |r| r[:judge_score] }.uniq.size).to eq(1)
+      end
+
+      it "orders by created_at for same scores" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        expect(rankings[0][:entry]).to eq(entries[0])
+        expect(rankings[1][:entry]).to eq(entries[1])
+        expect(rankings[2][:entry]).to eq(entries[2])
+      end
+    end
+
+    context "when judge evaluation is partial (not all judges evaluated)" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+      let(:judge1) { create(:user) }
+      let(:judge2) { create(:user) }
+      let!(:contest_judge1) { create(:contest_judge, contest: contest, user: judge1) }
+      let!(:contest_judge2) { create(:contest_judge, contest: contest, user: judge2) }
+      let!(:criterion) { create(:evaluation_criterion, contest: contest, max_score: 10) }
+
+      before do
+        # Judge 1 evaluates all entries
+        create(:judge_evaluation, contest_judge: contest_judge1, entry: entries[0], evaluation_criterion: criterion, score: 8)
+        create(:judge_evaluation, contest_judge: contest_judge1, entry: entries[1], evaluation_criterion: criterion, score: 6)
+        create(:judge_evaluation, contest_judge: contest_judge1, entry: entries[2], evaluation_criterion: criterion, score: 10)
+
+        # Judge 2 only evaluates first entry (partial)
+        create(:judge_evaluation, contest_judge: contest_judge2, entry: entries[0], evaluation_criterion: criterion, score: 9)
+      end
+
+      it "calculates average from available evaluations" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        # Entry 0: (8 + 9) / 2 = 8.5
+        # Entry 1: 6 / 1 = 6
+        # Entry 2: 10 / 1 = 10
+        expect(rankings[0][:entry]).to eq(entries[2]) # score 10
+        expect(rankings[1][:entry]).to eq(entries[0]) # score 8.5
+        expect(rankings[2][:entry]).to eq(entries[1]) # score 6
+      end
+    end
+
+    context "when judge leaves mid-contest (evaluations removed)" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+      let(:judge1) { create(:user) }
+      let(:judge2) { create(:user) }
+      let!(:contest_judge1) { create(:contest_judge, contest: contest, user: judge1) }
+      let!(:contest_judge2) { create(:contest_judge, contest: contest, user: judge2) }
+      let!(:criterion) { create(:evaluation_criterion, contest: contest, max_score: 10) }
+
+      before do
+        # Both judges evaluate all entries
+        entries.each_with_index do |entry, i|
+          create(:judge_evaluation, contest_judge: contest_judge1, entry: entry, evaluation_criterion: criterion, score: 5 + i)
+          create(:judge_evaluation, contest_judge: contest_judge2, entry: entry, evaluation_criterion: criterion, score: 7 + i)
+        end
+
+        # Judge 2 leaves - remove their evaluations
+        JudgeEvaluation.where(contest_judge: contest_judge2).destroy_all
+      end
+
+      it "recalculates rankings with remaining judge evaluations" do
+        calculator = described_class.new(contest)
+        rankings = calculator.calculate
+
+        # Only judge1's scores remain: 5, 6, 7
+        expect(rankings[0][:entry]).to eq(entries[2]) # score 7
+        expect(rankings[1][:entry]).to eq(entries[1]) # score 6
+        expect(rankings[2][:entry]).to eq(entries[0]) # score 5
+      end
+    end
+
+    context "with mixed vote and judge in hybrid mode" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :hybrid, judge_weight: 50) }
+      let(:voters) { create_list(:user, 5) }
+
+      context "when there are only votes (no judge scores)" do
+        before do
+          voters[0..2].each { |v| create(:vote, entry: entries[0], user: v) }
+          voters[0..1].each { |v| create(:vote, entry: entries[1], user: v) }
+          voters[0..0].each { |v| create(:vote, entry: entries[2], user: v) }
+        end
+
+        it "calculates ranking based only on votes" do
+          calculator = described_class.new(contest)
+          rankings = calculator.calculate
+
+          # Hybrid with 50% judge (0) + 50% vote
+          # Entry 0: 0 + 50 * (3/3) = 50
+          # Entry 1: 0 + 50 * (2/3) = 33.33
+          # Entry 2: 0 + 50 * (1/3) = 16.67
+          expect(rankings[0][:entry]).to eq(entries[0])
+          expect(rankings[1][:entry]).to eq(entries[1])
+          expect(rankings[2][:entry]).to eq(entries[2])
+        end
+      end
+
+      context "when there are only judge scores (no votes)" do
+        let(:judge) { create(:user) }
+        let!(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+        let!(:criterion) { create(:evaluation_criterion, contest: contest, max_score: 10) }
+
+        before do
+          create(:judge_evaluation, contest_judge: contest_judge, entry: entries[0], evaluation_criterion: criterion, score: 5)
+          create(:judge_evaluation, contest_judge: contest_judge, entry: entries[1], evaluation_criterion: criterion, score: 10)
+          create(:judge_evaluation, contest_judge: contest_judge, entry: entries[2], evaluation_criterion: criterion, score: 7)
+        end
+
+        it "calculates ranking based only on judge scores" do
+          calculator = described_class.new(contest)
+          rankings = calculator.calculate
+
+          # Hybrid with 50% judge + 50% vote (0)
+          expect(rankings[0][:entry]).to eq(entries[1]) # score 10
+          expect(rankings[1][:entry]).to eq(entries[2]) # score 7
+          expect(rankings[2][:entry]).to eq(entries[0]) # score 5
+        end
+      end
+    end
+  end
 end

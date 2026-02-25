@@ -1,31 +1,46 @@
 # frozen_string_literal: true
 
 class StatisticsService
+  CACHE_TTL = 5.minutes
+  CACHE_NAMESPACE = "statistics"
+
   attr_reader :contest
 
   def initialize(contest)
     @contest = contest
   end
 
+  # Clear all cached statistics for a contest
+  def self.clear_cache(contest)
+    cache_keys = %w[summary daily_entries daily_votes spot_rankings vote_summary]
+    cache_keys.each do |key|
+      Rails.cache.delete("#{CACHE_NAMESPACE}/#{contest.id}/#{key}")
+    end
+  end
+
   # Task 2: サマリーカード用データ
   def summary_stats
-    {
-      total_entries: total_entries_count,
-      total_votes: total_votes_count,
-      total_participants: total_participants_count,
-      total_spots: total_spots_count,
-      entries_change: entries_change_from_yesterday,
-      votes_change: votes_change_from_yesterday,
-      participants_change: participants_change_from_yesterday,
-      spots_change: spots_change_from_yesterday
-    }
+    Rails.cache.fetch(cache_key("summary"), expires_in: CACHE_TTL) do
+      {
+        total_entries: total_entries_count,
+        total_votes: total_votes_count,
+        total_participants: total_participants_count,
+        total_spots: total_spots_count,
+        entries_change: entries_change_from_yesterday,
+        votes_change: votes_change_from_yesterday,
+        participants_change: participants_change_from_yesterday,
+        spots_change: spots_change_from_yesterday
+      }
+    end
   end
 
   # Task 3: 日別応募数（Chartkick対応形式）
   def daily_entries
-    contest.entries
-           .group_by_day(:created_at, time_zone: "Tokyo")
-           .count
+    Rails.cache.fetch(cache_key("daily_entries"), expires_in: CACHE_TTL) do
+      contest.entries
+             .group_by_day(:created_at, time_zone: "Tokyo")
+             .count
+    end
   end
 
   # Task 3: 週別応募数（7日以上の場合のオプション）
@@ -48,26 +63,28 @@ class StatisticsService
 
   # Task 4: スポット別ランキング（上位limit件）
   def spot_rankings(limit: 10)
-    spot_counts = contest.entries
-                         .group(:spot_id)
-                         .count
+    Rails.cache.fetch(cache_key("spot_rankings"), expires_in: CACHE_TTL) do
+      spot_counts = contest.entries
+                           .group(:spot_id)
+                           .count
 
-    # スポット情報を取得
-    spot_ids = spot_counts.keys.compact
-    spots_by_id = Spot.where(id: spot_ids).index_by(&:id)
+      # スポット情報を取得
+      spot_ids = spot_counts.keys.compact
+      spots_by_id = Spot.where(id: spot_ids).index_by(&:id)
 
-    # ランキングデータを構築
-    rankings = spot_counts.map do |spot_id, count|
-      if spot_id.nil?
-        { spot: nil, name: "スポット未指定", count: count }
-      else
-        spot = spots_by_id[spot_id]
-        { spot: spot, name: spot&.name || "不明", count: count }
+      # ランキングデータを構築
+      rankings = spot_counts.map do |spot_id, count|
+        if spot_id.nil?
+          { spot: nil, name: "スポット未指定", count: count }
+        else
+          spot = spots_by_id[spot_id]
+          { spot: spot, name: spot&.name || "不明", count: count }
+        end
       end
-    end
 
-    # 降順ソートしてlimit件を返す
-    rankings.sort_by { |r| -r[:count] }.first(limit)
+      # 降順ソートしてlimit件を返す
+      rankings.sort_by { |r| -r[:count] }.first(limit)
+    end
   end
 
   # Task 4: エリア別応募分布（円グラフ用）
@@ -89,26 +106,30 @@ class StatisticsService
 
   # Task 5: 日別投票数（Chartkick対応形式）
   def daily_votes
-    Vote.joins(entry: :contest)
-        .where(entries: { contest_id: contest.id })
-        .group_by_day(:created_at, time_zone: "Tokyo")
-        .count
+    Rails.cache.fetch(cache_key("daily_votes"), expires_in: CACHE_TTL) do
+      Vote.joins(entry: :contest)
+          .where(entries: { contest_id: contest.id })
+          .group_by_day(:created_at, time_zone: "Tokyo")
+          .count
+    end
   end
 
   # Task 5: 投票サマリー
   def vote_summary
-    votes = Vote.joins(entry: :contest)
-                .where(entries: { contest_id: contest.id })
+    Rails.cache.fetch(cache_key("vote_summary"), expires_in: CACHE_TTL) do
+      votes = Vote.joins(entry: :contest)
+                  .where(entries: { contest_id: contest.id })
 
-    total = votes.count
-    unique_voters = votes.distinct.count(:user_id)
-    entries_count = contest.entries.count
+      total = votes.count
+      unique_voters = votes.distinct.count(:user_id)
+      entries_count = contest.entries.count
 
-    {
-      total: total,
-      unique_voters: unique_voters,
-      average_per_entry: entries_count.positive? ? (total.to_f / entries_count).round(2) : 0
-    }
+      {
+        total: total,
+        unique_voters: unique_voters,
+        average_per_entry: entries_count.positive? ? (total.to_f / entries_count).round(2) : 0
+      }
+    end
   end
 
   # Task 5: 上位得票作品（Top limit件）
@@ -183,5 +204,9 @@ class StatisticsService
     return nil if yesterday_count.zero? && today_count.zero?
 
     today_count - yesterday_count
+  end
+
+  def cache_key(suffix)
+    "#{CACHE_NAMESPACE}/#{contest.id}/#{suffix}"
   end
 end

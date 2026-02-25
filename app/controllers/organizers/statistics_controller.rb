@@ -19,6 +19,26 @@ module Organizers
       @voting_started = @service.voting_started?
     end
 
+    def export
+      export_service = StatisticsExportService.new(@contest)
+      export_type = params[:type] || "daily"
+
+      csv_data, filename = case export_type
+      when "summary"
+        [ export_service.summary_csv, "summary_#{@contest.id}.csv" ]
+      when "entries"
+        [ export_service.entries_csv, "entries_#{@contest.id}.csv" ]
+      when "spots"
+        [ export_service.spots_csv, "spots_#{@contest.id}.csv" ]
+      else
+        [ export_service.to_csv, "daily_statistics_#{@contest.id}.csv" ]
+      end
+
+      send_data csv_data,
+                filename: filename,
+                type: "text/csv; charset=utf-8"
+    end
+
     private
 
     def set_contest

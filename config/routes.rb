@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Health check endpoints
+  get "health", to: "health#show"
+  get "health/details", to: "health#details"
+
   # Devise routes for user authentication
   devise_for :users, path: "organizers", controllers: {
     sessions: "organizers/sessions",
@@ -117,7 +121,9 @@ Rails.application.routes.draw do
         post :calculate
         post :announce
       end
-      resource :statistics, only: [ :show ]
+      resource :statistics, only: [ :show ] do
+        get :export
+      end
       member do
         patch :publish
         patch :finish

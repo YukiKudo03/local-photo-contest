@@ -274,4 +274,157 @@ RSpec.describe StatisticsService do
       expect(draft_service.voting_started?).to be false
     end
   end
+
+  describe "caching", :caching do
+    around do |example|
+      original_cache = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+      example.run
+      Rails.cache = original_cache
+    end
+
+    # Disable cache clearing callbacks for caching behavior tests
+    before do
+      allow_any_instance_of(Entry).to receive(:clear_statistics_cache)
+      allow_any_instance_of(Vote).to receive(:clear_statistics_cache)
+    end
+
+    describe "#summary_stats" do
+      it "caches results" do
+        # First call - cache miss
+        first_result = service.summary_stats
+
+        # Create new entry after caching
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+
+        # Second call should return cached result
+        second_result = service.summary_stats
+
+        expect(second_result[:total_entries]).to eq(first_result[:total_entries])
+      end
+
+      it "uses contest-specific cache key" do
+        other_contest = create(:contest, :published, user: organizer)
+        other_service = described_class.new(other_contest)
+
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+
+        contest_stats = service.summary_stats
+        other_stats = other_service.summary_stats
+
+        expect(contest_stats[:total_entries]).to eq(1)
+        expect(other_stats[:total_entries]).to eq(0)
+      end
+    end
+
+    describe "#daily_entries" do
+      it "caches results" do
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+        first_result = service.daily_entries.dup
+
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+        second_result = service.daily_entries
+
+        expect(second_result.values.sum).to eq(first_result.values.sum)
+      end
+    end
+
+    describe "#daily_votes" do
+      it "caches results" do
+        entry = create(:entry, contest: contest, user: create(:user, :confirmed))
+        create(:vote, entry: entry, user: create(:user, :confirmed))
+        first_result = service.daily_votes.dup
+
+        create(:vote, entry: entry, user: create(:user, :confirmed))
+        second_result = service.daily_votes
+
+        expect(second_result.values.sum).to eq(first_result.values.sum)
+      end
+    end
+
+    describe "#spot_rankings" do
+      it "caches results" do
+        spot = create(:spot, contest: contest)
+        create(:entry, contest: contest, user: create(:user, :confirmed), spot: spot)
+        first_result = service.spot_rankings.dup
+
+        create(:entry, contest: contest, user: create(:user, :confirmed), spot: spot)
+        second_result = service.spot_rankings
+
+        expect(second_result.first[:count]).to eq(first_result.first[:count])
+      end
+    end
+
+    describe "#vote_summary" do
+      it "caches results" do
+        entry = create(:entry, contest: contest, user: create(:user, :confirmed))
+        create(:vote, entry: entry, user: create(:user, :confirmed))
+        first_result = service.vote_summary.dup
+
+        create(:vote, entry: entry, user: create(:user, :confirmed))
+        second_result = service.vote_summary
+
+        expect(second_result[:total]).to eq(first_result[:total])
+      end
+    end
+
+    describe ".clear_cache" do
+      it "clears all cached statistics for a contest" do
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+        first_result = service.summary_stats
+
+        # Clear cache
+        described_class.clear_cache(contest)
+
+        # Create new entry
+        create(:entry, contest: contest, user: create(:user, :confirmed))
+
+        # Should now return fresh data
+        new_service = described_class.new(contest)
+        fresh_result = new_service.summary_stats
+
+        expect(fresh_result[:total_entries]).to eq(2)
+      end
+    end
+  end
+
+  describe "cache invalidation callbacks" do
+    around do |example|
+      original_cache = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+      example.run
+      Rails.cache = original_cache
+    end
+
+    it "clears cache when entry is created" do
+      # Cache initial stats
+      first_result = service.summary_stats
+      expect(first_result[:total_entries]).to eq(0)
+
+      # Create entry (triggers cache clear callback)
+      create(:entry, contest: contest, user: create(:user, :confirmed))
+
+      # Should return fresh data
+      new_service = described_class.new(contest)
+      second_result = new_service.summary_stats
+      expect(second_result[:total_entries]).to eq(1)
+    end
+
+    it "clears cache when vote is created" do
+      entry = create(:entry, contest: contest, user: create(:user, :confirmed))
+      voter = create(:user, :confirmed)
+
+      # Cache initial stats
+      first_result = service.vote_summary
+      expect(first_result[:total]).to eq(0)
+
+      # Create vote (triggers cache clear callback)
+      create(:vote, entry: entry, user: voter)
+
+      # Should return fresh data
+      new_service = described_class.new(contest)
+      second_result = new_service.vote_summary
+      expect(second_result[:total]).to eq(1)
+    end
+  end
 end

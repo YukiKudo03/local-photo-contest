@@ -143,4 +143,76 @@ RSpec.describe "Organizers::DiscoverySpots", type: :request do
       end
     end
   end
+
+  describe "POST /organizers/contests/:contest_id/discovery_spots/merge" do
+    let!(:target_spot) { create(:spot, :certified, contest: contest, name: "統合先スポット") }
+    let!(:source_spot1) { create(:spot, :certified, contest: contest, name: "統合元スポット1") }
+    let!(:source_spot2) { create(:spot, :certified, contest: contest, name: "統合元スポット2") }
+
+    context "when not signed in" do
+      it "redirects to login page" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id, source_ids: [ source_spot1.id, source_spot2.id ] }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when signed in as organizer" do
+      before { sign_in organizer }
+
+      it "merges source spots into target" do
+        entry1 = create(:entry, contest: contest, spot: source_spot1)
+        entry2 = create(:entry, contest: contest, spot: source_spot2)
+
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id, source_ids: [ source_spot1.id, source_spot2.id ] }
+
+        expect(entry1.reload.spot).to eq(target_spot)
+        expect(entry2.reload.spot).to eq(target_spot)
+      end
+
+      it "destroys source spots after merge" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id, source_ids: [ source_spot1.id, source_spot2.id ] }
+
+        expect { source_spot1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { source_spot2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "redirects back to discovery spots index with notice" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id, source_ids: [ source_spot1.id, source_spot2.id ] }
+
+        expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+        expect(flash[:notice]).to include("統合しました")
+      end
+
+      it "requires target_id parameter" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { source_ids: [ source_spot1.id ] }
+
+        expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+        expect(flash[:alert]).to be_present
+      end
+
+      it "requires source_ids parameter" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id }
+
+        expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+        expect(flash[:alert]).to be_present
+      end
+
+      it "handles target spot not found in contest" do
+        other_spot = create(:spot, :certified, contest: other_contest)
+
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: other_spot.id, source_ids: [ source_spot1.id ] }
+
+        # Controller catches RecordNotFound and redirects with error
+        expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
 end

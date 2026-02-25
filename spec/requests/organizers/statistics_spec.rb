@@ -109,4 +109,73 @@ RSpec.describe "Organizers::Statistics", type: :request do
       end
     end
   end
+
+  describe "GET /organizers/contests/:contest_id/statistics/export" do
+    context "when not authenticated" do
+      it "redirects to login page" do
+        get export_organizers_contest_statistics_path(contest)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when authenticated as contest owner" do
+      before { sign_in organizer }
+
+      it "returns CSV file" do
+        get export_organizers_contest_statistics_path(contest)
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to include("text/csv")
+      end
+
+      it "sets filename in content disposition" do
+        get export_organizers_contest_statistics_path(contest)
+        expect(response.headers["Content-Disposition"]).to include("daily_statistics")
+      end
+
+      it "includes BOM in CSV for Excel compatibility" do
+        get export_organizers_contest_statistics_path(contest)
+        # UTF-8 BOM
+        expect(response.body.bytes[0..2]).to eq([ 0xEF, 0xBB, 0xBF ])
+      end
+
+      context "with type=summary" do
+        it "exports summary CSV" do
+          get export_organizers_contest_statistics_path(contest, type: "summary")
+          expect(response).to have_http_status(:success)
+          expect(response.headers["Content-Disposition"]).to include("summary")
+        end
+      end
+
+      context "with type=entries" do
+        let!(:entry) { create(:entry, contest: contest, user: create(:user, :confirmed), title: "テスト作品") }
+
+        it "exports entries CSV" do
+          get export_organizers_contest_statistics_path(contest, type: "entries")
+          expect(response).to have_http_status(:success)
+          expect(response.headers["Content-Disposition"]).to include("entries")
+          expect(response.body).to include("テスト作品")
+        end
+      end
+
+      context "with type=spots" do
+        let!(:spot) { create(:spot, contest: contest, name: "テストスポット") }
+
+        it "exports spots CSV" do
+          get export_organizers_contest_statistics_path(contest, type: "spots")
+          expect(response).to have_http_status(:success)
+          expect(response.headers["Content-Disposition"]).to include("spots")
+          expect(response.body).to include("テストスポット")
+        end
+      end
+    end
+
+    context "when authenticated as different organizer" do
+      before { sign_in other_organizer }
+
+      it "redirects with unauthorized message" do
+        get export_organizers_contest_statistics_path(contest)
+        expect(response).to redirect_to(organizers_contests_path)
+      end
+    end
+  end
 end

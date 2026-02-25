@@ -34,10 +34,17 @@ class GalleryController < ApplicationController
     @entries = @entries.includes(:user, :contest, :area, :votes, photo_attachment: :blob)
                        .page(params[:page]).per(24)
 
-    # For filter dropdowns
-    @contests = Contest.where(status: [ :published, :finished ]).active.order(created_at: :desc)
-    @categories = Category.ordered
-    @areas = Area.ordered
+    # For filter dropdowns (only needed for full page requests)
+    unless turbo_frame_request?
+      @contests = Contest.where(status: [ :published, :finished ]).active.order(created_at: :desc)
+      @categories = Category.ordered
+      @areas = Area.ordered
+    end
+
+    # Respond with just the entries partial for Turbo Frame requests
+    if turbo_frame_request?
+      render partial: "gallery/entries", layout: false
+    end
   end
 
   def map

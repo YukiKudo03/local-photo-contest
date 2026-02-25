@@ -13,6 +13,7 @@ class Vote < ApplicationRecord
   # Callbacks
   after_create_commit :broadcast_vote_update
   after_destroy_commit :broadcast_vote_update
+  after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
   # Scopes
   scope :by_user, ->(user) { where(user: user) }
@@ -44,5 +45,11 @@ class Vote < ApplicationRecord
     NotificationBroadcaster.vote_update(entry)
   rescue => e
     Rails.logger.error("Failed to broadcast vote update: #{e.message}")
+  end
+
+  def clear_statistics_cache
+    StatisticsService.clear_cache(contest)
+  rescue => e
+    Rails.logger.error("Failed to clear statistics cache: #{e.message}")
   end
 end

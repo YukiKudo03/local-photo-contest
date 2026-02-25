@@ -3,8 +3,8 @@
 class Rack::Attack
   ### Configure Cache ###
 
-  # Use Rails cache for storing throttle data
-  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+  # Use Rails cache for storing throttle data (Redis in production)
+  Rack::Attack.cache.store = Rails.cache
 
   ### Throttle Spammy Clients ###
 
