@@ -33,7 +33,7 @@ class DiscoverySpotService
 
     # Certify a discovered spot
     def certify_spot(spot:, user:)
-      raise ArgumentError, "Spot is not pending certification" unless spot.discovery_discovered?
+      validate_pending_certification!(spot)
 
       ActiveRecord::Base.transaction do
         spot.certify!(user)
@@ -58,8 +58,8 @@ class DiscoverySpotService
 
     # Reject a discovered spot
     def reject_spot(spot:, user:, reason:)
-      raise ArgumentError, "Spot is not pending certification" unless spot.discovery_discovered?
-      raise ArgumentError, "Rejection reason is required" if reason.blank?
+      validate_pending_certification!(spot)
+      validate_presence!(reason, "Rejection reason is required")
 
       ActiveRecord::Base.transaction do
         spot.reject!(user, reason)
@@ -159,6 +159,14 @@ class DiscoverySpotService
     end
 
     private
+
+    def validate_pending_certification!(spot)
+      raise ArgumentError, "Spot is not pending certification" unless spot.discovery_discovered?
+    end
+
+    def validate_presence!(value, message)
+      raise ArgumentError, message if value.blank?
+    end
 
     def haversine_distance(lat1, lng1, lat2, lng2)
       # Convert to radians

@@ -1,0 +1,42 @@
+en:
+  activerecord:
+    models:
+      vote: Vote
+    attributes:
+      vote:
+        user: Voter
+        entry: Entry
+        created_at: Voted At
+    errors:
+      models:
+        vote:
+          attributes:
+            user_id:
+              taken: has already voted for this entry
+            base:
+              cannot_vote_own_entry: You cannot vote for your own entry
+              contest_not_accepting: This contest is not accepting votes
+
+  votes:
+    button:
+      vote: Vote
+      unvote: Voted
+      cannot_vote_own: Your Entry
+      login_required: Log in to vote
+    create:
+      success: Vote recorded.
+      already_voted: Already voted.
+    destroy:
+      success: Vote removed.
+      failed: Failed to remove vote.
+    voting_closed: Voting period has ended.
+
+  my:
+    votes:
+      index:
+        title: My Votes
+        description: A list of entries you voted for
+        no_votes: No votes yet
+        encourage: Vote for your favorite entries
+        find_contests: Browse Contests
+        voted_at: "Voted on"

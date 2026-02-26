@@ -1,0 +1,55 @@
+en:
+  activerecord:
+    attributes:
+      user:
+        name: Display Name
+        bio: Bio
+        avatar: Profile Picture
+
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              too_long: is too long (maximum is 50 characters)
+            bio:
+              too_long: is too long (maximum is 500 characters)
+            avatar:
+              content_type_invalid: must be JPEG, PNG, or GIF format
+              file_size_too_large: must be less than 5MB
+
+  my:
+    profile:
+      show:
+        title: My Profile
+        subtitle: Your profile information
+        bio_label: Bio
+        bio_placeholder: No bio set
+        activity_title: Activity
+        entries_count: Entries
+        votes_count: Votes
+        comments_count: Comments
+        account_title: Account Information
+        registered_at: Registered
+        last_login: Last Login
+        edit_button: Edit Profile
+
+      edit:
+        title: Edit Profile
+        subtitle: Update your profile information
+        avatar_label: Profile Picture
+        avatar_select: Select Image
+        avatar_hint: JPEG, PNG, or GIF format (max 5MB)
+        name_label: Display Name
+        name_placeholder: "e.g., John Doe"
+        name_hint: Up to 50 characters (email will be shown if not set)
+        bio_label: Bio
+        bio_placeholder: Tell us about yourself...
+        bio_hint: Up to 500 characters
+        email_label: Email
+        email_hint: To change your email, go to account settings
+        cancel: Cancel
+        submit: Save
+
+      update:
+        success: Profile updated successfully.

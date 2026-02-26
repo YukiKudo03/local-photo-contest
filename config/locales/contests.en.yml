@@ -1,0 +1,31 @@
+en:
+  activerecord:
+    models:
+      contest: Contest
+    attributes:
+      contest:
+        title: Title
+        description: Description
+        theme: Theme
+        status: Status
+        entry_start_at: Entry Start
+        entry_end_at: Entry End
+        thumbnail: Thumbnail
+        deleted_at: Deleted At
+    errors:
+      models:
+        contest:
+          attributes:
+            title:
+              blank: can't be blank
+              too_long: is too long (maximum is %{count} characters)
+            theme:
+              too_long: is too long (maximum is %{count} characters)
+            entry_end_at:
+              invalid: must be after the start date
+  enums:
+    contest:
+      status:
+        draft: Draft
+        published: Published
+        finished: Finished

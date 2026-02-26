@@ -1,0 +1,31 @@
+en:
+  activerecord:
+    models:
+      comment: Comment
+    attributes:
+      comment:
+        user: Author
+        entry: Entry
+        body: Content
+        created_at: Posted At
+    errors:
+      models:
+        comment:
+          attributes:
+            body:
+              blank: can't be blank
+              too_long: is too long (maximum is 1000 characters)
+
+  comments:
+    form:
+      placeholder: Write a comment...
+      submit: Comment
+    create:
+      success: Comment posted.
+    destroy:
+      success: Comment deleted.
+      unauthorized: You are not authorized to perform this action.
+    section:
+      title: Comments
+      no_comments: No comments yet
+      login_required: Please log in to comment.

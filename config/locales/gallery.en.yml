@@ -1,0 +1,30 @@
+en:
+  gallery:
+    index:
+      title: Photo Gallery
+      subtitle: Browse all contest entries
+      filter:
+        contest_label: Contest
+        all_contests: All Contests
+        sort_label: Sort By
+        newest: Newest
+        popular: Most Popular
+        oldest: Oldest
+        submit: Filter
+        clear: Clear
+      results_count: "%{count} entries"
+      empty:
+        title: No entries found
+        description: No entries have been submitted yet
+        filtered_description: No entries have been submitted to this contest yet
+        action: Browse Contests
+      entry:
+        untitled: Untitled
+
+  views:
+    pagination:
+      first: First
+      last: Last
+      previous: Previous
+      next: Next
+      truncate: "..."

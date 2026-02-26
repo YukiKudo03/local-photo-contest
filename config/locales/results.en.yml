@@ -1,0 +1,31 @@
+en:
+  results:
+    show:
+      title: Contest Results
+      back_to_contest: Back to Contest
+      winners_title: Winners
+      all_rankings: All Rankings
+      no_entries: No entries
+      votes: votes
+      announced_at: Results Announced
+
+  organizers:
+    contests:
+      announce_results:
+        success: Results have been announced.
+        not_finished: Contest has not ended yet.
+        already_announced: Results have already been announced.
+      show:
+        announce_results: Announce Results
+        announce_results_description: Publish contest results
+        view_results: View Results
+        view_results_description: View announced results
+        results_announced: Results Announced
+        results_not_announced: Results Not Announced
+
+  contests:
+    show:
+      results_announced: Results have been announced!
+      view_results: View Results
+    results:
+      not_announced: Results have not been announced yet.

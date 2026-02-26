@@ -8,26 +8,41 @@
         </svg>
         <span class="text-sm font-semibold text-gray-900">Local Photo Contest</span>
       </div>
-      <div class="mt-4 md:mt-0">
+      <div class="mt-4 md:mt-0 flex items-center space-x-4">
+        <!-- Language Switcher -->
+        <div class="flex items-center space-x-2 text-sm text-gray-500">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+          </svg>
+          <% if I18n.locale == :ja %>
+            <span class="font-medium text-gray-900">日本語</span>
+            <span>/</span>
+            <%= button_to "English", locale_path(locale: :en), method: :patch, class: "hover:text-indigo-600 transition-colors", data: { turbo: false } %>
+          <% else %>
+            <%= button_to "日本語", locale_path(locale: :ja), method: :patch, class: "hover:text-indigo-600 transition-colors", data: { turbo: false } %>
+            <span>/</span>
+            <span class="font-medium text-gray-900">English</span>
+          <% end %>
+        </div>
         <p class="text-sm text-gray-500">
           &copy; <%= Time.current.year %> Local Photo Contest. All rights reserved.
         </p>
       </div>
     </div>
     <div class="mt-8 border-t border-gray-200 pt-8">
-      <nav class="flex flex-wrap justify-center space-x-6" aria-label="フッターナビゲーション">
-        <%= link_to "利用ガイド", help_path, class: "text-sm text-gray-500 hover:text-indigo-600 transition-colors" %>
+      <nav class="flex flex-wrap justify-center space-x-6" aria-label="<%= t('footer.navigation_label', default: 'Footer Navigation') %>">
+        <%= link_to t('footer.user_guide', default: 'User Guide'), help_path, class: "text-sm text-gray-500 hover:text-indigo-600 transition-colors" %>
         <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          利用規約
+          <%= t('footer.terms', default: 'Terms of Service') %>
         </a>
         <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          プライバシーポリシー
+          <%= t('footer.privacy', default: 'Privacy Policy') %>
         </a>
         <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          お問い合わせ
+          <%= t('footer.contact', default: 'Contact') %>
         </a>
         <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          運営者情報
+          <%= t('footer.about', default: 'About Us') %>
         </a>
       </nav>
     </div>

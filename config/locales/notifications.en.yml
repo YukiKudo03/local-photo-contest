@@ -1,0 +1,29 @@
+en:
+  activerecord:
+    models:
+      notification: Notification
+    attributes:
+      notification:
+        user: User
+        notifiable: Related Object
+        notification_type: Notification Type
+        title: Title
+        body: Body
+        read_at: Read At
+        created_at: Created At
+
+  my:
+    notifications:
+      index:
+        title: Notifications
+        description: Your notifications
+        mark_all_as_read: Mark All as Read
+        no_notifications: No notifications
+        unread: Unread
+      mark_all_as_read:
+        success: All notifications marked as read.
+
+  notifications:
+    types:
+      results_announced: Results Announced
+      entry_ranked: Prize Winner

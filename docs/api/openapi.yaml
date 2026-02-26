@@ -1,0 +1,577 @@
+openapi: 3.0.3
+info:
+  title: Local Photo Contest API
+  description: |
+    Local Photo Contest application API documentation.
+
+    ## Authentication
+    Most endpoints require authentication via session cookies (Devise).
+    Admin and organizer endpoints require appropriate role permissions.
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://your-production-url.com
+    description: Production server
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Gallery
+    description: Public gallery endpoints
+  - name: Contests
+    description: Contest viewing
+  - name: Entries
+    description: Entry management
+  - name: Votes
+    description: Voting endpoints
+  - name: My
+    description: Current user's data
+  - name: Organizers
+    description: Organizer dashboard endpoints
+  - name: Admin
+    description: Admin dashboard endpoints
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Basic health check
+      description: Returns application health status
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /health/details:
+    get:
+      tags:
+        - Health
+      summary: Detailed health check
+      description: Returns detailed health information including database and cache status
+      responses:
+        '200':
+          description: Detailed health information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  database:
+                    type: string
+                  cache:
+                    type: string
+
+  /gallery:
+    get:
+      tags:
+        - Gallery
+      summary: List gallery entries
+      description: Returns paginated list of visible entries
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          schema:
+            type: string
+        - name: contest_id
+          in: query
+          description: Filter by contest
+          schema:
+            type: integer
+        - name: category_id
+          in: query
+          description: Filter by category
+          schema:
+            type: integer
+        - name: area_id
+          in: query
+          description: Filter by area
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [newest, oldest, popular]
+            default: newest
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: List of entries
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /gallery/map:
+    get:
+      tags:
+        - Gallery
+      summary: Map view
+      description: Returns map view with entry locations
+      responses:
+        '200':
+          description: Map view HTML
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /gallery/map_data:
+    get:
+      tags:
+        - Gallery
+      summary: Map marker data
+      description: Returns JSON data for map markers
+      parameters:
+        - name: contest_id
+          in: query
+          description: Filter by contest
+          schema:
+            type: integer
+        - name: area_id
+          in: query
+          description: Filter by area
+          schema:
+            type: integer
+        - name: spot_id
+          in: query
+          description: Filter by spot
+          schema:
+            type: integer
+        - name: discovery_status
+          in: query
+          description: Filter by discovery status
+          schema:
+            type: string
+            enum: [discovered, certified, organizer]
+      responses:
+        '200':
+          description: Array of marker data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MapMarker'
+
+  /contests:
+    get:
+      tags:
+        - Contests
+      summary: List contests
+      description: Returns list of active contests
+      responses:
+        '200':
+          description: List of contests
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /contests/{id}:
+    get:
+      tags:
+        - Contests
+      summary: Show contest details
+      description: Returns contest details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Contest details
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Contest not found
+
+  /contests/{contest_id}/entries:
+    post:
+      tags:
+        - Entries
+      summary: Create entry
+      description: Submit a new entry to a contest
+      parameters:
+        - name: contest_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                entry[title]:
+                  type: string
+                entry[description]:
+                  type: string
+                entry[photo]:
+                  type: string
+                  format: binary
+                entry[spot_id]:
+                  type: integer
+                entry[area_id]:
+                  type: integer
+      responses:
+        '302':
+          description: Redirect to entry page on success
+        '422':
+          description: Validation errors
+
+  /entries/{id}:
+    get:
+      tags:
+        - Entries
+      summary: Show entry
+      description: Returns entry details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Entry details
+        '404':
+          description: Entry not found
+    patch:
+      tags:
+        - Entries
+      summary: Update entry
+      description: Update entry details (owner only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                entry[title]:
+                  type: string
+                entry[description]:
+                  type: string
+      responses:
+        '302':
+          description: Redirect on success
+        '403':
+          description: Not authorized
+    delete:
+      tags:
+        - Entries
+      summary: Delete entry
+      description: Delete entry (owner only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: Redirect on success
+        '403':
+          description: Not authorized
+
+  /entries/{entry_id}/vote:
+    post:
+      tags:
+        - Votes
+      summary: Vote for entry
+      description: Add vote for an entry
+      parameters:
+        - name: entry_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vote recorded
+        '422':
+          description: Already voted or contest closed
+    delete:
+      tags:
+        - Votes
+      summary: Remove vote
+      description: Remove vote from entry
+      parameters:
+        - name: entry_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vote removed
+
+  /spots/{spot_id}/spot_vote:
+    post:
+      tags:
+        - Votes
+      summary: Vote for spot
+      description: Add vote for a spot
+      parameters:
+        - name: spot_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vote recorded
+    delete:
+      tags:
+        - Votes
+      summary: Remove spot vote
+      description: Remove vote from spot
+      parameters:
+        - name: spot_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vote removed
+
+  /my/entries:
+    get:
+      tags:
+        - My
+      summary: My entries
+      description: Returns current user's entries
+      responses:
+        '200':
+          description: List of user's entries
+        '302':
+          description: Redirect to login if not authenticated
+
+  /my/votes:
+    get:
+      tags:
+        - My
+      summary: My votes
+      description: Returns entries user has voted for
+      responses:
+        '200':
+          description: List of voted entries
+        '302':
+          description: Redirect to login if not authenticated
+
+  /my/notifications:
+    get:
+      tags:
+        - My
+      summary: List notifications
+      description: Returns user's notifications
+      responses:
+        '200':
+          description: List of notifications
+        '302':
+          description: Redirect to login if not authenticated
+
+  /my/notifications/mark_all_as_read:
+    post:
+      tags:
+        - My
+      summary: Mark all notifications as read
+      responses:
+        '200':
+          description: All notifications marked as read
+
+  /my/profile:
+    get:
+      tags:
+        - My
+      summary: Show profile
+      description: Returns current user's profile
+      responses:
+        '200':
+          description: User profile
+    patch:
+      tags:
+        - My
+      summary: Update profile
+      description: Update current user's profile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                user[display_name]:
+                  type: string
+                user[avatar]:
+                  type: string
+                  format: binary
+      responses:
+        '302':
+          description: Redirect on success
+
+components:
+  schemas:
+    MapMarker:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Entry ID
+        title:
+          type: string
+          description: Entry title
+        lat:
+          type: number
+          format: float
+          description: Latitude
+        lng:
+          type: number
+          format: float
+          description: Longitude
+        spot_name:
+          type: string
+          description: Spot name
+        spot_id:
+          type: integer
+          description: Spot ID
+        contest_title:
+          type: string
+          description: Contest title
+        votes_count:
+          type: integer
+          description: Number of votes
+        user_name:
+          type: string
+          description: Entry author display name
+        photo_url:
+          type: string
+          nullable: true
+          description: Thumbnail URL
+        entry_url:
+          type: string
+          description: Entry detail URL
+        discovery_status:
+          type: string
+          enum: [organizer_created, discovered, certified, rejected]
+          description: Spot discovery status
+        discovered_by_current_user:
+          type: boolean
+          description: Whether current user discovered this spot
+
+    Entry:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        user_id:
+          type: integer
+        contest_id:
+          type: integer
+        spot_id:
+          type: integer
+        area_id:
+          type: integer
+        votes_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Contest:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [draft, published, finished]
+        judging_method:
+          type: string
+          enum: [judge_only, vote_only, hybrid]
+        created_at:
+          type: string
+          format: date-time
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        notification_type:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        read_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: _local_photo_contest_session
+      description: Session cookie set by Devise authentication
+
+security:
+  - cookieAuth: []

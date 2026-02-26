@@ -1,0 +1,101 @@
+en:
+  activerecord:
+    models:
+      entry: Entry
+    attributes:
+      entry:
+        photo: Photo
+        title: Title
+        description: Description
+        location: Location
+        taken_at: Date Taken
+        user: Submitter
+        contest: Contest
+        created_at: Submitted At
+        updated_at: Updated At
+    errors:
+      models:
+        entry:
+          attributes:
+            photo:
+              blank: can't be blank
+              content_type_invalid: must be JPEG, PNG, or GIF format
+              file_size_too_large: must be less than 10MB
+            title:
+              too_long: is too long (maximum is %{count} characters)
+            location:
+              too_long: is too long (maximum is %{count} characters)
+            base:
+              contest_not_accepting: This contest is not accepting entries
+
+  entries:
+    new:
+      title: Submit Photo
+    edit:
+      title: Edit Entry
+    show:
+      title: Entry Details
+      edit: Edit
+      delete: Delete
+      delete_confirm: Are you sure you want to delete this entry? This action cannot be undone.
+    form:
+      upload_photo: Upload Photo
+      upload_hint: JPEG, PNG, or GIF format (max 10MB)
+      current_photo: Current Photo
+      click_to_select: Click to select a photo
+      or_drag_drop: or drag and drop
+      work_info: Work Information
+      optional: Optional
+      title_placeholder: Title of your work (optional)
+      title_hint: Up to 100 characters
+      description_placeholder: Description of your photo (optional)
+      location_placeholder: "e.g., Tokyo, Shibuya"
+      submit_create: Submit Entry
+      submit_update: Update
+      cancel: Cancel
+
+  my:
+    entries:
+      index:
+        title: My Entries
+        description: A list of your submitted works
+        no_entries: No entries yet
+        encourage: Try submitting to a contest
+        find_contests: Browse Contests
+        submitted_at: "Submitted on"
+
+  organizers:
+    entries:
+      index:
+        title: Entries
+        entries_count: entries
+        no_entries: No entries
+        no_entries_description: No entries have been submitted to this contest yet
+        table:
+          photo: Photo
+          title: Title
+          submitter: Submitter
+          submitted_at: Submitted At
+          actions: Actions
+          view: View
+          untitled: Untitled
+      show:
+        title: Entry Details
+        back: Back to Entries
+        entry_info: Entry Information
+        submitter: Submitter
+        submitted_at: Submitted At
+        location: Location
+        taken_at: Date Taken
+        description: Description
+        contest_info: Contest Information
+        untitled: Untitled
+
+  flash:
+    entries:
+      created: Entry submitted successfully.
+      updated: Entry updated successfully.
+      destroyed: Entry deleted successfully.
+      not_authorized: You are not authorized to perform this action.
+      not_editable: Cannot edit entry after submission period ends.
+      not_deletable: Cannot delete entry after submission period ends.

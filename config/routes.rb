@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Locale switching
+  patch "locale", to: "locales#update", as: :locale
+
   # Health check endpoints
   get "health", to: "health#show"
   get "health/details", to: "health#details"

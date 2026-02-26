@@ -87,10 +87,14 @@ class GalleryController < ApplicationController
     entries = entries.includes(:spot, :user, :contest, :votes, photo_attachment: :blob)
                      .limit(500)
 
-    render json: entries.map { |entry| entry_marker_data(entry) }
+    render json: map_marker_service.entries_to_markers(entries)
   end
 
   private
+
+  def map_marker_service
+    @map_marker_service ||= MapMarkerService.new(current_user: current_user, url_helpers: self)
+  end
 
   def base_entries
     Entry.visible
@@ -113,23 +117,5 @@ class GalleryController < ApplicationController
       .includes(:user, :contest, :area, :votes, photo_attachment: :blob)
       .order(created_at: :desc)
       .limit(50)
-  end
-
-  def entry_marker_data(entry)
-    {
-      id: entry.id,
-      title: entry.title.presence || "無題",
-      lat: entry.spot.latitude.to_f,
-      lng: entry.spot.longitude.to_f,
-      spot_name: entry.spot.name,
-      spot_id: entry.spot_id,
-      contest_title: entry.contest.title,
-      votes_count: entry.votes.size,
-      user_name: entry.user.display_name,
-      photo_url: entry.photo.attached? ? url_for(entry.photo.variant(resize_to_fill: [ 150, 150 ])) : nil,
-      entry_url: entry_path(entry),
-      discovery_status: entry.spot.discovery_status,
-      discovered_by_current_user: current_user && entry.spot.discovered_by_id == current_user.id
-    }
   end
 end

@@ -1,4 +1,11 @@
 ja:
+  footer:
+    navigation_label: フッターナビゲーション
+    user_guide: 利用ガイド
+    terms: 利用規約
+    privacy: プライバシーポリシー
+    contact: お問い合わせ
+    about: 運営者情報
   activerecord:
     models:
       user: ユーザー

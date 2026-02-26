@@ -1,31 +1,187 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      user: User
+      terms_of_service: Terms of Service
+      terms_acceptance: Terms Acceptance
+      category: Category
+      area: Area
+      contest: Contest
+      entry: Entry
+    attributes:
+      category:
+        name: Category Name
+        description: Description
+        position: Display Order
+      area:
+        name: Area Name
+        position: Display Order
+      contest:
+        category: Category
+        category_id: Category
+        judging_method: Judging Method
+        judge_weight: Judge Weight
+        prize_count: Prize Count
+        show_detailed_scores: Show Detailed Scores
+        results_announced_at: Results Announced At
+      contest_ranking:
+        rank: Rank
+        total_score: Total Score
+        judge_score: Judge Score
+        vote_count: Vote Count
+      judge_invitation:
+        email: Email
+        status: Status
+        invited_at: Invited At
+        responded_at: Responded At
+        expires_at: Expires At
+      entry:
+        area: Area
+        area_id: Area
+      user:
+        email: Email
+        password: Password
+        password_confirmation: Password Confirmation
+        role: Role
+        current_password: Current Password
+        remember_me: Remember me
+      terms_of_service:
+        version: Version
+        content: Content
+        published_at: Published At
+      terms_acceptance:
+        accepted_at: Accepted At
+        ip_address: IP Address
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"
+      models:
+        user:
+          attributes:
+            email:
+              blank: can't be blank
+              taken: has already been taken
+              invalid: is not a valid email address
+            password:
+              blank: can't be blank
+              too_short: is too short (minimum is %{count} characters)
+            password_confirmation:
+              confirmation: doesn't match Password
+  errors:
+    messages:
+      blank: can't be blank
+      taken: has already been taken
+      too_short: is too short (minimum is %{count} characters)
+      too_long: is too long (maximum is %{count} characters)
+      invalid: is invalid
+      confirmation: doesn't match %{attribute}
+  helpers:
+    submit:
+      create: Create
+      update: Update
+      submit: Submit
+    label:
+      user:
+        email: Email
+        password: Password
+        password_confirmation: Password Confirmation
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%m/%d"
+      long: "%B %d, %Y"
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M"
+      short: "%m/%d %H:%M"
+      long: "%B %d, %Y %H:%M"
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than a second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: "%{count} days"
+      x_minutes:
+        one: 1 minute
+        other: "%{count} minutes"
+      x_months:
+        one: 1 month
+        other: "%{count} months"
+      x_seconds:
+        one: 1 second
+        other: "%{count} seconds"
+      x_years:
+        one: 1 year
+        other: "%{count} years"
+  enums:
+    contest:
+      judging_method:
+        judge_only: Judge Only
+        vote_only: Public Vote Only
+        hybrid: Hybrid
+    judge_invitation:
+      status:
+        pending: Pending
+        accepted: Accepted
+        declined: Declined
+        expired: Expired
+  flash:
+    actions:
+      create:
+        success: Successfully created
+      update:
+        success: Successfully updated
+      destroy:
+        success: Successfully deleted
+  help:
+    index:
+      title: User Guide
+      description: Learn how to use Local Photo Contest
+      select_guide: Select a guide based on your role
+    show:
+      back_to_list: Back to Guide List
+      table_of_contents: Table of Contents
+      toggle_toc: Toggle Table of Contents
+      not_found: The specified guide was not found
+    guides:
+      participant:
+        title: Participant Guide
+        description: How to participate in contests, submit photos, and vote
+      organizer:
+        title: Organizer Guide
+        description: How to create and manage contests, invite judges
+      judge:
+        title: Judge Guide
+        description: Judging process, evaluation criteria, and how to use the judging system
+      admin:
+        title: Admin Guide
+        description: System management, user management, and audit logs
+    navigation:
+      help: Help
+      guide: Guide
+      all_manuals: All Manuals
+      participant_guide: Participant Guide
+      organizer_guide: Organizer Guide
+      judge_guide: Judge Guide
+      admin_guide: Admin Guide
