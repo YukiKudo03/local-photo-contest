@@ -1,0 +1,17 @@
+応募完了
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」への応募が完了しました。
+
+<% if @entry.title.present? -%>
+作品タイトル: <%= @entry.title %>
+
+<% end -%>
+作品を確認する: <%= entry_url(@entry) %>
+
+たくさんの投票やコメントをお待ちください！
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

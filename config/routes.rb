@@ -169,6 +169,9 @@ Rails.application.routes.draw do
   # Search
   get "search", to: "search#index"
 
+  # Email preferences (unsubscribe)
+  resources :email_preferences, only: [ :show, :update ], param: :token
+
   # Render dynamic PWA files from app/views/pwa/*
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

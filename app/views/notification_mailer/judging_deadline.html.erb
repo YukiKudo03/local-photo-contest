@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #ef4444; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9fafb; }
+    .deadline { font-size: 24px; font-weight: bold; text-align: center; color: #ef4444; margin: 16px 0; }
+    .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .footer { padding: 20px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>審査期限のお知らせ</h1>
+    </div>
+    <div class="content">
+      <p><%= @user.display_name %>さん、</p>
+      <p>コンテスト「<strong><%= @contest.title %></strong>」の審査期限が迫っています。</p>
+
+      <div class="deadline">あと<%= @days_remaining %>日</div>
+
+      <p>お早めに審査を完了してください。</p>
+
+      <p style="text-align: center;">
+        <a href="<%= my_judge_assignment_url(@contest_judge) %>" class="button">審査を続ける</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>このメールは自動送信されています。</p>
+      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+    </div>
+  </div>
+</body>
+</html>

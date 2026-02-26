@@ -1,0 +1,14 @@
+新しいコメント
+
+<%= @user.display_name %>さん、
+
+あなたの作品「<%= @entry.title.presence || "無題" %>」に<%= @comment.user.display_name %>さんからコメントがつきました。
+
+コメント内容:
+<%= truncate(@comment.body, length: 200) %>
+
+コメントを確認する: <%= entry_url(@entry) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

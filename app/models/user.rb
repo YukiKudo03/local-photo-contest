@@ -28,12 +28,25 @@ class User < ApplicationRecord
   # Role enum
   enum :role, { participant: 0, organizer: 1, admin: 2 }
 
+  # Email preference mapping
+  EMAIL_PREFERENCE_MAP = {
+    entry_submitted: :email_on_entry_submitted,
+    comment: :email_on_comment,
+    vote: :email_on_vote,
+    results: :email_on_results,
+    digest: :email_digest,
+    judging: :email_on_judging
+  }.freeze
+
   # Validations
   validates :role, presence: true
   validates :name, length: { maximum: 50 }, allow_blank: true
   validates :bio, length: { maximum: 500 }, allow_blank: true
   validate :avatar_content_type
   validate :avatar_size
+
+  # Callbacks
+  before_create :generate_unsubscribe_token
 
   # Display name (returns name if set, otherwise email)
   def display_name
@@ -126,6 +139,18 @@ class User < ApplicationRecord
     update(tutorial_settings: (tutorial_settings || {}).merge(settings))
   end
 
+  def email_enabled?(notification_type)
+    column = EMAIL_PREFERENCE_MAP[notification_type]
+    return true unless column
+    send(column)
+  end
+
+  def ensure_unsubscribe_token!
+    return unsubscribe_token if unsubscribe_token.present?
+    update_column(:unsubscribe_token, SecureRandom.urlsafe_base64(32))
+    unsubscribe_token
+  end
+
   private
 
   def avatar_content_type
@@ -133,6 +158,10 @@ class User < ApplicationRecord
     unless avatar.content_type.in?(%w[image/jpeg image/png image/gif])
       errors.add(:avatar, "はJPEG、PNG、GIF形式のみ対応しています")
     end
+  end
+
+  def generate_unsubscribe_token
+    self.unsubscribe_token ||= SecureRandom.urlsafe_base64(32)
   end
 
   def avatar_size

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #3b82f6; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9fafb; }
+    .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .footer { padding: 20px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>審査完了</h1>
+    </div>
+    <div class="content">
+      <p><%= @user.display_name %>さん、</p>
+      <p>コンテスト「<strong><%= @contest.title %></strong>」の全審査員による評価が完了しました。</p>
+      <p>結果発表の準備が整いました。</p>
+
+      <p style="text-align: center;">
+        <a href="<%= organizers_contest_url(@contest) %>" class="button">コンテストを管理する</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>このメールは自動送信されています。</p>
+      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+    </div>
+  </div>
+</body>
+</html>

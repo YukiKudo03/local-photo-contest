@@ -1,0 +1,13 @@
+審査のリマインダー
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」の審査が未完了です。
+
+審査進捗: <%= @progress %>%
+
+審査を続ける: <%= my_judge_assignment_url(@contest_judge) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

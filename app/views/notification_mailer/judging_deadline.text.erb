@@ -1,0 +1,13 @@
+審査期限のお知らせ
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」の審査期限まであと<%= @days_remaining %>日です。
+
+お早めに審査を完了してください。
+
+審査を続ける: <%= my_judge_assignment_url(@contest_judge) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

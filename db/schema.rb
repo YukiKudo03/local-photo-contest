@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_26_121222) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_192821) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -467,14 +467,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_26_121222) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.text "bio"
-    t.json "tutorial_settings", default: {"show_tutorials"=>true, "show_context_help"=>true, "reduced_motion"=>false}
+    t.json "tutorial_settings", default: {"show_tutorials" => true, "show_context_help" => true, "reduced_motion" => false}
     t.string "feature_level", default: "beginner"
+    t.boolean "email_on_entry_submitted", default: true, null: false
+    t.boolean "email_on_comment", default: true, null: false
+    t.boolean "email_on_vote", default: false, null: false
+    t.boolean "email_on_results", default: true, null: false
+    t.boolean "email_digest", default: true, null: false
+    t.boolean "email_on_judging", default: true, null: false
+    t.string "unsubscribe_token"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["feature_level"], name: "index_users_on_feature_level"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role"], name: "index_users_on_role"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
+    t.index ["unsubscribe_token"], name: "index_users_on_unsubscribe_token", unique: true
   end
 
   create_table "votes", force: :cascade do |t|

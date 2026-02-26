@@ -189,29 +189,31 @@ class Contest < ApplicationRecord
 
   def send_results_notifications
     # Get all participants (users who have entries in this contest)
-    participant_ids = entries.pluck(:user_id).uniq
+    participants = User.where(id: entries.select(:user_id)).distinct
 
     # Get ranked entries for top 3
     ranked = ranked_entries.to_a
 
-    participant_ids.each do |participant_id|
-      # Send general results announcement
+    participants.find_each do |participant|
+      # Send general results announcement (in-app + email)
       Notification.create_results_announced!(
-        user_id: participant_id,
+        user: participant,
         contest: self
       )
+      NotificationMailer.results_announced(participant, self).deliver_later
 
       # Check if user has entries in top 3
       ranked.each_with_index do |entry, index|
         rank = index + 1
         break if rank > 3
 
-        if entry.user_id == participant_id
+        if entry.user_id == participant.id
           Notification.create_entry_ranked!(
-            user: entry.user,
+            user: participant,
             entry: entry,
             rank: rank
           )
+          NotificationMailer.entry_ranked(participant, entry, rank).deliver_later
         end
       end
     end

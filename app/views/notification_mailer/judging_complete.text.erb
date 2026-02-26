@@ -1,0 +1,13 @@
+審査完了
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」の全審査員による評価が完了しました。
+
+結果発表の準備が整いました。
+
+コンテストを管理する: <%= organizers_contest_url(@contest) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

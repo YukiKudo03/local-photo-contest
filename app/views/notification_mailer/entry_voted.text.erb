@@ -1,0 +1,13 @@
+投票されました
+
+<%= @user.display_name %>さん、
+
+あなたの作品「<%= @entry.title.presence || "無題" %>」に投票されました。
+
+現在の投票数: <%= @entry.votes.count %>
+
+作品を確認する: <%= entry_url(@entry) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

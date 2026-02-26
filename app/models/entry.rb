@@ -39,6 +39,7 @@ class Entry < ApplicationRecord
   # Callbacks
   after_create_commit :enqueue_moderation_job
   after_create_commit :broadcast_new_entry_notification
+  after_create_commit :send_entry_submitted_email
   after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
   # Scopes
@@ -137,5 +138,11 @@ class Entry < ApplicationRecord
     StatisticsService.clear_cache(contest)
   rescue => e
     Rails.logger.error("Failed to clear statistics cache: #{e.message}")
+  end
+
+  def send_entry_submitted_email
+    NotificationMailer.entry_submitted(self).deliver_later
+  rescue => e
+    Rails.logger.error("Failed to send entry submitted email: #{e.message}")
   end
 end

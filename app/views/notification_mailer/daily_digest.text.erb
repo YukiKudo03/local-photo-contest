@@ -1,0 +1,21 @@
+新規応募まとめ
+
+<%= @user.display_name %>さん、
+
+昨日の新規応募状況をお知らせします。
+
+<% @contests_with_entries.each do |contest, entries| -%>
+■ <%= contest.title %>（<%= entries.size %>件）
+<% entries.first(5).each do |entry| -%>
+  ・<%= entry.title.presence || "無題" %> — <%= entry.user.display_name %>
+<% end -%>
+<% if entries.size > 5 -%>
+  ...他<%= entries.size - 5 %>件
+<% end -%>
+
+<% end -%>
+ダッシュボードを開く: <%= organizers_dashboard_url %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #3b82f6; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9fafb; }
+    .spot-info { background: white; border-radius: 8px; padding: 16px; margin: 12px 0; }
+    .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .footer { padding: 20px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>発掘スポット認定依頼</h1>
+    </div>
+    <div class="content">
+      <p><%= @user.display_name %>さん、</p>
+      <p>コンテスト「<strong><%= @contest.title %></strong>」で新しいスポットが発掘されました。認定の確認をお願いします。</p>
+
+      <div class="spot-info">
+        <p><strong>スポット名:</strong> <%= @spot.name %></p>
+        <% if @spot.address.present? %>
+          <p><strong>住所:</strong> <%= @spot.address %></p>
+        <% end %>
+        <% if @spot.description.present? %>
+          <p><strong>説明:</strong> <%= @spot.description %></p>
+        <% end %>
+        <p><strong>カテゴリ:</strong> <%= @spot.category_name %></p>
+      </div>
+
+      <p style="text-align: center;">
+        <a href="<%= organizers_contest_discovery_spots_url(@contest) %>" class="button">発掘スポットを確認する</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>このメールは自動送信されています。</p>
+      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+入賞おめでとうございます！
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」であなたの作品「<%= @entry.title.presence || "無題" %>」が<%= @rank_label %>に入賞しました！
+
+結果を確認する: <%= contest_results_url(@contest) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

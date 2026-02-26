@@ -68,6 +68,7 @@ class Spot < ApplicationRecord
 
   # Callbacks
   before_create :set_position
+  after_create_commit :send_certification_request_email, if: :discovery_discovered?
 
   # Instance Methods
   def coordinates
@@ -117,5 +118,11 @@ class Spot < ApplicationRecord
 
   def set_position
     self.position ||= (contest.spots.maximum(:position) || 0) + 1
+  end
+
+  def send_certification_request_email
+    NotificationMailer.spot_certification_request(contest.user, self).deliver_later
+  rescue => e
+    Rails.logger.error("Failed to send spot certification request email: #{e.message}")
   end
 end

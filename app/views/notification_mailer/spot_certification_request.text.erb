@@ -1,0 +1,20 @@
+発掘スポット認定依頼
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」で新しいスポットが発掘されました。認定の確認をお願いします。
+
+スポット名: <%= @spot.name %>
+<% if @spot.address.present? -%>
+住所: <%= @spot.address %>
+<% end -%>
+<% if @spot.description.present? -%>
+説明: <%= @spot.description %>
+<% end -%>
+カテゴリ: <%= @spot.category_name %>
+
+発掘スポットを確認する: <%= organizers_contest_discovery_spots_url(@contest) %>
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>

@@ -1,0 +1,13 @@
+審査結果発表
+
+<%= @user.display_name %>さん、
+
+コンテスト「<%= @contest.title %>」の審査結果が発表されました。
+
+結果を確認する: <%= contest_results_url(@contest) %>
+
+ご参加いただきありがとうございました！
+
+---
+このメールは自動送信されています。
+メール通知設定を変更する: <%= @unsubscribe_url %>
