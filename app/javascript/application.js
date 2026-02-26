@@ -4,3 +4,8 @@ import "controllers"
 import "channels"
 import "chartkick"
 import "Chart.bundle"
+
+// Register Service Worker for PWA
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js")
+}
