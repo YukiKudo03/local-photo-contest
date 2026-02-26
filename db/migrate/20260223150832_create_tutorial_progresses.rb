@@ -13,7 +13,7 @@ class CreateTutorialProgresses < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :tutorial_progresses, [:user_id, :tutorial_type], unique: true
+    add_index :tutorial_progresses, [ :user_id, :tutorial_type ], unique: true
     add_index :tutorial_progresses, :completed
   end
 end

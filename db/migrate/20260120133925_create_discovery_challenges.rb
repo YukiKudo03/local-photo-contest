@@ -14,6 +14,6 @@ class CreateDiscoveryChallenges < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :discovery_challenges, [:contest_id, :status]
+    add_index :discovery_challenges, [ :contest_id, :status ]
   end
 end

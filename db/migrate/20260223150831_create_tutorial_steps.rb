@@ -14,7 +14,7 @@ class CreateTutorialSteps < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :tutorial_steps, [:tutorial_type, :step_id], unique: true
-    add_index :tutorial_steps, [:tutorial_type, :position]
+    add_index :tutorial_steps, [ :tutorial_type, :step_id ], unique: true
+    add_index :tutorial_steps, [ :tutorial_type, :position ]
   end
 end

@@ -12,8 +12,8 @@ class UpdateTutorialStepsForV2 < ActiveRecord::Migration[8.0]
     add_column :tutorial_steps, :skippable, :boolean, default: true
 
     # インデックス追加（既存でなければ）
-    unless index_exists?(:tutorial_steps, [:tutorial_type, :position])
-      add_index :tutorial_steps, [:tutorial_type, :position]
+    unless index_exists?(:tutorial_steps, [ :tutorial_type, :position ])
+      add_index :tutorial_steps, [ :tutorial_type, :position ]
     end
   end
 end

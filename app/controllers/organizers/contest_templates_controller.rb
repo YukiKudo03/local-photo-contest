@@ -2,9 +2,9 @@
 
 module Organizers
   class ContestTemplatesController < BaseController
-    before_action :set_template, only: [:destroy]
-    before_action :authorize_template!, only: [:destroy]
-    before_action :set_contest, only: [:new, :create]
+    before_action :set_template, only: [ :destroy ]
+    before_action :authorize_template!, only: [ :destroy ]
+    before_action :set_contest, only: [ :new, :create ]
 
     def index
       @templates = current_user.contest_templates

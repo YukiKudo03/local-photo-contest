@@ -11,6 +11,6 @@ class CreateFeatureUnlocks < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :feature_unlocks, [:user_id, :feature_key], unique: true
+    add_index :feature_unlocks, [ :user_id, :feature_key ], unique: true
   end
 end

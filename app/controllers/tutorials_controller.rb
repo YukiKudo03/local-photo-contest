@@ -2,7 +2,7 @@
 
 class TutorialsController < ApplicationController
   before_action :authenticate_user!
-  before_action :validate_tutorial_type, only: [:show, :start, :update, :skip, :reset]
+  before_action :validate_tutorial_type, only: [ :show, :start, :update, :skip, :reset ]
 
   # GET /tutorials/status
   # 全チュートリアルの進捗状況を取得
@@ -66,11 +66,11 @@ class TutorialsController < ApplicationController
 
     result = if params[:skip_all]
                { progress: service.skip_all(params[:tutorial_type]) }
-             elsif params[:step_id].present?
+    elsif params[:step_id].present?
                service.skip_step(params[:tutorial_type], params[:step_id])
-             else
+    else
                { progress: service.skip_all(params[:tutorial_type]) }
-             end
+    end
 
     render json: result
   end

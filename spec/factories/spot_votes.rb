@@ -6,7 +6,7 @@ FactoryBot.define do
     association :spot
 
     trait :for_certified_spot do
-      association :spot, factory: [:spot, :certified]
+      association :spot, factory: [ :spot, :certified ]
     end
   end
 end

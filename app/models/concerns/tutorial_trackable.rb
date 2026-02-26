@@ -31,11 +31,11 @@ module TutorialTrackable
 
   def available_features
     base_features = case role
-                    when "participant" then PARTICIPANT_BASE_FEATURES
-                    when "organizer" then ORGANIZER_BASE_FEATURES
-                    when "admin" then ADMIN_BASE_FEATURES
-                    else []
-                    end
+    when "participant" then PARTICIPANT_BASE_FEATURES
+    when "organizer" then ORGANIZER_BASE_FEATURES
+    when "admin" then ADMIN_BASE_FEATURES
+    else []
+    end
 
     base_features + feature_unlocks.pluck(:feature_key)
   end

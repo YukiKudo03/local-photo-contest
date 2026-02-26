@@ -120,7 +120,7 @@ module TutorialsHelper
 
     if show_icon
       tag.span(
-        class: ["context-help-trigger", css_class].compact.join(" "),
+        class: [ "context-help-trigger", css_class ].compact.join(" "),
         **data_attrs,
         aria: { label: "ヘルプ: #{title}" },
         tabindex: 0

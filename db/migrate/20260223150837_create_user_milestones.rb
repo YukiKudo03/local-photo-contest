@@ -11,6 +11,6 @@ class CreateUserMilestones < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :user_milestones, [:user_id, :milestone_type], unique: true
+    add_index :user_milestones, [ :user_id, :milestone_type ], unique: true
   end
 end

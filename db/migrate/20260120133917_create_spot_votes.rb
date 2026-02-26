@@ -9,6 +9,6 @@ class CreateSpotVotes < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :spot_votes, [:user_id, :spot_id], unique: true
+    add_index :spot_votes, [ :user_id, :spot_id ], unique: true
   end
 end

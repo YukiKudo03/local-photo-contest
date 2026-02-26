@@ -44,7 +44,7 @@ RSpec.describe TutorialStep, type: :model do
     describe ".for_type" do
       it "returns steps for the specified tutorial type ordered by position" do
         result = TutorialStep.for_type("organizer_onboarding")
-        expect(result).to eq([step1, step2])
+        expect(result).to eq([ step1, step2 ])
       end
     end
 

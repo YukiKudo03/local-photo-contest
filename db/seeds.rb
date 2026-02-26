@@ -101,9 +101,9 @@ puts "Creating default areas..."
 # エリア作成用のユーザーを取得（開発環境ではorganizer、本番では最初のadmin）
 area_owner = if Rails.env.development?
                User.find_by(email: "organizer@example.com")
-             else
+else
                User.find_by(role: :admin) || User.first
-             end
+end
 
 default_areas = [
   "北海道",

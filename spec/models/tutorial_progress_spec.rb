@@ -34,19 +34,19 @@ RSpec.describe TutorialProgress, type: :model do
 
     describe ".completed" do
       it "returns completed progresses" do
-        expect(TutorialProgress.completed).to eq([completed])
+        expect(TutorialProgress.completed).to eq([ completed ])
       end
     end
 
     describe ".in_progress" do
       it "returns in-progress progresses" do
-        expect(TutorialProgress.in_progress).to eq([in_progress])
+        expect(TutorialProgress.in_progress).to eq([ in_progress ])
       end
     end
 
     describe ".skipped" do
       it "returns skipped progresses" do
-        expect(TutorialProgress.skipped).to eq([skipped])
+        expect(TutorialProgress.skipped).to eq([ skipped ])
       end
     end
 

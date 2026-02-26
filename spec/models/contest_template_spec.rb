@@ -119,7 +119,7 @@ RSpec.describe ContestTemplate, type: :model do
         template2 = create(:contest_template, user: organizer, created_at: 1.day.ago)
         template3 = create(:contest_template, user: organizer, created_at: Time.current)
 
-        expect(ContestTemplate.recent.to_a).to eq([template3, template2, template1])
+        expect(ContestTemplate.recent.to_a).to eq([ template3, template2, template1 ])
       end
     end
   end

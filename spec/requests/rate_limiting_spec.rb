@@ -26,7 +26,7 @@ RSpec.describe "Rate Limiting", type: :request do
     it "allows normal voting" do
       post spot_spot_vote_path(spot)
       # Should work normally (302 redirect or 200)
-      expect(response.status).to be_in([200, 302, 303])
+      expect(response.status).to be_in([ 200, 302, 303 ])
     end
   end
 
@@ -41,7 +41,7 @@ RSpec.describe "Rate Limiting", type: :request do
     it "allows normal voting" do
       post entry_vote_path(entry)
       # Should work normally (302 redirect or 200)
-      expect(response.status).to be_in([200, 302, 303])
+      expect(response.status).to be_in([ 200, 302, 303 ])
     end
   end
 

@@ -10,7 +10,7 @@ RSpec.describe JudgeInvitationMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("【写真コンテスト2026】審査員への招待")
-      expect(mail.to).to eq(["judge@example.com"])
+      expect(mail.to).to eq([ "judge@example.com" ])
     end
 
     it "renders the body with invitation token link" do

@@ -19,7 +19,7 @@ class CreateContestTemplates < ActiveRecord::Migration[8.0]
 
       t.timestamps
 
-      t.index [:user_id, :name], unique: true
+      t.index [ :user_id, :name ], unique: true
     end
   end
 end

@@ -12,6 +12,6 @@ class CreateDiscoveryBadges < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :discovery_badges, [:user_id, :contest_id, :badge_type], unique: true, name: "idx_discovery_badges_unique"
+    add_index :discovery_badges, [ :user_id, :contest_id, :badge_type ], unique: true, name: "idx_discovery_badges_unique"
   end
 end

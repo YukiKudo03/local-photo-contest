@@ -86,7 +86,7 @@ class Rack::Attack
         "Content-Type" => "application/json",
         "Retry-After" => (match_data[:period] - (now.to_i % match_data[:period])).to_s
       },
-      [{ error: "リクエスト回数の制限に達しました。しばらく時間をおいてから再度お試しください。" }.to_json]
+      [ { error: "リクエスト回数の制限に達しました。しばらく時間をおいてから再度お試しください。" }.to_json ]
     ]
   end
 end

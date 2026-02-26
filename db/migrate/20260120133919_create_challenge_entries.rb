@@ -9,6 +9,6 @@ class CreateChallengeEntries < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :challenge_entries, [:discovery_challenge_id, :entry_id], unique: true, name: "idx_challenge_entries_unique"
+    add_index :challenge_entries, [ :discovery_challenge_id, :entry_id ], unique: true, name: "idx_challenge_entries_unique"
   end
 end
