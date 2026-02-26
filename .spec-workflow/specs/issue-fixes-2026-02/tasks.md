@@ -135,80 +135,58 @@
 #### 2.1 スポット統合機能
 
 ##### 2.1.1 スポット統合サービスのテスト
-- [ ] 🔴 2.1.1.1 `spec/services/spot_merge_service_spec.rb` を作成
-  ```ruby
-  describe SpotMergeService do
-    describe "#merge" do
-      it "merges duplicate spots into one" do
-        primary = create(:discovery_spot)
-        duplicate = create(:discovery_spot)
-        service.merge(primary, duplicate)
-        expect(duplicate.reload.merged_into_id).to eq(primary.id)
-      end
-    end
-  end
-  ```
-- [ ] 🔴 2.1.1.2 関連エントリーの移行テスト
-- [ ] 🔴 2.1.1.3 投票の統合テスト
+- [x] 🔴 2.1.1.1 `spec/services/spot_merge_service_spec.rb` を作成
+- [x] 🔴 2.1.1.2 関連エントリーの移行テスト
+- [x] 🔴 2.1.1.3 投票の統合テスト
 
 ##### 2.1.2 スポット統合サービスの実装
-- [ ] 🟢 2.1.2.1 `SpotMergeService` を作成
-- [ ] 🟢 2.1.2.2 マイグレーション: `merged_into_id` カラム追加
-- [ ] 🟢 2.1.2.3 関連データの移行ロジック実装
+- [x] 🟢 2.1.2.1 `SpotMergeService` を作成
+- [x] 🟢 2.1.2.2 マイグレーション: `merged_into_id` カラム追加
+- [x] 🟢 2.1.2.3 関連データの移行ロジック実装
 
 ##### 2.1.3 スポット統合UIのテスト
-- [ ] 🔴 2.1.3.1 `spec/system/organizers/spot_management_spec.rb` を作成
-- [ ] 🟢 2.1.3.2 統合UIの実装
+- [x] 🔴 2.1.3.1 `spec/system/organizers/spot_management_spec.rb` を更新
+- [x] 🟢 2.1.3.2 統合UIの実装（コントローラー・ビュー）
 
 #### 2.2 スポット認定ワークフロー
 
 ##### 2.2.1 認定ステータス管理のテスト
-- [ ] 🔴 2.2.1.1 認定ステータス変更のテスト
-- [ ] 🔴 2.2.1.2 認定基準チェックのテスト
-- [ ] 🟢 2.2.1.3 認定サービスの実装
+- [x] 🔴 2.2.1.1 認定ステータス変更のテスト（既存）
+- [x] 🔴 2.2.1.2 認定基準チェックのテスト（既存）
+- [x] 🟢 2.2.1.3 認定サービスの実装（既存: DiscoverySpotService）
 
 ##### 2.2.2 認定UIのテスト
-- [ ] 🔴 2.2.2.1 システムテスト作成
-- [ ] 🟢 2.2.2.2 認定ダッシュボードUI実装
+- [x] 🔴 2.2.2.1 システムテスト作成（既存）
+- [x] 🟢 2.2.2.2 認定ダッシュボードUI実装（既存）
 
 #### 2.3 チャレンジ結果分析
 
 ##### 2.3.1 分析サービスのテスト
-- [ ] 🔴 2.3.1.1 `spec/services/challenge_analytics_service_spec.rb` 作成
-- [ ] 🟢 2.3.1.2 分析サービス実装
+- [x] 🔴 2.3.1.1 `spec/services/challenge_analytics_service_spec.rb` 作成
+- [x] 🟢 2.3.1.2 ChallengeAnalyticsService実装
 
 ##### 2.3.2 分析ダッシュボードのテスト
-- [ ] 🔴 2.3.2.1 システムテスト作成
-- [ ] 🟢 2.3.2.2 ダッシュボードUI実装
-- [ ] 🔵 2.3.2.3 リファクタリング
-- [ ] 2.3.3 Issue #19 をクローズ
+- [x] 🔴 2.3.2.1 システムテスト作成
+- [x] 🟢 2.3.2.2 ダッシュボードUI実装
+- [x] 🔵 2.3.2.3 リファクタリング（data-testid属性追加）
+- [x] 2.3.3 Issue #19 をクローズ
 
 ---
 
 ### Issue #20: システムテストの拡充
 
 #### 2.4 コンテストライフサイクルE2Eテスト
-- [ ] 🔴 2.4.1 `spec/system/contest_lifecycle_spec.rb` 作成
-  ```ruby
-  describe "Contest lifecycle", type: :system do
-    scenario "organizer creates, publishes, and announces results" do
-      # コンテスト作成
-      # 参加者が応募
-      # 審査員が評価
-      # 結果発表
-    end
-  end
-  ```
-- [ ] 🟢 2.4.2 テストが通るまで既存機能を確認・修正
+- [x] 🔴 2.4.1 `spec/system/contest_lifecycle_spec.rb` 作成（既存: 13テスト）
+- [x] 🟢 2.4.2 テストが通るまで既存機能を確認・修正
 
 #### 2.5 審査員評価フローE2Eテスト
-- [ ] 🔴 2.5.1 `spec/system/judge_evaluation_flow_spec.rb` 作成
-- [ ] 🟢 2.5.2 テストが通ることを確認
+- [x] 🔴 2.5.1 `spec/system/judge_evaluation_spec.rb` 作成（既存: 13テスト）
+- [x] 🟢 2.5.2 テストが通ることを確認
 
 #### 2.6 スポットディスカバリーE2Eテスト
-- [ ] 🔴 2.6.1 `spec/system/spot_discovery_flow_spec.rb` 作成
-- [ ] 🟢 2.6.2 テストが通ることを確認
-- [ ] 2.6.3 Issue #20 をクローズ
+- [x] 🔴 2.6.1 `spec/system/spot_discovery_flow_spec.rb` 作成
+- [x] 🟢 2.6.2 テストが通ることを確認
+- [x] 2.6.3 Issue #20 をクローズ
 
 ---
 

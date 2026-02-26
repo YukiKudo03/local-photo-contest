@@ -88,6 +88,10 @@ Rails.application.routes.draw do
         collection do
           patch :update_positions
         end
+        member do
+          get :merge
+          post :merge, action: :do_merge
+        end
       end
       resources :discovery_spots, only: [ :index ] do
         member do

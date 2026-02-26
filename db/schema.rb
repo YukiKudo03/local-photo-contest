@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_25_214417) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_121222) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -360,11 +360,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_25_214417) do
     t.datetime "certified_at"
     t.text "rejection_reason"
     t.integer "votes_count", default: 0, null: false
+    t.integer "merged_into_id"
+    t.datetime "merged_at"
     t.index ["contest_id", "name"], name: "index_spots_on_contest_id_and_name", unique: true
     t.index ["contest_id", "position"], name: "index_spots_on_contest_id_and_position"
     t.index ["contest_id"], name: "index_spots_on_contest_id"
     t.index ["discovered_by_id"], name: "index_spots_on_discovered_by_id"
     t.index ["discovery_status"], name: "index_spots_on_discovery_status"
+    t.index ["merged_into_id"], name: "index_spots_on_merged_into_id", where: "merged_into_id IS NOT NULL"
   end
 
   create_table "terms_acceptances", force: :cascade do |t|

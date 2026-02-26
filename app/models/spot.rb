@@ -5,6 +5,8 @@ class Spot < ApplicationRecord
   belongs_to :contest
   belongs_to :discovered_by, class_name: "User", optional: true
   belongs_to :certified_by, class_name: "User", optional: true
+  belongs_to :merged_into, class_name: "Spot", optional: true
+  has_many :merged_spots, class_name: "Spot", foreign_key: :merged_into_id, dependent: :nullify
   has_many :entries, dependent: :nullify
   has_many :spot_votes, dependent: :destroy
 

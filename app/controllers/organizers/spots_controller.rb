@@ -4,10 +4,11 @@ module Organizers
   class SpotsController < BaseController
     before_action :set_contest
     before_action :authorize_contest!
-    before_action :set_spot, only: [ :edit, :update, :destroy ]
+    before_action :set_spot, only: [ :edit, :update, :destroy, :merge, :do_merge ]
 
     def index
-      @spots = @contest.spots.ordered
+      @spots = @contest.spots.where(merged_into_id: nil).ordered
+      @spots = @contest.spots.ordered if params[:show_merged].present?
     end
 
     def new
@@ -38,6 +39,27 @@ module Organizers
     def destroy
       @spot.destroy
       redirect_to organizers_contest_spots_path(@contest), notice: "スポットを削除しました。"
+    end
+
+    def merge
+      @available_spots = @contest.spots
+                                 .where(merged_into_id: nil)
+                                 .where.not(id: @spot.id)
+                                 .ordered
+      @entries_count = @spot.entries.count
+      @votes_count = @spot.spot_votes.count
+    end
+
+    def do_merge
+      primary_spot = @contest.spots.find(params[:primary_spot_id])
+      service = SpotMergeService.new(primary_spot, @spot)
+      service.merge
+
+      redirect_to organizers_contest_spots_path(@contest),
+                  notice: "スポットを統合しました（#{service.preview[:entries_to_move]}件の作品を移動）。"
+    rescue SpotMergeService::MergeError => e
+      redirect_to merge_organizers_contest_spot_path(@contest, @spot),
+                  alert: "統合に失敗しました: #{e.message}"
     end
 
     def update_positions

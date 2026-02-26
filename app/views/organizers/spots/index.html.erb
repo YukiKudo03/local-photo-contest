@@ -45,7 +45,7 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
         <% @spots.each do |spot| %>
-          <tr class="hover:bg-gray-50">
+          <tr id="spot-<%= spot.id %>" class="hover:bg-gray-50">
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
@@ -55,7 +55,14 @@
                   </svg>
                 </div>
                 <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900"><%= spot.name %></div>
+                  <div class="text-sm font-medium text-gray-900">
+                    <%= spot.name %>
+                    <% if spot.merged_into_id.present? %>
+                      <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                        統合済み
+                      </span>
+                    <% end %>
+                  </div>
                   <% if spot.description.present? %>
                     <div class="text-xs text-gray-500 line-clamp-1"><%= spot.description %></div>
                   <% end %>
@@ -82,6 +89,9 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <div class="flex items-center justify-end space-x-2">
+                <% if spot.merged_into_id.blank? %>
+                  <a href="<%= merge_organizers_contest_spot_path(@contest, spot) %>" class="text-amber-600 hover:text-amber-900">統合</a>
+                <% end %>
                 <%= link_to edit_organizers_contest_spot_path(@contest, spot), class: "text-indigo-600 hover:text-indigo-900" do %>
                   <span class="sr-only">編集</span>
                   <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

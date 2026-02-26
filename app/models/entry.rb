@@ -11,6 +11,8 @@ class Entry < ApplicationRecord
   has_many :judge_comments, dependent: :destroy
   has_one :moderation_result, dependent: :destroy
   has_one :contest_ranking, dependent: :destroy
+  has_many :challenge_entries, dependent: :destroy
+  has_many :discovery_challenges, through: :challenge_entries
 
   # Enums
   enum :location_source, { manual: 0, exif: 1, gps: 2 }, prefix: :location

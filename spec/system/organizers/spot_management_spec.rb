@@ -149,4 +149,89 @@ RSpec.describe "Organizers::SpotManagement", type: :system do
       expect(page).to have_content("テストスポット")
     end
   end
+
+  describe "spot merging" do
+    let!(:accepting_contest) { create(:contest, :accepting_entries, user: organizer, area: area) }
+    let!(:primary_spot) { create(:spot, :with_coordinates, contest: accepting_contest, name: "メインスポット", category: :restaurant) }
+    let!(:duplicate_spot) { create(:spot, :with_coordinates, contest: accepting_contest, name: "重複スポット", category: :restaurant) }
+
+    before do
+      login_as organizer, scope: :user
+      create_list(:entry, 2, contest: accepting_contest, spot: duplicate_spot)
+    end
+
+    it "shows merge link for each spot" do
+      visit organizers_contest_spots_path(accepting_contest)
+
+      expect(page).to have_content("スポット管理")
+      expect(page).to have_content("メインスポット")
+      expect(page).to have_content("重複スポット")
+
+      # Check merge links exist (may be hidden on small screens)
+      links = all("a[href*='merge']", visible: :all)
+      expect(links.length).to eq(2)
+
+      # Verify links have correct hrefs
+      expect(links.map(&:native).map { |l| l["href"] }).to all(include("merge"))
+    end
+
+    it "shows merge preview page" do
+      visit merge_organizers_contest_spot_path(accepting_contest, duplicate_spot)
+
+      expect(page).to have_content("スポット統合")
+      expect(page).to have_content("重複スポット")
+      expect(page).to have_content("2件の作品")
+    end
+
+    it "merges duplicate spot into primary spot" do
+      visit merge_organizers_contest_spot_path(accepting_contest, duplicate_spot)
+
+      select "メインスポット", from: "統合先スポット"
+
+      accept_confirm do
+        click_button "統合を実行"
+      end
+
+      expect(page).to have_content("スポットを統合しました")
+      expect(page).to have_content("メインスポット")
+      expect(page).not_to have_content("重複スポット")
+    end
+
+    context "when duplicate spot has votes" do
+      let!(:voter) { create(:user, :confirmed) }
+
+      before do
+        create(:spot_vote, spot: duplicate_spot, user: voter)
+      end
+
+      it "shows vote count in preview" do
+        visit merge_organizers_contest_spot_path(accepting_contest, duplicate_spot)
+
+        expect(page).to have_content("1件の投票")
+      end
+    end
+  end
+
+  describe "viewing merged spots" do
+    let!(:primary_spot) { create(:spot, contest: contest, name: "メインスポット") }
+    let!(:merged_spot) do
+      create(:spot, contest: contest, name: "統合済みスポット", merged_into: primary_spot, merged_at: 1.day.ago)
+    end
+
+    before { login_as organizer, scope: :user }
+
+    it "hides merged spots from the main list by default" do
+      visit organizers_contest_spots_path(contest)
+
+      expect(page).to have_content("メインスポット")
+      expect(page).not_to have_content("統合済みスポット")
+    end
+
+    it "shows merged spots when requested" do
+      visit organizers_contest_spots_path(contest, show_merged: true)
+
+      expect(page).to have_content("メインスポット")
+      expect(page).to have_content("統合済みスポット")
+    end
+  end
 end

@@ -69,7 +69,7 @@
   </div>
 
   <!-- Stats -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" data-testid="stats-section">
     <h2 class="text-lg font-medium text-gray-900 mb-4">統計</h2>
     <dl class="space-y-4">
       <div>
@@ -89,7 +89,7 @@
 </div>
 
 <!-- Recent Entries -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8" data-testid="entries-section">
   <h2 class="text-lg font-medium text-gray-900 mb-4">参加エントリー</h2>
   <% if @entries.any? %>
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -118,7 +118,7 @@
 </div>
 
 <!-- Discovered Spots -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" data-testid="spots-section">
   <h2 class="text-lg font-medium text-gray-900 mb-4">発掘されたスポット</h2>
   <% if @discovered_spots.any? %>
     <div class="space-y-3">
