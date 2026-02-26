@@ -123,7 +123,7 @@
         <li class="px-4 py-4">
           <div class="flex items-center space-x-4">
             <% if entry.photo.attached? %>
-              <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), class: "h-12 w-12 rounded object-cover" %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "h-12 w-12 rounded object-cover" %>
             <% end %>
             <div class="flex-1">
               <p class="text-sm font-medium text-gray-900"><%= entry.title.presence || "無題" %></p>

@@ -36,7 +36,7 @@
           <!-- User Avatar -->
           <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 ml-2 flex items-center justify-center">
             <% if user.respond_to?(:avatar) && user.avatar.attached? %>
-              <%= image_tag user.avatar.variant(resize_to_fill: [40, 40]), class: "w-full h-full object-cover" %>
+              <%= image_tag user.avatar.variant(resize_to_fill: [40, 40]), alt: "プロフィール画像", class: "w-full h-full object-cover" %>
             <% else %>
               <span class="text-gray-500 text-lg font-medium"><%= user.name&.first || user.email.first.upcase %></span>
             <% end %>

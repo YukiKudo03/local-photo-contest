@@ -4,7 +4,7 @@
       <!-- Logo -->
       <div class="flex items-center">
         <%= link_to root_path, class: "flex items-center space-x-2" do %>
-          <svg class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -13,7 +13,7 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="hidden md:flex items-center space-x-4">
+      <nav class="hidden md:flex items-center space-x-4" aria-label="メインナビゲーション">
         <%= link_to "コンテスト", contests_path, data: { tutorial: "contests-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
         <%= link_to "ギャラリー", gallery_index_path, data: { tutorial: "gallery-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
         <% if user_signed_in? %>
@@ -22,13 +22,13 @@
           <% if current_user.contest_judges.any? %>
             <%= link_to "審査担当", my_judge_assignments_path, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
           <% end %>
-          <%= link_to my_notifications_path, data: { tutorial: "notifications-link" }, class: "relative inline-flex items-center p-1 text-gray-700 hover:text-indigo-600 transition-colors" do %>
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <% unread_count = current_user.notifications.unread.count %>
+          <%= link_to my_notifications_path, data: { tutorial: "notifications-link" }, class: "relative inline-flex items-center p-1 text-gray-700 hover:text-indigo-600 transition-colors", aria: { label: unread_count > 0 ? "通知 未読#{unread_count}件" : "通知" } do %>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
-            <% unread_count = current_user.notifications.unread.count %>
             <% if unread_count > 0 %>
-              <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+              <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full" aria-hidden="true">
                 <%= unread_count > 99 ? '99+' : unread_count %>
               </span>
             <% end %>
@@ -53,9 +53,9 @@
 
       <!-- Mobile menu button -->
       <div class="md:hidden">
-        <button type="button" data-action="click->mobile-menu#toggle" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+        <button type="button" data-action="click->mobile-menu#toggle" data-mobile-menu-target="button" aria-expanded="false" aria-controls="mobile-menu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
           <span class="sr-only">メニューを開く</span>
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -64,8 +64,8 @@
   </div>
 
   <!-- Mobile menu -->
-  <div class="md:hidden hidden" data-mobile-menu-target="menu">
-    <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+  <div id="mobile-menu" class="md:hidden hidden" data-mobile-menu-target="menu">
+    <nav class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200" aria-label="モバイルナビゲーション">
       <%= link_to "コンテスト", contests_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
       <%= link_to "ギャラリー", gallery_index_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
       <% if user_signed_in? %>
@@ -74,11 +74,11 @@
         <% if current_user.contest_judges.any? %>
           <%= link_to "審査担当", my_judge_assignments_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
         <% end %>
-        <%= link_to my_notifications_path, class: "flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" do %>
+        <% unread_count = current_user.notifications.unread.count %>
+        <%= link_to my_notifications_path, class: "flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50", aria: { label: unread_count > 0 ? "通知 未読#{unread_count}件" : "通知" } do %>
           通知
-          <% unread_count = current_user.notifications.unread.count %>
           <% if unread_count > 0 %>
-            <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+            <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full" aria-hidden="true">
               <%= unread_count > 99 ? '99+' : unread_count %>
             </span>
           <% end %>
@@ -99,6 +99,6 @@
         <%= link_to "ログイン", new_user_session_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
         <%= link_to "新規登録", new_user_registration_path, class: "block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 text-center" %>
       <% end %>
-    </div>
+    </nav>
   </div>
 </header>

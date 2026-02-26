@@ -149,7 +149,7 @@
       <% if contest.thumbnail.attached? %>
         <div class="mb-4">
           <p class="text-sm text-gray-500 mb-2">現在の画像：</p>
-          <%= image_tag contest.thumbnail, class: "max-w-xs rounded-lg" %>
+          <%= image_tag contest.thumbnail, alt: contest.title, class: "max-w-xs rounded-lg" %>
         </div>
       <% end %>
 

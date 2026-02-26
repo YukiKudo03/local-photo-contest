@@ -24,6 +24,7 @@
         <div class="aspect-square bg-gray-100">
           <% if entry.photo.attached? %>
             <%= image_tag entry.photo.variant(resize_to_fill: [200, 200]),
+                          alt: entry.title.presence || "フォトコンテスト応募作品",
                           class: "w-full h-full object-cover",
                           loading: "lazy" %>
           <% end %>

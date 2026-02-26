@@ -71,7 +71,7 @@
     <!-- Photo -->
     <div class="bg-gray-100">
       <% if @entry.photo.attached? %>
-        <%= image_tag @entry.photo, class: "w-full max-h-[600px] object-contain" %>
+        <%= image_tag @entry.photo, alt: @entry.title.presence || "フォトコンテスト応募作品", class: "w-full max-h-[600px] object-contain" %>
       <% end %>
     </div>
 

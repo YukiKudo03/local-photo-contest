@@ -196,7 +196,7 @@
         <li class="px-4 py-4">
           <div class="flex items-center space-x-3">
             <% if entry.photo.attached? %>
-              <%= image_tag entry.photo.variant(resize_to_fill: [40, 40]), class: "h-10 w-10 rounded object-cover" %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [40, 40]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "h-10 w-10 rounded object-cover" %>
             <% else %>
               <div class="h-10 w-10 rounded bg-gray-100 flex items-center justify-center">
                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

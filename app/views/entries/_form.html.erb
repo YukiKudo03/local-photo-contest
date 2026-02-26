@@ -28,7 +28,7 @@
       <% if entry.persisted? && entry.photo.attached? %>
         <div class="mb-4">
           <p class="text-sm text-gray-500 mb-2">現在の写真：</p>
-          <%= image_tag entry.photo, class: "max-w-md rounded-lg" %>
+          <%= image_tag entry.photo, alt: entry.title.presence || "フォトコンテスト応募作品", class: "max-w-md rounded-lg" %>
         </div>
       <% end %>
 

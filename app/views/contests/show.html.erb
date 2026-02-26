@@ -11,7 +11,7 @@
     <!-- Thumbnail -->
     <div class="aspect-video bg-gray-100 flex items-center justify-center">
       <% if @contest.thumbnail.attached? %>
-        <%= image_tag @contest.thumbnail, class: "w-full h-full object-cover" %>
+        <%= image_tag @contest.thumbnail, alt: @contest.title, class: "w-full h-full object-cover" %>
       <% else %>
         <div class="text-center">
           <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -233,7 +233,7 @@
               <!-- Photo Thumbnail -->
               <div class="aspect-square bg-gray-100 relative">
                 <% if entry.photo.attached? %>
-                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), class: "w-full h-full object-cover" %>
+                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover" %>
                 <% end %>
 
                 <!-- Vote Count Overlay -->

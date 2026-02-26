@@ -103,7 +103,7 @@ RSpec.describe "Authentication", type: :system do
       page.execute_script("window.confirm = () => true")
 
       # Find and click the first (desktop) logout button
-      within("header nav") do
+      within("header nav[aria-label='メインナビゲーション']") do
         first(:button, "ログアウト").click
       end
 

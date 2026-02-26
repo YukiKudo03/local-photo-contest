@@ -29,6 +29,7 @@
   </head>
 
   <body class="h-full bg-gray-50" <%= "data-controller=toast data-toast-user-id-value=#{current_user.id}" if user_signed_in? %>>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-indigo-600 focus:font-medium">メインコンテンツへスキップ</a>
     <%= render "shared/flash" %>
 
     <div class="min-h-full flex flex-col">
@@ -43,7 +44,7 @@
         <% end %>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-auto">
+        <main id="main-content" class="flex-1 overflow-auto">
           <div class="py-6 px-4 sm:px-6 lg:px-8">
             <%= yield %>
           </div>
@@ -51,7 +52,7 @@
 
         <% if content_for?(:right_sidebar) %>
           <!-- Right Sidebar -->
-          <aside class="w-full lg:w-64 bg-white border-l border-gray-200 p-4">
+          <aside class="w-full lg:w-64 bg-white border-l border-gray-200 p-4" aria-label="補足情報">
             <%= yield :right_sidebar %>
           </aside>
         <% end %>

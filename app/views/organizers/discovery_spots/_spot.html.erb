@@ -6,7 +6,7 @@
         <div class="w-48 h-48 rounded-lg overflow-hidden bg-gray-100">
           <% first_entry = spot.entries.includes(photo_attachment: :blob).first %>
           <% if first_entry&.photo&.attached? %>
-            <%= image_tag first_entry.photo.variant(resize_to_fill: [384, 384]), class: "w-full h-full object-cover" %>
+            <%= image_tag first_entry.photo.variant(resize_to_fill: [384, 384]), alt: first_entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover" %>
           <% else %>
             <div class="w-full h-full flex items-center justify-center text-gray-400">
               <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
