@@ -388,6 +388,109 @@ RSpec.describe StatisticsService do
     end
   end
 
+  describe "date range filtering" do
+    let!(:user1) { create(:user, :confirmed) }
+    let!(:user2) { create(:user, :confirmed) }
+    let!(:user3) { create(:user, :confirmed) }
+
+    # Create entries on different dates
+    let!(:entry_old) { create(:entry, contest: contest, user: user1, created_at: 10.days.ago) }
+    let!(:entry_mid) { create(:entry, contest: contest, user: user2, created_at: 5.days.ago) }
+    let!(:entry_new) { create(:entry, contest: contest, user: user3, created_at: 1.day.ago) }
+
+    let!(:vote_old) { create(:vote, entry: entry_old, user: user2, created_at: 9.days.ago) }
+    let!(:vote_mid) { create(:vote, entry: entry_mid, user: user1, created_at: 4.days.ago) }
+    let!(:vote_new) { create(:vote, entry: entry_new, user: user1, created_at: 1.day.ago) }
+
+    describe "#summary_stats with date range" do
+      it "filters entries by start_date" do
+        service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date)
+        stats = service_with_range.summary_stats
+
+        expect(stats[:total_entries]).to eq(2) # entry_mid and entry_new
+      end
+
+      it "filters entries by end_date" do
+        service_with_range = described_class.new(contest, end_date: 6.days.ago.to_date)
+        stats = service_with_range.summary_stats
+
+        expect(stats[:total_entries]).to eq(1) # entry_old only
+      end
+
+      it "filters entries by both start_date and end_date" do
+        service_with_range = described_class.new(contest, start_date: 7.days.ago.to_date, end_date: 3.days.ago.to_date)
+        stats = service_with_range.summary_stats
+
+        expect(stats[:total_entries]).to eq(1) # entry_mid only
+      end
+
+      it "filters votes accordingly" do
+        service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date)
+        stats = service_with_range.summary_stats
+
+        expect(stats[:total_votes]).to eq(2) # vote_mid and vote_new
+      end
+    end
+
+    describe "#daily_entries with date range" do
+      it "returns only entries within date range" do
+        service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date, end_date: Date.current)
+        result = service_with_range.daily_entries
+
+        expect(result.values.sum).to eq(2) # entry_mid and entry_new
+      end
+    end
+
+    describe "#daily_votes with date range" do
+      it "returns only votes within date range" do
+        service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date, end_date: Date.current)
+        result = service_with_range.daily_votes
+
+        expect(result.values.sum).to eq(2) # vote_mid and vote_new
+      end
+    end
+
+    describe "#top_voted_entries with date range" do
+      it "returns only entries with votes within date range" do
+        # Add more votes to entry_new within range
+        create(:vote, entry: entry_new, user: create(:user, :confirmed), created_at: 1.day.ago)
+
+        service_with_range = described_class.new(contest, start_date: 2.days.ago.to_date)
+        result = service_with_range.top_voted_entries
+
+        expect(result.first).to eq(entry_new)
+      end
+    end
+
+    describe "#date_range_preset" do
+      it "supports 'last_7_days' preset" do
+        service_with_preset = described_class.new(contest, date_preset: "last_7_days")
+        stats = service_with_preset.summary_stats
+
+        expect(stats[:total_entries]).to eq(2) # entry_mid and entry_new (within 7 days)
+      end
+
+      it "supports 'last_30_days' preset" do
+        service_with_preset = described_class.new(contest, date_preset: "last_30_days")
+        stats = service_with_preset.summary_stats
+
+        expect(stats[:total_entries]).to eq(3) # all entries
+      end
+
+      it "supports 'this_week' preset" do
+        service_with_preset = described_class.new(contest, date_preset: "this_week")
+        # Result depends on current day of week
+        expect(service_with_preset.summary_stats).to be_a(Hash)
+      end
+
+      it "supports 'this_month' preset" do
+        service_with_preset = described_class.new(contest, date_preset: "this_month")
+        # Result depends on current month
+        expect(service_with_preset.summary_stats).to be_a(Hash)
+      end
+    end
+  end
+
   describe "cache invalidation callbacks" do
     around do |example|
       original_cache = Rails.cache

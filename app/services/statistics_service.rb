@@ -4,10 +4,30 @@ class StatisticsService
   CACHE_TTL = 5.minutes
   CACHE_NAMESPACE = "statistics"
 
-  attr_reader :contest
+  DATE_PRESETS = {
+    "last_7_days" => -> { [ 7.days.ago.to_date, Date.current ] },
+    "last_30_days" => -> { [ 30.days.ago.to_date, Date.current ] },
+    "this_week" => -> { [ Date.current.beginning_of_week, Date.current.end_of_week ] },
+    "this_month" => -> { [ Date.current.beginning_of_month, Date.current.end_of_month ] }
+  }.freeze
 
-  def initialize(contest)
+  attr_reader :contest, :start_date, :end_date
+
+  def initialize(contest, start_date: nil, end_date: nil, date_preset: nil)
     @contest = contest
+
+    if date_preset.present? && DATE_PRESETS.key?(date_preset)
+      @start_date, @end_date = DATE_PRESETS[date_preset].call
+    else
+      @start_date = start_date
+      @end_date = end_date
+    end
+  end
+
+  # Get date range based on preset
+  def date_range_preset(preset)
+    return nil unless DATE_PRESETS.key?(preset)
+    DATE_PRESETS[preset].call
   end
 
   # Clear all cached statistics for a contest
@@ -20,7 +40,8 @@ class StatisticsService
 
   # Task 2: サマリーカード用データ
   def summary_stats
-    Rails.cache.fetch(cache_key("summary"), expires_in: CACHE_TTL) do
+    # Date range filtering bypasses cache
+    if date_range_active?
       {
         total_entries: total_entries_count,
         total_votes: total_votes_count,
@@ -31,15 +52,34 @@ class StatisticsService
         participants_change: participants_change_from_yesterday,
         spots_change: spots_change_from_yesterday
       }
+    else
+      Rails.cache.fetch(cache_key("summary"), expires_in: CACHE_TTL) do
+        {
+          total_entries: total_entries_count,
+          total_votes: total_votes_count,
+          total_participants: total_participants_count,
+          total_spots: total_spots_count,
+          entries_change: entries_change_from_yesterday,
+          votes_change: votes_change_from_yesterday,
+          participants_change: participants_change_from_yesterday,
+          spots_change: spots_change_from_yesterday
+        }
+      end
     end
   end
 
   # Task 3: 日別応募数（Chartkick対応形式）
   def daily_entries
-    Rails.cache.fetch(cache_key("daily_entries"), expires_in: CACHE_TTL) do
-      contest.entries
-             .group_by_day(:created_at, time_zone: "Tokyo")
-             .count
+    if date_range_active?
+      filtered_entries
+        .group_by_day(:created_at, time_zone: "Tokyo")
+        .count
+    else
+      Rails.cache.fetch(cache_key("daily_entries"), expires_in: CACHE_TTL) do
+        contest.entries
+               .group_by_day(:created_at, time_zone: "Tokyo")
+               .count
+      end
     end
   end
 
@@ -106,11 +146,17 @@ class StatisticsService
 
   # Task 5: 日別投票数（Chartkick対応形式）
   def daily_votes
-    Rails.cache.fetch(cache_key("daily_votes"), expires_in: CACHE_TTL) do
-      Vote.joins(entry: :contest)
-          .where(entries: { contest_id: contest.id })
-          .group_by_day(:created_at, time_zone: "Tokyo")
-          .count
+    if date_range_active?
+      filtered_votes
+        .group_by_day(:created_at, time_zone: "Tokyo")
+        .count
+    else
+      Rails.cache.fetch(cache_key("daily_votes"), expires_in: CACHE_TTL) do
+        Vote.joins(entry: :contest)
+            .where(entries: { contest_id: contest.id })
+            .group_by_day(:created_at, time_zone: "Tokyo")
+            .count
+      end
     end
   end
 
@@ -134,12 +180,41 @@ class StatisticsService
 
   # Task 5: 上位得票作品（Top limit件）
   def top_voted_entries(limit: 5)
-    contest.entries
-           .left_joins(:votes)
-           .group(:id)
-           .select("entries.*, COUNT(votes.id) as votes_count")
-           .order(Arel.sql("COUNT(votes.id) DESC"), "entries.created_at ASC")
-           .limit(limit)
+    base_entries = if date_range_active?
+      filtered_entries
+    else
+      contest.entries
+    end
+
+    # Join with votes that may be filtered by date range
+    query = base_entries.left_joins(:votes)
+
+    if date_range_active?
+      # Filter votes within date range for counting
+      vote_conditions = []
+      vote_conditions << "votes.created_at >= '#{start_date.to_date.beginning_of_day}'" if start_date
+      vote_conditions << "votes.created_at <= '#{end_date.to_date.end_of_day}'" if end_date
+
+      if vote_conditions.any?
+        vote_filter = vote_conditions.join(" AND ")
+        query = query
+                  .group(:id)
+                  .select("entries.*, COUNT(CASE WHEN #{vote_filter} THEN votes.id END) as votes_count")
+                  .order(Arel.sql("COUNT(CASE WHEN #{vote_filter} THEN votes.id END) DESC"), "entries.created_at ASC")
+      else
+        query = query
+                  .group(:id)
+                  .select("entries.*, COUNT(votes.id) as votes_count")
+                  .order(Arel.sql("COUNT(votes.id) DESC"), "entries.created_at ASC")
+      end
+    else
+      query = query
+                .group(:id)
+                .select("entries.*, COUNT(votes.id) as votes_count")
+                .order(Arel.sql("COUNT(votes.id) DESC"), "entries.created_at ASC")
+    end
+
+    query.limit(limit)
   end
 
   # 投票期間が開始しているかどうか
@@ -150,18 +225,49 @@ class StatisticsService
 
   private
 
+  def date_range_active?
+    start_date.present? || end_date.present?
+  end
+
+  def filtered_entries
+    query = contest.entries
+    query = query.where("entries.created_at >= ?", start_date.to_date.beginning_of_day) if start_date
+    query = query.where("entries.created_at <= ?", end_date.to_date.end_of_day) if end_date
+    query
+  end
+
+  def filtered_votes
+    query = Vote.joins(entry: :contest)
+                .where(entries: { contest_id: contest.id })
+    query = query.where("votes.created_at >= ?", start_date.to_date.beginning_of_day) if start_date
+    query = query.where("votes.created_at <= ?", end_date.to_date.end_of_day) if end_date
+    query
+  end
+
   def total_entries_count
-    contest.entries.count
+    if date_range_active?
+      filtered_entries.count
+    else
+      contest.entries.count
+    end
   end
 
   def total_votes_count
-    Vote.joins(entry: :contest)
-        .where(entries: { contest_id: contest.id })
-        .count
+    if date_range_active?
+      filtered_votes.count
+    else
+      Vote.joins(entry: :contest)
+          .where(entries: { contest_id: contest.id })
+          .count
+    end
   end
 
   def total_participants_count
-    contest.entries.distinct.count(:user_id)
+    if date_range_active?
+      filtered_entries.distinct.count(:user_id)
+    else
+      contest.entries.distinct.count(:user_id)
+    end
   end
 
   def total_spots_count
