@@ -1,0 +1,136 @@
+<div class="container mx-auto max-w-5xl px-4 py-8">
+  <!-- Search Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-4">検索</h1>
+    <%= form_with url: search_path, method: :get, data: { controller: "search", search_target: "form" }, class: "relative" do |f| %>
+      <div class="relative">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" name="q" value="<%= @query %>"
+               placeholder="コンテスト、作品、スポットを検索..."
+               autocomplete="off"
+               data-search-target="input"
+               data-action="input->search#debounce"
+               class="block w-full pl-12 pr-10 py-3 text-lg border-gray-300 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+               aria-label="検索キーワード">
+        <% if @query.present? %>
+          <%= link_to search_path, class: "absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600", aria: { label: "検索をクリア" } do %>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @query.present? %>
+    <!-- Result Summary -->
+    <p class="text-sm text-gray-500 mb-6">
+      「<strong class="text-gray-900"><%= @query %></strong>」の検索結果：<%= @total_count %>件
+    </p>
+
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+      <nav class="-mb-px flex space-x-8" aria-label="検索タブ">
+        <%= link_to search_path(q: @query, type: "all"),
+            class: "whitespace-nowrap pb-3 px-1 border-b-2 text-sm font-medium #{@type == 'all' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+          すべて <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"><%= @total_count %></span>
+        <% end %>
+        <%= link_to search_path(q: @query, type: "contests"),
+            class: "whitespace-nowrap pb-3 px-1 border-b-2 text-sm font-medium #{@type == 'contests' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+          コンテスト <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"><%= @contest_count %></span>
+        <% end %>
+        <%= link_to search_path(q: @query, type: "entries"),
+            class: "whitespace-nowrap pb-3 px-1 border-b-2 text-sm font-medium #{@type == 'entries' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+          作品 <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"><%= @entry_count %></span>
+        <% end %>
+        <%= link_to search_path(q: @query, type: "spots"),
+            class: "whitespace-nowrap pb-3 px-1 border-b-2 text-sm font-medium #{@type == 'spots' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+          スポット <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"><%= @spot_count %></span>
+        <% end %>
+      </nav>
+    </div>
+
+    <!-- Results -->
+    <% if @total_count == 0 %>
+      <div class="text-center py-16">
+        <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">検索結果がありません</h3>
+        <p class="mt-2 text-sm text-gray-500">別のキーワードで検索してみてください</p>
+      </div>
+    <% else %>
+      <!-- Contests -->
+      <% if (@type == "all" || @type == "contests") && @contests.any? %>
+        <% if @type == "all" %>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">コンテスト</h2>
+        <% end %>
+        <div class="space-y-3 mb-8">
+          <% @contests.each do |contest| %>
+            <%= render "search/contest_result", contest: contest %>
+          <% end %>
+        </div>
+        <% if @type == "all" && @contest_count > 6 %>
+          <div class="mb-8">
+            <%= link_to "コンテストの結果をすべて見る（#{@contest_count}件）", search_path(q: @query, type: "contests"),
+                class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+          </div>
+        <% elsif @type == "contests" %>
+          <div class="mt-6"><%= paginate @contests %></div>
+        <% end %>
+      <% end %>
+
+      <!-- Entries -->
+      <% if (@type == "all" || @type == "entries") && @entries.any? %>
+        <% if @type == "all" %>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">作品</h2>
+        <% end %>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+          <% @entries.each do |entry| %>
+            <%= render "search/entry_result", entry: entry %>
+          <% end %>
+        </div>
+        <% if @type == "all" && @entry_count > 6 %>
+          <div class="mb-8">
+            <%= link_to "作品の結果をすべて見る（#{@entry_count}件）", search_path(q: @query, type: "entries"),
+                class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+          </div>
+        <% elsif @type == "entries" %>
+          <div class="mt-6"><%= paginate @entries %></div>
+        <% end %>
+      <% end %>
+
+      <!-- Spots -->
+      <% if (@type == "all" || @type == "spots") && @spots.any? %>
+        <% if @type == "all" %>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">スポット</h2>
+        <% end %>
+        <div class="space-y-3 mb-8">
+          <% @spots.each do |spot| %>
+            <%= render "search/spot_result", spot: spot %>
+          <% end %>
+        </div>
+        <% if @type == "all" && @spot_count > 6 %>
+          <div class="mb-8">
+            <%= link_to "スポットの結果をすべて見る（#{@spot_count}件）", search_path(q: @query, type: "spots"),
+                class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+          </div>
+        <% elsif @type == "spots" %>
+          <div class="mt-6"><%= paginate @spots %></div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <!-- Initial State -->
+    <div class="text-center py-16">
+      <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900">キーワードを入力してください</h3>
+      <p class="mt-2 text-sm text-gray-500">コンテスト、作品、スポットを検索できます</p>
+    </div>
+  <% end %>
+</div>

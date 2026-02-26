@@ -12,6 +12,19 @@
         <% end %>
       </div>
 
+      <!-- Search -->
+      <div class="hidden md:block flex-1 max-w-md mx-4">
+        <%= form_with url: search_path, method: :get, class: "relative" do |f| %>
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" name="q" placeholder="検索..."
+                 autocomplete="off"
+                 class="block w-full pl-9 pr-3 py-1.5 text-sm border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500"
+                 aria-label="サイト内検索">
+        <% end %>
+      </div>
+
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-4" aria-label="メインナビゲーション">
         <%= link_to "コンテスト", contests_path, data: { tutorial: "contests-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
@@ -66,6 +79,18 @@
   <!-- Mobile menu -->
   <div id="mobile-menu" class="md:hidden hidden" data-mobile-menu-target="menu">
     <nav class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200" aria-label="モバイルナビゲーション">
+      <!-- Mobile Search -->
+      <div class="px-3 py-2">
+        <%= form_with url: search_path, method: :get, class: "relative" do |f| %>
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" name="q" placeholder="検索..."
+                 autocomplete="off"
+                 class="block w-full pl-9 pr-3 py-2 text-sm border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500"
+                 aria-label="サイト内検索">
+        <% end %>
+      </div>
       <%= link_to "コンテスト", contests_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
       <%= link_to "ギャラリー", gallery_index_path, class: "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" %>
       <% if user_signed_in? %>

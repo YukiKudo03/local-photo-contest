@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Spot < ApplicationRecord
+  include Searchable
+  search_by :name, :address, :description
+
   # Associations
   belongs_to :contest
   belongs_to :discovered_by, class_name: "User", optional: true

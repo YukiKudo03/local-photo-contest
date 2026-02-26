@@ -1,0 +1,22 @@
+<%= link_to contest_path(contest), class: "block bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition p-4" do %>
+  <div class="flex items-start justify-between">
+    <div class="flex-1 min-w-0">
+      <h3 class="text-base font-semibold text-gray-900 truncate"><%= contest.title %></h3>
+      <% if contest.theme.present? %>
+        <p class="mt-1 text-sm text-gray-500 truncate">テーマ: <%= contest.theme %></p>
+      <% end %>
+      <% if contest.description.present? %>
+        <p class="mt-1 text-sm text-gray-600 line-clamp-2"><%= truncate(contest.description, length: 120) %></p>
+      <% end %>
+      <div class="mt-2 flex items-center gap-3 text-xs text-gray-500">
+        <span><%= contest.entries.count %>作品</span>
+        <% if contest.entry_end_at.present? %>
+          <span>締切: <%= l(contest.entry_end_at, format: :short) %></span>
+        <% end %>
+      </div>
+    </div>
+    <span class="ml-3 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium <%= contest.published? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+      <%= contest.published? ? '開催中' : '終了' %>
+    </span>
+  </div>
+<% end %>

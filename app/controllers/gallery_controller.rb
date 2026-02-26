@@ -4,6 +4,11 @@ class GalleryController < ApplicationController
   def index
     @entries = base_entries
 
+    # Text search
+    if params[:q].present?
+      @entries = @entries.search(params[:q].to_s.strip)
+    end
+
     # Filter by contest
     if params[:contest_id].present?
       @entries = @entries.where(contest_id: params[:contest_id])

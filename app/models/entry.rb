@@ -1,4 +1,7 @@
 class Entry < ApplicationRecord
+  include Searchable
+  search_by :title, :description, :location
+
   # Associations
   belongs_to :user
   belongs_to :contest

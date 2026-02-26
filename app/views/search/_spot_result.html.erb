@@ -1,0 +1,24 @@
+<%= link_to contest_path(spot.contest), class: "block bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition p-4" do %>
+  <div class="flex items-start justify-between">
+    <div class="flex-1 min-w-0">
+      <h3 class="text-base font-semibold text-gray-900 truncate"><%= spot.name %></h3>
+      <% if spot.address.present? %>
+        <p class="mt-1 text-sm text-gray-500 truncate">
+          <svg class="inline-block h-3.5 w-3.5 mr-0.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <%= spot.address %>
+        </p>
+      <% end %>
+      <% if spot.description.present? %>
+        <p class="mt-1 text-sm text-gray-600 line-clamp-2"><%= truncate(spot.description, length: 120) %></p>
+      <% end %>
+      <div class="mt-2 flex items-center gap-3 text-xs text-gray-500">
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-100 text-gray-600"><%= spot.category_name %></span>
+        <span><%= spot.contest.title %></span>
+        <span><%= spot.entries.count %>作品</span>
+      </div>
+    </div>
+  </div>
+<% end %>

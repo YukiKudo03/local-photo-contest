@@ -1,4 +1,7 @@
 class Contest < ApplicationRecord
+  include Searchable
+  search_by :title, :description, :theme
+
   # Associations
   belongs_to :user
   belongs_to :category, optional: true

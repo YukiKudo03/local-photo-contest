@@ -22,6 +22,14 @@
   <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
     <%= form_with url: gallery_index_path, method: :get, data: { turbo_frame: "_top" }, class: "space-y-4" do |f| %>
       <div class="flex flex-wrap items-end gap-4">
+        <!-- Text Search -->
+        <div class="flex-1 min-w-[200px]">
+          <label for="q" class="block text-xs font-medium text-gray-500 mb-1">キーワード</label>
+          <input type="text" name="q" id="q" value="<%= params[:q] %>"
+                 placeholder="タイトル、説明で検索..."
+                 class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+        </div>
+
         <!-- Contest Filter -->
         <div class="flex-1 min-w-[180px]">
           <label for="contest_id" class="block text-xs font-medium text-gray-500 mb-1">コンテスト</label>
@@ -84,7 +92,7 @@
         </div>
 
         <!-- Clear Filters -->
-        <% if params[:contest_id].present? || params[:category_id].present? || params[:area_id].present? || params[:sort].present? %>
+        <% if params[:q].present? || params[:contest_id].present? || params[:category_id].present? || params[:area_id].present? || params[:sort].present? %>
           <div class="flex-shrink-0">
             <%= link_to "クリア", gallery_index_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
           </div>
