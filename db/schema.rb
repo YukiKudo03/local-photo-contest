@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_26_215119) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_222519) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -123,7 +123,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_26_215119) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contest_id", "entry_id"], name: "index_contest_rankings_on_contest_id_and_entry_id", unique: true
-    t.index ["contest_id", "rank"], name: "index_contest_rankings_on_contest_id_and_rank", unique: true
+    t.index ["contest_id", "rank"], name: "index_contest_rankings_on_contest_id_and_rank"
     t.index ["contest_id"], name: "index_contest_rankings_on_contest_id"
     t.index ["entry_id"], name: "index_contest_rankings_on_entry_id"
   end

@@ -21,32 +21,73 @@
         <h2 class="text-lg font-semibold text-gray-900">審査員一覧</h2>
       </div>
       <% if @judges.any? %>
+        <!-- Overall Progress Summary -->
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-gray-700">全体の審査進捗</span>
+            <span class="text-sm font-semibold text-gray-900"><%= @contest.judge_completion_rate %>%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <% completion_rate = @contest.judge_completion_rate %>
+            <div class="h-2.5 rounded-full <%= completion_rate >= 100 ? 'bg-green-500' : completion_rate >= 50 ? 'bg-yellow-500' : 'bg-red-500' %>" style="width: <%= completion_rate %>%"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            <%= @contest.entries.count %>作品 × <%= @contest.evaluation_criteria.count %>基準 × <%= @judges.count %>審査員
+          </p>
+        </div>
+
         <ul class="divide-y divide-gray-100">
           <% @judges.each do |judge| %>
-            <li class="p-6 flex items-center justify-between">
-              <div class="flex items-center">
-                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                  <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+            <% progress = judge.evaluation_progress %>
+            <% evaluated_entries = judge.judge_evaluations.select(:entry_id).distinct.count %>
+            <% total_entries = @contest.entries.where.not(user_id: judge.user_id).count %>
+            <li class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-900"><%= judge.user.email %></p>
+                    <p class="text-xs text-gray-500">
+                      招待日: <%= judge.invited_at&.strftime('%Y年%m月%d日 %H:%M') || '未設定' %>
+                    </p>
+                  </div>
                 </div>
-                <div class="ml-4">
-                  <p class="text-sm font-medium text-gray-900"><%= judge.user.email %></p>
-                  <p class="text-xs text-gray-500">
-                    招待日: <%= judge.invited_at&.strftime('%Y年%m月%d日 %H:%M') || '未設定' %>
-                  </p>
-                  <p class="text-xs text-gray-500">
-                    評価進捗: <%= judge.evaluation_progress %>%
-                  </p>
+                <div class="flex items-center space-x-4">
+                  <div class="text-right">
+                    <span class="text-lg font-semibold <%= progress >= 100 ? 'text-green-600' : progress >= 50 ? 'text-yellow-600' : 'text-red-600' %>">
+                      <%= progress %>%
+                    </span>
+                    <p class="text-xs text-gray-500"><%= evaluated_entries %>/<%= total_entries %>作品</p>
+                  </div>
+                  <% unless @contest.results_announced? %>
+                    <%= button_to organizers_contest_judge_path(@contest, judge),
+                        method: :delete,
+                        data: { turbo_confirm: "この審査員を削除しますか？" },
+                        class: "text-red-600 hover:text-red-800 text-sm font-medium" do %>
+                      削除
+                    <% end %>
+                  <% end %>
                 </div>
               </div>
-              <% unless @contest.results_announced? %>
-                <%= button_to organizers_contest_judge_path(@contest, judge),
-                    method: :delete,
-                    data: { turbo_confirm: "この審査員を削除しますか？" },
-                    class: "text-red-600 hover:text-red-800 text-sm font-medium" do %>
-                  削除
-                <% end %>
+              <!-- Individual Progress Bar -->
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="h-2 rounded-full <%= progress >= 100 ? 'bg-green-500' : progress >= 50 ? 'bg-yellow-500' : 'bg-red-500' %>" style="width: <%= progress %>%"></div>
+              </div>
+              <% if progress >= 100 %>
+                <p class="mt-2 text-xs text-green-600 flex items-center">
+                  <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  評価完了
+                </p>
+              <% elsif progress > 0 %>
+                <p class="mt-2 text-xs text-yellow-600">評価中...</p>
+              <% else %>
+                <p class="mt-2 text-xs text-gray-500">未着手</p>
               <% end %>
             </li>
           <% end %>

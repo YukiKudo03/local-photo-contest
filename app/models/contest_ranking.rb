@@ -10,7 +10,8 @@ class ContestRanking < ApplicationRecord
   validates :total_score, presence: true
   validates :calculated_at, presence: true
   validates :entry_id, uniqueness: { scope: :contest_id, message: "は既にランキングに登録されています" }
-  validates :rank, uniqueness: { scope: :contest_id, message: "は既に使用されています" }
+  # Note: rank uniqueness removed to support standard competition ranking
+  # where entries with identical scores receive the same rank
 
   # Scopes
   scope :for_contest, ->(contest) { where(contest: contest) }

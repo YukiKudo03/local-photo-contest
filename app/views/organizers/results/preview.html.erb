@@ -53,16 +53,39 @@
     </div>
   <% end %>
 
+  <!-- ランキングが古い場合の警告 -->
+  <% if @preview_data[:rankings_outdated] %>
+    <div class="bg-orange-50 border border-orange-200 rounded-md p-4 mb-6">
+      <div class="flex items-center">
+        <svg class="h-5 w-5 text-orange-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-orange-800 font-medium">ランキングが最新ではありません</p>
+      </div>
+      <p class="mt-2 text-orange-700 text-sm">
+        新しい評価が追加されたため、ランキングが変動している可能性があります。
+        下のプレビューは最新のデータを反映しています。保存したランキングを更新するには「ランキングを再計算」をクリックしてください。
+      </p>
+    </div>
+  <% end %>
+
   <!-- 暫定ランキング -->
   <div class="bg-white rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
       <h2 class="text-lg font-semibold">
-        <% if @contest.results_announced? %>確定ランキング<% else %>暫定ランキング<% end %>
+        <% if @contest.results_announced? %>
+          確定ランキング
+        <% else %>
+          暫定ランキング
+          <% if @preview_data[:rankings_outdated] %>
+            <span class="ml-2 text-xs font-normal text-orange-600 bg-orange-100 px-2 py-1 rounded">要再計算</span>
+          <% end %>
+        <% end %>
       </h2>
       <% unless @contest.results_announced? %>
         <%= button_to "ランキングを再計算", calculate_organizers_contest_results_path(@contest),
             method: :post,
-            class: "text-blue-600 hover:text-blue-800 text-sm" %>
+            class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm" %>
       <% end %>
     </div>
 

@@ -163,6 +163,29 @@ class Contest < ApplicationRecord
     prize_count || 3
   end
 
+  # Check if saved rankings are outdated
+  # Rankings are outdated if any judge evaluation was modified after rankings were calculated
+  def rankings_outdated?
+    return false if contest_rankings.empty?
+
+    last_ranking_calculation = contest_rankings.maximum(:calculated_at)
+    return false unless last_ranking_calculation
+
+    # Check if any evaluation was created/updated after the last ranking calculation
+    latest_evaluation = JudgeEvaluation.joins(:contest_judge)
+                                       .where(contest_judges: { contest_id: id })
+                                       .maximum(:updated_at)
+
+    return false unless latest_evaluation
+
+    latest_evaluation > last_ranking_calculation
+  end
+
+  # Check if rankings have been calculated
+  def rankings_calculated?
+    contest_rankings.exists?
+  end
+
   private
 
   def entry_dates_validity

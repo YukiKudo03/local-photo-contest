@@ -13,7 +13,8 @@ class ResultsAnnouncementService
       rankings: calculator.preview,
       judge_completion_rate: contest.judge_completion_rate,
       can_announce: can_announce?,
-      warnings: warnings
+      warnings: warnings,
+      rankings_outdated: contest.rankings_outdated?
     }
   end
 
@@ -55,6 +56,10 @@ class ResultsAnnouncementService
 
     if contest.judging_judge_only? && contest.evaluation_criteria.empty?
       warnings << "評価基準が設定されていません"
+    end
+
+    if contest.rankings_outdated?
+      warnings << "新しい評価が追加されました。ランキングの再計算をお勧めします"
     end
 
     warnings

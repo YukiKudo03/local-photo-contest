@@ -25,10 +25,41 @@ module RankingStrategies
       end
     end
 
+    # Standard competition ranking (1224 ranking)
+    # Entries with identical scores (total_score, vote_count, judge_score) get the same rank
+    # If any of these differ, entries get different ranks based on sort order
+    # Example: scores [100, 100, 80, 80, 50] → ranks [1, 1, 3, 3, 5]
     def assign_ranks(sorted_rankings)
-      sorted_rankings.each_with_index.map do |ranking, index|
-        ranking.merge(rank: index + 1)
+      return [] if sorted_rankings.empty?
+
+      result = []
+      current_rank = 1
+
+      sorted_rankings.each_with_index do |ranking, index|
+        if index.zero?
+          result << ranking.merge(rank: current_rank)
+        else
+          previous = result[index - 1]
+          # Compare all score components to determine if this is a tie
+          # Only assign same rank if total_score, vote_count, AND judge_score are all identical
+          if same_scores?(ranking, previous)
+            # Same scores as previous entry, assign same rank
+            result << ranking.merge(rank: previous[:rank])
+          else
+            # Different scores, assign current position + 1
+            current_rank = index + 1
+            result << ranking.merge(rank: current_rank)
+          end
+        end
       end
+
+      result
+    end
+
+    def same_scores?(ranking1, ranking2)
+      ranking1[:total_score] == ranking2[:total_score] &&
+        ranking1[:vote_count] == ranking2[:vote_count] &&
+        (ranking1[:judge_score] || 0) == (ranking2[:judge_score] || 0)
     end
 
     def max_votes(entries)

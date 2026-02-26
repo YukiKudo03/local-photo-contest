@@ -388,4 +388,84 @@ RSpec.describe Contest, type: :model do
       expect(top.length).to eq(2)
     end
   end
+
+  describe "#rankings_calculated?" do
+    let(:contest) { create(:contest, :published) }
+
+    context "when no rankings exist" do
+      it "returns false" do
+        expect(contest.rankings_calculated?).to be false
+      end
+    end
+
+    context "when rankings exist" do
+      before do
+        create(:entry, contest: contest)
+        RankingCalculator.new(contest).calculate
+      end
+
+      it "returns true" do
+        expect(contest.rankings_calculated?).to be true
+      end
+    end
+  end
+
+  describe "#rankings_outdated?" do
+    let(:organizer) { create(:user, :organizer) }
+    let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+    let(:participant) { create(:user) }
+    let!(:entry) { create(:entry, contest: contest, user: participant) }
+    let(:judge) { create(:user) }
+    let!(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+    let!(:criterion) { create(:evaluation_criterion, contest: contest, max_score: 10) }
+
+    context "when no rankings exist" do
+      it "returns false" do
+        expect(contest.rankings_outdated?).to be false
+      end
+    end
+
+    context "when rankings exist and no new evaluations" do
+      before do
+        create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 8)
+        RankingCalculator.new(contest).calculate
+      end
+
+      it "returns false" do
+        expect(contest.rankings_outdated?).to be false
+      end
+    end
+
+    context "when rankings exist and new evaluation added after calculation" do
+      let(:participant2) { create(:user) }
+      let!(:entry2) { create(:entry, contest: contest, user: participant2) }
+
+      it "returns true" do
+        # Create evaluation and calculate rankings
+        create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 8)
+        RankingCalculator.new(contest).calculate
+
+        # Backdate the ranking calculation
+        contest.contest_rankings.update_all(calculated_at: 1.hour.ago)
+
+        # Add new evaluation (will have current timestamp)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: entry2, evaluation_criterion: criterion, score: 9)
+        expect(contest.rankings_outdated?).to be true
+      end
+    end
+
+    context "when rankings exist and evaluation updated after calculation" do
+      it "returns true" do
+        evaluation = create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 8)
+        RankingCalculator.new(contest).calculate
+
+        # Backdate the ranking calculation
+        contest.contest_rankings.update_all(calculated_at: 1.hour.ago)
+
+        # Update evaluation (will have current timestamp)
+        evaluation.update!(score: 9)
+        expect(contest.rankings_outdated?).to be true
+      end
+    end
+  end
 end

@@ -156,15 +156,18 @@ RSpec.describe RankingCalculator do
         end
       end
 
-      it "assigns ranks based on tiebreaker (created_at)" do
+      it "assigns same rank when scores are identical (standard competition ranking)" do
         calculator = described_class.new(contest)
         rankings = calculator.calculate
 
-        # With all scores at 0, ranks should be by created_at
+        # With all scores at 0, all entries get rank 1 (standard competition ranking)
+        # created_at determines ordering but not rank
         expect(rankings[0][:entry]).to eq(entries[0])
         expect(rankings[0][:rank]).to eq(1)
         expect(rankings[1][:entry]).to eq(entries[1])
-        expect(rankings[1][:rank]).to eq(2)
+        expect(rankings[1][:rank]).to eq(1)  # Same rank as first entry
+        expect(rankings[2][:entry]).to eq(entries[2])
+        expect(rankings[2][:rank]).to eq(1)  # Same rank as first entry
       end
     end
 
@@ -192,14 +195,15 @@ RSpec.describe RankingCalculator do
         end
       end
 
-      it "assigns sequential ranks by tiebreaker" do
+      it "assigns same rank for identical scores (standard competition ranking)" do
         calculator = described_class.new(contest)
         rankings = calculator.calculate
 
-        # All have same score (7 out of 10 = 70 normalized), so rank by created_at
+        # All have same score (7 out of 10 = 70 normalized), all get rank 1
+        # created_at determines ordering but not rank
         expect(rankings[0][:rank]).to eq(1)
-        expect(rankings[1][:rank]).to eq(2)
-        expect(rankings[2][:rank]).to eq(3)
+        expect(rankings[1][:rank]).to eq(1)
+        expect(rankings[2][:rank]).to eq(1)
         # All entries should have same normalized score
         expect(rankings.map { |r| r[:judge_score] }.uniq.size).to eq(1)
       end
@@ -320,6 +324,82 @@ RSpec.describe RankingCalculator do
           expect(rankings[1][:entry]).to eq(entries[2]) # score 7
           expect(rankings[2][:entry]).to eq(entries[0]) # score 5
         end
+      end
+    end
+
+    context "when entries have identical scores (same rank assignment)" do
+      let(:tie_contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+      let(:judge) { create(:user) }
+      let!(:contest_judge) { create(:contest_judge, contest: tie_contest, user: judge) }
+      let!(:criterion) { create(:evaluation_criterion, contest: tie_contest, max_score: 10) }
+      let(:tie_participants) { create_list(:user, 5) }
+      let!(:five_entries) do
+        tie_participants.map { |p| create(:entry, contest: tie_contest, user: p) }
+      end
+
+      before do
+        # Entry 0: score 10 -> rank 1
+        # Entry 1: score 10 -> rank 1 (same as entry 0)
+        # Entry 2: score 8 -> rank 3 (skips rank 2)
+        # Entry 3: score 8 -> rank 3 (same as entry 2)
+        # Entry 4: score 5 -> rank 5 (skips rank 4)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: five_entries[0], evaluation_criterion: criterion, score: 10)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: five_entries[1], evaluation_criterion: criterion, score: 10)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: five_entries[2], evaluation_criterion: criterion, score: 8)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: five_entries[3], evaluation_criterion: criterion, score: 8)
+        create(:judge_evaluation, contest_judge: contest_judge, entry: five_entries[4], evaluation_criterion: criterion, score: 5)
+      end
+
+      it "assigns same rank to entries with identical scores" do
+        calculator = described_class.new(tie_contest)
+        rankings = calculator.calculate
+
+        # Entries with score 10 should both have rank 1
+        score_10_rankings = rankings.select { |r| r[:judge_score] == 100.0 }
+        expect(score_10_rankings.map { |r| r[:rank] }.uniq).to eq([1])
+        expect(score_10_rankings.size).to eq(2)
+      end
+
+      it "skips ranks appropriately after ties" do
+        calculator = described_class.new(tie_contest)
+        rankings = calculator.calculate
+
+        ranks = rankings.map { |r| r[:rank] }
+        # Two rank 1s, two rank 3s, one rank 5
+        expect(ranks.sort).to eq([1, 1, 3, 3, 5])
+      end
+
+      it "saves correct ranks to database" do
+        calculator = described_class.new(tie_contest)
+        calculator.calculate
+
+        saved_rankings = tie_contest.contest_rankings.reload
+        ranks = saved_rankings.map(&:rank).sort
+        expect(ranks).to eq([1, 1, 3, 3, 5])
+      end
+    end
+
+    context "when all entries have identical scores and votes" do
+      let(:tie_contest) { create(:contest, :published, user: organizer, judging_method: :vote_only) }
+      let(:tie_participants) { create_list(:user, 3) }
+      let!(:tie_entries) do
+        tie_participants.map { |p| create(:entry, contest: tie_contest, user: p) }
+      end
+      let(:voters) { create_list(:user, 3) }
+
+      before do
+        # All entries get exactly 2 votes each
+        voters[0..1].each do |voter|
+          tie_entries.each { |entry| create(:vote, entry: entry, user: voter) }
+        end
+      end
+
+      it "assigns rank 1 to all entries with identical scores" do
+        calculator = described_class.new(tie_contest)
+        rankings = calculator.calculate
+
+        # All should have rank 1
+        expect(rankings.map { |r| r[:rank] }.uniq).to eq([1])
       end
     end
   end
