@@ -98,7 +98,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                       <% if entry.photo.attached? %>
-                        <%= image_tag entry.photo.variant(resize_to_fill: [128, 128]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover" %>
+                        <%= image_tag entry.photo.variant(resize_to_fill: [128, 128]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
                       <% end %>
                     </div>
                   </td>

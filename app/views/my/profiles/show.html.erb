@@ -12,7 +12,7 @@
         <!-- Avatar -->
         <div class="flex-shrink-0">
           <% if @user.avatar.attached? %>
-            <%= image_tag @user.avatar.variant(resize_to_fill: [120, 120]), alt: "プロフィール画像", class: "w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover" %>
+            <%= image_tag @user.avatar.variant(resize_to_fill: [120, 120]), alt: "プロフィール画像", class: "w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover", loading: "lazy" %>
           <% else %>
             <div class="w-24 h-24 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               <span class="text-3xl font-bold text-indigo-600"><%= @user.initial %></span>

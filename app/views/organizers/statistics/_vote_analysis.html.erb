@@ -51,7 +51,7 @@
                 <%= index + 1 %>
               </span>
               <% if entry.photo.attached? %>
-                <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-12 h-12 rounded object-cover mr-3" %>
+                <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-12 h-12 rounded object-cover mr-3", loading: "lazy" %>
               <% end %>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 truncate">

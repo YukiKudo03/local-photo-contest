@@ -100,7 +100,7 @@
               <div class="aspect-[4/3] bg-gray-100">
                 <% if entry.photo.attached? %>
                   <%= link_to entry_path(entry) do %>
-                    <%= image_tag entry.photo, alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover hover:opacity-90 transition-opacity" %>
+                    <%= image_tag entry.photo, alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover hover:opacity-90 transition-opacity", loading: "lazy" %>
                   <% end %>
                 <% else %>
                   <div class="w-full h-full flex items-center justify-center">
@@ -162,7 +162,7 @@
           <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 ml-2">
             <% if entry.photo.attached? %>
               <%= link_to entry_path(entry) do %>
-                <%= image_tag entry.photo.variant(resize_to_fill: [64, 64]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover" %>
+                <%= image_tag entry.photo.variant(resize_to_fill: [64, 64]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
               <% end %>
             <% else %>
               <div class="w-full h-full flex items-center justify-center">

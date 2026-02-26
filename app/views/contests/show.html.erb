@@ -233,7 +233,7 @@
               <!-- Photo Thumbnail -->
               <div class="aspect-square bg-gray-100 relative">
                 <% if entry.photo.attached? %>
-                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover" %>
+                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
                 <% end %>
 
                 <!-- Vote Count Overlay -->
