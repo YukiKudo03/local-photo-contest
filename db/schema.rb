@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_26_192821) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_215119) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -222,6 +222,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_26_192821) do
     t.decimal "longitude", precision: 10, scale: 7
     t.integer "location_source", default: 0
     t.integer "moderation_status", default: 0, null: false
+    t.json "exif_data"
     t.index ["area_id"], name: "index_entries_on_area_id"
     t.index ["contest_id", "moderation_status"], name: "index_entries_on_contest_id_and_moderation_status"
     t.index ["contest_id"], name: "index_entries_on_contest_id"

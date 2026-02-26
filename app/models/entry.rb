@@ -2,6 +2,15 @@ class Entry < ApplicationRecord
   include Searchable
   search_by :title, :description, :location
 
+  PHOTO_VARIANTS = {
+    thumb:  { resize_to_fill: [ 150, 150 ] },
+    small:  { resize_to_fill: [ 300, 300 ] },
+    medium: { resize_to_limit: [ 600, 600 ] },
+    large:  { resize_to_limit: [ 1200, 1200 ] }
+  }.freeze
+
+  VARIANT_SAVER_OPTIONS = { strip: true }.freeze
+
   # Associations
   belongs_to :user
   belongs_to :contest
@@ -40,6 +49,7 @@ class Entry < ApplicationRecord
   after_create_commit :enqueue_moderation_job
   after_create_commit :broadcast_new_entry_notification
   after_create_commit :send_entry_submitted_email
+  after_create_commit :enqueue_exif_extraction
   after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
   # Scopes
@@ -51,6 +61,16 @@ class Entry < ApplicationRecord
   scope :needs_moderation_review, -> { where(moderation_status: [ :moderation_hidden, :moderation_requires_review ]) }
 
   # Instance Methods
+  def optimized_photo(size = :medium)
+    return nil unless photo.attached?
+    photo.variant(**PHOTO_VARIANTS[size], format: :webp, saver: VARIANT_SAVER_OPTIONS)
+  end
+
+  def photo_variant(size = :medium)
+    return nil unless photo.attached?
+    photo.variant(**PHOTO_VARIANTS[size], saver: VARIANT_SAVER_OPTIONS)
+  end
+
   def editable?
     contest.accepting_entries?
   end
@@ -144,5 +164,12 @@ class Entry < ApplicationRecord
     NotificationMailer.entry_submitted(self).deliver_later
   rescue => e
     Rails.logger.error("Failed to send entry submitted email: #{e.message}")
+  end
+
+  def enqueue_exif_extraction
+    return unless photo.attached?
+    ExifExtractionJob.perform_later(id)
+  rescue => e
+    Rails.logger.error("Failed to enqueue EXIF extraction: #{e.message}")
   end
 end
