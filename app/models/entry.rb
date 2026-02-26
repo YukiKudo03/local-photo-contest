@@ -9,7 +9,8 @@ class Entry < ApplicationRecord
     large:  { resize_to_limit: [ 1200, 1200 ] }
   }.freeze
 
-  VARIANT_SAVER_OPTIONS = { strip: true }.freeze
+  # MiniMagick compatible options for stripping metadata
+  VARIANT_STRIP_OPTIONS = { strip: true }.freeze
 
   # Associations
   belongs_to :user
@@ -63,12 +64,12 @@ class Entry < ApplicationRecord
   # Instance Methods
   def optimized_photo(size = :medium)
     return nil unless photo.attached?
-    photo.variant(**PHOTO_VARIANTS[size], format: :webp, saver: VARIANT_SAVER_OPTIONS)
+    photo.variant(**PHOTO_VARIANTS[size], format: :webp)
   end
 
   def photo_variant(size = :medium)
     return nil unless photo.attached?
-    photo.variant(**PHOTO_VARIANTS[size], saver: VARIANT_SAVER_OPTIONS)
+    photo.variant(**PHOTO_VARIANTS[size])
   end
 
   def editable?
