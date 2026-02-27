@@ -1,5 +1,7 @@
 class Entry < ApplicationRecord
   include Searchable
+  include Moderatable
+  include EntryNotifications
   search_by :title, :description, :location
 
   PHOTO_VARIANTS = {
@@ -29,37 +31,19 @@ class Entry < ApplicationRecord
 
   # Enums
   enum :location_source, { manual: 0, exif: 1, gps: 2 }, prefix: :location
-  enum :moderation_status, {
-    moderation_pending: 0,
-    moderation_approved: 1,
-    moderation_hidden: 2,
-    moderation_requires_review: 3
-  }, prefix: false
 
   # Validations
   validates :photo, presence: true
   validates :title, length: { maximum: 100 }, allow_blank: true
   validates :location, length: { maximum: 255 }, allow_blank: true
   validate :contest_accepting_entries, on: :create
-  validate :photo_content_type
-  validate :photo_size
   validate :spot_belongs_to_contest
   validate :spot_required_if_contest_requires
-
-  # Callbacks
-  after_create_commit :enqueue_moderation_job
-  after_create_commit :broadcast_new_entry_notification
-  after_create_commit :send_entry_submitted_email
-  after_create_commit :enqueue_exif_extraction
-  after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
   # Scopes
   scope :by_contest, ->(contest) { where(contest: contest) }
   scope :by_user, ->(user) { where(user: user) }
   scope :recent, -> { order(created_at: :desc) }
-  scope :visible, -> { where(moderation_status: [ :moderation_pending, :moderation_approved ]) }
-  scope :hidden, -> { where(moderation_status: :moderation_hidden) }
-  scope :needs_moderation_review, -> { where(moderation_status: [ :moderation_hidden, :moderation_requires_review ]) }
 
   # Instance Methods
   def optimized_photo(size = :medium)
@@ -108,69 +92,20 @@ class Entry < ApplicationRecord
 
   def contest_accepting_entries
     return if contest&.accepting_entries?
-    errors.add(:base, "このコンテストは現在応募を受け付けていません")
-  end
-
-  def photo_content_type
-    return unless photo.attached?
-    unless photo.content_type.in?(%w[image/jpeg image/png image/gif])
-      errors.add(:photo, "はJPEG、PNG、GIF形式のみ対応しています")
-    end
-  end
-
-  def photo_size
-    return unless photo.attached?
-    if photo.byte_size > 10.megabytes
-      errors.add(:photo, "は10MB以下にしてください")
-    end
+    errors.add(:base, :contest_not_accepting)
   end
 
   def spot_belongs_to_contest
     return unless spot.present?
     return if spot.contest_id == contest_id
 
-    errors.add(:spot, "はこのコンテストのスポットではありません")
+    errors.add(:spot, :not_in_contest)
   end
 
   def spot_required_if_contest_requires
     return unless contest&.require_spot
     return if spot.present?
 
-    errors.add(:spot_id, "を選択してください")
-  end
-
-  def enqueue_moderation_job
-    return unless should_enqueue_moderation?
-
-    ModerationJob.perform_later(id)
-  end
-
-  def should_enqueue_moderation?
-    photo.attached? && contest&.moderation_enabled?
-  end
-
-  def broadcast_new_entry_notification
-    NotificationBroadcaster.new_entry(self)
-  rescue => e
-    Rails.logger.error("Failed to broadcast new entry notification: #{e.message}")
-  end
-
-  def clear_statistics_cache
-    StatisticsService.clear_cache(contest)
-  rescue => e
-    Rails.logger.error("Failed to clear statistics cache: #{e.message}")
-  end
-
-  def send_entry_submitted_email
-    NotificationMailer.entry_submitted(self).deliver_later
-  rescue => e
-    Rails.logger.error("Failed to send entry submitted email: #{e.message}")
-  end
-
-  def enqueue_exif_extraction
-    return unless photo.attached?
-    ExifExtractionJob.perform_later(id)
-  rescue => e
-    Rails.logger.error("Failed to enqueue EXIF extraction: #{e.message}")
+    errors.add(:spot_id, :blank)
   end
 end

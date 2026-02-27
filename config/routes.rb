@@ -17,8 +17,8 @@ Rails.application.routes.draw do
   # Gallery
   resources :gallery, only: [ :index ] do
     collection do
-      get :map
-      get :map_data
+      get :map, to: "gallery/maps#show"
+      get :map_data, to: "gallery/maps#data"
     end
   end
 

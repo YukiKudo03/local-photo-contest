@@ -40,12 +40,12 @@ class DiscoverySpotService
 
         # Notify the discoverer
         if spot.discovered_by.present?
-          Notification.create!(
+          create_notification(
             user: spot.discovered_by,
             notifiable: spot,
             notification_type: "spot_certified",
-            title: "スポットが認定されました",
-            body: "あなたが発掘した「#{spot.name}」が認定されました！"
+            title: I18n.t("services.discovery.spot_certified_title"),
+            body: I18n.t("services.discovery.spot_certified_body", name: spot.name)
           )
         end
 
@@ -59,19 +59,19 @@ class DiscoverySpotService
     # Reject a discovered spot
     def reject_spot(spot:, user:, reason:)
       validate_pending_certification!(spot)
-      validate_presence!(reason, "Rejection reason is required")
+      raise ArgumentError, "Rejection reason is required" if reason.blank?
 
       ActiveRecord::Base.transaction do
         spot.reject!(user, reason)
 
         # Notify the discoverer
         if spot.discovered_by.present?
-          Notification.create!(
+          create_notification(
             user: spot.discovered_by,
             notifiable: spot,
             notification_type: "spot_rejected",
-            title: "スポットが却下されました",
-            body: "発掘スポット「#{spot.name}」が却下されました。理由: #{reason}"
+            title: I18n.t("services.discovery.spot_rejected_title"),
+            body: I18n.t("services.discovery.spot_rejected_body", name: spot.name, reason: reason)
           )
         end
       end
@@ -164,8 +164,14 @@ class DiscoverySpotService
       raise ArgumentError, "Spot is not pending certification" unless spot.discovery_discovered?
     end
 
-    def validate_presence!(value, message)
-      raise ArgumentError, message if value.blank?
+    def create_notification(user:, notifiable:, notification_type:, title:, body:)
+      Notification.create!(
+        user: user,
+        notifiable: notifiable,
+        notification_type: notification_type,
+        title: title,
+        body: body
+      )
     end
 
     def haversine_distance(lat1, lng1, lat2, lng2)
@@ -185,12 +191,12 @@ class DiscoverySpotService
     end
 
     def notify_organizer_of_discovery(spot)
-      Notification.create!(
+      create_notification(
         user: spot.contest.user,
         notifiable: spot,
         notification_type: "spot_discovered",
-        title: "新しいスポットが発掘されました",
-        body: "「#{spot.name}」が発掘されました。審査をお願いします。"
+        title: I18n.t("services.discovery.spot_discovered_title"),
+        body: I18n.t("services.discovery.spot_discovered_body", name: spot.name)
       )
     rescue => e
       Rails.logger.error("Failed to notify organizer of spot discovery: #{e.message}")

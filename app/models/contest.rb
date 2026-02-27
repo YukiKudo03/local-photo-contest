@@ -1,5 +1,6 @@
 class Contest < ApplicationRecord
   include Searchable
+  include ContestStateMachine
   search_by :title, :description, :theme
 
   # Associations
@@ -36,7 +37,6 @@ class Contest < ApplicationRecord
             allow_nil: true
   validate :entry_dates_validity
   validate :area_belongs_to_user
-  validate :judging_method_not_changed_after_publish
 
   # Scopes
   scope :active, -> { where(deleted_at: nil) }
@@ -44,24 +44,6 @@ class Contest < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
 
   # Instance Methods
-  def publish!
-    raise "Cannot publish: not a draft" unless draft?
-    raise "Cannot publish: title is required" if title.blank?
-    update!(status: :published)
-  end
-
-  def finish!
-    raise "Cannot finish: not published" unless published?
-    update!(status: :finished)
-  end
-
-  def announce_results!
-    raise "Cannot announce results: contest is not finished" unless finished?
-    raise "Results already announced" if results_announced?
-    update!(results_announced_at: Time.current)
-    send_results_notifications
-  end
-
   def results_announced?
     results_announced_at.present?
   end
@@ -104,15 +86,6 @@ class Contest < ApplicationRecord
     update!(deleted_at: Time.current)
   end
 
-  def accepting_entries?
-    return false unless published?
-    return true if entry_start_at.nil? && entry_end_at.nil?
-
-    now = Time.current
-    (entry_start_at.nil? || now >= entry_start_at) &&
-      (entry_end_at.nil? || now <= entry_end_at)
-  end
-
   def owned_by?(other_user)
     user_id == other_user.id
   end
@@ -143,14 +116,6 @@ class Contest < ApplicationRecord
     (actual_evaluations.to_f / total_evaluations_needed * 100).round
   end
 
-  def ranking_calculatable?
-    return false if entries.empty?
-    return true if judging_vote_only?
-
-    # For judge_only or hybrid, need at least some evaluations
-    judge_completion_rate > 0
-  end
-
   def calculated_rankings
     contest_rankings.ordered.includes(entry: [ :user, { photo_attachment: :blob } ])
   end
@@ -163,24 +128,6 @@ class Contest < ApplicationRecord
     prize_count || 3
   end
 
-  # Check if saved rankings are outdated
-  # Rankings are outdated if any judge evaluation was modified after rankings were calculated
-  def rankings_outdated?
-    return false if contest_rankings.empty?
-
-    last_ranking_calculation = contest_rankings.maximum(:calculated_at)
-    return false unless last_ranking_calculation
-
-    # Check if any evaluation was created/updated after the last ranking calculation
-    latest_evaluation = JudgeEvaluation.joins(:contest_judge)
-                                       .where(contest_judges: { contest_id: id })
-                                       .maximum(:updated_at)
-
-    return false unless latest_evaluation
-
-    latest_evaluation > last_ranking_calculation
-  end
-
   # Check if rankings have been calculated
   def rankings_calculated?
     contest_rankings.exists?
@@ -191,7 +138,7 @@ class Contest < ApplicationRecord
   def entry_dates_validity
     return if entry_start_at.blank? || entry_end_at.blank?
     if entry_end_at <= entry_start_at
-      errors.add(:entry_end_at, "は開始日時より後にしてください")
+      errors.add(:entry_end_at, :after_start_date)
     end
   end
 
@@ -199,15 +146,7 @@ class Contest < ApplicationRecord
     return if area_id.blank?
     return if area&.user_id == user_id
 
-    errors.add(:area_id, "は自分が作成したエリアを選択してください")
-  end
-
-  def judging_method_not_changed_after_publish
-    return unless persisted?
-    return if draft?
-    return unless judging_method_changed?
-
-    errors.add(:judging_method, "はコンテスト公開後は変更できません")
+    errors.add(:area_id, :must_be_own_area)
   end
 
   def send_results_notifications

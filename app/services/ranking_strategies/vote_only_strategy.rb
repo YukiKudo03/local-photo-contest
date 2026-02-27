@@ -22,17 +22,5 @@ module RankingStrategies
 
       assign_ranks(sort_with_tiebreaker(rankings))
     end
-
-    protected
-
-    def sort_with_tiebreaker(rankings)
-      rankings.sort_by do |r|
-        [
-          -r[:total_score],
-          -r[:vote_count],
-          r[:entry].created_at
-        ]
-      end
-    end
   end
 end
