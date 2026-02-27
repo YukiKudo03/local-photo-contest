@@ -27,6 +27,7 @@ flowchart TB
         P((参加者<br/>Participant))
         O((主催者<br/>Organizer))
         J((審査員<br/>Judge))
+        A((管理者<br/>Admin))
         S((システム<br/>System))
     end
 
@@ -41,6 +42,12 @@ flowchart TB
         UC8[結果を確認]
         UC9[通知を確認]
         UC10[プロフィールを編集]
+        UC29[スポットを発見・投票]
+        UC30[チャレンジに参加]
+        UC31[作品を検索]
+        UC32[言語を切り替え]
+        UC33[チュートリアルを利用]
+        UC34[ヘルプを参照]
     end
 
     subgraph "主催者のユースケース"
@@ -56,18 +63,32 @@ flowchart TB
         UC20[応募作品を管理]
         UC21[モデレーション結果を確認]
         UC22[作品を承認/却下]
+        UC35[テンプレートを管理]
+        UC36[統計を確認・エクスポート]
+        UC37[発見スポットを認定/却下]
+        UC38[チャレンジを作成・管理]
     end
 
     subgraph "審査員のユースケース"
         UC23[担当コンテストを確認]
         UC24[作品を評価]
         UC25[審査コメントを記入]
+        UC39[招待を受諾/辞退]
+    end
+
+    subgraph "管理者のユースケース"
+        UC40[ユーザーを管理]
+        UC41[カテゴリを管理]
+        UC42[監査ログを確認]
+        UC43[チュートリアル分析]
     end
 
     subgraph "システムのユースケース"
         UC26[画像をモデレート]
         UC27[通知を送信]
         UC28[ランキングを計算]
+        UC44[EXIF情報を抽出]
+        UC45[日次ダイジェストを送信]
     end
 
     P --> UC1
@@ -80,6 +101,12 @@ flowchart TB
     P --> UC8
     P --> UC9
     P --> UC10
+    P --> UC29
+    P --> UC30
+    P --> UC31
+    P --> UC32
+    P --> UC33
+    P --> UC34
 
     O --> UC11
     O --> UC12
@@ -93,16 +120,29 @@ flowchart TB
     O --> UC20
     O --> UC21
     O --> UC22
+    O --> UC35
+    O --> UC36
+    O --> UC37
+    O --> UC38
 
     J --> UC23
     J --> UC24
     J --> UC25
+    J --> UC39
+
+    A --> UC40
+    A --> UC41
+    A --> UC42
+    A --> UC43
 
     S --> UC26
     S --> UC27
     S --> UC28
+    S --> UC44
+    S --> UC45
 
     UC3 -.->|トリガー| UC26
+    UC3 -.->|トリガー| UC44
     UC15 -.->|トリガー| UC27
     UC5 -.->|トリガー| UC28
 ```
@@ -111,10 +151,11 @@ flowchart TB
 
 | アクター | ユースケース |
 |---------|-------------|
-| 参加者 | コンテスト閲覧、作品応募、投票、コメント、通知確認 |
-| 主催者 | コンテスト管理、エリア/スポット管理、審査員招待、モデレーション |
-| 審査員 | 作品評価、審査コメント記入 |
-| システム | 画像モデレーション、通知送信、ランキング計算 |
+| 参加者 | コンテスト閲覧、作品応募、投票、コメント、通知確認、スポット発見・投票、チャレンジ参加、検索、チュートリアル、ヘルプ |
+| 主催者 | コンテスト管理、エリア/スポット管理、審査員招待、モデレーション、テンプレート管理、統計分析、発見スポット認定、チャレンジ管理 |
+| 審査員 | 招待受諾/辞退、作品評価、審査コメント記入 |
+| 管理者 | ユーザー管理、カテゴリ管理、監査ログ、チュートリアル分析 |
+| システム | 画像モデレーション、通知送信、ランキング計算、EXIF抽出、日次ダイジェスト |
 
 ---
 
@@ -130,11 +171,22 @@ erDiagram
     User ||--o{ ContestJudge : "assigned as"
     User ||--o{ Area : "manages"
     User ||--o{ TermsAcceptance : "accepts"
+    User ||--o{ Spot : "discovers"
+    User ||--o{ SpotVote : "casts"
+    User ||--o{ DiscoveryBadge : "earns"
+    User ||--o{ TutorialProgress : "tracks"
+    User ||--o{ UserMilestone : "achieves"
+    User ||--o{ FeatureUnlock : "unlocks"
 
     Contest ||--o{ Entry : "has"
     Contest ||--o{ Spot : "has"
     Contest ||--o{ ContestJudge : "has"
     Contest ||--o{ EvaluationCriterion : "has"
+    Contest ||--o{ ContestRanking : "has"
+    Contest ||--o{ JudgeInvitation : "has"
+    Contest ||--o{ DiscoveryChallenge : "has"
+    Contest ||--o{ DiscoveryBadge : "awards"
+    Contest ||--o{ ContestTemplate : "source of"
     Contest }o--|| Category : "belongs to"
     Contest }o--|| Area : "held in"
 
@@ -142,14 +194,21 @@ erDiagram
     Entry ||--o{ Comment : "has"
     Entry ||--o{ JudgeEvaluation : "evaluated by"
     Entry ||--o{ JudgeComment : "commented by"
-    Entry ||--|| ModerationResult : "has"
+    Entry ||--o| ModerationResult : "has"
+    Entry ||--o| ContestRanking : "ranked as"
+    Entry ||--o{ ChallengeEntry : "participates in"
     Entry }o--|| Spot : "taken at"
     Entry }o--|| Area : "located in"
+
+    Spot ||--o{ SpotVote : "receives"
+    Spot ||--o{ Entry : "has"
 
     ContestJudge ||--o{ JudgeEvaluation : "makes"
     ContestJudge ||--o{ JudgeComment : "writes"
 
     JudgeEvaluation }o--|| EvaluationCriterion : "based on"
+
+    DiscoveryChallenge ||--o{ ChallengeEntry : "has"
 
     TermsAcceptance }o--|| TermsOfService : "for"
 
@@ -160,6 +219,16 @@ erDiagram
         integer role "participant/organizer/admin"
         string name
         text bio
+        string locale "ja/en"
+        json tutorial_settings
+        integer feature_level
+        boolean email_on_entry_submitted
+        boolean email_on_comment
+        boolean email_on_vote
+        boolean email_on_results
+        boolean email_digest
+        boolean email_on_judging
+        string unsubscribe_token
         datetime confirmed_at
         datetime locked_at
     }
@@ -178,6 +247,12 @@ erDiagram
         datetime results_announced_at
         boolean moderation_enabled
         decimal moderation_threshold
+        integer judging_method "judge_only/vote_only/hybrid"
+        integer judge_weight
+        integer prize_count
+        boolean require_spot
+        boolean show_detailed_scores
+        datetime deleted_at
     }
 
     Entry {
@@ -192,7 +267,97 @@ erDiagram
         date taken_at
         decimal latitude
         decimal longitude
+        integer location_source "manual/exif/gps"
         integer moderation_status "pending/approved/hidden/requires_review"
+        json exif_data
+    }
+
+    Spot {
+        integer id PK
+        integer contest_id FK
+        integer discovered_by_id FK
+        integer certified_by_id FK
+        integer merged_into_id FK
+        string name
+        integer category
+        string address
+        decimal latitude
+        decimal longitude
+        text description
+        integer discovery_status "organizer_created/discovered/certified/rejected"
+        datetime discovered_at
+        datetime certified_at
+        string rejection_reason
+        text discovery_comment
+        integer votes_count
+    }
+
+    SpotVote {
+        integer id PK
+        integer user_id FK
+        integer spot_id FK
+    }
+
+    ContestRanking {
+        integer id PK
+        integer contest_id FK
+        integer entry_id FK
+        integer rank
+        decimal total_score
+        decimal judge_score
+        decimal vote_score
+        integer vote_count
+        datetime calculated_at
+    }
+
+    JudgeInvitation {
+        integer id PK
+        integer contest_id FK
+        integer invited_by_id FK
+        integer user_id FK
+        string email
+        string token
+        integer status "pending/accepted/declined"
+        datetime invited_at
+        datetime responded_at
+    }
+
+    ContestTemplate {
+        integer id PK
+        integer user_id FK
+        integer source_contest_id FK
+        string name
+        string theme
+        integer judging_method
+        integer judge_weight
+        boolean moderation_enabled
+        decimal moderation_threshold
+    }
+
+    DiscoveryChallenge {
+        integer id PK
+        integer contest_id FK
+        string name
+        text description
+        string theme
+        datetime starts_at
+        datetime ends_at
+        integer status "draft/active/finished"
+    }
+
+    ChallengeEntry {
+        integer id PK
+        integer discovery_challenge_id FK
+        integer entry_id FK
+    }
+
+    DiscoveryBadge {
+        integer id PK
+        integer user_id FK
+        integer contest_id FK
+        integer badge_type "explorer/curator"
+        datetime earned_at
+        json metadata
     }
 
     Vote {
@@ -240,17 +405,6 @@ erDiagram
         text boundary_geojson
     }
 
-    Spot {
-        integer id PK
-        integer contest_id FK
-        string name
-        integer category
-        string address
-        decimal latitude
-        decimal longitude
-        text description
-    }
-
     ContestJudge {
         integer id PK
         integer contest_id FK
@@ -291,6 +445,63 @@ erDiagram
         string title
         text body
         datetime read_at
+    }
+
+    TutorialStep {
+        integer id PK
+        string tutorial_type
+        string step_id
+        integer position
+        string title
+        string description
+        string target_selector
+        string target_path
+        string tooltip_position
+        string video_url
+        string action_type
+        string success_feedback
+        integer recommended_duration
+        boolean skippable
+    }
+
+    TutorialProgress {
+        integer id PK
+        integer user_id FK
+        string tutorial_type
+        string current_step_id
+        boolean completed
+        boolean skipped
+        datetime started_at
+        datetime completed_at
+        json step_times
+        json skipped_steps
+        string completion_method
+    }
+
+    UserMilestone {
+        integer id PK
+        integer user_id FK
+        string milestone_type
+        datetime achieved_at
+        json metadata
+    }
+
+    FeatureUnlock {
+        integer id PK
+        integer user_id FK
+        string feature_key
+        datetime unlocked_at
+        string unlock_trigger
+    }
+
+    AuditLog {
+        integer id PK
+        integer user_id FK
+        string action
+        string target_type
+        integer target_id
+        text details
+        string ip_address
     }
 
     TermsOfService {
@@ -776,15 +987,17 @@ stateDiagram-v2
 | 図 | 関連ファイル |
 |----|-------------|
 | ユースケース図 | `config/routes.rb`, 各Controller |
-| ER図 | `db/schema.rb`, `app/models/*.rb` |
+| ER図 | `db/schema.rb`, `app/models/*.rb`, `app/models/concerns/*.rb` |
 | ユーザー登録 | `app/controllers/organizers/registrations_controller.rb` |
 | コンテスト作成 | `app/controllers/organizers/contests_controller.rb` |
-| 作品応募 | `app/controllers/entries_controller.rb` |
+| 作品応募 | `app/controllers/entries_controller.rb`, `app/models/concerns/moderatable.rb`, `app/models/concerns/entry_notifications.rb` |
 | モデレーション | `app/jobs/moderation_job.rb`, `app/services/moderation/` |
-| 投票 | `app/controllers/votes_controller.rb` |
+| 投票 | `app/controllers/votes_controller.rb`, `app/controllers/spot_votes_controller.rb` |
 | 審査員評価 | `app/controllers/my/judge_evaluations_controller.rb` |
-| 結果発表 | `app/models/contest.rb#announce_results!` |
+| 結果発表 | `app/models/concerns/contest_state_machine.rb#announce_results!`, `app/services/ranking_calculator.rb` |
+| スポット発見 | `app/services/discovery_spot_service.rb`, `app/controllers/organizers/discovery_spots_controller.rb` |
+| 統計 | `app/services/statistics_service.rb`, `app/services/statistics_export_service.rb` |
 
 ---
 
-*このドキュメントは Local Photo Contest v1.0 に基づいています。*
+*このドキュメントは Local Photo Contest v1.3 に基づいています（2026-02-28 更新）。*

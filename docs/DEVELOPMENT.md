@@ -185,13 +185,13 @@ tail -f log/development.log
 ### Build and run
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 ### Run commands in container
 
 ```bash
-docker-compose exec web bin/rails console
+docker compose exec web bin/rails console
 ```
 
 ## Deployment
