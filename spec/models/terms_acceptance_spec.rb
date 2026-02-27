@@ -17,7 +17,7 @@ RSpec.describe TermsAcceptance, type: :model do
       it "prevents duplicate acceptance for same user and terms" do
         duplicate = build(:terms_acceptance, user: user, terms_of_service: terms)
         expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:user_id]).to include("has already accepted this terms version")
+        expect(duplicate.errors[:user_id]).to include("は既にこの利用規約に同意しています")
       end
 
       it "allows same user to accept different terms versions" do

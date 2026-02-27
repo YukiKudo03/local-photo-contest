@@ -4,8 +4,8 @@
 <!-- Page Header -->
 <div class="mb-8 flex items-center justify-between">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">エリア管理</h1>
-    <p class="mt-1 text-sm text-gray-500">撮影エリアを管理します</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.areas.index.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('organizers.areas.index.subtitle') %></p>
   </div>
   <div class="flex items-center gap-3">
     <%= render "tutorials/help_button", tutorial_type: "area_management" %>
@@ -13,7 +13,7 @@
       <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      新規作成
+      <%= t('organizers.areas.index.new_area') %>
     <% end %>
   </div>
 </div>
@@ -62,11 +62,11 @@
               <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              コンテスト: <%= area.contests.count %>件
+              <%= t('organizers.areas.index.contests_count') %>: <%= area.contests.count %>
             </span>
             <% if area.has_boundary? %>
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                境界設定済み
+                <%= t('organizers.areas.index.boundary_set') %>
               </span>
             <% end %>
           </div>
@@ -80,14 +80,14 @@
     <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
     </svg>
-    <h3 class="mt-4 text-lg font-medium text-gray-900">エリアがありません</h3>
-    <p class="mt-2 text-sm text-gray-500">新しいエリアを作成して始めましょう</p>
+    <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('organizers.areas.index.no_areas') %></h3>
+    <p class="mt-2 text-sm text-gray-500"><%= t('organizers.areas.index.create_first') %></p>
     <div class="mt-6">
       <%= link_to new_organizers_area_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
         <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        新規エリア作成
+        <%= t('organizers.areas.index.new_area') %>
       <% end %>
     </div>
   </div>

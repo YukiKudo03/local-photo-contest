@@ -1,11 +1,11 @@
 <div class="bg-white rounded-lg shadow p-6 mb-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-lg font-semibold text-gray-900">応募数推移</h2>
+    <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.statistics.entry_trend.title') %></h2>
     <% if show_weekly_option %>
       <div class="text-sm text-gray-500">
-        <span class="mr-2">表示:</span>
-        <button type="button" class="px-3 py-1 rounded-md bg-blue-100 text-blue-700" data-chart-view="daily">日別</button>
-        <button type="button" class="px-3 py-1 rounded-md text-gray-600 hover:bg-gray-100" data-chart-view="weekly">週別</button>
+        <span class="mr-2"><%= t('organizers.statistics.entry_trend.display') %>:</span>
+        <button type="button" class="px-3 py-1 rounded-md bg-blue-100 text-blue-700" data-chart-view="daily"><%= t('organizers.statistics.entry_trend.daily') %></button>
+        <button type="button" class="px-3 py-1 rounded-md text-gray-600 hover:bg-gray-100" data-chart-view="weekly"><%= t('organizers.statistics.entry_trend.weekly') %></button>
       </div>
     <% end %>
   </div>
@@ -15,19 +15,19 @@
       <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
       </svg>
-      <p>まだデータがありません</p>
-      <p class="text-sm mt-1">応募があると、ここにグラフが表示されます。</p>
+      <p><%= t('organizers.statistics.entry_trend.no_data') %></p>
+      <p class="text-sm mt-1"><%= t('organizers.statistics.entry_trend.no_data_desc') %></p>
     </div>
   <% else %>
     <div id="daily-entries-chart">
       <%= line_chart daily_entries,
-                     xtitle: "日付",
-                     ytitle: "応募数",
+                     xtitle: t('organizers.statistics.entry_trend.date'),
+                     ytitle: t('organizers.statistics.entry_trend.entries'),
                      library: {
                        plugins: {
                          tooltip: {
                            callbacks: {
-                             label: ->(context) { "#{context.parsed.y} 件" }
+                             label: ->(context) { "#{context.parsed.y} #{t('organizers.statistics.spot_chart.count_unit')}" }
                            }
                          }
                        }
@@ -36,8 +36,8 @@
     <% if show_weekly_option %>
       <div id="weekly-entries-chart" style="display: none;">
         <%= line_chart weekly_entries,
-                       xtitle: "週",
-                       ytitle: "応募数" %>
+                       xtitle: t('organizers.statistics.entry_trend.week'),
+                       ytitle: t('organizers.statistics.entry_trend.entries') %>
       </div>
     <% end %>
   <% end %>

@@ -48,7 +48,7 @@ module Organizers
     def authorize_contest
       return if @contest.owned_by?(current_user)
 
-      flash[:alert] = "このコンテストにアクセスする権限がありません。"
+      flash[:alert] = t('flash.statistics.not_authorized')
       redirect_to organizers_contests_path
     end
   end

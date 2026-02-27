@@ -1,0 +1,50 @@
+en:
+  gallery:
+    index:
+      title: Photo Gallery
+      subtitle: Browse all contest entries
+      keyword: Keyword
+      keyword_placeholder: "Search by title, description..."
+      contest_filter: Contest
+      category_filter: Category
+      area_filter: Area
+      all: All
+      sort_label: Sort By
+      sort_newest: Newest
+      sort_popular: Most Popular
+      sort_oldest: Oldest
+      submit_filter: Filter
+      clear_filter: Clear
+      works_count: "%{count} entries"
+      view_on_map: View on Map
+      empty:
+        title: No entries
+        no_entries_for_contest: No entries in this contest yet
+        no_entries: No entries yet
+        browse_contests: Browse Contests
+    entries:
+      votes_aria: "%{count} votes"
+      untitled: Untitled
+      loading: Loading...
+    map:
+      title: Map Gallery
+      subtitle: Explore entries on the map
+      grid_view: Grid View
+      filter: Filter
+      contest_filter: Contest
+      area_filter: Area
+      all: All
+      discovery_status: Discovery Status
+      status_organizer: Organizer Created
+      status_certified: Certified Discovery
+      status_pending: Under Review
+      entries_with_location: "%{count} entries with location"
+      marker_legend: Marker Legend
+      legend_organizer: Organizer-created Spot
+      legend_certified: Certified Discovery Spot
+      legend_pending: Under Review Spot
+      legend_own: Your Discovered Spot
+      no_location_entries: Entries without location
+      entry_alt: Photo contest entry
+      untitled: Untitled
+      more_entries: "%{count} more"

@@ -23,13 +23,13 @@ module Admin
 
     def destroy
       @contest.destroy
-      redirect_to admin_contests_path, notice: "コンテストを削除しました"
+      redirect_to admin_contests_path, notice: t('flash.admin.contests.destroyed')
     end
 
     def force_finish
       @contest.update!(status: :finished)
       NotificationBroadcaster.contest_status_change(@contest, :finished)
-      redirect_to admin_contest_path(@contest), notice: "コンテストを強制終了しました"
+      redirect_to admin_contest_path(@contest), notice: t('flash.admin.contests.force_finished')
     end
 
     private

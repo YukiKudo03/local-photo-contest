@@ -1,10 +1,10 @@
 <div class="container mx-auto px-4 py-8">
   <div class="mb-6">
-    <%= link_to "← コンテスト詳細に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+    <%= link_to t('organizers.statistics.show.back'), organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
   </div>
 
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-900">統計ダッシュボード</h1>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.statistics.show.title') %></h1>
     <span class="text-gray-500"><%= @contest.title %></span>
   </div>
 

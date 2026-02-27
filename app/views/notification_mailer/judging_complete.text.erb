@@ -1,13 +1,13 @@
-審査完了
+<%= t('mailers.notification.judging_complete.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」の全審査員による評価が完了しました。
+<%= t('mailers.notification.judging_complete.body', contest_title: @contest.title) %>
 
-結果発表の準備が整いました。
+<%= t('mailers.notification.judging_complete.ready') %>
 
-コンテストを管理する: <%= organizers_contest_url(@contest) %>
+<%= t('mailers.notification.judging_complete.view_button') %>: <%= organizers_contest_url(@contest) %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

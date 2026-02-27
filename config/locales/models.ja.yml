@@ -1,0 +1,48 @@
+ja:
+  ranks:
+    grand_prize: 最優秀賞
+    excellence: 優秀賞
+    merit: 準優秀賞
+    award: 入賞
+  models:
+    contest_template:
+      deleted: "(削除済み)"
+    discovery_badge:
+      names:
+        pioneer: 開拓者
+        explorer: 探検家
+        curator: キュレーター
+        master: マスター
+      descriptions:
+        pioneer: 未開拓エリアへの初投稿を達成
+        explorer: 5つ以上のスポットを発掘
+        curator: 10以上のスポットが認定
+        master: 全ての発掘チャレンジに参加
+    spot:
+      categories:
+        restaurant: 飲食店
+        retail: 小売店
+        service: サービス業
+        landmark: 名所・ランドマーク
+        public_facility: 公共施設
+        park: 公園・広場
+        temple_shrine: 寺社仏閣
+        other: その他
+      discovery_statuses:
+        organizer_created: 主催者作成
+        discovered: 発掘中
+        certified: 認定済み
+        rejected: 却下
+    discovery_challenge:
+      statuses:
+        draft: 下書き
+        active: 開催中
+        finished: 終了
+    tutorial_progress:
+      completed: 完了
+      skipped: スキップ済
+      in_progress: 進行中
+      not_started: 未開始
+    judge_invitation:
+      already_processed: 招待は既に処理されています
+      expired: 招待の有効期限が切れています

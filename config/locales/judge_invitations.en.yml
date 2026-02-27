@@ -1,0 +1,17 @@
+en:
+  judge_invitations:
+    show:
+      title: Judge Invitation
+      expired: This invitation has expired. Please contact the organizer to request a new invitation.
+      accepted: This invitation has already been accepted.
+      declined: This invitation has been declined.
+      theme: "Theme:"
+      invitation_email: "Invitation Email:"
+      invitation_date: "Invitation Date:"
+      accept: Join as Judge
+      login_to_accept: Log in to Join
+      signup_prompt_html: "If you don't have an account, please %{link}"
+      signup_link: sign up
+      decline: Decline
+      decline_confirm: Are you sure you want to decline this invitation?
+      back_to_top: Back to Home

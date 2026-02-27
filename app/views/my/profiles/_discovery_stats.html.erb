@@ -11,29 +11,29 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
-      発掘実績
+      <%= t('my.profile.show.discovery_title') %>
     </h3>
 
     <!-- Discovery Stats Grid -->
     <div class="grid grid-cols-3 gap-4 text-center mb-4">
       <div class="bg-green-50 rounded-lg p-4">
         <div class="text-2xl font-bold text-green-600"><%= certified_spots.count %></div>
-        <div class="text-sm text-gray-500">認定スポット</div>
+        <div class="text-sm text-gray-500"><%= t('my.profile.show.certified_spots') %></div>
       </div>
       <div class="bg-amber-50 rounded-lg p-4">
         <div class="text-2xl font-bold text-amber-600"><%= pending_spots.count %></div>
-        <div class="text-sm text-gray-500">審査中</div>
+        <div class="text-sm text-gray-500"><%= t('my.profile.show.pending_review') %></div>
       </div>
       <div class="bg-blue-50 rounded-lg p-4">
         <div class="text-2xl font-bold text-blue-600"><%= user.spot_votes.count %></div>
-        <div class="text-sm text-gray-500">スポット投票</div>
+        <div class="text-sm text-gray-500"><%= t('my.profile.show.spot_votes') %></div>
       </div>
     </div>
 
     <!-- Badges -->
     <% if badges.any? %>
       <div class="mt-4">
-        <p class="text-sm text-gray-500 mb-2">獲得バッジ</p>
+        <p class="text-sm text-gray-500 mb-2"><%= t('my.profile.show.earned_badges') %></p>
         <div class="flex flex-wrap gap-2">
           <% badges.includes(:contest).each do |badge| %>
             <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%=
@@ -58,7 +58,7 @@
     <% recent_certified = certified_spots.order(certified_at: :desc).limit(3) %>
     <% if recent_certified.any? %>
       <div class="mt-4">
-        <p class="text-sm text-gray-500 mb-2">最近の認定スポット</p>
+        <p class="text-sm text-gray-500 mb-2"><%= t('my.profile.show.recent_certifications') %></p>
         <div class="space-y-2">
           <% recent_certified.each do |spot| %>
             <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">

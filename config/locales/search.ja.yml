@@ -1,0 +1,38 @@
+ja:
+  search:
+    index:
+      title: 検索
+      heading: 検索
+      placeholder: "コンテスト、作品、スポットを検索..."
+      search_label: 検索キーワード
+      clear_search: 検索をクリア
+      results_summary_html: "「<strong>%{query}</strong>」の検索結果：%{count}件"
+      tab_label: 検索タブ
+      no_results: 検索結果がありません
+      no_results_description: 別のキーワードで検索してみてください
+      results_count: "%{count}件の検索結果"
+      initial_title: キーワードを入力してください
+      initial_description: コンテスト、作品、スポットを検索できます
+      view_all_contests: "コンテストの結果をすべて見る（%{count}件）"
+      view_all_entries: "作品の結果をすべて見る（%{count}件）"
+      view_all_spots: "スポットの結果をすべて見る（%{count}件）"
+    tabs:
+      all: すべて
+      contests: コンテスト
+      entries: 作品
+      spots: スポット
+    contest_result:
+      theme: "テーマ: %{theme}"
+      entries_count: "%{count}作品"
+      deadline: "締切: %{date}"
+      active: 開催中
+      ended: 終了
+      no_period: 期間制限なし
+    entry_result:
+      untitled: 無題
+      entry_alt: 応募作品
+      votes: "%{count}票"
+    spot_result:
+      entries_count: "%{count}作品"
+      certified: 認定済み
+      pending: 審査中

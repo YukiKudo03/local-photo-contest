@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_26_222519) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_27_100000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -477,6 +477,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_26_222519) do
     t.boolean "email_digest", default: true, null: false
     t.boolean "email_on_judging", default: true, null: false
     t.string "unsubscribe_token"
+    t.string "locale", limit: 5
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["feature_level"], name: "index_users_on_feature_level"

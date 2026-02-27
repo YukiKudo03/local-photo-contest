@@ -4,10 +4,10 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    エリア一覧に戻る
+    <%= t('organizers.areas.show.back') %>
   <% end %>
-  <h1 class="text-2xl font-bold text-gray-900">新規エリア作成</h1>
-  <p class="mt-1 text-sm text-gray-500">新しい撮影エリアを作成します</p>
+  <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.areas.new.title') %></h1>
+  <p class="mt-1 text-sm text-gray-500"><%= t('organizers.areas.new.subtitle') %></p>
 </div>
 
 <%= render "form", area: @area %>

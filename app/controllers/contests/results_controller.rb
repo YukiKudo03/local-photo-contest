@@ -6,7 +6,7 @@ module Contests
 
     def show
       unless @contest.results_announced?
-        redirect_to contest_path(@contest), alert: "結果はまだ発表されていません。"
+        redirect_to contest_path(@contest), alert: t('flash.results.not_announced')
         return
       end
 

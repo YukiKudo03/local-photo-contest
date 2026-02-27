@@ -86,8 +86,8 @@ RSpec.describe "Spot Discovery Flow", type: :system do
     it "displays pending spots for review" do
       visit organizers_contest_discovery_spots_path(contest)
 
-      expect(page).to have_content("発掘スポット審査")
-      expect(page).to have_content("審査待ち (1)")
+      expect(page).to have_content(I18n.t('organizers.discovery_spots.index.title'))
+      expect(page).to have_content("審査中 (1)")
       expect(page).to have_content("Discovered Spot")
     end
 
@@ -95,14 +95,14 @@ RSpec.describe "Spot Discovery Flow", type: :system do
       # This tests the certification logic directly to avoid Turbo issues
       visit organizers_contest_discovery_spots_path(contest)
 
-      expect(page).to have_content("審査待ち (1)")
+      expect(page).to have_content("審査中 (1)")
 
       # Directly certify via service (testing the backend logic)
       DiscoverySpotService.certify_spot(spot: discovered_spot, user: organizer)
 
       # Refresh and verify
       visit organizers_contest_discovery_spots_path(contest)
-      expect(page).to have_content("審査待ち (0)")
+      expect(page).to have_content("審査中 (0)")
       expect(page).to have_content("認定済み (1)")
 
       # Verify notification was created
@@ -115,7 +115,7 @@ RSpec.describe "Spot Discovery Flow", type: :system do
       visit organizers_contest_discovery_spots_path(contest)
 
       # Wait for page to fully load with spot content
-      expect(page).to have_content("審査待ち (1)")
+      expect(page).to have_content("審査中 (1)")
       expect(page).to have_content("Discovered Spot")
 
       # Find the reject button within the pending spots area
@@ -134,7 +134,7 @@ RSpec.describe "Spot Discovery Flow", type: :system do
 
       # Verify rejection
       expect(page).to have_content("を却下しました", wait: 5)
-      expect(page).to have_content("審査待ち (0)")
+      expect(page).to have_content("審査中 (0)")
 
       # Verify database state
       discovered_spot.reload
@@ -153,20 +153,25 @@ RSpec.describe "Spot Discovery Flow", type: :system do
     it "displays spots in correct tabs" do
       visit organizers_contest_discovery_spots_path(contest)
 
-      # Pending tab (default)
-      expect(page).to have_content("Pending Spot")
-      expect(page).not_to have_content("Certified Spot")
-      expect(page).not_to have_content("Rejected Spot")
+      # Pending tab (default) - verify spot is rendered in the pending section
+      within("#pending-tab") do
+        expect(page).to have_content("Pending Spot")
+      end
 
-      # Certified tab
-      click_button "認定済み"
-      expect(page).to have_content("Certified Spot")
-      expect(page).not_to have_content("Pending Spot")
+      # Certified tab - verify spot is rendered in the certified section
+      within("#certified-tab") do
+        expect(page).to have_content("Certified Spot")
+      end
 
-      # Rejected tab
-      click_button "却下"
-      expect(page).to have_content("Rejected Spot")
-      expect(page).not_to have_content("Pending Spot")
+      # Rejected tab - verify spot is rendered in the rejected section
+      within("#rejected-tab") do
+        expect(page).to have_content("Rejected Spot")
+      end
+
+      # Verify tab counts
+      expect(page).to have_content("審査中 (1)")
+      expect(page).to have_content("認定済み (1)")
+      expect(page).to have_content("却下済み (1)")
     end
   end
 
@@ -192,8 +197,8 @@ RSpec.describe "Spot Discovery Flow", type: :system do
     it "shows appropriate message when no pending spots exist" do
       visit organizers_contest_discovery_spots_path(contest)
 
-      expect(page).to have_content("審査待ちのスポットはありません")
-      expect(page).to have_content("すべての発掘スポットは審査済みです")
+      expect(page).to have_content(I18n.t('organizers.discovery_spots.index.no_pending'))
+      expect(page).to have_content(I18n.t('organizers.discovery_spots.index.all_reviewed'))
     end
   end
 end

@@ -1,0 +1,612 @@
+en:
+  organizers:
+    dashboard:
+      title: Dashboard
+      subtitle: Contest management overview
+      total_contests: Contests
+      total_entries: Entries
+      total_votes: Votes
+      active_contests: Active Contests
+      no_contests: No contests yet
+      create_first: Create your first contest
+      recent_entries: Recent Entries
+      no_recent_entries: No recent entries
+      view_all: View All
+      untitled: Untitled
+    contests:
+      index:
+        title: Contests
+        subtitle: Manage your contests
+        new_contest: New Contest
+        no_contests: No contests
+        create_first: Create your first contest
+        status: Status
+        entries_count: Entries
+        actions: Actions
+        view: View
+        edit: Edit
+        all: All
+        draft: Draft
+        published: Published
+        finished: Finished
+        no_period: No period set
+      new:
+        title: New Contest
+        subtitle: Create a new photo contest
+        from_template: Create from Template
+        template_hint: Select a saved template to preset your settings
+        template_applied: "Settings from \"%{name}\" have been preset in the form"
+        select_template: "Select a template..."
+        reset: Reset
+      edit:
+        title: Edit Contest
+        subtitle: Edit contest settings
+      show:
+        back: Back to Contests
+        edit: Edit
+        status: Status
+        contest_info: Contest Information
+        theme: Theme
+        category: Category
+        not_set: Not set
+        description: Description
+        entry_period: Entry Period
+        no_start: No start date
+        no_end: No end date
+        no_limit: No limit
+        area: Area
+        spots: "Spots (%{count})"
+        spot_required: Spot selection required
+        entries_section: Entries
+        entries_count: "%{count} entries"
+        view_all_entries: View All Entries
+        no_entries: No entries yet
+        delete_contest: Delete Contest
+        delete_confirm: Are you sure you want to delete this contest? This action cannot be undone.
+        publish: Publish
+        publish_confirm: Are you sure you want to publish this contest?
+        unpublish: Unpublish
+        unpublish_confirm: Are you sure you want to unpublish this contest?
+        finish: Finish
+        finish_confirm: Are you sure you want to finish this contest?
+        judging_section: Judging & Results
+        judging_method: Judging Method
+        judge_weight: Judge Weight
+        prize_count: Prize Count
+        judges: Judges
+        judges_count: "%{count} judges"
+        invite_judge: Invite Judge
+        evaluation_criteria: Evaluation Criteria
+        manage_criteria: Manage Criteria
+        calculate_scores: Calculate Scores
+        calculate_confirm: Calculate scores?
+        announce_results: Announce Results
+        announce_confirm: Announce results? This cannot be undone.
+        view_results: View Results
+        results_announced: Results Announced
+        results_not_announced: Results Not Announced
+        no_thumbnail: No Thumbnail
+        created_at: Created At
+        updated_at: Updated At
+        accepting_entries: Accepting Entries
+        not_accepting_entries: Not Accepting Entries
+        edit_desc: Edit contest settings
+        entries_desc: "%{count} entries"
+        spots_section: Spot Management
+        spots_desc: "Spots (%{count})"
+        discovery_spots_section: Discovery Spot Management
+        challenges_count: "Challenges Count"
+        statistics_desc: View statistics and analytics
+        save_as_template: Save as Template
+        save_template_desc: Save contest settings as a template
+        save_template_confirm: Save this contest's settings as a template?
+        statistics: View Statistics
+        moderation: Moderation
+        publish_desc: Publish contest and start accepting entries
+        finish_desc: Close entries for this contest
+        delete_desc: Permanently delete this contest
+        announce_desc: Make results public to participants
+        ranking_preview: Ranking Preview
+        view_results_desc: View announced results
+        map_preview: Map Preview
+        actions: Actions
+        all_reviewed: All Reviewed
+        pending_review: "%{count} pending review"
+      form:
+        errors_count:
+          one: 1 error found
+          other: "%{count} errors found"
+        basic_info: Basic Information
+        title_label: Title
+        title_placeholder: Contest title
+        title_hint: Enter a name for your contest
+        theme_label: Theme
+        theme_placeholder: Contest theme (optional)
+        theme_hint: Setting a theme helps guide participants
+        description_label: Description
+        description_placeholder: Contest description
+        category_label: Category
+        category_placeholder: Select category
+        category_hint: Select a category for your contest
+        area_label: Area
+        area_placeholder: Select area
+        area_settings: Area Settings
+        area_hint: Set the target area for your contest
+        area_select_hint: Select an area or
+        create_new_area: create a new area
+        area_preview: Area Preview
+        entry_period: Entry Period
+        entry_start_label: Entry Start
+        entry_end_label: Entry End
+        period_hint: Leave empty to accept entries until manually closed
+        thumbnail_label: Thumbnail
+        thumbnail_hint: JPEG, PNG format (recommended 800x600)
+        current_image: Current Image
+        click_to_select: Click to select an image
+        spot_required_label: Require spot selection
+        spot_required_hint: When enabled, participants must select a spot when submitting
+        judging_method_label: Judging Method
+        judge_weight_label: Judge Weight (%)
+        prize_count_label: Prize Count
+        show_scores_label: Show detailed scores
+        moderation_title: Content Moderation
+        moderation_subtitle: Automatically detect and filter inappropriate content
+        moderation_enable: Enable content moderation
+        moderation_desc: Uses AWS Rekognition to automatically detect inappropriate images
+        threshold_label: Moderation Threshold
+        threshold_loose: Loose
+        threshold_strict: Strict
+        threshold_desc: Lower threshold filters more content
+        about_moderation: About Moderation
+        moderation_info_1: Uploaded images are automatically scanned
+        moderation_info_2: Inappropriate images are hidden
+        moderation_info_3: You can manually review and approve content
+        submit_create: Create
+        submit_update: Update
+        cancel: Cancel
+    areas:
+      index:
+        title: Area Management
+        subtitle: Manage your areas
+        new_area: New Area
+        no_areas: No areas
+        create_first: Create your first area
+        name: Area Name
+        spots_count: Spots
+        contests_count: Contests
+        actions: Actions
+        boundary_set: Boundary Set
+      new:
+        title: New Area
+      edit:
+        title: Edit Area
+      show:
+        back: Back to Areas
+        edit: Edit
+        delete: Delete
+        delete_confirm: Are you sure you want to delete this area?
+        spots_section: Spots
+        add_spot: Add Spot
+        no_spots: No spots
+      form:
+        name_label: Area Name
+        name_placeholder: Area name
+        name_hint: Enter the name of the area
+        description_label: Description
+        description_placeholder: Area description (optional)
+        description_hint: Briefly describe the area
+        address_title: Address
+        prefecture_label: Prefecture
+        prefecture_placeholder: Select prefecture
+        city_label: City
+        city_placeholder: City name
+        city_hint: Enter the city name
+        address_label: Street Address
+        address_placeholder: Street address
+        address_hint: Enter the street address
+        optional: Optional
+        geojson_label: GeoJSON Boundary Data
+        geojson_placeholder: GeoJSON boundary data
+        geojson_hint: Enter boundary data in GeoJSON format
+        coordinates_title: Coordinates
+        coordinates_hint: Click on the map to set coordinates
+        selected_coordinates: Selected Coordinates
+        latitude: Latitude
+        longitude: Longitude
+        click_map: Click the map to set coordinates
+        clear: Clear
+        boundary_title: Boundary Settings
+        boundary_hint: Enter boundary data in GeoJSON format
+        submit_create: Create
+        submit_update: Update
+        cancel: Cancel
+    spots:
+      index:
+        title: Spot Management
+        new_spot: Add Spot
+        merge: Merge
+        no_spots: No spots
+        add_spot: Add Spot
+      new:
+        title: Add Spot
+        subtitle: Register a new spot
+        back: Back to Spots
+      edit:
+        title: Edit Spot
+      merge:
+        title: Merge Spots
+        subtitle: Merge duplicate spots
+        source_spot: Source Spot
+        data_to_move: Data to Move
+        entries_move:
+          one: "1 entry"
+          other: "%{count} entries"
+        votes_move:
+          one: "1 vote"
+          other: "%{count} votes"
+        target_spot: Target Spot
+        select_target: Select target spot
+        target_hint: Select the spot to merge into
+        execute: Execute Merge
+        confirm: "Merge \"%{name}\"?"
+      form:
+        name_label: Spot Name
+        name_placeholder: Spot name
+        name_hint: Enter the official name of the spot
+        category_label: Category
+        category_placeholder: Select category
+        category_hint: Select the type of spot
+        description_label: Description
+        description_placeholder: Spot description
+        description_hint: Briefly describe the spot's features
+        address_label: Address
+        address_placeholder: Spot address
+        address_hint: Enter the address to display on the map
+        latitude_label: Latitude
+        longitude_label: Longitude
+        coordinates_hint: Click on the map to set coordinates or enter directly
+        submit_create: Create
+        submit_update: Update
+        cancel: Cancel
+    discovery_spots:
+      index:
+        title: Discovery Spot Management
+        back: Back to Contest
+        no_spots: No discovery spots
+        status: Status
+        discoverer: Discoverer
+        actions: Actions
+        certify: Certify
+        reject: Reject
+        certified: Certified
+        rejected: Rejected
+        pending: Under Review
+        pending_count: Pending Count
+        no_pending: No pending spots
+        all_reviewed: All discovery spots have been reviewed
+        no_certified: No certified spots
+        no_rejected: No rejected spots
+        reject_title: Reject Spot
+        reject_reason: Rejection Reason
+        reject_placeholder: Enter reason for rejection
+      spot:
+        discoverer: Discoverer
+        discovery_comment: Discovery Comment
+        entries_count: Entries Count
+        certified_by: Certified By
+        rejection_reason: Rejection Reason
+        certify_confirm: "Certify \"%{name}\"?"
+    discovery_challenges:
+      index:
+        title: Discovery Challenge Management
+        new_challenge: New Challenge
+        no_challenges: No challenges
+        active: Active
+      new:
+        title: New Challenge
+        back: Back to Challenges
+      edit:
+        title: Edit Challenge
+      show:
+        theme: Theme
+        details: Details
+        no_description: No description
+        period: Period
+        statistics: Statistics
+        entries_count: Entries Count
+        spots_count: Spots Count
+        participants_count: Participants Count
+        entries: Entries
+        no_entries: No Entries
+        discovered_spots: Discovered Spots
+        unknown: Unknown
+        no_spots: No Spots
+      form:
+        title_label: Title
+        description_label: Description
+        start_date_label: Start Date
+        end_date_label: End Date
+        points_label: Points
+        submit_create: Create
+        submit_update: Update
+        cancel: Cancel
+    moderation:
+      index:
+        title: Moderation
+        no_entries: No entries awaiting review
+        status: Status
+        submitter: Submitter
+        submitted_at: Submitted At
+        actions: Actions
+        approve: Approve
+        reject: Hide
+        approved: Approved
+        rejected: Hidden
+        pending: Pending
+        reject_reason: Reason for hiding
+        reject_placeholder: Enter the reason for hiding
+    judge_invitations:
+      index:
+        title: Judge Invitations
+        invite_new: New Invitation
+        no_invitations: No invitations
+        email: Email
+        status: Status
+        invited_at: Invited At
+        actions: Actions
+        resend: Resend
+        cancel_invite: Cancel
+        cancel_confirm: Cancel this invitation?
+      form:
+        email_label: Email
+        email_placeholder: "Judge's email address"
+        submit: Send Invitation
+    contest_judges:
+      index:
+        title: Judge Management
+        no_judges: No judges
+        name: Name
+        email: Email
+        status: Status
+        evaluations: Evaluations
+        actions: Actions
+        remove: Remove
+        remove_confirm: Remove this judge?
+    evaluation_criteria:
+      index:
+        title: Evaluation Criteria Management
+        back: "Back to %{title}"
+        new_criterion: Add New
+        criteria_list: Criteria List
+        criteria_desc: Set criteria for judges to evaluate entries
+        max_score: "Max %{score} pts"
+        delete_confirm: Delete this evaluation criterion?
+        no_criteria: No evaluation criteria
+        no_criteria_desc: Add criteria to set evaluation standards
+        add_first: Add First Criterion
+        about_criteria: About Evaluation Criteria
+        about_criteria_desc: Evaluation criteria are standards for judges to score entries. You can evaluate from multiple perspectives such as "Composition", "Color", and "Theme relevance". Each criterion has a maximum score, and judges score from 0 to the maximum.
+      new:
+        title: Add New Criterion
+        back: Back to Criteria
+        subtitle: "Add criterion for %{title}"
+      edit:
+        title: Edit Criterion
+        back: Back to Criteria
+        subtitle: "Edit %{name}"
+      form:
+        errors: "%{count} error(s) found"
+        criterion_info: Criterion Information
+        name_label: Criterion Name
+        name_placeholder: "e.g., Composition, Color, Theme relevance"
+        name_hint: Up to 50 characters (required)
+        description_label: Description
+        description_placeholder: Describe what this criterion evaluates
+        description_hint: Up to 500 characters (optional)
+        max_score_label: Max Score
+        max_score_hint: Integer from 1 to 100 (required)
+        position_label: Display Order
+        position_hint: Lower numbers are displayed first (optional, auto-set if empty)
+        weight_label: Weight
+        submit_create: Add
+        submit_update: Update
+        cancel: Cancel
+    judging_settings:
+      edit:
+        title: Judging Settings
+        back: "← Back to Contest Details"
+        published_notice: "<strong>Note:</strong> You cannot change the judging method after publishing. Only scoring settings and prize count can be adjusted."
+        judging_method: Judging Method
+        judge_only: Judge Evaluation Only
+        judge_only_desc: Rankings determined solely by judge scores
+        vote_only: Public Voting Only
+        vote_only_desc: Rankings determined solely by vote count
+        hybrid: Hybrid
+        hybrid_desc: Rankings determined by combining judge evaluations and votes
+        weight_ratio: Weight Ratio
+        judge_label: Judge
+        vote_label: Votes
+        results_settings: Results Settings
+        prize_count: Prize Count
+        prize_rank: "Up to %{n}th place"
+        prize_count_hint: Number of prize-winning positions
+        show_scores: Show detailed scores to participants
+        show_scores_hint: When enabled, participants can see the score breakdown for each criterion
+        evaluation_criteria: Evaluation Criteria
+        manage_criteria: Manage Criteria
+        points: pts
+        total: Total
+        no_criteria: No evaluation criteria set yet
+        add_criteria: Add Evaluation Criteria
+        submit: Save Settings
+    results:
+      preview:
+        title: Results Management
+        back: "← Back to Contest Details"
+        contest_status: Contest Status
+        finished: Finished
+        published: Published
+        draft: Draft
+        judge_completion: Judge Completion Rate
+        entries_count: Number of Entries
+        entries_with_count: "%{count} entries"
+        warnings: Warnings
+        results_announced: Results Announced
+        view_results_page: View Results Page
+        rankings_outdated: Rankings are outdated
+        rankings_outdated_desc: New evaluations have been added, so rankings may have changed. The preview below reflects the latest data. Click "Recalculate Rankings" to update saved rankings.
+        final_rankings: Final Rankings
+        provisional_rankings: Provisional Rankings
+        needs_recalculation: Needs Recalculation
+        recalculate: Recalculate Rankings
+        rankings: Rankings
+        no_rankings: No ranking data
+        rank: Rank
+        entry: Entry
+        submitter: Submitter
+        total_score: Total Score
+        judge_score: Judge Score
+        vote_count: Votes
+        score: Score
+        votes: Votes
+        announce_title: Announce Results
+        announce_desc: Once announced, participants and public users will be able to view the rankings. This action cannot be undone.
+        announce_button: Announce Results
+        announce_confirm: Announce results? This action cannot be undone.
+        finish_first: Please finish the contest before announcing results.
+        back_to_contest: Back to Contest Management
+    statistics:
+      show:
+        title: Statistics Dashboard
+        back: "← Back to Contest Details"
+        overview: Overview
+        entries_over_time: Entries Over Time
+        votes_distribution: Votes Distribution
+        area_breakdown: Area Breakdown
+        export: Export
+        total_entries: Total Entries
+        total_votes: Total Votes
+        total_comments: Total Comments
+        avg_votes: Average Votes
+        date_range: Date Range
+        from_date: From
+        to_date: To
+        apply: Apply
+      summary:
+        entries_change: "entries (vs. previous day)"
+        votes_change: "votes (vs. previous day)"
+        total_participants: Participants
+        participants_change: "users (vs. previous day)"
+        total_spots: Registered Spots
+        spots_change: "spots (vs. previous day)"
+      entry_trend:
+        title: Entry Trend
+        display: Display
+        daily: Daily
+        weekly: Weekly
+        no_data: No data yet
+        no_data_desc: Charts will appear when entries are submitted.
+        date: Date
+        entries: Entries
+        week: Week
+      spot_chart:
+        title: Popular Spots (Top 10)
+        no_data: No spot data
+        entries: Entries
+        spot_list: Entries by Spot
+        count_unit: entries
+        view_list: List
+      area_chart:
+        title: Entry Distribution by Area
+      discovery:
+        title: Discovery Statistics
+        total_spots: Total Spots
+        organizer_created: Organizer Created
+        certified: Certified
+        pending_certification: Pending Review
+        active_discoverers: Active Discoverers
+        people_unit: users
+        spot_votes: Spot Votes
+        votes_unit: votes
+        top_spots: Top Spots (Top 5)
+        top_discoverers: Top Discoverers (Top 5)
+        spots_unit: spots
+        challenges: Discovery Challenges
+        status_draft: Draft
+        status_active: Active
+        status_finished: Finished
+        entries_unit: entries
+        discoveries_unit: discoveries
+      vote_analysis:
+        title: Vote Analysis
+        not_started: Will be displayed after voting period starts
+        total_votes: Total Votes
+        unique_voters: Unique Voters
+        avg_per_entry: Avg Votes / Entry
+        no_data: No vote data yet
+        daily_trend: Daily Vote Trend
+        date: Date
+        votes: Votes
+        top_entries: Top Voted Entries (Top 5)
+        votes_unit: votes
+    contest_templates:
+      index:
+        title: Templates
+        subtitle: Manage your saved templates
+        source_contest: Source Contest
+        theme: Theme
+        category: Category
+        area: Area
+        judging_method: Judging Method
+        judge_only: Judge Only
+        vote_only: Voting Only
+        hybrid: Hybrid
+        created_at: Created
+        create_from: Create from this template
+        no_templates: No templates
+        no_templates_desc: You can create templates from the "Save as Template" option on a contest detail page
+        name: Template Name
+        actions: Actions
+        use: Use
+        delete: Delete
+        delete_confirm: "Delete \"%{name}\"?"
+      new:
+        title: Save as Template
+        subtitle: "Save settings from \"%{title}\" as a template"
+        errors: Errors found
+        name_label: Template Name
+        name_placeholder: "e.g., Monthly Photo Contest Settings"
+        name_hint: Choose a descriptive name (max 100 characters)
+        saved_settings: Settings to be saved
+        theme: Theme
+        description: Description
+        judging_method: Judging Method
+        prize_count: Prize Count
+        people_unit: ""
+        moderation: Moderation
+        moderation_enabled: "Enabled (threshold: %{threshold}%)"
+        moderation_disabled: Disabled
+        spot_required: Spot Required
+        required: Required
+        optional: Optional
+        category: Category
+        area: Area
+        note: "* Title, entry period, and status are not saved"
+        cancel: Cancel
+        submit: Save Template
+    terms_acceptances:
+      new:
+        title: Terms of Service
+        subtitle: You must agree to the following terms of service to use this service.
+        not_found: Terms of service not found.
+        version: Version
+        published_at: Published
+        agree_text: I agree to the terms of service above
+        agree_hint: Please read the terms carefully before agreeing.
+        agree_and_continue: Agree and Continue
+        disagree_logout: Disagree (Logout)
+        terms_content: Terms of Service Content
+    registrations:
+      new:
+        title: Organizer Registration
+        subtitle: Register as an organizer to host contests

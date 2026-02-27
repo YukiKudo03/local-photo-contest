@@ -20,7 +20,7 @@ module Organizers
       @area = current_user.areas.build(area_params)
 
       if @area.save
-        redirect_to organizers_area_path(@area), notice: "エリアを作成しました。"
+        redirect_to organizers_area_path(@area), notice: t('flash.areas.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module Organizers
 
     def update
       if @area.update(area_params)
-        redirect_to organizers_area_path(@area), notice: "エリアを更新しました。"
+        redirect_to organizers_area_path(@area), notice: t('flash.areas.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -39,12 +39,12 @@ module Organizers
 
     def destroy
       if @area.contests.exists?
-        redirect_to organizers_area_path(@area), alert: "このエリアに関連するコンテストがあるため削除できません。"
+        redirect_to organizers_area_path(@area), alert: t('flash.areas.has_contests')
         return
       end
 
       @area.destroy
-      redirect_to organizers_areas_path, notice: "エリアを削除しました。"
+      redirect_to organizers_areas_path, notice: t('flash.areas.destroyed')
     end
 
     private
@@ -56,7 +56,7 @@ module Organizers
     def authorize_area!
       return if @area.owned_by?(current_user)
 
-      redirect_to organizers_areas_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_areas_path, alert: t('flash.areas.not_authorized')
     end
 
     def area_params

@@ -1,20 +1,20 @@
-審査員への招待
+<%= t('mailers.judge_invitation.invite.header') %>
 
-こんにちは、
+<%= t('mailers.judge_invitation.invite.greeting') %>
 
-あなたはフォトコンテスト「<%= @contest.title %>」の審査員として招待されました。
+<%= t('mailers.judge_invitation.invite.body', contest_title: @contest.title) %>
 
 <% if @contest.theme.present? -%>
-テーマ: <%= @contest.theme %>
+<%= t('mailers.judge_invitation.invite.theme') %> <%= @contest.theme %>
 
 <% end -%>
-審査員として参加いただける場合は、以下のURLをクリックして招待を承諾してください。
+<%= t('mailers.judge_invitation.invite.instruction') %>
 
 <%= @accept_url %>
 
-この招待は<%= JudgeInvitation::TOKEN_EXPIRY_DAYS %>日間有効です。
+<%= t('mailers.judge_invitation.invite.expiry', days: JudgeInvitation::TOKEN_EXPIRY_DAYS) %>
 
-ご不明な点がございましたら、コンテスト主催者にお問い合わせください。
+<%= t('mailers.judge_invitation.invite.contact') %>
 
 ---
-このメールは自動送信されています。心当たりがない場合は無視してください。
+<%= t('mailers.common.auto_sent_ignore') %>

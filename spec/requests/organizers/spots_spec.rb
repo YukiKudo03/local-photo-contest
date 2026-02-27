@@ -92,7 +92,7 @@ RSpec.describe "Organizers::Spots", type: :request do
 
         it "shows success flash message" do
           post organizers_contest_spots_path(contest), params: valid_params
-          expect(flash[:notice]).to eq("スポットを登録しました。")
+          expect(flash[:notice]).to eq("スポットを作成しました。")
         end
 
         it "associates spot with contest" do

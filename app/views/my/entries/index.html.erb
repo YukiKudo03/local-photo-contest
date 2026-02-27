@@ -1,8 +1,8 @@
 <div class="container mx-auto max-w-6xl px-4 py-8" data-tutorial="my-entries-page">
   <!-- Page Header -->
   <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">マイ応募一覧</h1>
-    <p class="mt-1 text-gray-500">あなたが応募した作品の一覧です</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('my.entries.index.title') %></h1>
+    <p class="mt-1 text-gray-500"><%= t('my.entries.index.description') %></p>
   </div>
 
   <!-- Entries Grid -->
@@ -13,7 +13,7 @@
           <!-- Photo Thumbnail -->
           <div class="aspect-square bg-gray-100 flex items-center justify-center">
             <% if entry.photo.attached? %>
-              <%= image_tag entry.photo.variant(resize_to_fill: [400, 400]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [400, 400]), alt: entry.title.presence || t('entries.form.entry_alt'), class: "w-full h-full object-cover", loading: "lazy" %>
             <% else %>
               <svg class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -26,7 +26,7 @@
             <% if entry.title.present? %>
               <h3 class="text-lg font-semibold text-gray-900 line-clamp-1"><%= entry.title %></h3>
             <% else %>
-              <h3 class="text-lg font-semibold text-gray-400">無題</h3>
+              <h3 class="text-lg font-semibold text-gray-400"><%= t('entries.show.untitled') %></h3>
             <% end %>
 
             <!-- Contest Name -->
@@ -34,7 +34,7 @@
 
             <!-- Entry Date -->
             <p class="mt-2 text-xs text-gray-400">
-              <%= entry.created_at.strftime('%Y/%m/%d %H:%M') %> に応募
+              <%= l(entry.created_at, format: :default) %> <%= t('my.entries.index.submitted_at') %>
             </p>
           </div>
         <% end %>
@@ -46,11 +46,11 @@
       <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
-      <h3 class="mt-4 text-lg font-medium text-gray-900">応募作品がありません</h3>
-      <p class="mt-2 text-sm text-gray-500">コンテストに応募してみましょう</p>
+      <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('my.entries.index.no_entries') %></h3>
+      <p class="mt-2 text-sm text-gray-500"><%= t('my.entries.index.encourage') %></p>
       <div class="mt-6">
         <%= link_to contests_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
-          コンテストを探す
+          <%= t('my.entries.index.find_contests') %>
         <% end %>
       </div>
     </div>

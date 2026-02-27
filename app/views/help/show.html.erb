@@ -7,7 +7,7 @@
       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
-      マニュアル一覧に戻る
+      <%= t('help.show.back_to_list') %>
     <% end %>
   </div>
 
@@ -23,7 +23,7 @@
           data-toc-target="toggleButton"
           aria-expanded="false"
         >
-          <span class="font-medium text-gray-700">目次</span>
+          <span class="font-medium text-gray-700"><%= t('help.show.table_of_contents') %></span>
           <svg class="w-5 h-5 text-gray-500 transform transition-transform" data-toc-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
@@ -33,9 +33,9 @@
         <nav
           class="hidden lg:block bg-gray-50 rounded-lg border border-gray-200 p-4 overflow-hidden transition-all duration-200"
           data-toc-target="content"
-          aria-label="目次"
+          aria-label="<%= t('help.show.table_of_contents') %>"
         >
-          <h2 class="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">目次</h2>
+          <h2 class="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide"><%= t('help.show.table_of_contents') %></h2>
           <%= render "toc", toc: @toc %>
         </nav>
       </div>
@@ -76,7 +76,7 @@
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
-          マニュアル一覧に戻る
+          <%= t('help.show.back_to_list') %>
         <% end %>
       </div>
     </main>

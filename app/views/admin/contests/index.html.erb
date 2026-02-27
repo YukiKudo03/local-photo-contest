@@ -1,9 +1,9 @@
-<% content_for :title, "コンテスト管理" %>
+<% content_for :title, t('admin.contests.index.title') %>
 
 <div class="sm:flex sm:items-center mb-6">
   <div class="sm:flex-auto">
-    <h1 class="text-2xl font-bold text-gray-900">コンテスト管理</h1>
-    <p class="mt-1 text-sm text-gray-500">システム内の全コンテストを管理できます</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('admin.contests.index.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('admin.contests.index.subtitle') %></p>
   </div>
 </div>
 
@@ -11,16 +11,16 @@
 <div class="bg-white shadow rounded-lg p-4 mb-6">
   <%= form_with url: admin_contests_path, method: :get, local: true, class: "sm:flex sm:items-center gap-4" do |form| %>
     <div class="flex-1">
-      <%= form.text_field :q, value: params[:q], placeholder: "コンテスト名で検索...",
+      <%= form.text_field :q, value: params[:q], placeholder: t('admin.contests.index.search_placeholder'),
           class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
     </div>
     <div class="mt-3 sm:mt-0">
-      <%= form.select :status, [["すべてのステータス", ""], ["下書き", "draft"], ["応募受付中", "accepting_entries"], ["終了", "finished"]],
+      <%= form.select :status, [[t('admin.contests.index.all_statuses'), ""], [t('admin.contests.index.draft'), "draft"], [t('admin.contests.index.accepting_entries'), "accepting_entries"], [t('admin.contests.index.finished'), "finished"]],
           { selected: params[:status] },
           class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
     </div>
     <div class="mt-3 sm:mt-0">
-      <%= form.submit "検索", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <%= form.submit t('admin.contests.index.search'), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
     </div>
   <% end %>
 </div>
@@ -30,12 +30,12 @@
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">コンテスト</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">主催者</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">応募数</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ステータス</th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">作成日</th>
-        <th scope="col" class="relative px-6 py-3"><span class="sr-only">操作</span></th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('admin.contests.index.contest') %></th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('admin.contests.index.organizer') %></th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('admin.contests.index.entries_count') %></th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('admin.contests.index.status') %></th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('admin.contests.index.created_at') %></th>
+        <th scope="col" class="relative px-6 py-3"><span class="sr-only"><%= t('admin.contests.index.actions') %></span></th>
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
@@ -60,18 +60,18 @@
                   else 'bg-gray-100 text-gray-800'
                   end %>">
               <%= case contest.status
-                  when 'draft' then '下書き'
-                  when 'accepting_entries' then '応募受付中'
-                  when 'finished' then '終了'
+                  when 'draft' then t('admin.contests.index.draft')
+                  when 'accepting_entries' then t('admin.contests.index.accepting_entries')
+                  when 'finished' then t('admin.contests.index.finished')
                   else contest.status
                   end %>
             </span>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <%= contest.created_at.strftime("%Y/%m/%d") %>
+            <%= l(contest.created_at, format: :short) %>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <%= link_to "詳細", admin_contest_path(contest), class: "text-indigo-600 hover:text-indigo-900" %>
+            <%= link_to t('admin.contests.index.details'), admin_contest_path(contest), class: "text-indigo-600 hover:text-indigo-900" %>
           </td>
         </tr>
       <% end %>

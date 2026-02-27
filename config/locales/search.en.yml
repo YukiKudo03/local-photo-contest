@@ -1,0 +1,38 @@
+en:
+  search:
+    index:
+      title: Search
+      heading: Search
+      placeholder: "Search contests, entries, spots..."
+      search_label: Search keyword
+      clear_search: Clear search
+      results_summary_html: "Search results for \"<strong>%{query}</strong>\": %{count} results"
+      tab_label: Search tabs
+      no_results: No results found
+      no_results_description: Try searching with different keywords
+      results_count: "%{count} results"
+      initial_title: Enter a keyword
+      initial_description: Search for contests, entries, and spots
+      view_all_contests: "View all contest results (%{count})"
+      view_all_entries: "View all entry results (%{count})"
+      view_all_spots: "View all spot results (%{count})"
+    tabs:
+      all: All
+      contests: Contests
+      entries: Entries
+      spots: Spots
+    contest_result:
+      theme: "Theme: %{theme}"
+      entries_count: "%{count} entries"
+      deadline: "Deadline: %{date}"
+      active: Active
+      ended: Ended
+      no_period: No time limit
+    entry_result:
+      untitled: Untitled
+      entry_alt: Contest entry
+      votes: "%{count} votes"
+    spot_result:
+      entries_count: "%{count} entries"
+      certified: Certified
+      pending: Under Review

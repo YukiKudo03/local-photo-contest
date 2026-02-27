@@ -5,7 +5,7 @@ module Organizers
     protected
 
     def after_inactive_sign_up_path_for(resource)
-      flash[:notice] = "確認メールを送信しました。メール内のリンクをクリックしてアカウントを有効化してください。"
+      flash[:notice] = t('flash.registrations.confirmation_sent')
       root_path
     end
   end

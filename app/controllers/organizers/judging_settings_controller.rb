@@ -12,7 +12,7 @@ module Organizers
     def update
       if @contest.update(judging_settings_params)
         redirect_to edit_organizers_contest_judging_settings_path(@contest),
-                    notice: "審査設定を保存しました。"
+                    notice: t('flash.judging_settings.updated')
       else
         @evaluation_criteria = @contest.evaluation_criteria.ordered
         flash.now[:alert] = @contest.errors.full_messages.join(", ")
@@ -29,7 +29,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def judging_settings_params

@@ -8,10 +8,10 @@
       <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-      コンテスト一覧に戻る
+      <%= t('organizers.contests.show.back') %>
     <% end %>
-    <h1 class="text-2xl font-bold text-gray-900">新規コンテスト作成</h1>
-    <p class="mt-1 text-sm text-gray-500">新しいフォトコンテストを作成します</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.contests.new.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('organizers.contests.new.subtitle') %></p>
   </div>
   <%= render "tutorials/help_button", tutorial_type: "contest_creation" %>
 </div>
@@ -19,15 +19,15 @@
 <% if @templates.any? %>
   <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" data-controller="template-selector">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">テンプレートから作成</h2>
-      <p class="mt-1 text-sm text-gray-500">保存したテンプレートを選択して設定をプリセットできます</p>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.new.from_template') %></h2>
+      <p class="mt-1 text-sm text-gray-500"><%= t('organizers.contests.new.template_hint') %></p>
     </div>
     <div class="p-6">
       <div class="flex items-center space-x-4">
         <select data-template-selector-target="select"
                 data-action="change->template-selector#select"
                 class="block w-full max-w-md rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-          <option value="">テンプレートを選択...</option>
+          <option value=""><%= t('organizers.contests.new.select_template') %></option>
           <% @templates.each do |template| %>
             <option value="<%= template.id %>" <%= 'selected' if @selected_template&.id == template.id %>>
               <%= template.name %> (<%= template.source_contest_title %>)
@@ -35,13 +35,13 @@
           <% end %>
         </select>
         <% if @selected_template %>
-          <%= link_to "リセット", new_organizers_contest_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+          <%= link_to t('organizers.contests.new.reset'), new_organizers_contest_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
         <% end %>
       </div>
       <% if @selected_template %>
         <div class="mt-4 p-3 bg-indigo-50 rounded-lg">
           <p class="text-sm text-indigo-700">
-            <span class="font-medium">「<%= @selected_template.name %>」</span>の設定がフォームにプリセットされました
+            <%= t('organizers.contests.new.template_applied', name: @selected_template.name) %>
           </p>
         </div>
       <% end %>

@@ -20,6 +20,10 @@ en:
         mark_all_as_read: Mark All as Read
         no_notifications: No notifications
         unread: Unread
+        time_ago: "%{time} ago"
+      show:
+        back_to_list: Back to Notifications
+        open_link: Open Link
       mark_all_as_read:
         success: All notifications marked as read.
 
@@ -27,3 +31,11 @@ en:
     types:
       results_announced: Results Announced
       entry_ranked: Prize Winner
+    messages:
+      results_announced:
+        title: "Results announced for contest \"%{contest_title}\""
+        body: Please check the results of the contest you participated in.
+      entry_ranked:
+        rank_label: "%{rank}th place"
+        title: "Your entry won %{rank_label}!"
+        body: "Your entry \"%{entry_title}\" was awarded %{rank_label} in contest \"%{contest_title}\"."

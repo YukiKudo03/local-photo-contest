@@ -1,0 +1,66 @@
+ja:
+  my:
+    judge_assignments:
+      index:
+        title: 審査担当コンテスト
+        description: あなたが審査員として割り当てられているコンテストの一覧です
+        judge_guide: 審査員ガイド
+        entries: 応募作品
+        evaluation_progress: 評価進捗
+        status_results_announced: 結果発表済み
+        status_judging: 審査中
+        status_accepting: 応募受付中
+        evaluation_complete: 評価完了
+        view_evaluations: 評価を確認
+        evaluate_entries: 作品を評価する
+        no_assignments: 審査担当のコンテストがありません
+        no_assignments_hint: コンテスト主催者から審査員として招待されると、ここに表示されます
+      show:
+        judging: 審査
+        back_to_list: 審査担当コンテスト一覧に戻る
+        status_results_announced: 結果発表済み
+        status_judging: 審査期間中
+        status_accepting: 応募受付中
+        evaluation_progress: 評価進捗
+        complete: 完了
+        evaluation_criteria: 評価基準
+        max_score: "最大 %{score} 点"
+        entries_list: 応募作品一覧
+        entries_count: "%{count} 件"
+        submitter: 投稿者
+        own_entry: 自分の作品
+        evaluated: 評価済み
+        not_evaluated: 未評価
+        action_view: 確認
+        action_edit: 編集
+        action_evaluate: 評価する
+        no_entries: まだ応募作品がありません
+        no_entries_hint: 応募が開始されると、ここに作品が表示されます
+    judge_evaluations:
+      index:
+        title: 評価一覧
+        back_to_contest: コンテスト詳細に戻る
+        select_entry: 評価する作品を選択してください
+        own_entry: 自分の作品
+        evaluated: 評価済み
+        not_evaluated: 未評価
+      show:
+        entry: 作品
+        evaluation: 評価
+        back_to_entries: 作品一覧に戻る
+        submitter: 投稿者
+        description: 説明
+        location: 撮影場所
+        taken_at: 撮影日
+        submitted_at: 投稿日時
+        evaluation_form: 評価フォーム
+        results_readonly: 結果発表済み（編集不可）
+        score_range: "1 〜 %{max} 点"
+        comment_label: コメント（任意）
+        no_comment: コメントなし
+        comment_placeholder: 作品に対するフィードバックを入力してください...
+        comment_hint: 2000文字以内
+        cancel: キャンセル
+        submit_update: 評価を更新
+        submit_save: 評価を保存
+        back_to_entries: 作品一覧に戻る

@@ -2,12 +2,28 @@ ja:
   results:
     show:
       title: コンテスト結果発表
+      subtitle: コンテスト結果発表
       back_to_contest: コンテストに戻る
+      my_result: あなたの結果
+      rank_position: "%{rank}位"
+      total_score: "総合スコア: %{score}"
+      share_title: "%{contest_title}で%{rank_label}を受賞しました！"
+      share_description: "フォトコンテスト「%{contest_title}」で%{rank}位を獲得しました。"
+      judge_score: "審査員スコア: %{score}"
+      vote_count: "投票数: %{count}"
       winners_title: 入賞作品
       all_rankings: 全作品ランキング
       no_entries: 作品がありません
       votes: 票
-      announced_at: 結果発表日
+      score: "スコア: %{score}"
+      entry_image_alt: フォトコンテスト応募作品
+      untitled: 無題
+      announced_at: "結果発表日: %{date}"
+    discovery_ranking:
+      title: 発掘ランキング
+      subtitle: 認定スポット数順
+      spots: スポット
+      profile_image_alt: プロフィール画像
 
   organizers:
     contests:

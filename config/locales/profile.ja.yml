@@ -33,6 +33,13 @@ ja:
         registered_at: 登録日
         last_login: 最終ログイン
         edit_button: プロフィールを編集
+        tutorial_settings: チュートリアル設定
+        discovery_title: 発掘実績
+        certified_spots: 認定スポット
+        pending_review: 審査中
+        spot_votes: スポット投票
+        earned_badges: 獲得バッジ
+        recent_certifications: 最近の認定スポット
 
       edit:
         title: プロフィール編集

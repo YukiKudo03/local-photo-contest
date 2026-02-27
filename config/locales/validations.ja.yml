@@ -1,0 +1,93 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        entry:
+          attributes:
+            spot:
+              not_in_contest: はこのコンテストのスポットではありません
+            spot_id:
+              blank: を選択してください
+        contest:
+          attributes:
+            entry_end_at:
+              after_start_date: は開始日時より後にしてください
+            area_id:
+              must_be_own_area: は自分が作成したエリアを選択してください
+            judging_method:
+              cannot_change_after_publish: はコンテスト公開後は変更できません
+        judge_evaluation:
+          attributes:
+            entry_id:
+              already_evaluated: は既にこの基準で評価済みです
+            score:
+              score_out_of_range: "は%{max}以下にしてください"
+            entry:
+              not_in_contest: はこのコンテストの作品ではありません
+            base:
+              cannot_evaluate_own_entry: 自分の作品は評価できません
+              cannot_edit_after_results: 結果発表後は評価を変更できません
+        judge_comment:
+          attributes:
+            entry_id:
+              already_commented: には既にコメント済みです
+            base:
+              cannot_comment_own_entry: 自分の作品にはコメントできません
+              cannot_edit_after_results: 結果発表後はコメントを変更できません
+        judge_invitation:
+          attributes:
+            email:
+              already_invited: は既にこのコンテストに招待されています
+              already_a_judge: は既にこのコンテストの審査員です
+        area:
+          attributes:
+            name:
+              duplicate_name: 同じ名前のエリアが既に存在します
+            boundary_geojson:
+              invalid_json: は有効なJSON形式である必要があります
+        spot:
+          attributes:
+            name:
+              already_registered: は既にこのコンテストに登録されています
+        spot_vote:
+          attributes:
+            user_id:
+              already_voted: は既にこのスポットに投票しています
+            spot:
+              must_be_certified: は認定済みスポットのみ投票可能です
+        discovery_challenge:
+          attributes:
+            ends_at:
+              after_start_date: は開始日時より後に設定してください
+        tutorial_step:
+          attributes:
+            base:
+              max_steps_exceeded: "チュートリアルは最大%{max}ステップまでです"
+        tutorial_progress:
+          attributes:
+            user_id:
+              already_exists: のチュートリアル進捗は既に存在します
+        evaluation_criterion:
+          attributes:
+            name:
+              already_registered: は既にこのコンテストに登録されています
+        contest_ranking:
+          attributes:
+            entry_id:
+              already_ranked: は既にランキングに登録されています
+        discovery_badge:
+          attributes:
+            badge_type:
+              already_earned: は既に獲得しています
+        contest_judge:
+          attributes:
+            user_id:
+              already_a_judge: は既にこのコンテストの審査員です
+        challenge_entry:
+          attributes:
+            entry_id:
+              already_participating: は既にこのチャレンジに参加しています
+        terms_acceptance:
+          attributes:
+            user_id:
+              already_accepted: は既にこの利用規約に同意しています

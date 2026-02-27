@@ -30,7 +30,7 @@ module Organizers
       DiscoverySpotService.certify_spot(spot: @spot, user: current_user)
 
       respond_to do |format|
-        format.html { redirect_to organizers_contest_discovery_spots_path(@contest), notice: "「#{@spot.name}」を認定しました。" }
+        format.html { redirect_to organizers_contest_discovery_spots_path(@contest), notice: t('flash.discovery_spots.certified_name', name: @spot.name) }
         format.turbo_stream
       end
     rescue ArgumentError => e
@@ -45,8 +45,8 @@ module Organizers
 
       if reason.blank?
         respond_to do |format|
-          format.html { redirect_to organizers_contest_discovery_spots_path(@contest), alert: "却下理由を入力してください。" }
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("flash", partial: "shared/flash", locals: { alert: "却下理由を入力してください。" }) }
+          format.html { redirect_to organizers_contest_discovery_spots_path(@contest), alert: t('flash.discovery_spots.reject_reason_required') }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("flash", partial: "shared/flash", locals: { alert: t('flash.discovery_spots.reject_reason_required') }) }
         end
         return
       end
@@ -54,7 +54,7 @@ module Organizers
       DiscoverySpotService.reject_spot(spot: @spot, user: current_user, reason: reason)
 
       respond_to do |format|
-        format.html { redirect_to organizers_contest_discovery_spots_path(@contest), notice: "「#{@spot.name}」を却下しました。" }
+        format.html { redirect_to organizers_contest_discovery_spots_path(@contest), notice: t('flash.discovery_spots.rejected_name', name: @spot.name) }
         format.turbo_stream
       end
     rescue ArgumentError => e
@@ -69,7 +69,7 @@ module Organizers
       source_ids = params[:source_ids]
 
       if target_id.blank? || source_ids.blank?
-        redirect_to organizers_contest_discovery_spots_path(@contest), alert: "統合先と統合元を選択してください。"
+        redirect_to organizers_contest_discovery_spots_path(@contest), alert: t('flash.spots.merge_select_required')
         return
       end
 
@@ -77,15 +77,15 @@ module Organizers
       sources = @contest.spots.where(id: source_ids).where.not(id: target_id)
 
       if sources.empty?
-        redirect_to organizers_contest_discovery_spots_path(@contest), alert: "統合元のスポットを選択してください。"
+        redirect_to organizers_contest_discovery_spots_path(@contest), alert: t('flash.discovery_spots.merge_source_required')
         return
       end
 
       DiscoverySpotService.merge_spots(target: target, sources: sources)
 
-      redirect_to organizers_contest_discovery_spots_path(@contest), notice: "#{sources.count}件のスポットを「#{target.name}」に統合しました。"
+      redirect_to organizers_contest_discovery_spots_path(@contest), notice: t('flash.discovery_spots.merged', count: sources.count, name: target.name)
     rescue ActiveRecord::RecordNotFound
-      redirect_to organizers_contest_discovery_spots_path(@contest), alert: "指定されたスポットが見つかりません。"
+      redirect_to organizers_contest_discovery_spots_path(@contest), alert: t('flash.discovery_spots.not_found')
     end
 
     private
@@ -97,7 +97,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_spot

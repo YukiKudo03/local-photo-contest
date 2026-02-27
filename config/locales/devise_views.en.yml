@@ -1,0 +1,64 @@
+en:
+  devise_views:
+    sessions:
+      title: Log In
+      subtitle: Sign in to your account
+      email: Email
+      password: Password
+      remember_me: Remember me
+      submit: Log In
+      forgot_password: Forgot your password?
+      sign_up: Sign Up
+    registrations:
+      title: Sign Up
+      subtitle: Create an account and start hosting contests
+      email: Email
+      password: Password
+      password_placeholder: At least 8 characters
+      password_hint: Must be at least 8 characters
+      password_confirmation: Password Confirmation
+      password_confirmation_placeholder: Re-enter password
+      submit: Create Account
+      already_have_account: Already have an account? Sign in
+      edit_title: Account Settings
+      edit_subtitle: Update your account information
+      current_password: Current Password
+      current_password_hint: Required to confirm changes
+      leave_blank: Leave blank if you don't want to change
+      update: Update
+      cancel_account: Delete Account
+      cancel_confirm: Are you sure you want to delete your account?
+      unhappy: "Delete your account?"
+      back: Back
+      waiting_confirmation: "Currently waiting confirmation for: %{email}"
+      minimum_password_length: "%{count} characters minimum"
+    passwords:
+      new_title: Forgot your password?
+      new_subtitle: Enter your registered email address
+      email: Email
+      submit: Send Password Reset Email
+      back_to_login: Back to Login
+      edit_title: Change Password
+      edit_subtitle: Set a new password
+      new_password: New Password
+      new_password_placeholder: At least 8 characters
+      new_password_hint: Must be at least 8 characters
+      new_password_confirmation: New Password (Confirmation)
+      new_password_confirmation_placeholder: Re-enter password
+      change_password: Change Password
+    confirmations:
+      title: Resend Confirmation Email
+      email: Email
+      submit: Resend Confirmation Email
+      back_to_login: Back to Login
+    unlocks:
+      title: Resend Unlock Instructions
+      email: Email
+      submit: Resend Unlock Instructions
+    shared:
+      links:
+        login: Log In
+        sign_up: Sign Up
+        forgot_password: Forgot your password?
+        no_confirmation: Didn't receive confirmation instructions?
+        no_unlock: Didn't receive unlock instructions?

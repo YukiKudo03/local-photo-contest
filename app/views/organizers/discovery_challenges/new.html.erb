@@ -4,10 +4,10 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    チャレンジ一覧に戻る
+    <%= t('organizers.discovery_challenges.new.back') %>
   <% end %>
-  <h1 class="text-2xl font-bold text-gray-900">発掘チャレンジ作成</h1>
-  <p class="mt-1 text-sm text-gray-500"><%= @contest.title %> に新しい発掘チャレンジを作成します</p>
+  <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.discovery_challenges.new.title') %></h1>
+  <p class="mt-1 text-sm text-gray-500"><%= t('organizers.discovery_challenges.new.subtitle', title: @contest.title) %></p>
 </div>
 
 <%= render "form", challenge: @challenge %>

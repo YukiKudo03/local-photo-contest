@@ -69,7 +69,7 @@ RSpec.describe "Organizers::Results", type: :request do
 
         expect(response).to redirect_to(preview_organizers_contest_results_path(contest))
         follow_redirect!
-        expect(response.body).to include("ランキングを計算しました")
+        expect(response.body).to include("スコアを計算しました")
       end
 
       it "creates rankings in correct order" do

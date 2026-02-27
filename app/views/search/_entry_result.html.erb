@@ -2,10 +2,10 @@
   <div class="aspect-square rounded-lg overflow-hidden bg-gray-100">
     <%= responsive_entry_image(entry, size: :small,
           class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-200",
-          alt: entry.title.presence || "応募作品") %>
+          alt: entry.title.presence || t('search.entry_result.entry_alt')) %>
   </div>
   <div class="mt-2">
-    <h3 class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || "無題" %></h3>
+    <h3 class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || t('search.entry_result.untitled') %></h3>
     <p class="text-xs text-gray-500 truncate"><%= entry.contest.title %></p>
     <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
       <span class="flex items-center gap-0.5">

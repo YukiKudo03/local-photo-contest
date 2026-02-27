@@ -1,0 +1,21 @@
+en:
+  email_preferences:
+    show:
+      title: Email Notification Settings
+      description: Select which email notifications you want to receive.
+      participant_section: Participant Notifications
+      email_on_entry_submitted: Entry Submission Email
+      email_on_entry_submitted_description: Notification when your contest entry is submitted
+      email_on_comment: Comment Notification Email
+      email_on_comment_description: Notification when someone comments on your work
+      email_on_vote: Vote Notification Email
+      email_on_vote_description: Notification when your work receives a vote (may be frequent)
+      email_on_results: Results & Awards Email
+      email_on_results_description: Notification of judging results and awards
+      organizer_section: Organizer Notifications
+      email_digest: Daily Digest Email
+      email_digest_description: Daily summary of new entries delivered every morning
+      judge_section: Judge Notifications
+      email_on_judging: Judging Related Email
+      email_on_judging_description: Judging reminders and deadline notifications
+      submit: Save Settings

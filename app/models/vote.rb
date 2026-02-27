@@ -3,15 +3,16 @@
 class Vote < ApplicationRecord
   # Associations
   belongs_to :user
-  belongs_to :entry
+  belongs_to :entry, touch: true
 
   # Validations
-  validates :user_id, uniqueness: { scope: :entry_id, message: "は既にこの作品に投票しています" }
+  validates :user_id, uniqueness: { scope: :entry_id }
   validate :cannot_vote_own_entry
   validate :contest_accepting_votes, on: :create
 
   # Callbacks
   after_create_commit :broadcast_vote_update
+  after_create_commit :send_vote_notification_email
   after_destroy_commit :broadcast_vote_update
   after_commit :clear_statistics_cache, on: [ :create, :destroy ]
 
@@ -29,7 +30,7 @@ class Vote < ApplicationRecord
     return unless entry && user
 
     if entry.user_id == user_id
-      errors.add(:base, "自分の作品には投票できません")
+      errors.add(:base, :cannot_vote_own_entry)
     end
   end
 
@@ -37,7 +38,7 @@ class Vote < ApplicationRecord
     return unless entry&.contest
 
     unless entry.contest.accepting_entries?
-      errors.add(:base, "このコンテストは現在投票を受け付けていません")
+      errors.add(:base, :contest_not_accepting)
     end
   end
 
@@ -51,5 +52,11 @@ class Vote < ApplicationRecord
     StatisticsService.clear_cache(contest)
   rescue => e
     Rails.logger.error("Failed to clear statistics cache: #{e.message}")
+  end
+
+  def send_vote_notification_email
+    NotificationMailer.entry_voted(self).deliver_later
+  rescue => e
+    Rails.logger.error("Failed to send vote notification email: #{e.message}")
   end
 end

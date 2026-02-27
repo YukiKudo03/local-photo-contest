@@ -5,8 +5,8 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
     </div>
-    <h1 class="text-2xl font-bold text-gray-900">利用規約</h1>
-    <p class="mt-2 text-sm text-gray-600">サービスをご利用いただくには、以下の利用規約に同意していただく必要があります。</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.terms_acceptances.new.title') %></h1>
+    <p class="mt-2 text-sm text-gray-600"><%= t('organizers.terms_acceptances.new.subtitle') %></p>
   </div>
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -20,7 +20,7 @@
           <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p class="mt-4 text-gray-500">利用規約が見つかりません。</p>
+          <p class="mt-4 text-gray-500"><%= t('organizers.terms_acceptances.new.not_found') %></p>
         </div>
       <% end %>
     </div>
@@ -28,8 +28,8 @@
     <% if @terms %>
       <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
         <div class="flex items-center justify-between text-sm text-gray-500">
-          <span>バージョン: <%= @terms.version %></span>
-          <span>公開日: <%= l(@terms.published_at, format: :default) rescue @terms.published_at.strftime('%Y年%m月%d日') %></span>
+          <span><%= t('organizers.terms_acceptances.new.version') %>: <%= @terms.version %></span>
+          <span><%= t('organizers.terms_acceptances.new.published_at') %>: <%= l(@terms.published_at, format: :default) %></span>
         </div>
       </div>
 
@@ -40,19 +40,19 @@
           </div>
           <div class="ml-3">
             <%= label_tag :agree, class: "font-medium text-gray-900 cursor-pointer" do %>
-              上記の利用規約に同意します
+              <%= t('organizers.terms_acceptances.new.agree_text') %>
             <% end %>
-            <p class="text-sm text-gray-500 mt-1">利用規約をよくお読みの上、同意してください。</p>
+            <p class="text-sm text-gray-500 mt-1"><%= t('organizers.terms_acceptances.new.agree_hint') %></p>
           </div>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3">
-          <%= submit_tag "同意して続ける", class: "flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors", data: { terms_acceptance_target: "submit" } %>
+          <%= submit_tag t('organizers.terms_acceptances.new.agree_and_continue'), class: "flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors", data: { terms_acceptance_target: "submit" } %>
           <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors" do %>
             <svg class="mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            同意しない（ログアウト）
+            <%= t('organizers.terms_acceptances.new.disagree_logout') %>
           <% end %>
         </div>
       <% end %>

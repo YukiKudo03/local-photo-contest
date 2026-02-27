@@ -19,8 +19,8 @@ class NotificationBroadcaster
       organizer = entry.contest.user
       notify_user(
         organizer,
-        title: "新規応募",
-        message: "「#{entry.contest.title}」に新しい作品が投稿されました：#{entry.title.presence || '無題'}",
+        title: I18n.t('services.broadcaster.new_entry_title'),
+        message: I18n.t('services.broadcaster.new_entry_message', contest: entry.contest.title, entry: entry.title.presence || I18n.t('common.untitled')),
         type: "entry",
         link: Rails.application.routes.url_helpers.organizers_contest_entry_path(entry.contest, entry)
       )
@@ -38,16 +38,12 @@ class NotificationBroadcaster
 
     # Broadcast moderation result to entry owner
     def moderation_result(entry)
-      status_text = case entry.moderation_status
-      when "moderation_approved" then "承認されました"
-      when "moderation_hidden" then "却下されました"
-      else "審査待ちです"
-      end
+      status_text = I18n.t("services.broadcaster.moderation_statuses.#{entry.moderation_status}", default: entry.moderation_status)
 
       notify_user(
         entry.user,
-        title: "作品審査結果",
-        message: "「#{entry.contest.title}」への応募作品「#{entry.title.presence || '無題'}」が#{status_text}",
+        title: I18n.t('services.broadcaster.moderation_result_title'),
+        message: I18n.t('services.broadcaster.moderation_result_message', contest: entry.contest.title, entry: entry.title.presence || I18n.t('common.untitled'), status: status_text),
         type: entry.moderation_approved? ? "success" : "warning",
         link: Rails.application.routes.url_helpers.entry_path(entry)
       )
@@ -55,20 +51,14 @@ class NotificationBroadcaster
 
     # Broadcast contest status change to participants
     def contest_status_change(contest, new_status)
-      status_messages = {
-        "accepting_entries" => "の応募が開始されました",
-        "finished" => "の応募が終了しました",
-        "results_announced" => "の結果が発表されました"
-      }
-
-      message_suffix = status_messages[new_status.to_s] || "のステータスが変更されました"
+      message = I18n.t("services.broadcaster.contest_statuses.#{new_status}", default: I18n.t('services.broadcaster.contest_status_changed'))
 
       # Notify all participants
       contest.entries.includes(:user).find_each do |entry|
         notify_user(
           entry.user,
-          title: "コンテスト更新",
-          message: "「#{contest.title}」#{message_suffix}",
+          title: I18n.t('services.broadcaster.contest_update_title'),
+          message: I18n.t('services.broadcaster.contest_update_message', contest: contest.title, status: message),
           type: "info",
           link: Rails.application.routes.url_helpers.contest_path(contest)
         )
@@ -78,8 +68,8 @@ class NotificationBroadcaster
       contest.contest_judges.includes(:user).find_each do |judge|
         notify_user(
           judge.user,
-          title: "コンテスト更新",
-          message: "「#{contest.title}」#{message_suffix}",
+          title: I18n.t('services.broadcaster.contest_update_title'),
+          message: I18n.t('services.broadcaster.contest_update_message', contest: contest.title, status: message),
           type: "info",
           link: Rails.application.routes.url_helpers.my_judge_assignment_path(judge)
         )

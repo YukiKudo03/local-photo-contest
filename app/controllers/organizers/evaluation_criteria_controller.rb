@@ -20,7 +20,7 @@ module Organizers
 
       if @criterion.save
         redirect_to organizers_contest_evaluation_criteria_path(@contest),
-                    notice: "評価基準を追加しました。"
+                    notice: t('flash.evaluation_criteria.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -32,7 +32,7 @@ module Organizers
     def update
       if @criterion.update(criterion_params)
         redirect_to organizers_contest_evaluation_criteria_path(@contest),
-                    notice: "評価基準を更新しました。"
+                    notice: t('flash.evaluation_criteria.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -41,7 +41,7 @@ module Organizers
     def destroy
       @criterion.destroy
       redirect_to organizers_contest_evaluation_criteria_path(@contest),
-                  notice: "評価基準を削除しました。"
+                  notice: t('flash.evaluation_criteria.destroyed')
     end
 
     private
@@ -53,7 +53,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_criterion
@@ -64,7 +64,7 @@ module Organizers
       return unless @contest.results_announced?
 
       redirect_to organizers_contest_evaluation_criteria_path(@contest),
-                  alert: "結果発表後は評価基準を変更できません。"
+                  alert: t('flash.evaluation_criteria.not_editable_after_results')
     end
 
     def criterion_params

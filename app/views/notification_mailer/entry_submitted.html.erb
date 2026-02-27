@@ -14,25 +14,25 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>応募完了</h1>
+      <h1><%= t('mailers.notification.entry_submitted.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>コンテスト「<strong><%= @contest.title %></strong>」への応募が完了しました。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.entry_submitted.body', contest_title: @contest.title) %></p>
 
       <% if @entry.title.present? %>
-        <p><strong>作品タイトル:</strong> <%= @entry.title %></p>
+        <p><strong><%= t('mailers.notification.entry_submitted.work_title') %></strong> <%= @entry.title %></p>
       <% end %>
 
       <p style="text-align: center;">
-        <a href="<%= entry_url(@entry) %>" class="button">作品を確認する</a>
+        <a href="<%= entry_url(@entry) %>" class="button"><%= t('mailers.notification.entry_submitted.view_button') %></a>
       </p>
 
-      <p>たくさんの投票やコメントをお待ちください！</p>
+      <p><%= t('mailers.notification.entry_submitted.encouragement') %></p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

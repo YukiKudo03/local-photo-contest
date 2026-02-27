@@ -20,6 +20,10 @@ ja:
         mark_all_as_read: すべて既読にする
         no_notifications: 通知はありません
         unread: 未読
+        time_ago: "%{time}前"
+      show:
+        back_to_list: 通知一覧に戻る
+        open_link: リンク先を開く
       mark_all_as_read:
         success: すべての通知を既読にしました。
 
@@ -27,3 +31,11 @@ ja:
     types:
       results_announced: 結果発表
       entry_ranked: 入賞
+    messages:
+      results_announced:
+        title: "コンテスト「%{contest_title}」の結果が発表されました"
+        body: あなたが参加したコンテストの結果をご確認ください。
+      entry_ranked:
+        rank_label: "%{rank}位"
+        title: "あなたの作品が%{rank_label}に入賞しました！"
+        body: "コンテスト「%{contest_title}」であなたの作品「%{entry_title}」が%{rank_label}に選ばれました。"

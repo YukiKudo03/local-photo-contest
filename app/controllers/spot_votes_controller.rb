@@ -10,7 +10,7 @@ class SpotVotesController < ApplicationController
 
     if @vote.save
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path, notice: "投票しました。" }
+        format.html { redirect_back fallback_location: root_path, notice: t('flash.spot_votes.created') }
         format.turbo_stream
       end
     else
@@ -26,12 +26,12 @@ class SpotVotesController < ApplicationController
 
     if @vote&.destroy
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path, notice: "投票を取り消しました。" }
+        format.html { redirect_back fallback_location: root_path, notice: t('flash.spot_votes.destroyed') }
         format.turbo_stream
       end
     else
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path, alert: "投票の取り消しに失敗しました。" }
+        format.html { redirect_back fallback_location: root_path, alert: t('flash.spot_votes.failed') }
         format.turbo_stream
       end
     end
@@ -46,7 +46,7 @@ class SpotVotesController < ApplicationController
   def check_voting_allowed
     unless @spot.voteable?
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path, alert: "このスポットには投票できません。" }
+        format.html { redirect_back fallback_location: root_path, alert: t('flash.spot_votes.not_voteable') }
         format.turbo_stream { head :unprocessable_entity }
       end
     end

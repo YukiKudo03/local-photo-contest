@@ -1,0 +1,239 @@
+ja:
+  admin:
+    layout:
+      title_prefix: 管理画面
+      admin_panel: 管理画面
+      dashboard: ダッシュボード
+      users: ユーザー
+      contests: コンテスト
+      categories: カテゴリ
+      audit_logs: 監査ログ
+      tutorial_analytics: チュートリアル分析
+      admin_guide: 管理者ガイド
+      back_to_site: サイトに戻る
+      logout: ログアウト
+    dashboard:
+      title: 管理者ダッシュボード
+      subtitle: システム全体の統計と状況を確認できます
+      total_users: ユーザー数
+      total_users_label: 総ユーザー数
+      total_contests: コンテスト数
+      total_contests_label: 総コンテスト数
+      total_entries: 応募数
+      total_entries_label: 総応募数
+      pending_moderation: モデレーション待ち
+      today: 今日
+      active: アクティブ
+      recent_users: 最近のユーザー
+      recent_contests: 最近のコンテスト
+      recent_entries: 最新の応募
+      view_all: すべて見る
+      user_registrations_chart: ユーザー登録数（過去30日）
+      entries_chart: 応募数（過去30日）
+      system_info: システム情報
+      untitled: 無題
+      entry_image_alt: フォトコンテスト応募作品
+    users:
+      index:
+        title: ユーザー管理
+        subtitle: システム内の全ユーザーを管理できます
+        search_placeholder: メールアドレスまたは名前で検索...
+        all_roles: すべてのロール
+        participant: 参加者
+        organizer: 主催者
+        admin: 管理者
+        search: 検索
+        no_users: ユーザーがいません
+        name: 名前
+        user: ユーザー
+        email: メールアドレス
+        role: ロール
+        status: ステータス
+        registered_at: 登録日
+        last_login: 最終ログイン
+        actions: 操作
+        active: アクティブ
+        suspended: 停止中
+        unconfirmed: 未確認
+        details: 詳細
+      show:
+        title: ユーザー詳細
+        back: "← ユーザー一覧に戻る"
+        user_info: ユーザー情報
+        edit: 編集
+        unsuspend: 停止解除
+        suspend: アカウント停止
+        suspend_confirm: このユーザーのアカウントを停止しますか？
+        profile: プロフィール
+        account_info: アカウント情報
+        name: 名前
+        email: メールアドレス
+        role: ロール
+        status: ステータス
+        registered_at: 登録日
+        last_login: 最終ログイン
+        login_count: ログイン回数
+        login_count_unit: 回
+        active: アクティブ
+        suspended: アカウント停止中
+        unconfirmed: メール未確認
+        entries_count: 応募数
+        votes_count: 投票数
+        change_role: ロール変更
+        change: 変更
+        participant: 参加者
+        organizer: 主催者
+        admin: 管理者
+        organized_contests: 主催コンテスト
+        entries: 応募作品
+        entries_unit: 応募
+        delete_user: ユーザーを削除
+        delete_confirm: 本当にこのユーザーを削除しますか？この操作は取り消せません。
+        untitled: 無題
+        entry_image_alt: フォトコンテスト応募作品
+        unsuspend_confirm: このアカウントの停止を解除しますか？
+        delete: アカウント削除
+      edit:
+        title: ユーザー編集
+        back: "← ユーザー詳細に戻る"
+        edit_info: ユーザー情報を編集
+        error_title: 入力エラーがあります
+        name_label: 名前
+        bio_label: 自己紹介
+        cancel: キャンセル
+        update: 更新
+    contests:
+      index:
+        title: コンテスト管理
+        subtitle: システム内の全コンテストを管理できます
+        search_placeholder: コンテスト名で検索...
+        all_statuses: すべてのステータス
+        draft: 下書き
+        accepting_entries: 応募受付中
+        finished: 終了
+        search: 検索
+        no_contests: コンテストがありません
+        contest: コンテスト
+        title_column: タイトル
+        organizer: 主催者
+        entries_count: 応募数
+        status: ステータス
+        created_at: 作成日
+        actions: 操作
+        details: 詳細
+      show:
+        title: コンテスト詳細
+        back: "← コンテスト一覧に戻る"
+        organizer: "主催者:"
+        force_finish: 強制終了
+        force_finish_confirm: このコンテストを強制終了しますか？
+        delete: 削除
+        delete_confirm: 本当にこのコンテストを削除しますか？
+        theme: テーマ
+        status: ステータス
+        draft: 下書き
+        accepting_entries: 応募受付中
+        finished: 終了
+        entry_period: 応募期間
+        created_at: 作成日
+        total_entries: 総応募数
+        total_votes: 総投票数
+        judges_count: 審査員数
+        pending_moderation: モデレーション待ち
+        recent_entries: 最近の応募
+        entry_image_alt: フォトコンテスト応募作品
+        untitled: 無題
+        moderation_approved: 承認済み
+        moderation_hidden: 非表示
+        moderation_requires_review: 要確認
+        moderation_pending: 審査待ち
+    categories:
+      index:
+        title: カテゴリ管理
+        subtitle: コンテストカテゴリを管理できます
+        new_category: 新規カテゴリ
+        no_categories: カテゴリがありません
+        no_categories_description: 新しいカテゴリを作成してください
+        order: 順序
+        name: 名前
+        description: 説明
+        contests_count: コンテスト数
+        position: 表示順
+        actions: 操作
+        edit: 編集
+        delete: 削除
+        delete_confirm: このカテゴリを削除しますか？
+      new:
+        title: 新規カテゴリ作成
+        back: "← カテゴリ一覧に戻る"
+        heading: 新規カテゴリ
+      edit:
+        title: カテゴリ編集
+        back: "← カテゴリ一覧に戻る"
+        heading: カテゴリを編集
+      form:
+        error_title: 入力エラーがあります
+        name_label: カテゴリ名
+        name_placeholder: カテゴリの名前
+        description_label: 説明
+        description_placeholder: カテゴリの説明（任意）
+        position_label: 表示順序
+        submit_create: 作成
+        submit_update: 更新
+        cancel: キャンセル
+    audit_logs:
+      index:
+        title: 監査ログ
+        subtitle: システムの重要な操作履歴を確認できます
+        all_actions: すべての操作
+        from_date: 開始日
+        to_date: 終了日
+        filter: フィルター
+        no_logs: ログがありません
+        no_logs_description: 検索条件に該当するログがありません
+        timestamp: 日時
+        user: ユーザー
+        action: 操作
+        target: 対象
+        ip_address: IPアドレス
+        details: 詳細
+      show:
+        title: 監査ログ詳細
+        back: "← 監査ログ一覧に戻る"
+        heading: 監査ログ詳細
+        timestamp: 日時
+        user: ユーザー
+        action: 操作
+        target: 対象
+        target_exists: "(現在も存在)"
+        target_deleted: "(削除済み)"
+        ip_address: IPアドレス
+        details: 詳細
+    tutorial_analytics:
+      show:
+        title: チュートリアル分析
+        subtitle: チュートリアルの利用状況と効果を分析します
+        users_started: チュートリアル開始者
+        users_unit: ユーザー
+        completion_rate: 完了率
+        completed: 完了
+        skip_rate: スキップ率
+        skipped: スキップ
+        avg_completion_time: 平均完了時間
+        minutes: 分
+        seconds: 秒
+        daily_chart: 日別推移（過去30日）
+        legend_started: 開始
+        legend_completed: 完了
+        legend_skipped: スキップ
+        completion_by_type: チュートリアル種別ごとの完了率
+        no_data: データがありません
+        completion_by_role: ロール別完了状況
+        unknown_role: 不明
+        recent_completions: 最近の完了
+        time_ago: "%{time}前"
+        skip_analysis: スキップ分析
+        skip_analysis_description: どのステップでスキップされることが多いか
+        step: "ステップ: %{step_id}"
+        times: "%{count} 回"
+        no_skip_data: スキップデータがありません

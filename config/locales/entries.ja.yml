@@ -68,13 +68,20 @@ ja:
     entries:
       index:
         title: 応募一覧
+        back: コンテスト詳細に戻る
         entries_count: 件の応募
         no_entries: 応募がありません
+        no_entries_desc: まだこのコンテストへの応募はありません
         no_entries_description: まだこのコンテストへの応募はありません
+        list_view: リスト
+        map_view: マップ
+        spots_count_label: 件がスポット付き
+        map_hint: マーカーをクリックして詳細を表示
         table:
           photo: 写真
           title: タイトル
           submitter: 応募者
+          spot: スポット
           submitted_at: 応募日時
           actions: 操作
           view: 詳細
@@ -90,6 +97,19 @@ ja:
         description: 説明
         contest_info: コンテスト情報
         untitled: 無題
+        moderation: モデレーション
+        status: ステータス
+        moderation_pending: 確認待ち
+        moderation_approved: 承認済み
+        moderation_hidden: 非表示
+        moderation_requires_review: 要確認
+        detected_labels: 検出ラベル
+        max_confidence: 最大信頼度
+        reviewed_at: レビュー日時
+        review_note: レビューメモ
+        approve: 承認
+        reject: 却下
+        reject_confirm: この応募を却下しますか？非表示になります。
 
   flash:
     entries:

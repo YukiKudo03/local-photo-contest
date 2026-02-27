@@ -10,12 +10,12 @@
           </div>
         </div>
         <div class="ml-3 flex-1">
-          <p class="text-sm font-semibold text-gray-900">成功</p>
+          <p class="text-sm font-semibold text-gray-900"><%= t('shared.flash.success') %></p>
           <p class="mt-1 text-sm text-gray-600"><%= notice %></p>
         </div>
         <div class="ml-4 flex-shrink-0">
-          <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none transition-colors" data-action="flash#dismiss" aria-label="通知を閉じる">
-            <span class="sr-only">閉じる</span>
+          <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none transition-colors" data-action="flash#dismiss" aria-label="<%= t('shared.flash.dismiss_notice') %>">
+            <span class="sr-only"><%= t('shared.flash.close') %></span>
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -38,12 +38,12 @@
           </div>
         </div>
         <div class="ml-3 flex-1">
-          <p class="text-sm font-semibold text-gray-900">エラー</p>
+          <p class="text-sm font-semibold text-gray-900"><%= t('shared.flash.error') %></p>
           <p class="mt-1 text-sm text-gray-600"><%= alert %></p>
         </div>
         <div class="ml-4 flex-shrink-0">
-          <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none transition-colors" data-action="flash#dismiss" aria-label="エラー通知を閉じる">
-            <span class="sr-only">閉じる</span>
+          <button type="button" class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none transition-colors" data-action="flash#dismiss" aria-label="<%= t('shared.flash.dismiss_error') %>">
+            <span class="sr-only"><%= t('shared.flash.close') %></span>
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

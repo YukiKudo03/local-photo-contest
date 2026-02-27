@@ -1,40 +1,40 @@
 <div class="container mx-auto px-4 py-8">
   <div class="mb-6">
-    <%= link_to "← コンテスト詳細に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+    <%= link_to t('organizers.judge_invitations.index.back'), organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
   </div>
 
-  <h1 class="text-2xl font-bold mb-6">審査員管理: <%= @contest.title %></h1>
+  <h1 class="text-2xl font-bold mb-6"><%= t('organizers.judge_invitations.index.title') %>: <%= @contest.title %></h1>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- 招待フォーム -->
     <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">新しい審査員を招待</h2>
+      <h2 class="text-lg font-semibold mb-4"><%= t('organizers.judge_invitations.index.invite_new') %></h2>
 
       <%= form_with url: organizers_contest_judge_invitations_path(@contest), method: :post, local: true, class: "space-y-4" do |f| %>
         <div>
-          <%= label_tag "judge_invitation[email]", "メールアドレス", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= label_tag 'judge_invitation[email]', t('organizers.judge_invitations.form.email_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= email_field_tag "judge_invitation[email]", nil, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", placeholder: "judge@example.com", required: true %>
         </div>
         <div>
-          <%= submit_tag "招待メールを送信", class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer" %>
+          <%= submit_tag t('organizers.judge_invitations.form.submit'), class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer" %>
         </div>
       <% end %>
     </div>
 
     <!-- 審査統計 -->
     <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold mb-4">審査状況</h2>
+      <h2 class="text-lg font-semibold mb-4"><%= t('organizers.judge_invitations.index.judging_status') %></h2>
       <div class="space-y-3">
         <div class="flex justify-between">
-          <span class="text-gray-600">審査員数</span>
-          <span class="font-semibold"><%= @judges.count %>人</span>
+          <span class="text-gray-600"><%= t('organizers.judge_invitations.index.judges_count') %></span>
+          <span class="font-semibold"><%= @judges.count %></span>
         </div>
         <div class="flex justify-between">
-          <span class="text-gray-600">招待中</span>
-          <span class="font-semibold"><%= @invitations.pending.count %>件</span>
+          <span class="text-gray-600"><%= t('organizers.judge_invitations.index.inviting') %></span>
+          <span class="font-semibold"><%= @invitations.pending.count %></span>
         </div>
         <div class="flex justify-between">
-          <span class="text-gray-600">採点完了率</span>
+          <span class="text-gray-600"><%= t('organizers.judge_invitations.index.completion_rate') %></span>
           <span class="font-semibold"><%= @contest.judge_completion_rate %>%</span>
         </div>
       </div>
@@ -44,7 +44,7 @@
   <!-- 登録済み審査員 -->
   <div class="mt-8 bg-white rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold">登録済み審査員</h2>
+      <h2 class="text-lg font-semibold"><%= t('organizers.judge_invitations.index.registered_judges') %></h2>
     </div>
 
     <% if @judges.any? %>
@@ -54,14 +54,14 @@
             <div>
               <p class="font-medium"><%= contest_judge.user.email %></p>
               <p class="text-sm text-gray-500">
-                登録日: <%= l(contest_judge.created_at, format: :short) %>
-                | 採点進捗: <%= contest_judge.evaluation_progress %>%
+                <%= t('organizers.judge_invitations.index.registered_at') %>: <%= l(contest_judge.created_at, format: :short) %>
+                | <%= t('organizers.judge_invitations.index.evaluation_progress') %>: <%= contest_judge.evaluation_progress %>%
               </p>
             </div>
             <div>
-              <%= button_to "削除", organizers_contest_judge_path(@contest, contest_judge),
+              <%= button_to t('organizers.areas.show.delete'), organizers_contest_judge_path(@contest, contest_judge),
                   method: :delete,
-                  data: { turbo_confirm: "この審査員を削除しますか？既存の採点は保持されます。" },
+                  data: { turbo_confirm: t('organizers.judge_invitations.index.delete_judge_confirm') },
                   class: "text-red-600 hover:text-red-800 text-sm" %>
             </div>
           </div>
@@ -69,7 +69,7 @@
       </div>
     <% else %>
       <div class="px-6 py-8 text-center text-gray-500">
-        まだ審査員が登録されていません
+        <%= t('organizers.judge_invitations.index.no_judges') %>
       </div>
     <% end %>
   </div>
@@ -77,7 +77,7 @@
   <!-- 招待一覧 -->
   <div class="mt-8 bg-white rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 class="text-lg font-semibold">招待一覧</h2>
+      <h2 class="text-lg font-semibold"><%= t('organizers.judge_invitations.index.invitations_list') %></h2>
     </div>
 
     <% if @invitations.any? %>
@@ -87,27 +87,27 @@
             <div>
               <p class="font-medium"><%= invitation.email %></p>
               <p class="text-sm text-gray-500">
-                招待日: <%= l(invitation.invited_at, format: :short) %>
+                <%= t('organizers.judge_invitations.index.invited_at') %>: <%= l(invitation.invited_at, format: :short) %>
               </p>
             </div>
             <div class="flex items-center gap-4">
               <% if invitation.pending? %>
                 <% if invitation.expired? %>
-                  <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-600">期限切れ</span>
+                  <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-600"><%= t('organizers.judge_invitations.index.expired') %></span>
                 <% else %>
-                  <span class="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800">招待中</span>
-                  <%= button_to "再送信", resend_organizers_contest_judge_invitation_path(@contest, invitation),
+                  <span class="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800"><%= t('organizers.judge_invitations.index.status_inviting') %></span>
+                  <%= button_to t('organizers.judge_invitations.index.resend'), resend_organizers_contest_judge_invitation_path(@contest, invitation),
                       method: :post,
                       class: "text-blue-600 hover:text-blue-800 text-sm" %>
                 <% end %>
               <% elsif invitation.accepted? %>
-                <span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800">承諾済み</span>
+                <span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800"><%= t('organizers.judge_invitations.index.accepted') %></span>
               <% elsif invitation.declined? %>
-                <span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800">辞退</span>
+                <span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800"><%= t('organizers.judge_invitations.index.declined') %></span>
               <% end %>
-              <%= button_to "削除", organizers_contest_judge_invitation_path(@contest, invitation),
+              <%= button_to t('organizers.areas.show.delete'), organizers_contest_judge_invitation_path(@contest, invitation),
                   method: :delete,
-                  data: { turbo_confirm: "この招待を削除しますか？" },
+                  data: { turbo_confirm: t('organizers.judge_invitations.index.cancel_confirm') },
                   class: "text-red-600 hover:text-red-800 text-sm" %>
             </div>
           </div>
@@ -115,7 +115,7 @@
       </div>
     <% else %>
       <div class="px-6 py-8 text-center text-gray-500">
-        まだ招待がありません
+        <%= t('organizers.judge_invitations.index.no_invitations') %>
       </div>
     <% end %>
   </div>

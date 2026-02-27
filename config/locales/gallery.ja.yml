@@ -28,3 +28,7 @@ ja:
       previous: 前へ
       next: 次へ
       truncate: "..."
+      first_aria: 最初のページへ
+      last_aria: 最後のページへ
+      next_aria: 次のページへ
+      prev_aria: 前のページへ

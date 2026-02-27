@@ -1,0 +1,67 @@
+ja:
+  common:
+    untitled: "(無題)"
+  services:
+    statistics:
+      no_spot: スポット未指定
+      unknown: 不明
+    discovery:
+      spot_certified_title: スポットが認定されました
+      spot_certified_body: "あなたが発掘した「%{name}」が認定されました！"
+      spot_rejected_title: スポットが却下されました
+      spot_rejected_body: "発掘スポット「%{name}」が却下されました。理由: %{reason}"
+      spot_discovered_title: 新しいスポットが発掘されました
+      spot_discovered_body: "「%{name}」が発掘されました。審査をお願いします。"
+    export:
+      date: 日付
+      entries: 応募数
+      votes: 投票数
+      cumulative_entries: 累計応募数
+      cumulative_votes: 累計投票数
+      item: 項目
+      value: 値
+      total_entries: 総応募数
+      total_votes: 総投票数
+      total_participants: 参加者数
+      total_spots: スポット数
+      entries_change_today: 本日の応募増減
+      votes_change_today: 本日の投票増減
+      title: タイトル
+      submitter: 投稿者
+      spot: スポット
+      submitted_at: 投稿日時
+      moderation_status: モデレーション状態
+      name: 名前
+      category: カテゴリ
+      discovery_status: 発掘ステータス
+      discoverer: 発掘者
+      certified_date: 認定日
+      moderation_statuses:
+        moderation_pending: 保留中
+        moderation_approved: 承認済み
+        moderation_hidden: 非表示
+        moderation_requires_review: 要確認
+    results:
+      contest_not_finished: コンテストが終了していません
+      already_announced: 結果は既に発表されています
+      incomplete_judging: "審査員の採点が%{rate}%しか完了していません"
+      no_entries: 応募作品がありません
+      no_judges: 審査員が登録されていません
+      no_criteria: 評価基準が設定されていません
+      rankings_outdated: 新しい評価が追加されました。ランキングの再計算をお勧めします
+    broadcaster:
+      new_entry_title: 新規応募
+      new_entry_message: "「%{contest}」に新しい作品が投稿されました：%{entry}"
+      moderation_result_title: 作品審査結果
+      moderation_result_message: "「%{contest}」への応募作品「%{entry}」が%{status}"
+      moderation_statuses:
+        moderation_approved: 承認されました
+        moderation_hidden: 却下されました
+        moderation_pending: 審査待ちです
+      contest_update_title: コンテスト更新
+      contest_update_message: "「%{contest}」%{status}"
+      contest_status_changed: のステータスが変更されました
+      contest_statuses:
+        accepting_entries: の応募が開始されました
+        finished: の応募が終了しました
+        results_announced: の結果が発表されました

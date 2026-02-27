@@ -6,7 +6,7 @@ class ChallengeEntry < ApplicationRecord
   belongs_to :entry
 
   # Validations
-  validates :entry_id, uniqueness: { scope: :discovery_challenge_id, message: "は既にこのチャレンジに参加しています" }
+  validates :entry_id, uniqueness: { scope: :discovery_challenge_id, message: :already_participating }
 
   # Scopes
   scope :recent, -> { order(created_at: :desc) }

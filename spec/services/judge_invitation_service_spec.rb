@@ -115,7 +115,7 @@ RSpec.describe JudgeInvitationService do
       it "raises an error" do
         expect {
           service.accept(invitation, user)
-        }.to raise_error(RuntimeError, "招待が既に処理されています")
+        }.to raise_error(RuntimeError, "招待は既に処理されています")
       end
     end
 
@@ -145,7 +145,7 @@ RSpec.describe JudgeInvitationService do
       it "raises an error" do
         expect {
           service.decline(invitation)
-        }.to raise_error(RuntimeError, "招待が既に処理されています")
+        }.to raise_error(RuntimeError, "招待は既に処理されています")
       end
     end
   end

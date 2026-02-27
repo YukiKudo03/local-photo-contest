@@ -5,15 +5,15 @@
   <!-- Page Header -->
   <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div class="text-center sm:text-left">
-      <h1 class="text-3xl font-bold text-gray-900">フォトギャラリー</h1>
-      <p class="mt-2 text-gray-500">すべてのコンテスト作品をご覧いただけます</p>
+      <h1 class="text-3xl font-bold text-gray-900"><%= t('gallery.index.title') %></h1>
+      <p class="mt-2 text-gray-500"><%= t('gallery.index.subtitle') %></p>
     </div>
     <div class="flex justify-center sm:justify-end">
       <%= link_to map_gallery_index_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors" do %>
         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
         </svg>
-        マップで見る
+        <%= t('gallery.index.view_on_map') %>
       <% end %>
     </div>
   </div>
@@ -24,18 +24,18 @@
       <div class="flex flex-wrap items-end gap-4">
         <!-- Text Search -->
         <div class="flex-1 min-w-[200px]">
-          <label for="q" class="block text-xs font-medium text-gray-500 mb-1">キーワード</label>
+          <label for="q" class="block text-xs font-medium text-gray-500 mb-1"><%= t('gallery.index.keyword') %></label>
           <input type="text" name="q" id="q" value="<%= params[:q] %>"
-                 placeholder="タイトル、説明で検索..."
+                 placeholder="<%= t('gallery.index.keyword_placeholder') %>"
                  class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
         </div>
 
         <!-- Contest Filter -->
         <div class="flex-1 min-w-[180px]">
-          <label for="contest_id" class="block text-xs font-medium text-gray-500 mb-1">コンテスト</label>
+          <label for="contest_id" class="block text-xs font-medium text-gray-500 mb-1"><%= t('gallery.index.contest_filter') %></label>
           <%= select_tag :contest_id,
             options_for_select(
-              [["すべて", ""]] + @contests.map { |c| [c.title, c.id] },
+              [[t('gallery.index.all'), ""]] + @contests.map { |c| [c.title, c.id] },
               params[:contest_id]
             ),
             class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
@@ -45,10 +45,10 @@
         <!-- Category Filter -->
         <% if @categories.any? %>
           <div class="flex-1 min-w-[150px]">
-            <label for="category_id" class="block text-xs font-medium text-gray-500 mb-1">カテゴリ</label>
+            <label for="category_id" class="block text-xs font-medium text-gray-500 mb-1"><%= t('gallery.index.category_filter') %></label>
             <%= select_tag :category_id,
               options_for_select(
-                [["すべて", ""]] + @categories.map { |c| [c.name, c.id] },
+                [[t('gallery.index.all'), ""]] + @categories.map { |c| [c.name, c.id] },
                 params[:category_id]
               ),
               class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
@@ -59,10 +59,10 @@
         <!-- Area Filter -->
         <% if @areas.any? %>
           <div class="flex-1 min-w-[150px]">
-            <label for="area_id" class="block text-xs font-medium text-gray-500 mb-1">地域</label>
+            <label for="area_id" class="block text-xs font-medium text-gray-500 mb-1"><%= t('gallery.index.area_filter') %></label>
             <%= select_tag :area_id,
               options_for_select(
-                [["すべて", ""]] + @areas.map { |a| [a.name, a.id] },
+                [[t('gallery.index.all'), ""]] + @areas.map { |a| [a.name, a.id] },
                 params[:area_id]
               ),
               class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
@@ -72,13 +72,13 @@
 
         <!-- Sort -->
         <div class="flex-1 min-w-[130px]">
-          <label for="sort" class="block text-xs font-medium text-gray-500 mb-1">並び順</label>
+          <label for="sort" class="block text-xs font-medium text-gray-500 mb-1"><%= t('gallery.index.sort_label') %></label>
           <%= select_tag :sort,
             options_for_select(
               [
-                ["新着順", "newest"],
-                ["人気順", "popular"],
-                ["古い順", "oldest"]
+                [t('gallery.index.sort_newest'), "newest"],
+                [t('gallery.index.sort_popular'), "popular"],
+                [t('gallery.index.sort_oldest'), "oldest"]
               ],
               params[:sort] || "newest"
             ),
@@ -88,13 +88,13 @@
 
         <!-- Submit -->
         <div class="flex-shrink-0">
-          <%= f.submit "絞り込む", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
+          <%= f.submit t('gallery.index.submit_filter'), class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
         </div>
 
         <!-- Clear Filters -->
         <% if params[:q].present? || params[:contest_id].present? || params[:category_id].present? || params[:area_id].present? || params[:sort].present? %>
           <div class="flex-shrink-0">
-            <%= link_to "クリア", gallery_index_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+            <%= link_to t('gallery.index.clear_filter'), gallery_index_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
           </div>
         <% end %>
       </div>
@@ -103,7 +103,7 @@
 
   <!-- Results Count & Active Filters -->
   <div class="mb-4 flex flex-wrap items-center gap-2">
-    <p class="text-sm text-gray-500"><%= @entries.total_count %>作品</p>
+    <p class="text-sm text-gray-500"><%= t('gallery.index.works_count', count: @entries.total_count) %></p>
 
     <% if params[:contest_id].present? || params[:category_id].present? || params[:area_id].present? %>
       <span class="text-sm text-gray-400">|</span>
@@ -149,17 +149,17 @@
       <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
-      <h3 class="mt-4 text-lg font-medium text-gray-900">作品がありません</h3>
+      <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('gallery.index.empty.title') %></h3>
       <p class="mt-2 text-sm text-gray-500">
         <% if params[:contest_id].present? %>
-          このコンテストにはまだ応募作品がありません
+          <%= t('gallery.index.empty.no_entries_for_contest') %>
         <% else %>
-          まだ応募作品がありません
+          <%= t('gallery.index.empty.no_entries') %>
         <% end %>
       </p>
       <div class="mt-6">
         <%= link_to contests_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors" do %>
-          コンテスト一覧を見る
+          <%= t('gallery.index.empty.browse_contests') %>
         <% end %>
       </div>
     </div>

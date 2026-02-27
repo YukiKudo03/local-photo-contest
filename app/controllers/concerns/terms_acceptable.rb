@@ -14,7 +14,7 @@ module TermsAcceptable
     return if current_terms.nil?
     return if accepted_current_terms?
 
-    redirect_to new_organizers_terms_acceptance_path, alert: "利用規約への同意が必要です。"
+    redirect_to new_organizers_terms_acceptance_path, alert: t('flash.terms.required')
   end
 
   def current_terms

@@ -6,7 +6,7 @@ class SpotVote < ApplicationRecord
   belongs_to :spot, counter_cache: :votes_count
 
   # Validations
-  validates :user_id, uniqueness: { scope: :spot_id, message: "は既にこのスポットに投票しています" }
+  validates :user_id, uniqueness: { scope: :spot_id, message: :already_voted }
   validate :spot_must_be_certified
 
   # Scopes
@@ -19,6 +19,6 @@ class SpotVote < ApplicationRecord
     return unless spot.present?
     return if spot.discovery_certified? || spot.discovery_organizer_created?
 
-    errors.add(:spot, "は認定済みスポットのみ投票可能です")
+    errors.add(:spot, :must_be_certified)
   end
 end

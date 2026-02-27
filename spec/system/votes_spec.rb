@@ -32,16 +32,16 @@ RSpec.describe "Votes", type: :system do
       it "allows adding a vote to an entry" do
         visit entry_path(entry)
 
-        expect(page).to have_content("まだ投票がありません")
+        expect(page).to have_content(I18n.t("entries.show.no_votes"))
 
-        click_button "投票する"
+        click_button I18n.t("votes.button.vote")
 
         # Wait for Turbo to update the button
-        expect(page).to have_button("投票済み")
+        expect(page).to have_button(I18n.t("votes.button.unvote"))
 
         # Reload to verify the vote was saved
         visit entry_path(entry)
-        expect(page).to have_content("1票の投票")
+        expect(page).to have_content(I18n.t("entries.show.votes_count", count: 1))
       end
 
       it "allows removing a vote from an entry" do
@@ -49,17 +49,17 @@ RSpec.describe "Votes", type: :system do
 
         visit entry_path(entry)
 
-        expect(page).to have_content("1票の投票")
-        expect(page).to have_button("投票済み")
+        expect(page).to have_content(I18n.t("entries.show.votes_count", count: 1))
+        expect(page).to have_button(I18n.t("votes.button.unvote"))
 
-        click_button "投票済み"
+        click_button I18n.t("votes.button.unvote")
 
         # Wait for Turbo to update the button
-        expect(page).to have_button("投票する")
+        expect(page).to have_button(I18n.t("votes.button.vote"))
 
         # Reload to verify the vote was removed
         visit entry_path(entry)
-        expect(page).to have_content("まだ投票がありません")
+        expect(page).to have_content(I18n.t("entries.show.no_votes"))
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "Votes", type: :system do
       it "does not show vote button for own entry" do
         visit entry_path(entry)
 
-        expect(page).not_to have_button("投票する")
+        expect(page).not_to have_button(I18n.t("votes.button.vote"))
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.describe "Votes", type: :system do
         visit entry_path(entry)
 
         # Vote button should be disabled or not present
-        expect(page).not_to have_button("投票する")
+        expect(page).not_to have_button(I18n.t("votes.button.vote"))
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe "Votes", type: :system do
         visit entry_path(entry)
 
         # Should show login prompt instead of vote button
-        expect(page).to have_link("ログイン")
+        expect(page).to have_link(I18n.t("votes.button.login_required"))
       end
     end
   end
@@ -109,7 +109,7 @@ RSpec.describe "Votes", type: :system do
 
       visit entry_path(entry)
 
-      expect(page).to have_content("5票の投票")
+      expect(page).to have_content(I18n.t("entries.show.votes_count", count: 5))
     end
 
     it "updates vote count after voting" do
@@ -117,16 +117,16 @@ RSpec.describe "Votes", type: :system do
 
       visit entry_path(entry)
 
-      expect(page).to have_content("3票の投票")
+      expect(page).to have_content(I18n.t("entries.show.votes_count", count: 3))
 
-      click_button "投票する"
+      click_button I18n.t("votes.button.vote")
 
       # Wait for Turbo to update the button
-      expect(page).to have_button("投票済み")
+      expect(page).to have_button(I18n.t("votes.button.unvote"))
 
       # Reload to verify the vote count increased
       visit entry_path(entry)
-      expect(page).to have_content("4票の投票")
+      expect(page).to have_content(I18n.t("entries.show.votes_count", count: 4))
     end
   end
 

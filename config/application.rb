@@ -26,6 +26,8 @@ module LocalPhotoContest
 
     # Set default locale to Japanese
     config.i18n.default_locale = :ja
+    config.i18n.available_locales = %i[ja en]
+    config.i18n.fallbacks = true
 
     # config.eager_load_paths << Rails.root.join("extras")
 

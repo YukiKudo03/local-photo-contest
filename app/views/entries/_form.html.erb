@@ -7,7 +7,7 @@
         </svg>
         <div class="ml-3">
           <h3 class="text-sm font-medium text-red-800">
-            エラーがあります
+            <%= t('entries.form.errors_title') %>
           </h3>
           <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
             <% entry.errors.full_messages.each do |message| %>
@@ -21,14 +21,14 @@
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" data-tutorial="photo-upload">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">写真をアップロード</h2>
-      <p class="mt-1 text-sm text-gray-500">JPEG、PNG、GIF形式（10MB以下）</p>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('entries.form.upload_photo') %></h2>
+      <p class="mt-1 text-sm text-gray-500"><%= t('entries.form.upload_hint') %></p>
     </div>
     <div class="p-6">
       <% if entry.persisted? && entry.photo.attached? %>
         <div class="mb-4">
-          <p class="text-sm text-gray-500 mb-2">現在の写真：</p>
-          <%= image_tag entry.photo, alt: entry.title.presence || "フォトコンテスト応募作品", class: "max-w-md rounded-lg" %>
+          <p class="text-sm text-gray-500 mb-2"><%= t('entries.form.current_photo') %></p>
+          <%= image_tag entry.photo, alt: entry.title.presence || t('entries.form.entry_alt'), class: "max-w-md rounded-lg" %>
         </div>
       <% end %>
 
@@ -38,8 +38,8 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            <p class="mt-2 text-sm text-gray-500">クリックして写真を選択</p>
-            <p class="text-xs text-gray-400">またはドラッグ＆ドロップ</p>
+            <p class="mt-2 text-sm text-gray-500"><%= t('entries.form.click_to_select') %></p>
+            <p class="text-xs text-gray-400"><%= t('entries.form.or_drag_drop') %></p>
           </div>
         </div>
         <%= f.file_field :photo, accept: "image/jpeg,image/png,image/gif", class: "hidden", required: !entry.persisted? %>
@@ -49,42 +49,42 @@
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" data-tutorial="entry-info">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">作品情報</h2>
-      <p class="mt-1 text-sm text-gray-500">任意入力</p>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('entries.form.work_info') %></h2>
+      <p class="mt-1 text-sm text-gray-500"><%= t('entries.form.optional') %></p>
     </div>
     <div class="p-6 space-y-6">
       <!-- Title -->
       <div data-tutorial="entry-title">
-        <%= f.label :title, "タイトル", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :title, placeholder: "作品のタイトル（任意）", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
-        <p class="mt-1 text-xs text-gray-500">100文字以内</p>
+        <%= f.label :title, t('entries.form.title_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :title, placeholder: t('entries.form.title_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500"><%= t('entries.form.title_hint') %></p>
       </div>
 
       <!-- Description -->
       <div>
-        <%= f.label :description, "説明", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_area :description, rows: 4, placeholder: "写真についての説明（任意）", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
+        <%= f.label :description, t('entries.form.description_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_area :description, rows: 4, placeholder: t('entries.form.description_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
       </div>
 
       <!-- Location -->
       <div>
-        <%= f.label :location, "撮影場所", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :location, placeholder: "例：東京都渋谷区", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <%= f.label :location, t('entries.form.location_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :location, placeholder: t('entries.form.location_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
       </div>
 
       <!-- Area -->
       <% if @areas&.any? %>
         <div>
-          <%= f.label :area_id, "地域", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.label :area_id, t('entries.form.area_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= f.select :area_id,
             options_for_select(
-              [["地域を選択（任意）", ""]] + @areas.map { |a| [a.name, a.id] },
+              [[t('entries.form.area_placeholder'), ""]] + @areas.map { |a| [a.name, a.id] },
               entry.area_id
             ),
             {},
             class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
           %>
-          <p class="mt-1 text-xs text-gray-500">撮影した地域を選択してください</p>
+          <p class="mt-1 text-xs text-gray-500"><%= t('entries.form.area_hint') %></p>
         </div>
       <% end %>
 
@@ -115,19 +115,19 @@
                   class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500",
                   data: { spot_picker_target: "discoverCheckbox", action: "change->spot-picker#toggleDiscoverMode" } },
                 "1", "0" %>
-            <span class="text-sm font-medium text-gray-700">新しいスポットを発掘して登録する</span>
+            <span class="text-sm font-medium text-gray-700"><%= t('entries.form.discover_new_spot') %></span>
           </label>
-          <p class="mt-1 ml-6 text-xs text-gray-500">まだ登録されていない隠れた名所を発掘して投稿できます</p>
+          <p class="mt-1 ml-6 text-xs text-gray-500"><%= t('entries.form.discover_hint') %></p>
         </div>
 
         <!-- Existing Spot Selection (shown when not discovering) -->
         <div data-spot-picker-target="existingSpotSection">
           <% if @spots&.any? %>
             <div>
-              <%= f.label :spot_id, "撮影スポット", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= f.label :spot_id, t('entries.form.spot_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
               <%= f.select :spot_id,
                 options_for_select(
-                  [["スポットを選択#{contest.require_spot ? '（必須）' : '（任意）'}", ""]] + @spots.map { |s| ["#{s.name}（#{s.category_name}）", s.id] },
+                  [[contest.require_spot ? t('entries.form.spot_placeholder_required') : t('entries.form.spot_placeholder_optional'), ""]] + @spots.map { |s| ["#{s.name}（#{s.category_name}）", s.id] },
                   entry.spot_id
                 ),
                 {},
@@ -136,9 +136,9 @@
                 required: contest.require_spot
               %>
               <% if contest.require_spot %>
-                <p class="mt-1 text-xs text-amber-600">このコンテストではスポットの選択が必須です</p>
+                <p class="mt-1 text-xs text-amber-600"><%= t('entries.form.spot_required_hint') %></p>
               <% else %>
-                <p class="mt-1 text-xs text-gray-500">地図をクリックするか、ドロップダウンから選択してください</p>
+                <p class="mt-1 text-xs text-gray-500"><%= t('entries.form.spot_map_hint') %></p>
               <% end %>
             </div>
           <% end %>
@@ -153,30 +153,30 @@
               </svg>
               <div class="ml-3">
                 <p class="text-sm text-amber-800">
-                  <strong>発掘スポット</strong>として登録すると、主催者の審査後に正式なスポットとして認定されます。
+                  <%= t('entries.form.discovery_spot_notice') %>
                 </p>
               </div>
             </div>
           </div>
 
           <div>
-            <%= f.label :new_spot_name, "スポット名", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= f.text_field :new_spot_name, placeholder: "発掘したスポットの名前", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors", data: { spot_picker_target: "newSpotName" } %>
-            <p class="mt-1 text-xs text-gray-500">100文字以内</p>
+            <%= f.label :new_spot_name, t('entries.form.spot_name_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= f.text_field :new_spot_name, placeholder: t('entries.form.spot_name_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors", data: { spot_picker_target: "newSpotName" } %>
+            <p class="mt-1 text-xs text-gray-500"><%= t('entries.form.title_hint') %></p>
           </div>
 
           <div>
-            <%= f.label :new_spot_category, "カテゴリ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= f.label :new_spot_category, t('entries.form.category_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
             <%= f.select :new_spot_category,
               options_for_select([
-                ["その他", "other"],
-                ["飲食店", "restaurant"],
-                ["小売店", "retail"],
-                ["サービス業", "service"],
-                ["名所・ランドマーク", "landmark"],
-                ["公共施設", "public_facility"],
-                ["公園・広場", "park"],
-                ["寺社仏閣", "temple_shrine"]
+                [t('entries.form.category_other'), "other"],
+                [t('entries.form.category_restaurant'), "restaurant"],
+                [t('entries.form.category_retail'), "retail"],
+                [t('entries.form.category_service'), "service"],
+                [t('entries.form.category_landmark'), "landmark"],
+                [t('entries.form.category_public'), "public_facility"],
+                [t('entries.form.category_park'), "park"],
+                [t('entries.form.category_temple'), "temple_shrine"]
               ], entry.try(:new_spot_category) || "other"),
               {},
               class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -184,8 +184,8 @@
           </div>
 
           <div>
-            <%= f.label :discovery_comment, "発見コメント", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= f.text_area :discovery_comment, rows: 3, placeholder: "このスポットを発掘した理由や魅力を教えてください...", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
+            <%= f.label :discovery_comment, t('entries.form.discovery_comment_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= f.text_area :discovery_comment, rows: 3, placeholder: t('entries.form.discovery_comment_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
           </div>
 
           <%= f.hidden_field :new_spot_latitude, data: { spot_picker_target: "newSpotLatitude" } %>
@@ -195,16 +195,16 @@
         <!-- Spot Map -->
         <div class="mt-4" data-spot-picker-target="mapWrapper">
           <label class="block text-sm font-medium text-gray-700 mb-2">
-            <span data-spot-picker-target="mapLabel">スポット位置</span>
+            <span data-spot-picker-target="mapLabel"><%= t('entries.form.spot_location') %></span>
           </label>
           <div data-spot-picker-target="mapContainer" class="map-container map-container-sm rounded-lg"></div>
-          <p class="mt-1 text-xs text-gray-500" data-spot-picker-target="mapHelp">マーカーをクリックしてスポットを選択できます</p>
+          <p class="mt-1 text-xs text-gray-500" data-spot-picker-target="mapHelp"><%= t('entries.form.spot_click_hint') %></p>
         </div>
       </div>
 
       <!-- Taken At -->
       <div>
-        <%= f.label :taken_at, "撮影日", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.label :taken_at, t('entries.form.taken_at_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
         <%= f.date_field :taken_at, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
       </div>
     </div>
@@ -213,10 +213,10 @@
   <!-- Form Actions -->
   <div class="flex items-center justify-end space-x-4" data-tutorial="entry-submit">
     <% if entry.persisted? %>
-      <%= link_to "キャンセル", entry_path(entry), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
+      <%= link_to t('entries.form.cancel'), entry_path(entry), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
     <% else %>
-      <%= link_to "キャンセル", contest_path(contest), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
+      <%= link_to t('entries.form.cancel'), contest_path(contest), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
     <% end %>
-    <%= f.submit entry.persisted? ? "更新する" : "応募する", class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+    <%= f.submit entry.persisted? ? t('entries.form.submit_update') : t('entries.form.submit_create'), class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
   </div>
 <% end %>

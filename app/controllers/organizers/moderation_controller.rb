@@ -25,7 +25,7 @@ module Organizers
       end
 
       respond_to do |format|
-        format.html { redirect_to organizers_contest_moderation_index_path(@contest), notice: "エントリーを承認しました。" }
+        format.html { redirect_to organizers_contest_moderation_index_path(@contest), notice: t('flash.moderation.approved') }
         format.turbo_stream
       end
     end
@@ -41,7 +41,7 @@ module Organizers
       end
 
       respond_to do |format|
-        format.html { redirect_to organizers_contest_moderation_index_path(@contest), notice: "エントリーを却下しました。" }
+        format.html { redirect_to organizers_contest_moderation_index_path(@contest), notice: t('flash.moderation.rejected') }
         format.turbo_stream
       end
     end
@@ -55,7 +55,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_entry

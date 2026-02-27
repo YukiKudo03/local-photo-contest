@@ -1,0 +1,50 @@
+ja:
+  gallery:
+    index:
+      title: フォトギャラリー
+      subtitle: すべてのコンテスト作品をご覧いただけます
+      keyword: キーワード
+      keyword_placeholder: "タイトル、説明で検索..."
+      contest_filter: コンテスト
+      category_filter: カテゴリ
+      area_filter: 地域
+      all: すべて
+      sort_label: 並び順
+      sort_newest: 新着順
+      sort_popular: 人気順
+      sort_oldest: 古い順
+      submit_filter: 絞り込む
+      clear_filter: クリア
+      works_count: "%{count}作品"
+      view_on_map: マップで見る
+      empty:
+        title: 作品がありません
+        no_entries_for_contest: このコンテストにはまだ応募作品がありません
+        no_entries: まだ応募作品がありません
+        browse_contests: コンテスト一覧を見る
+    entries:
+      votes_aria: "%{count}票"
+      untitled: 無題
+      loading: 読み込み中...
+    map:
+      title: マップギャラリー
+      subtitle: 地図上で作品を探索できます
+      grid_view: グリッド表示
+      filter: 絞り込み
+      contest_filter: コンテスト
+      area_filter: 地域
+      all: すべて
+      discovery_status: 発掘ステータス
+      status_organizer: 主催者作成
+      status_certified: 認定済み発掘
+      status_pending: 審査中
+      entries_with_location: "%{count}件の位置情報付き作品"
+      marker_legend: マーカー凡例
+      legend_organizer: 主催者作成スポット
+      legend_certified: 認定済み発掘スポット
+      legend_pending: 審査中スポット
+      legend_own: 自分が発掘したスポット
+      no_location_entries: 位置情報なしの作品
+      entry_alt: フォトコンテスト応募作品
+      untitled: 無題
+      more_entries: "他%{count}件"

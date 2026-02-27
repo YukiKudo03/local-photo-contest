@@ -136,7 +136,7 @@ RSpec.describe "Organizers::JudgeInvitations", type: :request do
 
         expect(response).to redirect_to(organizers_contest_judge_invitations_path(contest))
         follow_redirect!
-        expect(response.body).to include("招待メールを再送信しました")
+        expect(response.body).to include("招待を再送信しました")
       end
     end
 

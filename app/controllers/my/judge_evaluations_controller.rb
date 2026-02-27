@@ -26,7 +26,7 @@ module My
       end
 
       redirect_to my_judge_assignment_evaluation_path(@contest_judge, @entry),
-                  notice: "評価を保存しました。"
+                  notice: t('flash.judge_evaluations.created')
     rescue ActiveRecord::RecordInvalid => e
       @criteria = @contest.evaluation_criteria.ordered
       @evaluations = @contest_judge.judge_evaluations.where(entry: @entry).index_by(&:evaluation_criterion_id)
@@ -42,7 +42,7 @@ module My
       end
 
       redirect_to my_judge_assignment_evaluation_path(@contest_judge, @entry),
-                  notice: "評価を更新しました。"
+                  notice: t('flash.judge_evaluations.updated')
     rescue ActiveRecord::RecordInvalid => e
       @criteria = @contest.evaluation_criteria.ordered
       @evaluations = @contest_judge.judge_evaluations.where(entry: @entry).index_by(&:evaluation_criterion_id)
@@ -67,7 +67,7 @@ module My
       return unless @entry.user == current_user
 
       redirect_to my_judge_assignment_path(@contest_judge),
-                  alert: "自分の作品は評価できません。"
+                  alert: t('flash.judge_evaluations.cannot_evaluate_own')
     end
 
     def save_evaluations

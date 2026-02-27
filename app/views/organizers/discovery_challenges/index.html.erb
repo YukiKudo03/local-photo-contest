@@ -4,18 +4,18 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    コンテストに戻る
+    <%= t('organizers.discovery_challenges.index.back') %>
   <% end %>
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">発掘チャレンジ管理</h1>
-      <p class="mt-1 text-sm text-gray-500">参加者の発掘活動を促進するチャレンジを管理します</p>
+      <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.discovery_challenges.index.title') %></h1>
+      <p class="mt-1 text-sm text-gray-500"><%= t('organizers.discovery_challenges.index.subtitle') %></p>
     </div>
     <%= link_to new_organizers_contest_discovery_challenge_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
       <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      チャレンジ作成
+      <%= t('organizers.discovery_challenges.index.new_challenge') %>
     <% end %>
   </div>
 </div>
@@ -32,20 +32,20 @@
                 <% case challenge.status %>
                 <% when "draft" %>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                    下書き
+                    <%= t('organizers.contests.index.draft') %>
                   </span>
                 <% when "active" %>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    開催中
+                    <%= t('organizers.discovery_challenges.index.active') %>
                   </span>
                 <% when "finished" %>
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    終了
+                    <%= t('organizers.contests.index.finished') %>
                   </span>
                 <% end %>
               </div>
               <% if challenge.theme.present? %>
-                <p class="mt-1 text-sm text-indigo-600">テーマ: <%= challenge.theme %></p>
+                <p class="mt-1 text-sm text-indigo-600"><%= t('organizers.discovery_challenges.show.theme') %>: <%= challenge.theme %></p>
               <% end %>
               <% if challenge.description.present? %>
                 <p class="mt-2 text-sm text-gray-600 line-clamp-2"><%= challenge.description %></p>
@@ -58,7 +58,7 @@
                 </svg>
               <% end %>
               <% if challenge.challenge_draft? %>
-                <%= button_to organizers_contest_discovery_challenge_path(@contest, challenge), method: :delete, form: { data: { turbo_confirm: "「#{challenge.name}」を削除しますか？" } }, class: "p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100" do %>
+                <%= button_to organizers_contest_discovery_challenge_path(@contest, challenge), method: :delete, form: { data: { turbo_confirm: t('organizers.discovery_challenges.index.delete_confirm', name: challenge.name) } }, class: "p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100" do %>
                   <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -75,11 +75,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <% if challenge.starts_at.present? && challenge.ends_at.present? %>
-                  <%= challenge.starts_at.strftime('%Y/%m/%d') %> - <%= challenge.ends_at.strftime('%Y/%m/%d') %>
+                  <%= l(challenge.starts_at, format: :short) %> - <%= l(challenge.ends_at, format: :short) %>
                 <% elsif challenge.starts_at.present? %>
-                  <%= challenge.starts_at.strftime('%Y/%m/%d') %> 〜
+                  <%= l(challenge.starts_at, format: :short) %> 〜
                 <% elsif challenge.ends_at.present? %>
-                  〜 <%= challenge.ends_at.strftime('%Y/%m/%d') %>
+                  〜 <%= l(challenge.ends_at, format: :short) %>
                 <% end %>
               </div>
             <% end %>
@@ -87,30 +87,30 @@
               <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              エントリー: <%= challenge.entries_count %>件
+              <%= t('organizers.discovery_challenges.index.entries') %>: <%= challenge.entries_count %>
             </div>
             <div class="flex items-center">
               <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               </svg>
-              発掘スポット: <%= challenge.discovered_spots_count %>件
+              <%= t('organizers.discovery_challenges.index.discovered_spots') %>: <%= challenge.discovered_spots_count %>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="mt-4 pt-4 border-t border-gray-100">
             <% if challenge.challenge_draft? %>
-              <%= button_to "開始する", activate_organizers_contest_discovery_challenge_path(@contest, challenge),
+              <%= button_to t('organizers.discovery_challenges.index.activate'), activate_organizers_contest_discovery_challenge_path(@contest, challenge),
                   method: :patch,
                   class: "inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg",
-                  data: { turbo_confirm: "「#{challenge.name}」を開始しますか？" } %>
+                  data: { turbo_confirm: t('organizers.discovery_challenges.index.activate_confirm', name: challenge.name) } %>
             <% elsif challenge.challenge_active? %>
-              <%= button_to "終了する", finish_organizers_contest_discovery_challenge_path(@contest, challenge),
+              <%= button_to t('organizers.discovery_challenges.index.finish_challenge'), finish_organizers_contest_discovery_challenge_path(@contest, challenge),
                   method: :patch,
                   class: "inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg",
-                  data: { turbo_confirm: "「#{challenge.name}」を終了しますか？" } %>
+                  data: { turbo_confirm: t('organizers.discovery_challenges.index.finish_confirm', name: challenge.name) } %>
             <% end %>
-            <%= link_to "詳細を見る", organizers_contest_discovery_challenge_path(@contest, challenge),
+            <%= link_to t('organizers.discovery_challenges.index.view_details'), organizers_contest_discovery_challenge_path(@contest, challenge),
                 class: "inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 ml-2" %>
           </div>
         </div>
@@ -123,14 +123,14 @@
     <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
     </svg>
-    <h3 class="mt-4 text-lg font-medium text-gray-900">発掘チャレンジがありません</h3>
-    <p class="mt-2 text-sm text-gray-500">参加者の発掘活動を促進するチャレンジを作成しましょう</p>
+    <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('organizers.discovery_challenges.index.no_challenges') %></h3>
+    <p class="mt-2 text-sm text-gray-500"><%= t('organizers.discovery_challenges.index.create_first') %></p>
     <div class="mt-6">
       <%= link_to new_organizers_contest_discovery_challenge_path(@contest), class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
         <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        チャレンジ作成
+        <%= t('organizers.discovery_challenges.index.new_challenge') %>
       <% end %>
     </div>
   </div>

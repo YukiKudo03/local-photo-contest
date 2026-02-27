@@ -1,0 +1,67 @@
+en:
+  common:
+    untitled: "(Untitled)"
+  services:
+    statistics:
+      no_spot: No spot specified
+      unknown: Unknown
+    discovery:
+      spot_certified_title: Spot has been certified
+      spot_certified_body: "Your discovered spot \"%{name}\" has been certified!"
+      spot_rejected_title: Spot has been rejected
+      spot_rejected_body: "Discovered spot \"%{name}\" has been rejected. Reason: %{reason}"
+      spot_discovered_title: New spot has been discovered
+      spot_discovered_body: "\"%{name}\" has been discovered. Please review."
+    export:
+      date: Date
+      entries: Entries
+      votes: Votes
+      cumulative_entries: Cumulative Entries
+      cumulative_votes: Cumulative Votes
+      item: Item
+      value: Value
+      total_entries: Total Entries
+      total_votes: Total Votes
+      total_participants: Participants
+      total_spots: Spots
+      entries_change_today: Entries Change Today
+      votes_change_today: Votes Change Today
+      title: Title
+      submitter: Submitter
+      spot: Spot
+      submitted_at: Submitted At
+      moderation_status: Moderation Status
+      name: Name
+      category: Category
+      discovery_status: Discovery Status
+      discoverer: Discoverer
+      certified_date: Certified Date
+      moderation_statuses:
+        moderation_pending: Pending
+        moderation_approved: Approved
+        moderation_hidden: Hidden
+        moderation_requires_review: Requires Review
+    results:
+      contest_not_finished: Contest has not finished
+      already_announced: Results have already been announced
+      incomplete_judging: "Judge scoring is only %{rate}% complete"
+      no_entries: No entries submitted
+      no_judges: No judges registered
+      no_criteria: No evaluation criteria set
+      rankings_outdated: New evaluations have been added. We recommend recalculating rankings.
+    broadcaster:
+      new_entry_title: New Entry
+      new_entry_message: "A new entry has been submitted to \"%{contest}\": %{entry}"
+      moderation_result_title: Moderation Result
+      moderation_result_message: "Your entry \"%{entry}\" for \"%{contest}\" has been %{status}"
+      moderation_statuses:
+        moderation_approved: approved
+        moderation_hidden: rejected
+        moderation_pending: pending review
+      contest_update_title: Contest Update
+      contest_update_message: "\"%{contest}\" %{status}"
+      contest_status_changed: status has been changed
+      contest_statuses:
+        accepting_entries: is now accepting entries
+        finished: has finished accepting entries
+        results_announced: results have been announced

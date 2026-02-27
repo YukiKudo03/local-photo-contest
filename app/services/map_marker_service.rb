@@ -11,7 +11,7 @@ class MapMarkerService
   def entry_marker_data(entry)
     {
       id: entry.id,
-      title: entry.title.presence || "無題",
+      title: entry.title.presence || I18n.t('common.untitled'),
       lat: entry.spot.latitude.to_f,
       lng: entry.spot.longitude.to_f,
       spot_name: entry.spot.name,

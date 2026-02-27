@@ -68,13 +68,20 @@ en:
     entries:
       index:
         title: Entries
+        back: Back to Contest Details
         entries_count: entries
         no_entries: No entries
+        no_entries_desc: No entries have been submitted to this contest yet
         no_entries_description: No entries have been submitted to this contest yet
+        list_view: List
+        map_view: Map
+        spots_count_label: entries with spots
+        map_hint: Click a marker to view details
         table:
           photo: Photo
           title: Title
           submitter: Submitter
+          spot: Spot
           submitted_at: Submitted At
           actions: Actions
           view: View
@@ -90,6 +97,19 @@ en:
         description: Description
         contest_info: Contest Information
         untitled: Untitled
+        moderation: Moderation
+        status: Status
+        moderation_pending: Pending Review
+        moderation_approved: Approved
+        moderation_hidden: Hidden
+        moderation_requires_review: Requires Review
+        detected_labels: Detected Labels
+        max_confidence: Max Confidence
+        reviewed_at: Reviewed At
+        review_note: Review Note
+        approve: Approve
+        reject: Reject
+        reject_confirm: Reject this entry? It will be hidden.
 
   flash:
     entries:

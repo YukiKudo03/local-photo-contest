@@ -1,20 +1,20 @@
-発掘スポット認定依頼
+<%= t('mailers.notification.spot_certification_request.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」で新しいスポットが発掘されました。認定の確認をお願いします。
+<%= t('mailers.notification.spot_certification_request.body', contest_title: @contest.title) %>
 
-スポット名: <%= @spot.name %>
+<%= t('mailers.notification.spot_certification_request.spot_name') %> <%= @spot.name %>
 <% if @spot.address.present? -%>
-住所: <%= @spot.address %>
+<%= t('mailers.notification.spot_certification_request.address') %> <%= @spot.address %>
 <% end -%>
 <% if @spot.description.present? -%>
-説明: <%= @spot.description %>
+<%= t('mailers.notification.spot_certification_request.description') %> <%= @spot.description %>
 <% end -%>
-カテゴリ: <%= @spot.category_name %>
+<%= t('mailers.notification.spot_certification_request.category') %> <%= @spot.category_name %>
 
-発掘スポットを確認する: <%= organizers_contest_discovery_spots_url(@contest) %>
+<%= t('mailers.notification.spot_certification_request.view_button') %>: <%= organizers_contest_discovery_spots_url(@contest) %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -17,31 +17,31 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>新規応募まとめ</h1>
+      <h1><%= t('mailers.notification.daily_digest.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>昨日の新規応募状況をお知らせします。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.daily_digest.body') %></p>
 
       <% @contests_with_entries.each do |contest, entries| %>
         <div class="contest-section">
-          <div class="contest-title"><%= contest.title %>（<%= entries.size %>件）</div>
+          <div class="contest-title"><%= contest.title %>(<%= t('mailers.notification.daily_digest.entries_count', count: entries.size) %>)</div>
           <% entries.first(5).each do |entry| %>
-            <div class="entry-item">・<%= entry.title.presence || "無題" %> — <%= entry.user.display_name %></div>
+            <div class="entry-item">・<%= entry.title.presence || t('mailers.notification.daily_digest.untitled') %> — <%= entry.user.display_name %></div>
           <% end %>
           <% if entries.size > 5 %>
-            <div class="entry-item">...他<%= entries.size - 5 %>件</div>
+            <div class="entry-item">...<%= t('mailers.notification.daily_digest.more_entries', count: entries.size - 5) %></div>
           <% end %>
         </div>
       <% end %>
 
       <p style="text-align: center;">
-        <a href="<%= organizers_dashboard_url %>" class="button">ダッシュボードを開く</a>
+        <a href="<%= organizers_dashboard_url %>" class="button"><%= t('mailers.notification.daily_digest.view_button') %></a>
       </p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

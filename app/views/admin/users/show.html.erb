@@ -1,23 +1,23 @@
 <% content_for :title, @user.display_name %>
 
 <div class="mb-6">
-  <%= link_to "← ユーザー一覧に戻る", admin_users_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <%= link_to t('admin.users.show.back'), admin_users_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
 </div>
 
 <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
   <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
     <div>
-      <h3 class="text-lg leading-6 font-medium text-gray-900">ユーザー情報</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= t('admin.users.show.user_info') %></h3>
       <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= @user.email %></p>
     </div>
     <div class="flex space-x-3">
-      <%= link_to "編集", edit_admin_user_path(@user), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+      <%= link_to t('admin.users.show.edit'), edit_admin_user_path(@user), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
       <% if @user.access_locked? %>
-        <%= button_to "停止解除", unsuspend_admin_user_path(@user), method: :patch,
+        <%= button_to t('admin.users.show.unsuspend'), unsuspend_admin_user_path(@user), method: :patch,
             class: "inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700" %>
       <% else %>
-        <%= button_to "アカウント停止", suspend_admin_user_path(@user), method: :patch,
-            data: { turbo_confirm: "このユーザーのアカウントを停止しますか？" },
+        <%= button_to t('admin.users.show.suspend'), suspend_admin_user_path(@user), method: :patch,
+            data: { turbo_confirm: t('admin.users.show.suspend_confirm') },
             class: "inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700" %>
       <% end %>
     </div>
@@ -25,61 +25,61 @@
   <div class="border-t border-gray-200">
     <dl>
       <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">名前</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.name') %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.display_name %></dd>
       </div>
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">メールアドレス</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.email') %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.email %></dd>
       </div>
       <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">ロール</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.role') %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <div class="flex items-center space-x-4">
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
               <%= @user.admin? ? 'bg-red-100 text-red-800' : @user.organizer? ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' %>">
-              <%= @user.admin? ? "管理者" : @user.organizer? ? "主催者" : "参加者" %>
+              <%= @user.admin? ? t('admin.users.show.admin') : @user.organizer? ? t('admin.users.show.organizer') : t('admin.users.show.participant') %>
             </span>
             <% unless @user == current_user %>
               <%= form_with url: change_role_admin_user_path(@user), method: :patch, local: true, class: "flex items-center space-x-2" do |form| %>
-                <%= form.select :role, [["参加者", "participant"], ["主催者", "organizer"], ["管理者", "admin"]],
+                <%= form.select :role, [[t('admin.users.show.participant'), "participant"], [t('admin.users.show.organizer'), "organizer"], [t('admin.users.show.admin'), "admin"]],
                     { selected: @user.role },
                     class: "text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-                <%= form.submit "変更", class: "text-sm text-indigo-600 hover:text-indigo-900 cursor-pointer" %>
+                <%= form.submit t('admin.users.show.change'), class: "text-sm text-indigo-600 hover:text-indigo-900 cursor-pointer" %>
               <% end %>
             <% end %>
           </div>
         </dd>
       </div>
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">ステータス</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.status') %></dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <% if @user.access_locked? %>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-              アカウント停止中
+              <%= t('admin.users.show.suspended') %>
             </span>
           <% elsif !@user.confirmed? %>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              メール未確認
+              <%= t('admin.users.show.unconfirmed') %>
             </span>
           <% else %>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              アクティブ
+              <%= t('admin.users.show.active') %>
             </span>
           <% end %>
         </dd>
       </div>
       <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">登録日</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.created_at.strftime("%Y年%m月%d日 %H:%M") %></dd>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.registered_at') %></dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= l(@user.created_at, format: :long) %></dd>
       </div>
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">最終ログイン</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.last_sign_in_at&.strftime("%Y年%m月%d日 %H:%M") || "-" %></dd>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.last_login') %></dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.last_sign_in_at ? l(@user.last_sign_in_at, format: :long) : "-" %></dd>
       </div>
       <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">ログイン回数</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.sign_in_count %> 回</dd>
+        <dt class="text-sm font-medium text-gray-500"><%= t('admin.users.show.login_count') %></dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.sign_in_count %> <%= t('admin.users.show.login_count_unit') %></dd>
       </div>
     </dl>
   </div>
@@ -89,7 +89,7 @@
 <% if @contests.any? %>
   <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
     <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">主催コンテスト</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= t('admin.users.show.organized_contests') %></h3>
     </div>
     <ul class="divide-y divide-gray-200">
       <% @contests.each do |contest| %>
@@ -99,7 +99,7 @@
               <%= link_to admin_contest_path(contest), class: "text-sm font-medium text-indigo-600 hover:text-indigo-900" do %>
                 <%= contest.title %>
               <% end %>
-              <p class="text-sm text-gray-500"><%= contest.entries.count %> 応募</p>
+              <p class="text-sm text-gray-500"><%= contest.entries.count %> <%= t('admin.users.show.entries_unit') %></p>
             </div>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
               <%= contest.accepting_entries? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
@@ -116,17 +116,17 @@
 <% if @entries.any? %>
   <div class="bg-white shadow overflow-hidden sm:rounded-lg">
     <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">応募作品</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= t('admin.users.show.entries') %></h3>
     </div>
     <ul class="divide-y divide-gray-200">
       <% @entries.each do |entry| %>
         <li class="px-4 py-4">
           <div class="flex items-center space-x-4">
             <% if entry.photo.attached? %>
-              <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "h-12 w-12 rounded object-cover", loading: "lazy" %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || t('admin.users.show.entry_image_alt'), class: "h-12 w-12 rounded object-cover", loading: "lazy" %>
             <% end %>
             <div>
-              <p class="text-sm font-medium text-gray-900"><%= entry.title.presence || "無題" %></p>
+              <p class="text-sm font-medium text-gray-900"><%= entry.title.presence || t('admin.users.show.untitled') %></p>
               <p class="text-sm text-gray-500"><%= entry.contest.title %></p>
             </div>
           </div>
@@ -139,8 +139,8 @@
 <!-- Delete User -->
 <div class="mt-6 pt-6 border-t border-gray-200">
   <div class="flex justify-end">
-    <%= button_to "ユーザーを削除", admin_user_path(@user), method: :delete,
-        data: { turbo_confirm: "本当にこのユーザーを削除しますか？この操作は取り消せません。" },
+    <%= button_to t('admin.users.show.delete_user'), admin_user_path(@user), method: :delete,
+        data: { turbo_confirm: t('admin.users.show.delete_confirm') },
         class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700" %>
   </div>
 </div>

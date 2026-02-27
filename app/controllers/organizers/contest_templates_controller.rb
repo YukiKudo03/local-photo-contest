@@ -24,7 +24,7 @@ module Organizers
       )
 
       if @template.persisted?
-        redirect_to organizers_contest_templates_path, notice: "テンプレートを保存しました。"
+        redirect_to organizers_contest_templates_path, notice: t('flash.contest_templates.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -32,7 +32,7 @@ module Organizers
 
     def destroy
       @template.destroy
-      redirect_to organizers_contest_templates_path, notice: "テンプレートを削除しました。"
+      redirect_to organizers_contest_templates_path, notice: t('flash.contest_templates.destroyed')
     end
 
     private
@@ -44,13 +44,13 @@ module Organizers
     def authorize_template!
       return if @template.owned_by?(current_user)
 
-      redirect_to organizers_contest_templates_path, alert: "このテンプレートにアクセスする権限がありません。"
+      redirect_to organizers_contest_templates_path, alert: t('flash.contest_templates.not_authorized')
     end
 
     def set_contest
       @contest = current_user.contests.active.find(params[:contest_id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to organizers_contests_path, alert: "コンテストが見つかりません。"
+      redirect_to organizers_contests_path, alert: t('flash.contest_templates.contest_not_found')
     end
 
     def template_params

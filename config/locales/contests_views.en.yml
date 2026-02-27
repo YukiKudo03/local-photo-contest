@@ -1,0 +1,35 @@
+en:
+  contests:
+    index:
+      title: Photo Contests
+      subtitle: Browse currently open contests
+      accepting_entries: Accepting Entries
+      no_time_limit: No Time Limit
+      until_date: "Until %{date}"
+      empty:
+        title: No contests accepting entries
+        description: Please wait for new contests to be announced
+    show:
+      back_to_list: Back to Contests
+      accepting_entries: Accepting Entries
+      finished: Finished
+      outside_period: Outside Entry Period
+      contest_details: Contest Details
+      entry_period: Entry Period
+      no_start_date: No start date
+      no_end_date: No end date
+      no_time_limit: No time limit
+      area_spots: Photo Areas & Spots
+      spots_count: "%{count} photo spots"
+      spot_required: Spot selection required
+      spots_list: "Photo spots:"
+      submit_entry: Submit Entry to This Contest
+      login_required_html: "Please <a href='%{login_path}'>log in</a> or <a href='%{register_path}'>sign up</a> to submit an entry."
+      results_announced: Results have been announced!
+      view_results: View Results
+      contest_ended: This contest has ended
+      outside_entry_period: Currently outside the entry period
+      entries_section: Entries
+      works_count: "%{count} entries"
+      entry_alt: Photo contest entry
+      untitled: Untitled

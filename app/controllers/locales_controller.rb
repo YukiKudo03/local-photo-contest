@@ -5,6 +5,7 @@ class LocalesController < ApplicationController
     locale = params[:locale].to_s
     if I18n.available_locales.map(&:to_s).include?(locale)
       session[:locale] = locale
+      current_user.update(locale: locale) if user_signed_in?
     end
 
     redirect_back fallback_location: root_path

@@ -1,0 +1,608 @@
+ja:
+  organizers:
+    dashboard:
+      title: ダッシュボード
+      subtitle: コンテスト運営概要
+      total_contests: コンテスト数
+      total_entries: 応募数
+      total_votes: 投票数
+      active_contests: 開催中のコンテスト
+      no_contests: まだコンテストがありません
+      create_first: 最初のコンテストを作成しましょう
+      recent_entries: 最近の応募
+      no_recent_entries: 最近の応募はありません
+      view_all: すべて見る
+      untitled: 無題
+    contests:
+      index:
+        title: コンテスト一覧
+        subtitle: コンテストの一覧・管理
+        new_contest: 新規作成
+        no_contests: コンテストがありません
+        create_first: 最初のコンテストを作成しましょう
+        status: ステータス
+        entries_count: 応募数
+        actions: 操作
+        view: 詳細
+        edit: 編集
+        all: すべて
+        draft: 下書き
+        published: 公開中
+        finished: 終了
+        no_period: 期間未設定
+      new:
+        title: 新規コンテスト作成
+        subtitle: 新しいフォトコンテストを作成します
+        from_template: テンプレートから作成
+        template_hint: 保存したテンプレートを選択して設定をプリセットできます
+        template_applied: "「%{name}」の設定がフォームにプリセットされました"
+        select_template: "テンプレートを選択..."
+        reset: リセット
+      edit:
+        title: コンテスト編集
+        subtitle: コンテストの設定を編集します
+      show:
+        back: コンテスト一覧に戻る
+        edit: 編集
+        status: ステータス
+        contest_info: コンテスト情報
+        theme: テーマ
+        category: カテゴリ
+        not_set: 未設定
+        description: 説明
+        entry_period: 応募期間
+        no_start: 開始日時なし
+        no_end: 終了日時なし
+        no_limit: 期間制限なし
+        area: エリア
+        spots: "スポット (%{count})"
+        spot_required: スポット選択必須
+        entries_section: 応募一覧
+        entries_count: "%{count}件の応募"
+        view_all_entries: すべての応募を見る
+        no_entries: まだ応募がありません
+        delete_contest: コンテストを削除
+        delete_confirm: このコンテストを削除しますか？この操作は取り消せません。
+        publish: 公開する
+        publish_confirm: このコンテストを公開しますか？
+        unpublish: 非公開にする
+        unpublish_confirm: このコンテストを非公開にしますか？
+        finish: 終了する
+        finish_confirm: このコンテストを終了しますか？
+        judging_section: 審査・結果
+        judging_method: 審査方式
+        judge_weight: 審査員評価の重み
+        prize_count: 入賞者数
+        judges: 審査員
+        judges_count: "%{count}名"
+        invite_judge: 審査員を招待
+        evaluation_criteria: 評価基準
+        manage_criteria: 基準を管理
+        calculate_scores: スコア計算
+        calculate_confirm: スコアを計算しますか？
+        announce_results: 結果を発表
+        announce_confirm: 結果を発表しますか？公開後は取り消せません。
+        view_results: 結果ページを見る
+        results_announced: 結果発表済み
+        results_not_announced: 結果未発表
+        no_thumbnail: サムネイルなし
+        created_at: 作成日
+        updated_at: 更新日
+        accepting_entries: 応募受付中
+        not_accepting_entries: 応募受付停止中
+        edit_desc: コンテストの設定を編集
+        entries_desc: "%{count}件の応募"
+        spots_section: スポット管理
+        spots_desc: "スポット (%{count})"
+        discovery_spots_section: 発掘スポット管理
+        challenges_count: "チャレンジ数"
+        statistics_desc: 統計・分析を確認
+        save_as_template: テンプレートとして保存
+        save_template_desc: コンテスト設定をテンプレートとして保存
+        save_template_confirm: このコンテストの設定をテンプレートとして保存しますか？
+        statistics: 統計を見る
+        moderation: モデレーション
+        publish_desc: コンテストを公開して応募を開始
+        finish_desc: コンテストの応募を締め切る
+        delete_desc: コンテストを完全に削除
+        announce_desc: 結果を参加者に公開する
+        ranking_preview: ランキングプレビュー
+        view_results_desc: 発表済みの結果を確認
+        map_preview: マッププレビュー
+        actions: 操作
+        all_reviewed: すべて審査済み
+        pending_review: "%{count}件の未審査"
+      form:
+        errors_count:
+          one: 1件のエラーがあります
+          other: "%{count}件のエラーがあります"
+        basic_info: 基本情報
+        title_label: タイトル
+        title_placeholder: コンテストのタイトル
+        title_hint: コンテストの名前を入力してください
+        theme_label: テーマ
+        theme_placeholder: コンテストのテーマ（任意）
+        theme_hint: テーマを設定すると、参加者に撮影の方向性を示せます
+        description_label: 説明
+        description_placeholder: コンテストの説明
+        category_label: カテゴリ
+        category_placeholder: カテゴリを選択
+        category_hint: コンテストのカテゴリを選択してください
+        area_label: エリア
+        area_placeholder: エリアを選択
+        area_settings: エリア設定
+        area_hint: コンテストの対象エリアを設定できます
+        area_select_hint: エリアを選択するか、
+        create_new_area: 新しいエリアを作成
+        area_preview: エリアプレビュー
+        entry_period: 応募期間
+        entry_start_label: 応募開始日時
+        entry_end_label: 応募終了日時
+        period_hint: 応募期間を設定しない場合、手動で終了するまで応募を受け付けます
+        thumbnail_label: サムネイル画像
+        thumbnail_hint: JPEG、PNG形式（推奨サイズ 800x600）
+        current_image: 現在の画像
+        click_to_select: クリックして画像を選択
+        spot_required_label: スポット選択を必須にする
+        spot_required_hint: 有効にすると、応募時にスポットの選択が必須になります
+        judging_method_label: 審査方式
+        judge_weight_label: 審査員評価の重み（%）
+        prize_count_label: 入賞者数
+        show_scores_label: 詳細スコアを公開する
+        moderation_title: コンテンツモデレーション
+        moderation_subtitle: 不適切なコンテンツを自動的に検出・フィルタリングします
+        moderation_enable: コンテンツモデレーションを有効にする
+        moderation_desc: AWS Rekognitionを使用して不適切な画像を自動検出します
+        threshold_label: モデレーション閾値
+        threshold_loose: ゆるめ
+        threshold_strict: 厳しめ
+        threshold_desc: 閾値が低いほど多くのコンテンツがフィルタリングされます
+        about_moderation: モデレーションについて
+        moderation_info_1: アップロードされた画像は自動的にスキャンされます
+        moderation_info_2: 不適切と判定された画像は非表示になります
+        moderation_info_3: 手動で確認・承認することもできます
+        submit_create: 作成する
+        submit_update: 更新する
+        cancel: キャンセル
+    areas:
+      index:
+        title: エリア管理
+        subtitle: エリアの管理を行います
+        new_area: 新規作成
+        no_areas: エリアがありません
+        create_first: エリアを作成しましょう
+        name: エリア名
+        spots_count: スポット数
+        contests_count: コンテスト数
+        actions: 操作
+        boundary_set: 境界設定済み
+      new:
+        title: 新規エリア作成
+      edit:
+        title: エリア編集
+      show:
+        back: エリア一覧に戻る
+        edit: 編集
+        delete: 削除
+        delete_confirm: このエリアを削除しますか？
+        spots_section: スポット一覧
+        add_spot: スポットを追加
+        no_spots: スポットがありません
+      form:
+        name_label: エリア名
+        name_placeholder: エリアの名前
+        name_hint: エリアの名前を入力してください
+        description_label: 説明
+        description_placeholder: エリアの説明（任意）
+        description_hint: エリアの特徴を簡潔に説明してください
+        address_title: 住所情報
+        prefecture_label: 都道府県
+        prefecture_placeholder: 都道府県を選択
+        city_label: 市区町村
+        city_placeholder: 市区町村名
+        city_hint: 市区町村名を入力してください
+        address_label: 番地等
+        address_placeholder: 番地等
+        address_hint: 番地等を入力してください
+        optional: 任意
+        geojson_label: GeoJSON境界データ
+        geojson_placeholder: GeoJSON形式の境界データ
+        geojson_hint: GeoJSON形式で境界データを入力してください
+        coordinates_title: 座標情報
+        coordinates_hint: マップをクリックして座標を設定してください
+        selected_coordinates: 選択された座標
+        latitude: 緯度
+        longitude: 経度
+        click_map: マップをクリックして座標を設定
+        clear: クリア
+        boundary_title: 境界設定
+        boundary_hint: GeoJSON形式で境界データを入力できます
+        submit_create: 作成する
+        submit_update: 更新する
+        cancel: キャンセル
+    spots:
+      index:
+        title: スポット管理
+        new_spot: スポット追加
+        merge: 統合
+        no_spots: スポットがありません
+        add_spot: スポット追加
+      new:
+        title: スポット追加
+        subtitle: 新しいスポットを登録します
+        back: スポット一覧に戻る
+      edit:
+        title: スポット編集
+      merge:
+        title: スポット統合
+        subtitle: 重複スポットを統合します
+        source_spot: 統合元スポット
+        data_to_move: 移動するデータ
+        entries_move: "%{count}件の作品"
+        votes_move: "%{count}件の投票"
+        target_spot: 統合先スポット
+        select_target: 統合先を選択
+        target_hint: 統合先のスポットを選択してください
+        execute: 統合を実行
+        confirm: "「%{name}」を統合しますか？"
+      form:
+        name_label: スポット名
+        name_placeholder: スポットの名前
+        name_hint: スポットの正式名称を入力してください
+        category_label: カテゴリ
+        category_placeholder: カテゴリを選択
+        category_hint: スポットの種類を選択してください
+        description_label: 説明
+        description_placeholder: スポットの説明
+        description_hint: スポットの特徴を簡潔に説明してください
+        address_label: 住所
+        address_placeholder: スポットの住所
+        address_hint: 住所を入力するとマップ上に表示されます
+        latitude_label: 緯度
+        longitude_label: 経度
+        coordinates_hint: マップをクリックして座標を設定するか、直接入力してください
+        submit_create: 作成する
+        submit_update: 更新する
+        cancel: キャンセル
+    discovery_spots:
+      index:
+        title: 発掘スポット管理
+        back: コンテスト詳細に戻る
+        no_spots: 発掘スポットがありません
+        status: ステータス
+        discoverer: 発掘者
+        actions: 操作
+        certify: 認定
+        reject: 却下
+        certified: 認定済み
+        rejected: 却下済み
+        pending: 審査中
+        pending_count: 審査待ち件数
+        no_pending: 審査待ちのスポットはありません
+        all_reviewed: すべての発掘スポットは審査済みです
+        no_certified: 認定済みスポットはありません
+        no_rejected: 却下済みスポットはありません
+        reject_title: 却下理由の入力
+        reject_reason: 却下理由
+        reject_placeholder: 却下理由を入力してください
+      spot:
+        discoverer: 発掘者
+        discovery_comment: 発掘コメント
+        entries_count: エントリー数
+        certified_by: 認定者
+        rejection_reason: 却下理由
+        certify_confirm: "「%{name}」を認定しますか？"
+    discovery_challenges:
+      index:
+        title: 発掘チャレンジ管理
+        new_challenge: 新規作成
+        no_challenges: チャレンジがありません
+        active: 開催中
+      new:
+        title: 新規チャレンジ作成
+        back: チャレンジ一覧に戻る
+      edit:
+        title: チャレンジ編集
+      show:
+        theme: テーマ
+        details: 詳細
+        no_description: 説明はありません
+        period: 期間
+        statistics: 統計
+        entries_count: エントリー数
+        spots_count: 発掘スポット数
+        participants_count: 参加者数
+        entries: エントリー
+        no_entries: まだエントリーがありません
+        discovered_spots: 発掘スポット
+        unknown: 不明
+        no_spots: まだスポットが発掘されていません
+      form:
+        title_label: タイトル
+        description_label: 説明
+        start_date_label: 開始日
+        end_date_label: 終了日
+        points_label: ポイント
+        submit_create: 作成する
+        submit_update: 更新する
+        cancel: キャンセル
+    moderation:
+      index:
+        title: モデレーション
+        no_entries: 審査待ちの応募はありません
+        status: ステータス
+        submitter: 応募者
+        submitted_at: 応募日時
+        actions: 操作
+        approve: 承認
+        reject: 非表示
+        approved: 承認済み
+        rejected: 非表示
+        pending: 審査中
+        reject_reason: 非表示理由
+        reject_placeholder: 非表示の理由を入力してください
+    judge_invitations:
+      index:
+        title: 審査員招待
+        invite_new: 新規招待
+        no_invitations: 招待がありません
+        email: メールアドレス
+        status: ステータス
+        invited_at: 招待日時
+        actions: 操作
+        resend: 再送信
+        cancel_invite: 取消
+        cancel_confirm: この招待を取り消しますか？
+      form:
+        email_label: メールアドレス
+        email_placeholder: 審査員のメールアドレス
+        submit: 招待する
+    contest_judges:
+      index:
+        title: 審査員管理
+        no_judges: 審査員がいません
+        name: 名前
+        email: メールアドレス
+        status: ステータス
+        evaluations: 審査数
+        actions: 操作
+        remove: 解任
+        remove_confirm: この審査員を解任しますか？
+    evaluation_criteria:
+      index:
+        title: 評価基準管理
+        back: "%{title}に戻る"
+        new_criterion: 新規追加
+        criteria_list: 評価基準一覧
+        criteria_desc: 審査員が作品を評価する際に使用する基準を設定します
+        max_score: "最大 %{score} 点"
+        delete_confirm: この評価基準を削除しますか？
+        no_criteria: 評価基準がありません
+        no_criteria_desc: 評価基準を追加して審査の指標を設定しましょう
+        add_first: 最初の評価基準を追加
+        about_criteria: 評価基準について
+        about_criteria_desc: 評価基準は審査員が作品を採点する際の指標となります。「構図」「色彩」「テーマへの適合性」など、複数の観点から評価を行うことができます。各基準には最大スコアを設定でき、審査員は0から最大スコアまでの範囲で採点します。
+      new:
+        title: 新規評価基準追加
+        back: 評価基準一覧に戻る
+        subtitle: "%{title}の評価基準を追加します"
+      edit:
+        title: 評価基準の編集
+        back: 評価基準一覧に戻る
+        subtitle: "%{name}を編集します"
+      form:
+        errors: "%{count}件のエラーがあります"
+        criterion_info: 基準情報
+        name_label: 基準名
+        name_placeholder: "例：構図、色彩、テーマへの適合性"
+        name_hint: 50文字以内で入力してください（必須）
+        description_label: 説明
+        description_placeholder: この評価基準で何を評価するかを説明してください
+        description_hint: 500文字以内（任意）
+        max_score_label: 最大スコア
+        max_score_hint: 1〜100の整数（必須）
+        position_label: 表示順
+        position_hint: 小さい数字が先に表示されます（任意、未入力時は自動設定）
+        weight_label: 重み
+        submit_create: 追加する
+        submit_update: 更新する
+        cancel: キャンセル
+    judging_settings:
+      edit:
+        title: 審査設定
+        back: "← コンテスト詳細に戻る"
+        published_notice: "<strong>注意:</strong> コンテスト公開後は審査方式を変更できません。配点設定や入賞者数の調整のみ可能です。"
+        judging_method: 審査方式
+        judge_only: 審査員評価のみ
+        judge_only_desc: 審査員のスコアのみでランキングを決定します
+        vote_only: 一般投票のみ
+        vote_only_desc: 投票数のみでランキングを決定します
+        hybrid: ハイブリッド
+        hybrid_desc: 審査員評価と投票数を組み合わせてランキングを決定します
+        weight_ratio: 配分比率
+        judge_label: 審査員
+        vote_label: 投票
+        results_settings: 結果発表設定
+        prize_count: 入賞者数
+        prize_rank: "%{n}位まで"
+        prize_count_hint: 入賞として表彰する順位の数
+        show_scores: 詳細スコアを参加者に公開
+        show_scores_hint: 有効にすると、参加者は各評価項目のスコア内訳を確認できます
+        evaluation_criteria: 評価基準
+        manage_criteria: 評価基準を管理
+        points: 点
+        total: 合計
+        no_criteria: まだ評価基準が設定されていません
+        add_criteria: 評価基準を追加する
+        submit: 設定を保存
+    results:
+      preview:
+        title: 結果発表管理
+        back: "← コンテスト詳細に戻る"
+        contest_status: コンテストステータス
+        finished: 終了
+        published: 公開中
+        draft: 下書き
+        judge_completion: 審査員採点完了率
+        entries_count: 応募作品数
+        entries_with_count: "%{count}件"
+        warnings: 警告
+        results_announced: 結果発表済み
+        view_results_page: 結果ページを確認
+        rankings_outdated: ランキングが最新ではありません
+        rankings_outdated_desc: 新しい評価が追加されたため、ランキングが変動している可能性があります。下のプレビューは最新のデータを反映しています。保存したランキングを更新するには「ランキングを再計算」をクリックしてください。
+        final_rankings: 確定ランキング
+        provisional_rankings: 暫定ランキング
+        needs_recalculation: 要再計算
+        recalculate: ランキングを再計算
+        rankings: ランキング
+        no_rankings: ランキングデータがありません
+        rank: 順位
+        entry: 作品
+        submitter: 投稿者
+        total_score: 総合スコア
+        judge_score: 審査員スコア
+        vote_count: 投票数
+        score: スコア
+        votes: 投票数
+        announce_title: 結果を発表
+        announce_desc: 結果を発表すると、参加者と一般ユーザーがランキングを閲覧できるようになります。この操作は取り消せません。
+        announce_button: 結果を発表する
+        announce_confirm: 結果を発表しますか？この操作は取り消せません。
+        finish_first: 結果を発表するには、まずコンテストを終了してください。
+        back_to_contest: コンテスト管理に戻る
+    statistics:
+      show:
+        title: 統計ダッシュボード
+        back: "← コンテスト詳細に戻る"
+        overview: 概要
+        entries_over_time: 応募推移
+        votes_distribution: 投票分布
+        area_breakdown: エリア別内訳
+        export: エクスポート
+        total_entries: 総応募数
+        total_votes: 総投票数
+        total_comments: 総コメント数
+        avg_votes: 平均投票数
+        date_range: 期間
+        from_date: 開始日
+        to_date: 終了日
+        apply: 適用
+      summary:
+        entries_change: 件（前日比）
+        votes_change: 票（前日比）
+        total_participants: 参加ユーザー数
+        participants_change: 人（前日比）
+        total_spots: 登録スポット数
+        spots_change: 件（前日比）
+      entry_trend:
+        title: 応募数推移
+        display: 表示
+        daily: 日別
+        weekly: 週別
+        no_data: まだデータがありません
+        no_data_desc: 応募があると、ここにグラフが表示されます。
+        date: 日付
+        entries: 応募数
+        week: 週
+      spot_chart:
+        title: 人気スポット（上位10件）
+        no_data: スポットデータがありません
+        entries: 応募数
+        spot_list: スポット別応募一覧
+        count_unit: 件
+        view_list: 一覧
+      area_chart:
+        title: エリア別応募分布
+      discovery:
+        title: 発掘統計
+        total_spots: 総スポット数
+        organizer_created: 主催者作成
+        certified: 認定済み
+        pending_certification: 審査待ち
+        active_discoverers: アクティブ発掘者
+        people_unit: 人
+        spot_votes: スポット投票数
+        votes_unit: 票
+        top_spots: 人気スポット TOP 5
+        top_discoverers: トップ発掘者 TOP 5
+        spots_unit: スポット
+        challenges: 発掘チャレンジ
+        status_draft: 下書き
+        status_active: 開催中
+        status_finished: 終了
+        entries_unit: 応募
+        discoveries_unit: 発掘
+      vote_analysis:
+        title: 投票分析
+        not_started: 投票期間開始後に表示されます
+        total_votes: 総投票数
+        unique_voters: ユニーク投票者数
+        avg_per_entry: 平均投票数/作品
+        no_data: まだ投票データがありません
+        daily_trend: 日別投票数推移
+        date: 日付
+        votes: 投票数
+        top_entries: 上位得票作品（Top 5）
+        votes_unit: 票
+    contest_templates:
+      index:
+        title: テンプレート一覧
+        subtitle: 保存したテンプレートを管理します
+        source_contest: 元コンテスト
+        theme: テーマ
+        category: カテゴリー
+        area: エリア
+        judging_method: 審査方法
+        judge_only: 審査員のみ
+        vote_only: 投票のみ
+        hybrid: ハイブリッド
+        created_at: 作成日
+        create_from: このテンプレートから作成
+        no_templates: テンプレートがありません
+        no_templates_desc: コンテスト詳細ページから「テンプレートとして保存」でテンプレートを作成できます
+        name: テンプレート名
+        actions: 操作
+        use: 使用
+        delete: 削除
+        delete_confirm: "「%{name}」を削除してもよろしいですか？"
+      new:
+        title: テンプレートとして保存
+        subtitle: "「%{title}」の設定をテンプレートとして保存します"
+        errors: エラーがあります
+        name_label: テンプレート名
+        name_placeholder: "例: 月例フォトコンテスト設定"
+        name_hint: 分かりやすい名前を付けてください（最大100文字）
+        saved_settings: 保存される設定
+        theme: テーマ
+        description: 説明
+        judging_method: 審査方法
+        prize_count: 入賞者数
+        people_unit: 名
+        moderation: モデレーション
+        moderation_enabled: "有効 (閾値: %{threshold}%)"
+        moderation_disabled: 無効
+        spot_required: スポット必須
+        required: 必須
+        optional: 任意
+        category: カテゴリー
+        area: エリア
+        note: "※ タイトル、応募期間、ステータスは保存されません"
+        cancel: キャンセル
+        submit: テンプレートを保存
+    terms_acceptances:
+      new:
+        title: 利用規約
+        subtitle: サービスをご利用いただくには、以下の利用規約に同意していただく必要があります。
+        not_found: 利用規約が見つかりません。
+        version: バージョン
+        published_at: 公開日
+        agree_text: 上記の利用規約に同意します
+        agree_hint: 利用規約をよくお読みの上、同意してください。
+        agree_and_continue: 同意して続ける
+        disagree_logout: 同意しない（ログアウト）
+        terms_content: 利用規約の内容
+    registrations:
+      new:
+        title: 運営者登録
+        subtitle: 運営者として登録してコンテストを開催しましょう

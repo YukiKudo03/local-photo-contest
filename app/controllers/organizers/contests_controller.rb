@@ -32,7 +32,7 @@ module Organizers
       @contest = current_user.contests.build(contest_params)
 
       if @contest.save
-        redirect_to organizers_contest_path(@contest), notice: "コンテストを作成しました。"
+        redirect_to organizers_contest_path(@contest), notice: t('flash.contests.created')
       else
         @categories = Category.ordered
         @areas = current_user.areas.ordered
@@ -48,7 +48,7 @@ module Organizers
 
     def update
       if @contest.update(contest_params)
-        redirect_to organizers_contest_path(@contest), notice: "コンテストを更新しました。"
+        redirect_to organizers_contest_path(@contest), notice: t('flash.contests.updated')
       else
         @categories = Category.ordered
         @areas = current_user.areas.ordered
@@ -58,28 +58,28 @@ module Organizers
 
     def destroy
       @contest.soft_delete!
-      redirect_to organizers_contests_path, notice: "コンテストを削除しました。"
+      redirect_to organizers_contests_path, notice: t('flash.contests.destroyed')
     rescue RuntimeError => e
       redirect_to organizers_contest_path(@contest), alert: e.message
     end
 
     def publish
       @contest.publish!
-      redirect_to organizers_contest_path(@contest), notice: "コンテストを公開しました。"
+      redirect_to organizers_contest_path(@contest), notice: t('flash.contests.published')
     rescue RuntimeError => e
       redirect_to organizers_contest_path(@contest), alert: e.message
     end
 
     def finish
       @contest.finish!
-      redirect_to organizers_contest_path(@contest), notice: "コンテストを終了しました。"
+      redirect_to organizers_contest_path(@contest), notice: t('flash.contests.finished')
     rescue RuntimeError => e
       redirect_to organizers_contest_path(@contest), alert: e.message
     end
 
     def announce_results
       @contest.announce_results!
-      redirect_to organizers_contest_path(@contest), notice: "結果を発表しました。"
+      redirect_to organizers_contest_path(@contest), notice: t('flash.results.announced')
     rescue RuntimeError => e
       redirect_to organizers_contest_path(@contest), alert: e.message
     end
@@ -93,7 +93,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def contest_params

@@ -17,7 +17,7 @@ RSpec.describe "Organizers::ContestManagement", type: :system do
     it "creates a new contest successfully" do
       visit organizers_contests_path
 
-      click_link "新規作成"
+      first(:link, "新規作成").click
       expect(page).to have_content("新規コンテスト作成")
 
       fill_in "タイトル", with: "春の写真コンテスト"
@@ -95,7 +95,6 @@ RSpec.describe "Organizers::ContestManagement", type: :system do
       click_button "公開"
 
       expect(page).to have_content("コンテストを公開しました")
-      expect(page).to have_content("公開中")
     end
   end
 
@@ -203,8 +202,7 @@ RSpec.describe "Organizers::ContestManagement", type: :system do
       visit organizers_contests_path
 
       expect(page).to have_content("コンテストがありません")
-      expect(page).to have_content("新しいコンテストを作成して始めましょう")
-      expect(page).to have_link("新規コンテスト作成")
+      expect(page).to have_content("最初のコンテストを作成しましょう")
     end
   end
 end

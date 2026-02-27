@@ -1,0 +1,22 @@
+ja:
+  home:
+    hero:
+      tagline: 地域の魅力を写真で発信。あなたの一枚が、地域を彩る。
+      go_to_dashboard: ダッシュボードへ
+      register_as_organizer: 運営者として登録
+      login: ログイン
+    features:
+      title: プラットフォームの特徴
+      easy_management:
+        title: 簡単なコンテスト運営
+        description: 直感的な管理画面で、誰でも簡単にフォトコンテストを開催・運営できます。
+      security:
+        title: 安心のセキュリティ
+        description: 二要素認証、アカウントロック機能など、万全のセキュリティ対策を実装。
+      community:
+        title: 地域コミュニティ
+        description: 地域の魅力を写真で共有し、コミュニティの絆を深めます。
+    cta:
+      title: 今すぐ始めましょう
+      description: アカウントを作成して、地域のフォトコンテストを開催しませんか？
+      register_free: 無料で登録する

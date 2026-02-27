@@ -9,7 +9,7 @@ class ContestRanking < ApplicationRecord
   validates :rank, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :total_score, presence: true
   validates :calculated_at, presence: true
-  validates :entry_id, uniqueness: { scope: :contest_id, message: "は既にランキングに登録されています" }
+  validates :entry_id, uniqueness: { scope: :contest_id, message: :already_ranked }
   # Note: rank uniqueness removed to support standard competition ranking
   # where entries with identical scores receive the same rank
 
@@ -25,10 +25,10 @@ class ContestRanking < ApplicationRecord
 
   def prize_label
     case rank
-    when 1 then "最優秀賞"
-    when 2 then "優秀賞"
-    when 3 then "準優秀賞"
-    else "入賞"
+    when 1 then I18n.t('ranks.grand_prize')
+    when 2 then I18n.t('ranks.excellence')
+    when 3 then I18n.t('ranks.merit')
+    else I18n.t('ranks.award')
     end
   end
 end

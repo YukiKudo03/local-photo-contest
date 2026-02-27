@@ -1,0 +1,76 @@
+ja:
+  entries:
+    show:
+      back_to_my_entries: マイ応募一覧に戻る
+      back_to_contest: コンテストに戻る
+      hidden_notice: この応募は非表示になっています
+      hidden_detail: コンテンツ審査の結果、この応募は他のユーザーには表示されていません。ご不明な点がございましたら、コンテスト主催者までお問い合わせください。
+      pending_notice: この応募は確認中です
+      pending_detail: コンテンツ審査のため、主催者による確認を待っています。確認が完了するまでしばらくお待ちください。
+      auto_review_notice: 自動審査を実行中
+      auto_review_detail: この応募は現在コンテンツ審査中です。通常数分で完了します。
+      submitted_to: に応募
+      untitled: 無題
+      taken_on: 撮影
+      votes_count: "%{count}票の投票"
+      no_votes: まだ投票がありません
+      submitted_at: "応募日時:"
+      edit: 編集
+      delete: 削除
+      delete_confirm: この応募を削除しますか？
+      comments_section: コメント
+      login_to_comment: コメントするにはログインしてください。
+      no_comments: まだコメントがありません
+    new:
+      back_to_contest: コンテストに戻る
+      title: 写真を応募
+    edit:
+      back_to_entry: 応募詳細に戻る
+      title: 応募を編集
+    form:
+      errors_title: エラーがあります
+      upload_photo: 写真をアップロード
+      upload_hint: JPEG、PNG、GIF形式（10MB以下）
+      current_photo: "現在の写真："
+      entry_alt: フォトコンテスト応募作品
+      click_to_select: クリックして写真を選択
+      or_drag_drop: またはドラッグ＆ドロップ
+      work_info: 作品情報
+      optional: 任意入力
+      title_label: タイトル
+      title_placeholder: 作品のタイトル（任意）
+      title_hint: 100文字以内
+      description_label: 説明
+      description_placeholder: 写真についての説明（任意）
+      location_label: 撮影場所
+      location_placeholder: "例：東京都渋谷区"
+      area_label: 地域
+      area_placeholder: 地域を選択（任意）
+      area_hint: 撮影した地域を選択してください
+      discover_new_spot: 新しいスポットを発掘して登録する
+      discover_hint: まだ登録されていない隠れた名所を発掘して投稿できます
+      spot_label: 撮影スポット
+      spot_placeholder_required: スポットを選択（必須）
+      spot_placeholder_optional: スポットを選択（任意）
+      spot_required_hint: このコンテストではスポットの選択が必須です
+      spot_map_hint: 地図をクリックするか、ドロップダウンから選択してください
+      discovery_spot_notice: 発掘スポットとして登録すると、主催者の審査後に正式なスポットとして認定されます。
+      spot_name_label: スポット名
+      spot_name_placeholder: 発掘したスポットの名前
+      category_label: カテゴリ
+      category_other: その他
+      category_restaurant: 飲食店
+      category_retail: 小売店
+      category_service: サービス業
+      category_landmark: 名所・ランドマーク
+      category_public: 公共施設
+      category_park: 公園・広場
+      category_temple: 寺社仏閣
+      discovery_comment_label: 発見コメント
+      discovery_comment_placeholder: このスポットを発掘した理由や魅力を教えてください...
+      spot_location: スポット位置
+      spot_click_hint: マーカーをクリックしてスポットを選択できます
+      taken_at_label: 撮影日
+      cancel: キャンセル
+      submit_create: 応募する
+      submit_update: 更新する

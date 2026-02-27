@@ -1,67 +1,67 @@
 <div class="container mx-auto max-w-lg px-4 py-8">
-  <h1 class="text-2xl font-bold text-gray-900 mb-2">メール通知設定</h1>
-  <p class="text-sm text-gray-500 mb-8">受け取りたいメール通知を選択してください。</p>
+  <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= t('email_preferences.show.title') %></h1>
+  <p class="text-sm text-gray-500 mb-8"><%= t('email_preferences.show.description') %></p>
 
   <%= form_with model: @user, url: email_preference_path(token: @user.unsubscribe_token), method: :patch, class: "space-y-6" do |f| %>
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 divide-y divide-gray-200">
-      <!-- 参加者向け -->
+      <!-- Participant notifications -->
       <div class="p-4">
-        <h2 class="text-sm font-semibold text-gray-700 mb-3">参加者向け通知</h2>
+        <h2 class="text-sm font-semibold text-gray-700 mb-3"><%= t('email_preferences.show.participant_section') %></h2>
         <div class="space-y-3">
           <label class="flex items-center gap-3">
             <%= f.check_box :email_on_entry_submitted, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">応募完了メール</span>
-              <p class="text-xs text-gray-500">コンテストへの応募が完了した時に通知</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_on_entry_submitted') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_on_entry_submitted_description') %></p>
             </div>
           </label>
           <label class="flex items-center gap-3">
             <%= f.check_box :email_on_comment, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">コメント通知メール</span>
-              <p class="text-xs text-gray-500">作品にコメントがついた時に通知</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_on_comment') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_on_comment_description') %></p>
             </div>
           </label>
           <label class="flex items-center gap-3">
             <%= f.check_box :email_on_vote, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">投票通知メール</span>
-              <p class="text-xs text-gray-500">作品に投票された時に通知（頻度が高い場合があります）</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_on_vote') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_on_vote_description') %></p>
             </div>
           </label>
           <label class="flex items-center gap-3">
             <%= f.check_box :email_on_results, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">審査結果・入賞メール</span>
-              <p class="text-xs text-gray-500">審査結果発表や入賞の通知</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_on_results') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_on_results_description') %></p>
             </div>
           </label>
         </div>
       </div>
 
-      <!-- 主催者向け -->
+      <!-- Organizer notifications -->
       <div class="p-4">
-        <h2 class="text-sm font-semibold text-gray-700 mb-3">主催者向け通知</h2>
+        <h2 class="text-sm font-semibold text-gray-700 mb-3"><%= t('email_preferences.show.organizer_section') %></h2>
         <div class="space-y-3">
           <label class="flex items-center gap-3">
             <%= f.check_box :email_digest, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">日次ダイジェストメール</span>
-              <p class="text-xs text-gray-500">前日の新規応募まとめを毎朝配信</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_digest') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_digest_description') %></p>
             </div>
           </label>
         </div>
       </div>
 
-      <!-- 審査員向け -->
+      <!-- Judge notifications -->
       <div class="p-4">
-        <h2 class="text-sm font-semibold text-gray-700 mb-3">審査員向け通知</h2>
+        <h2 class="text-sm font-semibold text-gray-700 mb-3"><%= t('email_preferences.show.judge_section') %></h2>
         <div class="space-y-3">
           <label class="flex items-center gap-3">
             <%= f.check_box :email_on_judging, class: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
             <div>
-              <span class="text-sm font-medium text-gray-900">審査関連メール</span>
-              <p class="text-xs text-gray-500">審査リマインダーや期限通知</p>
+              <span class="text-sm font-medium text-gray-900"><%= t('email_preferences.show.email_on_judging') %></span>
+              <p class="text-xs text-gray-500"><%= t('email_preferences.show.email_on_judging_description') %></p>
             </div>
           </label>
         </div>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="flex justify-end">
-      <%= f.submit "設定を保存", class: "px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
+      <%= f.submit t('email_preferences.show.submit'), class: "px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
     </div>
   <% end %>
 </div>

@@ -14,7 +14,7 @@ class JudgeInvitation < ApplicationRecord
 
   # Validations
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :email, uniqueness: { scope: :contest_id, message: "は既にこのコンテストに招待されています" }
+  validates :email, uniqueness: { scope: :contest_id, message: :already_invited }
   validates :token, presence: true, uniqueness: true
   validates :invited_at, presence: true
   validate :email_not_already_judge
@@ -39,8 +39,8 @@ class JudgeInvitation < ApplicationRecord
   end
 
   def accept!(accepting_user)
-    raise "招待が既に処理されています" unless pending?
-    raise "招待の有効期限が切れています" if expired?
+    raise I18n.t('models.judge_invitation.already_processed') unless pending?
+    raise I18n.t('models.judge_invitation.expired') if expired?
 
     transaction do
       update!(
@@ -58,7 +58,7 @@ class JudgeInvitation < ApplicationRecord
   end
 
   def decline!
-    raise "招待が既に処理されています" unless pending?
+    raise I18n.t('models.judge_invitation.already_processed') unless pending?
 
     update!(
       status: :declined,
@@ -81,7 +81,7 @@ class JudgeInvitation < ApplicationRecord
 
     existing_judge = contest.judges.find_by(email: email)
     if existing_judge
-      errors.add(:email, "は既にこのコンテストの審査員です")
+      errors.add(:email, :already_a_judge)
     end
   end
 end

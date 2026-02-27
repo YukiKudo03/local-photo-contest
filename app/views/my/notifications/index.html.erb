@@ -3,15 +3,15 @@
   <div class="mb-8">
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">通知</h1>
-        <p class="mt-1 text-sm text-gray-500">お知らせの一覧です</p>
+        <h1 class="text-2xl font-bold text-gray-900"><%= t('my.notifications.index.title') %></h1>
+        <p class="mt-1 text-sm text-gray-500"><%= t('my.notifications.index.description') %></p>
       </div>
       <% if @notifications.unread.any? %>
         <%= button_to mark_all_as_read_my_notifications_path, method: :post, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" do %>
           <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
-          すべて既読にする
+          <%= t('my.notifications.index.mark_all_as_read') %>
         <% end %>
       <% end %>
     </div>
@@ -47,7 +47,7 @@
                 </p>
                 <% if notification.unread? %>
                   <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                    未読
+                    <%= t('my.notifications.index.unread') %>
                   </span>
                 <% end %>
               </div>
@@ -55,7 +55,7 @@
                 <p class="mt-1 text-sm text-gray-500 line-clamp-2"><%= notification.body %></p>
               <% end %>
               <p class="mt-1 text-xs text-gray-400">
-                <%= time_ago_in_words(notification.created_at) %>前
+                <%= t('my.notifications.index.time_ago', time: time_ago_in_words(notification.created_at)) %>
               </p>
             </div>
 
@@ -75,7 +75,7 @@
         <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
-        <p class="mt-4 text-gray-500">通知がありません</p>
+        <p class="mt-4 text-gray-500"><%= t('my.notifications.index.no_notifications') %></p>
       </div>
     </div>
   <% end %>

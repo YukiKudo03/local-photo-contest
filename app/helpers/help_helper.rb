@@ -3,26 +3,18 @@
 module HelpHelper
   GUIDES = {
     participant: {
-      title: "参加者向けマニュアル",
-      description: "コンテストへの参加方法、写真の応募、投票の仕方など",
       icon: "camera",
       file: "participant_guide.md"
     },
     organizer: {
-      title: "主催者向けマニュアル",
-      description: "コンテストの作成・運営、モデレーション、審査の方法など",
       icon: "building-office",
       file: "organizer_guide.md"
     },
     judge: {
-      title: "審査員向けマニュアル",
-      description: "作品の評価方法、評価基準、フィードバックの書き方など",
       icon: "star",
       file: "judge_guide.md"
     },
     admin: {
-      title: "管理者向けマニュアル",
-      description: "システムの管理・運用、ユーザー管理、トラブルシューティングなど",
       icon: "cog-6-tooth",
       file: "admin_guide.md"
     }
@@ -31,9 +23,20 @@ module HelpHelper
   # Returns metadata for all guides or a specific guide
   def guide_info(guide_key = nil)
     if guide_key
-      GUIDES[guide_key.to_sym]
+      key = guide_key.to_sym
+      guide = GUIDES[key]
+      return nil unless guide
+      guide.merge(
+        title: I18n.t("help.guides.#{key}.title"),
+        description: I18n.t("help.guides.#{key}.description")
+      )
     else
-      GUIDES
+      GUIDES.each_with_object({}) do |(key, guide), hash|
+        hash[key] = guide.merge(
+          title: I18n.t("help.guides.#{key}.title"),
+          description: I18n.t("help.guides.#{key}.description")
+        )
+      end
     end
   end
 

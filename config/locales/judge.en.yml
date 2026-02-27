@@ -1,0 +1,66 @@
+en:
+  my:
+    judge_assignments:
+      index:
+        title: Judge Assignments
+        description: Contests where you are assigned as a judge
+        judge_guide: Judge Guide
+        entries: Entries
+        evaluation_progress: Evaluation Progress
+        status_results_announced: Results Announced
+        status_judging: Judging
+        status_accepting: Accepting Entries
+        evaluation_complete: Evaluation Complete
+        view_evaluations: View Evaluations
+        evaluate_entries: Evaluate Entries
+        no_assignments: No judge assignments
+        no_assignments_hint: When a contest organizer invites you as a judge, assignments will appear here
+      show:
+        judging: Judging
+        back_to_list: Back to Judge Assignments
+        status_results_announced: Results Announced
+        status_judging: Judging Period
+        status_accepting: Accepting Entries
+        evaluation_progress: Evaluation Progress
+        complete: Complete
+        evaluation_criteria: Evaluation Criteria
+        max_score: "Max %{score} points"
+        entries_list: Entry List
+        entries_count: "%{count} entries"
+        submitter: Submitter
+        own_entry: Your Entry
+        evaluated: Evaluated
+        not_evaluated: Not Evaluated
+        action_view: View
+        action_edit: Edit
+        action_evaluate: Evaluate
+        no_entries: No entries yet
+        no_entries_hint: Entries will appear here once submissions begin
+    judge_evaluations:
+      index:
+        title: Evaluation List
+        back_to_contest: Back to Contest Details
+        select_entry: Select an entry to evaluate
+        own_entry: Your Entry
+        evaluated: Evaluated
+        not_evaluated: Not Evaluated
+      show:
+        entry: Entry
+        evaluation: Evaluation
+        back_to_entries: Back to Entry List
+        submitter: Submitter
+        description: Description
+        location: Location
+        taken_at: Date Taken
+        submitted_at: Submitted At
+        evaluation_form: Evaluation Form
+        results_readonly: Results Announced (Read Only)
+        score_range: "1 to %{max} points"
+        comment_label: Comment (Optional)
+        no_comment: No comment
+        comment_placeholder: Enter your feedback for this entry...
+        comment_hint: Up to 2000 characters
+        cancel: Cancel
+        submit_update: Update Evaluation
+        submit_save: Save Evaluation
+        back_to_entries: Back to Entry List

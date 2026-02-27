@@ -21,7 +21,7 @@ module Admin
       @category.position = Category.maximum(:position).to_i + 1
 
       if @category.save
-        redirect_to admin_categories_path, notice: "カテゴリを作成しました"
+        redirect_to admin_categories_path, notice: t('flash.admin.categories.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -32,7 +32,7 @@ module Admin
 
     def update
       if @category.update(category_params)
-        redirect_to admin_categories_path, notice: "カテゴリを更新しました"
+        redirect_to admin_categories_path, notice: t('flash.admin.categories.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -40,10 +40,10 @@ module Admin
 
     def destroy
       if @category.contests.exists?
-        redirect_to admin_categories_path, alert: "このカテゴリに関連するコンテストがあるため削除できません"
+        redirect_to admin_categories_path, alert: t('flash.admin.categories.has_contests')
       else
         @category.destroy
-        redirect_to admin_categories_path, notice: "カテゴリを削除しました"
+        redirect_to admin_categories_path, notice: t('flash.admin.categories.destroyed')
       end
     end
 

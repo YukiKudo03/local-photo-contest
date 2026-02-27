@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ja" class="h-full">
+<html lang="<%= I18n.locale %>" class="h-full">
   <head>
-    <title>管理画面 - <%= content_for(:title) || "Local Photo Contest" %></title>
+    <title><%= t('admin.layout.title_prefix') %> - <%= content_for(:title) || "Local Photo Contest" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -23,27 +23,27 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span class="ml-2 text-white font-bold">管理画面</span>
+                  <span class="ml-2 text-white font-bold"><%= t('admin.layout.admin_panel') %></span>
                 <% end %>
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4" data-tutorial="admin-nav">
-                  <%= link_to "ダッシュボード", admin_dashboard_path,
+                  <%= link_to t('admin.layout.dashboard'), admin_dashboard_path,
                       data: { tutorial: "admin-dashboard-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path == admin_dashboard_path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
-                  <%= link_to "ユーザー", admin_users_path,
+                  <%= link_to t('admin.layout.users'), admin_users_path,
                       data: { tutorial: "admin-users-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_users_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
-                  <%= link_to "コンテスト", admin_contests_path,
+                  <%= link_to t('admin.layout.contests'), admin_contests_path,
                       data: { tutorial: "admin-contests-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_contests_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
-                  <%= link_to "カテゴリ", admin_categories_path,
+                  <%= link_to t('admin.layout.categories'), admin_categories_path,
                       data: { tutorial: "admin-categories-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_categories_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
-                  <%= link_to "監査ログ", admin_audit_logs_path,
+                  <%= link_to t('admin.layout.audit_logs'), admin_audit_logs_path,
                       data: { tutorial: "admin-audit-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path.start_with?(admin_audit_logs_path) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
-                  <%= link_to "チュートリアル分析", admin_tutorial_analytics_path,
+                  <%= link_to t('admin.layout.tutorial_analytics'), admin_tutorial_analytics_path,
                       data: { tutorial: "admin-tutorial-analytics-link" },
                       class: "rounded-md px-3 py-2 text-sm font-medium #{request.path == admin_tutorial_analytics_path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}" %>
                 </div>
@@ -52,9 +52,9 @@
             <div class="hidden md:block">
               <div class="ml-4 flex items-center md:ml-6">
                 <span class="text-gray-300 text-sm mr-4"><%= current_user.email %></span>
-                <%= link_to "管理者ガイド", help_guide_path(:admin), class: "text-gray-300 hover:text-white text-sm mr-4" %>
-                <%= link_to "サイトに戻る", root_path, class: "text-gray-300 hover:text-white text-sm mr-4" %>
-                <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+                <%= link_to t('admin.layout.admin_guide'), help_guide_path(:admin), class: "text-gray-300 hover:text-white text-sm mr-4" %>
+                <%= link_to t('admin.layout.back_to_site'), root_path, class: "text-gray-300 hover:text-white text-sm mr-4" %>
+                <%= button_to t('admin.layout.logout'), destroy_user_session_path, method: :delete,
                     class: "rounded-md bg-gray-700 px-3 py-2 text-sm font-medium text-white hover:bg-gray-600" %>
               </div>
             </div>

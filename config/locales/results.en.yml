@@ -2,12 +2,28 @@ en:
   results:
     show:
       title: Contest Results
+      subtitle: Contest Results
       back_to_contest: Back to Contest
+      my_result: Your Result
+      rank_position: "Rank %{rank}"
+      total_score: "Total Score: %{score}"
+      share_title: "Won %{rank_label} in %{contest_title}!"
+      share_description: "Achieved rank %{rank} in photo contest \"%{contest_title}\"."
+      judge_score: "Judge Score: %{score}"
+      vote_count: "Votes: %{count}"
       winners_title: Winners
       all_rankings: All Rankings
       no_entries: No entries
       votes: votes
-      announced_at: Results Announced
+      score: "Score: %{score}"
+      entry_image_alt: Photo contest entry
+      untitled: Untitled
+      announced_at: "Results Announced: %{date}"
+    discovery_ranking:
+      title: Discovery Ranking
+      subtitle: By certified spot count
+      spots: spots
+      profile_image_alt: Profile image
 
   organizers:
     contests:

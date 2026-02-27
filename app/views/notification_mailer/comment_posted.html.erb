@@ -15,23 +15,23 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>新しいコメント</h1>
+      <h1><%= t('mailers.notification.comment_posted.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>あなたの作品「<strong><%= @entry.title.presence || "無題" %></strong>」に<%= @comment.user.display_name %>さんからコメントがつきました。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.comment_posted.body', entry_title: @entry.title.presence || t('mailers.notification.comment_posted.untitled'), commenter: @comment.user.display_name) %></p>
 
       <div class="comment-box">
         <p><%= truncate(@comment.body, length: 200) %></p>
       </div>
 
       <p style="text-align: center;">
-        <a href="<%= entry_url(@entry) %>" class="button">コメントを確認する</a>
+        <a href="<%= entry_url(@entry) %>" class="button"><%= t('mailers.notification.comment_posted.view_button') %></a>
       </p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

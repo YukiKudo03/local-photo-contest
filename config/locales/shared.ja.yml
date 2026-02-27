@@ -1,0 +1,17 @@
+ja:
+  shared:
+    flash:
+      success: 成功
+      error: エラー
+      dismiss_notice: 通知を閉じる
+      dismiss_error: エラー通知を閉じる
+      close: 閉じる
+    share_buttons:
+      share: "共有:"
+      twitter_title: Xで共有
+      facebook_title: Facebookで共有
+      line_title: LINEで共有
+      copy_link_title: リンクをコピー
+  pwa:
+    manifest:
+      description: 地域のフォトコンテストに参加して、あなたの写真を披露しましょう

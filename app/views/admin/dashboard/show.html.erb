@@ -1,4 +1,4 @@
-<% content_for :title, "ダッシュボード" %>
+<% content_for :title, t('admin.dashboard.title') %>
 
 <%# チュートリアル: 管理者オンボーディング %>
 <%= render "tutorials/welcome_modal", tutorial_type: "admin_onboarding" if defined?(should_show_tutorial?) && should_show_tutorial?("admin_onboarding") %>
@@ -6,8 +6,8 @@
 
 <div class="mb-8 flex items-center justify-between">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">管理者ダッシュボード</h1>
-    <p class="mt-1 text-sm text-gray-500">システム全体の統計と状況を確認できます</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('admin.dashboard.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('admin.dashboard.subtitle') %></p>
   </div>
   <%= render "tutorials/help_button", tutorial_type: "admin_onboarding" if defined?(render) %>
 </div>
@@ -24,11 +24,11 @@
         </div>
         <div class="ml-5 w-0 flex-1">
           <dl>
-            <dt class="text-sm font-medium text-gray-500 truncate">総ユーザー数</dt>
+            <dt class="text-sm font-medium text-gray-500 truncate"><%= t('admin.dashboard.total_users_label') %></dt>
             <dd class="flex items-baseline">
               <div class="text-2xl font-semibold text-gray-900"><%= number_with_delimiter(@stats[:total_users]) %></div>
               <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                +<%= @stats[:users_today] %> 今日
+                +<%= @stats[:users_today] %> <%= t('admin.dashboard.today') %>
               </div>
             </dd>
           </dl>
@@ -47,11 +47,11 @@
         </div>
         <div class="ml-5 w-0 flex-1">
           <dl>
-            <dt class="text-sm font-medium text-gray-500 truncate">総コンテスト数</dt>
+            <dt class="text-sm font-medium text-gray-500 truncate"><%= t('admin.dashboard.total_contests_label') %></dt>
             <dd class="flex items-baseline">
               <div class="text-2xl font-semibold text-gray-900"><%= number_with_delimiter(@stats[:total_contests]) %></div>
               <div class="ml-2 flex items-baseline text-sm font-semibold text-blue-600">
-                <%= @stats[:active_contests] %> アクティブ
+                <%= @stats[:active_contests] %> <%= t('admin.dashboard.active') %>
               </div>
             </dd>
           </dl>
@@ -70,11 +70,11 @@
         </div>
         <div class="ml-5 w-0 flex-1">
           <dl>
-            <dt class="text-sm font-medium text-gray-500 truncate">総応募数</dt>
+            <dt class="text-sm font-medium text-gray-500 truncate"><%= t('admin.dashboard.total_entries_label') %></dt>
             <dd class="flex items-baseline">
               <div class="text-2xl font-semibold text-gray-900"><%= number_with_delimiter(@stats[:total_entries]) %></div>
               <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                +<%= @stats[:entries_today] %> 今日
+                +<%= @stats[:entries_today] %> <%= t('admin.dashboard.today') %>
               </div>
             </dd>
           </dl>
@@ -93,7 +93,7 @@
         </div>
         <div class="ml-5 w-0 flex-1">
           <dl>
-            <dt class="text-sm font-medium text-gray-500 truncate">モデレーション待ち</dt>
+            <dt class="text-sm font-medium text-gray-500 truncate"><%= t('admin.dashboard.pending_moderation') %></dt>
             <dd class="flex items-baseline">
               <div class="text-2xl font-semibold <%= @stats[:pending_moderation] > 0 ? 'text-amber-600' : 'text-gray-900' %>">
                 <%= number_with_delimiter(@stats[:pending_moderation]) %>
@@ -110,7 +110,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8" data-tutorial="admin-charts">
   <!-- User Growth Chart -->
   <div class="bg-white shadow rounded-lg p-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-4">ユーザー登録数（過去30日）</h3>
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.dashboard.user_registrations_chart') %></h3>
     <div class="h-64" data-controller="chart" data-chart-type-value="line" data-chart-data-value="<%= @user_stats.to_json %>">
       <canvas data-chart-target="canvas"></canvas>
     </div>
@@ -118,7 +118,7 @@
 
   <!-- Entry Growth Chart -->
   <div class="bg-white shadow rounded-lg p-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-4">応募数（過去30日）</h3>
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.dashboard.entries_chart') %></h3>
     <div class="h-64" data-controller="chart" data-chart-type-value="line" data-chart-data-value="<%= @entry_stats.to_json %>">
       <canvas data-chart-target="canvas"></canvas>
     </div>
@@ -130,7 +130,7 @@
   <!-- Recent Users -->
   <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-      <h3 class="text-lg font-medium text-gray-900">最新のユーザー</h3>
+      <h3 class="text-lg font-medium text-gray-900"><%= t('admin.dashboard.recent_users') %></h3>
     </div>
     <ul class="divide-y divide-gray-200">
       <% @recent_users.each do |user| %>
@@ -154,14 +154,14 @@
       <% end %>
     </ul>
     <div class="px-4 py-3 bg-gray-50 text-right">
-      <%= link_to "すべて見る", admin_users_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+      <%= link_to t('admin.dashboard.view_all'), admin_users_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
     </div>
   </div>
 
   <!-- Recent Contests -->
   <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-      <h3 class="text-lg font-medium text-gray-900">最新のコンテスト</h3>
+      <h3 class="text-lg font-medium text-gray-900"><%= t('admin.dashboard.recent_contests') %></h3>
     </div>
     <ul class="divide-y divide-gray-200">
       <% @recent_contests.each do |contest| %>
@@ -182,21 +182,21 @@
       <% end %>
     </ul>
     <div class="px-4 py-3 bg-gray-50 text-right">
-      <%= link_to "すべて見る", admin_contests_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+      <%= link_to t('admin.dashboard.view_all'), admin_contests_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
     </div>
   </div>
 
   <!-- Recent Entries -->
   <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-      <h3 class="text-lg font-medium text-gray-900">最新の応募</h3>
+      <h3 class="text-lg font-medium text-gray-900"><%= t('admin.dashboard.recent_entries') %></h3>
     </div>
     <ul class="divide-y divide-gray-200">
       <% @recent_entries.each do |entry| %>
         <li class="px-4 py-4">
           <div class="flex items-center space-x-3">
             <% if entry.photo.attached? %>
-              <%= image_tag entry.photo.variant(resize_to_fill: [40, 40]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "h-10 w-10 rounded object-cover", loading: "lazy" %>
+              <%= image_tag entry.photo.variant(resize_to_fill: [40, 40]), alt: entry.title.presence || t('admin.dashboard.entry_image_alt'), class: "h-10 w-10 rounded object-cover", loading: "lazy" %>
             <% else %>
               <div class="h-10 w-10 rounded bg-gray-100 flex items-center justify-center">
                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -205,7 +205,7 @@
               </div>
             <% end %>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || "無題" %></p>
+              <p class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || t('admin.dashboard.untitled') %></p>
               <p class="text-sm text-gray-500 truncate"><%= entry.contest.title %></p>
             </div>
           </div>

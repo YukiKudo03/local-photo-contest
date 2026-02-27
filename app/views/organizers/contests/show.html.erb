@@ -6,7 +6,7 @@
         <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        コンテスト一覧に戻る
+        <%= t('organizers.contests.show.back') %>
       <% end %>
       <h1 class="text-2xl font-bold text-gray-900"><%= @contest.title %></h1>
     </div>
@@ -14,15 +14,15 @@
       <% case @contest.status %>
       <% when "draft" %>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-          下書き
+          <%= t('organizers.contests.index.draft') %>
         </span>
       <% when "published" %>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-          公開中
+          <%= t('organizers.contests.index.published') %>
         </span>
       <% when "finished" %>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-          終了
+          <%= t('organizers.contests.index.finished') %>
         </span>
       <% end %>
     </div>
@@ -42,7 +42,7 @@
             <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p class="mt-2 text-sm text-gray-400">サムネイル未設定</p>
+            <p class="mt-2 text-sm text-gray-400"><%= t('organizers.contests.show.no_thumbnail') %></p>
           </div>
         <% end %>
       </div>
@@ -51,41 +51,41 @@
     <!-- Contest Details -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">コンテスト詳細</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.show.contest_info') %></h2>
       </div>
       <div class="p-6 space-y-6">
         <% if @contest.theme.present? %>
           <div>
-            <dt class="text-sm font-medium text-gray-500">テーマ</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.show.theme') %></dt>
             <dd class="mt-1 text-gray-900"><%= @contest.theme %></dd>
           </div>
         <% end %>
 
         <% if @contest.description.present? %>
           <div>
-            <dt class="text-sm font-medium text-gray-500">説明</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.show.description') %></dt>
             <dd class="mt-1 text-gray-900 whitespace-pre-wrap"><%= @contest.description %></dd>
           </div>
         <% end %>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <dt class="text-sm font-medium text-gray-500">応募開始日時</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.form.entry_start_label') %></dt>
             <dd class="mt-1 text-gray-900">
               <% if @contest.entry_start_at.present? %>
-                <%= @contest.entry_start_at.strftime('%Y年%m月%d日 %H:%M') %>
+                <%= l(@contest.entry_start_at, format: :long) %>
               <% else %>
-                <span class="text-gray-400">未設定</span>
+<span class="text-gray-400"><%= t('organizers.contests.show.not_set') %></span>
               <% end %>
             </dd>
           </div>
           <div>
-            <dt class="text-sm font-medium text-gray-500">応募終了日時</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.form.entry_end_label') %></dt>
             <dd class="mt-1 text-gray-900">
               <% if @contest.entry_end_at.present? %>
-                <%= @contest.entry_end_at.strftime('%Y年%m月%d日 %H:%M') %>
+                <%= l(@contest.entry_end_at, format: :long) %>
               <% else %>
-                <span class="text-gray-400">未設定</span>
+<span class="text-gray-400"><%= t('organizers.contests.show.not_set') %></span>
               <% end %>
             </dd>
           </div>
@@ -93,12 +93,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <dt class="text-sm font-medium text-gray-500">作成日時</dt>
-            <dd class="mt-1 text-gray-900"><%= @contest.created_at.strftime('%Y年%m月%d日 %H:%M') %></dd>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.show.created_at') %></dt>
+            <dd class="mt-1 text-gray-900"><%= l(@contest.created_at, format: :long) %></dd>
           </div>
           <div>
-            <dt class="text-sm font-medium text-gray-500">更新日時</dt>
-            <dd class="mt-1 text-gray-900"><%= @contest.updated_at.strftime('%Y年%m月%d日 %H:%M') %></dd>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.contests.show.updated_at') %></dt>
+            <dd class="mt-1 text-gray-900"><%= l(@contest.updated_at, format: :long) %></dd>
           </div>
         </div>
       </div>
@@ -108,11 +108,11 @@
     <% if @contest.area.present? %>
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900">エリア情報</h2>
+          <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.show.area') %></h2>
         </div>
         <div class="p-6 space-y-4">
           <div>
-            <dt class="text-sm font-medium text-gray-500">エリア名</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.form.name_label') %></dt>
             <dd class="mt-1">
               <%= link_to @contest.area.name, organizers_area_path(@contest.area), class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
             </dd>
@@ -120,7 +120,7 @@
 
           <% if @contest.area.full_address.present? %>
             <div>
-              <dt class="text-sm font-medium text-gray-500">住所</dt>
+              <dt class="text-sm font-medium text-gray-500"><%= t('organizers.spots.form.address_label') %></dt>
               <dd class="mt-1 text-gray-900"><%= @contest.area.full_address %></dd>
             </div>
           <% end %>
@@ -128,14 +128,14 @@
           <% if @contest.require_spot %>
             <div class="flex items-center">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                スポット指定必須
+                <%= t('organizers.contests.show.spot_required') %>
               </span>
             </div>
           <% end %>
 
           <% if @contest.area.center_coordinates %>
             <div>
-              <dt class="text-sm font-medium text-gray-500 mb-2">地図プレビュー</dt>
+              <dt class="text-sm font-medium text-gray-500 mb-2"><%= t('organizers.contests.show.map_preview') %></dt>
               <dd>
                 <div data-controller="map"
                      data-map-latitude-value="<%= @contest.area.latitude %>"
@@ -158,7 +158,7 @@
     <!-- Action Buttons -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">アクション</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.show.actions') %></h2>
       </div>
       <div class="p-6 space-y-3">
         <%= link_to edit_organizers_contest_path(@contest), class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors group" do %>
@@ -168,8 +168,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">編集</p>
-            <p class="text-xs text-gray-500">コンテスト情報を編集</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.edit') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.edit_desc') %></p>
           </div>
         <% end %>
 
@@ -180,8 +180,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">応募一覧</p>
-            <p class="text-xs text-gray-500"><%= @contest.entries.count %>件の応募</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.entries_section') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.entries_count', count: @contest.entries.count) %></p>
           </div>
         <% end %>
 
@@ -199,12 +199,12 @@
               <% end %>
             </div>
             <div class="ml-3">
-              <p class="text-sm font-medium text-gray-900">モデレーション</p>
+              <p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.moderation') %></p>
               <p class="text-xs text-gray-500">
                 <% if moderation_count > 0 %>
-                  <span class="text-amber-600 font-medium"><%= moderation_count %>件の確認待ち</span>
+                  <span class="text-amber-600 font-medium"><%= t('organizers.contests.show.pending_review', count: moderation_count) %></span>
                 <% else %>
-                  すべて審査済み
+<%= t('organizers.contests.show.all_reviewed') %>
                 <% end %>
               </p>
             </div>
@@ -219,8 +219,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">スポット管理</p>
-            <p class="text-xs text-gray-500"><%= @contest.spots.count %>件のスポット</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.spots.index.title') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.spots', count: @contest.spots.count) %></p>
           </div>
         <% end %>
 
@@ -237,12 +237,12 @@
             <% end %>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">発掘スポット審査</p>
+            <p class="text-sm font-medium text-gray-900"><%= t('organizers.discovery_spots.index.title') %></p>
             <p class="text-xs text-gray-500">
               <% if discovery_pending_count > 0 %>
-                <span class="text-amber-600 font-medium"><%= discovery_pending_count %>件の審査待ち</span>
+<span class="text-amber-600 font-medium"><%= t('organizers.contests.show.pending_review', count: discovery_pending_count) %></span>
               <% else %>
-                すべて審査済み
+                <%= t('organizers.contests.show.all_reviewed') %>
               <% end %>
             </p>
           </div>
@@ -255,8 +255,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">発掘チャレンジ</p>
-            <p class="text-xs text-gray-500"><%= @contest.discovery_challenges.count %>件のチャレンジ</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.discovery_challenges.index.title') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.challenges_count', count: @contest.discovery_challenges.count) %></p>
           </div>
         <% end %>
 
@@ -267,8 +267,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">統計ダッシュボード</p>
-            <p class="text-xs text-gray-500">応募・投票の分析</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.statistics') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.statistics_desc') %></p>
           </div>
         <% end %>
 
@@ -279,8 +279,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">テンプレートとして保存</p>
-            <p class="text-xs text-gray-500">設定を再利用可能に保存</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.save_as_template') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.save_template_desc') %></p>
           </div>
         <% end %>
 
@@ -291,7 +291,7 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">審査設定</p>
+            <p class="text-sm font-medium text-gray-900"><%= t('organizers.judging_settings.edit.title') %></p>
             <p class="text-xs text-gray-500">
               <%= t("activerecord.attributes.contest.judging_methods.#{@contest.judging_method}", default: @contest.judging_method) %>
             </p>
@@ -305,8 +305,8 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">審査員管理</p>
-            <p class="text-xs text-gray-500"><%= @contest.contest_judges.count %>人の審査員</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contest_judges.index.title') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.contests.show.judges_count', count: @contest.contest_judges.count) %></p>
           </div>
         <% end %>
 
@@ -318,12 +318,12 @@
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm font-medium text-gray-900">結果管理</p>
+              <p class="text-sm font-medium text-gray-900"><%= t('organizers.results.preview.title') %></p>
               <p class="text-xs text-gray-500">
                 <% if @contest.results_announced? %>
-                  発表済み
+                  <%= t('organizers.contests.show.results_announced') %>
                 <% else %>
-                  ランキング確認・発表
+                  <%= t('organizers.contests.show.ranking_preview') %>
                 <% end %>
               </p>
             </div>
@@ -331,7 +331,7 @@
         <% end %>
 
         <% if @contest.draft? %>
-          <%= button_to publish_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: "コンテストを公開しますか？公開後は削除できなくなります。" }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-colors group" do %>
+          <%= button_to publish_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: t('organizers.contests.show.publish_confirm') }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-colors group" do %>
             <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
               <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -339,36 +339,36 @@
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">公開</p>
-              <p class="text-xs text-gray-500">コンテストを公開する</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.publish') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.contests.show.publish_desc') %></p>
             </div>
           <% end %>
         <% end %>
 
         <% if @contest.published? %>
-          <%= button_to finish_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: "コンテストを終了しますか？終了後は新規応募を受け付けられなくなります。" }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group" do %>
+          <%= button_to finish_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: t('organizers.contests.show.finish_confirm') }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group" do %>
             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
               <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">終了</p>
-              <p class="text-xs text-gray-500">コンテストを終了する</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.finish') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.contests.show.finish_desc') %></p>
             </div>
           <% end %>
         <% end %>
 
         <% if @contest.finished? && !@contest.results_announced? %>
-          <%= button_to announce_results_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: "結果を発表しますか？発表後は参加者に結果が公開されます。" }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-yellow-300 hover:bg-yellow-50 transition-colors group" do %>
+          <%= button_to announce_results_organizers_contest_path(@contest), method: :patch, data: { turbo_confirm: t('organizers.contests.show.announce_confirm') }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-yellow-300 hover:bg-yellow-50 transition-colors group" do %>
             <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center group-hover:bg-yellow-200 transition-colors">
               <svg class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">結果発表</p>
-              <p class="text-xs text-gray-500">コンテスト結果を発表する</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.announce_results') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.contests.show.announce_desc') %></p>
             </div>
           <% end %>
         <% end %>
@@ -381,22 +381,22 @@
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">結果ページを見る</p>
-              <p class="text-xs text-gray-500">発表済みの結果を確認</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.view_results') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.contests.show.view_results_desc') %></p>
             </div>
           <% end %>
         <% end %>
 
         <% unless @contest.published? %>
-          <%= button_to organizers_contest_path(@contest), method: :delete, data: { turbo_confirm: "コンテストを削除しますか？この操作は取り消せません。" }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-colors group" do %>
+          <%= button_to organizers_contest_path(@contest), method: :delete, data: { turbo_confirm: t('organizers.contests.show.delete_confirm') }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-colors group" do %>
             <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
               <svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">削除</p>
-              <p class="text-xs text-gray-500">コンテストを削除する</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.contests.show.delete_contest') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.contests.show.delete_desc') %></p>
             </div>
           <% end %>
         <% end %>
@@ -406,7 +406,7 @@
     <!-- Status Info -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">ステータス情報</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.show.status') %></h2>
       </div>
       <div class="p-6">
         <div class="space-y-4">
@@ -416,19 +416,19 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
               </span>
-              <span class="ml-3 text-sm text-gray-700">応募受付中</span>
+              <span class="ml-3 text-sm text-gray-700"><%= t('organizers.contests.show.accepting_entries') %></span>
             <% else %>
               <span class="inline-flex rounded-full h-3 w-3 bg-gray-300"></span>
-              <span class="ml-3 text-sm text-gray-500">応募受付停止中</span>
+              <span class="ml-3 text-sm text-gray-500"><%= t('organizers.contests.show.not_accepting_entries') %></span>
             <% end %>
           </div>
           <div class="flex items-center">
             <% if @contest.results_announced? %>
               <span class="inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
-              <span class="ml-3 text-sm text-gray-700">結果発表済み</span>
+              <span class="ml-3 text-sm text-gray-700"><%= t('organizers.contests.show.results_announced') %></span>
             <% elsif @contest.finished? %>
               <span class="inline-flex rounded-full h-3 w-3 bg-blue-300"></span>
-              <span class="ml-3 text-sm text-gray-500">結果未発表</span>
+              <span class="ml-3 text-sm text-gray-500"><%= t('organizers.contests.show.results_not_announced') %></span>
             <% end %>
           </div>
         </div>

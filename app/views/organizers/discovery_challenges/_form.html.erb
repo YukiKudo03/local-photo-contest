@@ -6,7 +6,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">入力内容に問題があります</h3>
+          <h3 class="text-sm font-medium text-red-800"><%= t('organizers.shared.form_errors') %></h3>
           <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
             <% challenge.errors.full_messages.each do |message| %>
               <li><%= message %></li>
@@ -20,32 +20,32 @@
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
     <!-- Name -->
     <div>
-      <%= f.label :name, "チャレンジ名", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_field :name, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "例: 隠れた桜スポットを探せ！" %>
-      <p class="mt-1 text-xs text-gray-500">最大100文字</p>
+      <%= f.label :name, t('organizers.discovery_challenges.form.title_label'), class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t('organizers.discovery_challenges.form.name_placeholder') %>
+      <p class="mt-1 text-xs text-gray-500"><%= t('organizers.discovery_challenges.form.name_hint') %></p>
     </div>
 
     <!-- Theme -->
     <div>
-      <%= f.label :theme, "テーマ", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_field :theme, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "例: 春の花見スポット" %>
-      <p class="mt-1 text-xs text-gray-500">参加者に伝える発掘テーマを入力してください</p>
+      <%= f.label :theme, t('organizers.discovery_challenges.form.theme_label'), class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :theme, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t('organizers.discovery_challenges.form.theme_placeholder') %>
+      <p class="mt-1 text-xs text-gray-500"><%= t('organizers.discovery_challenges.form.theme_hint') %></p>
     </div>
 
     <!-- Description -->
     <div>
-      <%= f.label :description, "説明", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_area :description, rows: 4, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "チャレンジの詳細な説明や参加方法を記載してください..." %>
+      <%= f.label :description, t('organizers.discovery_challenges.form.description_label'), class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :description, rows: 4, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: t('organizers.discovery_challenges.form.description_placeholder') %>
     </div>
 
     <!-- Period -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <%= f.label :starts_at, "開始日時", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :starts_at, t('organizers.discovery_challenges.form.start_date_label'), class: "block text-sm font-medium text-gray-700" %>
         <%= f.datetime_local_field :starts_at, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
       </div>
       <div>
-        <%= f.label :ends_at, "終了日時", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.label :ends_at, t('organizers.discovery_challenges.form.end_date_label'), class: "block text-sm font-medium text-gray-700" %>
         <%= f.datetime_local_field :ends_at, class: "mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
       </div>
     </div>
@@ -53,7 +53,7 @@
 
   <!-- Actions -->
   <div class="flex items-center justify-end gap-3">
-    <%= link_to "キャンセル", organizers_contest_discovery_challenges_path(@contest), class: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50" %>
-    <%= f.submit challenge.persisted? ? "更新する" : "作成する", class: "px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 cursor-pointer" %>
+    <%= link_to t('organizers.discovery_challenges.form.cancel'), organizers_contest_discovery_challenges_path(@contest), class: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50" %>
+    <%= f.submit challenge.persisted? ? t('organizers.discovery_challenges.form.submit_update') : t('organizers.discovery_challenges.form.submit_create'), class: "px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 cursor-pointer" %>
   </div>
 <% end %>

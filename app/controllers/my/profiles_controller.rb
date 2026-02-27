@@ -16,7 +16,7 @@ module My
       @user = current_user
 
       if @user.update(profile_params)
-        redirect_to my_profile_path, notice: "プロフィールを更新しました。"
+        redirect_to my_profile_path, notice: t('flash.profiles.updated')
       else
         render :edit, status: :unprocessable_entity
       end

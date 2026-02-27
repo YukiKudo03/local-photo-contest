@@ -5,7 +5,7 @@
 <% hashtags = share_data[:hashtags] || [] %>
 
 <div class="share-buttons" data-controller="share">
-  <span class="text-xs font-medium text-gray-500 mr-2">共有:</span>
+  <span class="text-xs font-medium text-gray-500 mr-2"><%= t('shared.share_buttons.share') %></span>
 
   <div class="inline-flex items-center gap-1">
     <!-- Twitter/X -->
@@ -13,7 +13,7 @@
        target="_blank"
        rel="noopener noreferrer"
        class="share-button share-twitter"
-       title="Xで共有"
+       title="<%= t('shared.share_buttons.twitter_title') %>"
        data-action="click->share#trackShare"
        data-share-platform-param="twitter">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -26,7 +26,7 @@
        target="_blank"
        rel="noopener noreferrer"
        class="share-button share-facebook"
-       title="Facebookで共有"
+       title="<%= t('shared.share_buttons.facebook_title') %>"
        data-action="click->share#trackShare"
        data-share-platform-param="facebook">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -39,7 +39,7 @@
        target="_blank"
        rel="noopener noreferrer"
        class="share-button share-line"
-       title="LINEで共有"
+       title="<%= t('shared.share_buttons.line_title') %>"
        data-action="click->share#trackShare"
        data-share-platform-param="line">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -50,7 +50,7 @@
     <!-- Copy Link -->
     <button type="button"
             class="share-button share-copy"
-            title="リンクをコピー"
+            title="<%= t('shared.share_buttons.copy_link_title') %>"
             data-action="click->share#copyLink"
             data-share-url-param="<%= url %>">
       <svg class="w-4 h-4 copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

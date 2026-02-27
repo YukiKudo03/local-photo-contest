@@ -156,7 +156,7 @@ class User < ApplicationRecord
   def avatar_content_type
     return unless avatar.attached?
     unless avatar.content_type.in?(%w[image/jpeg image/png image/gif])
-      errors.add(:avatar, "はJPEG、PNG、GIF形式のみ対応しています")
+      errors.add(:avatar, :content_type_invalid)
     end
   end
 
@@ -167,7 +167,7 @@ class User < ApplicationRecord
   def avatar_size
     return unless avatar.attached?
     if avatar.byte_size > 5.megabytes
-      errors.add(:avatar, "は5MB以下にしてください")
+      errors.add(:avatar, :file_size_too_large)
     end
   end
 end

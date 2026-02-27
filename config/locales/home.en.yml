@@ -1,0 +1,22 @@
+en:
+  home:
+    hero:
+      tagline: Share local charm through photos. Your picture colors the community.
+      go_to_dashboard: Go to Dashboard
+      register_as_organizer: Register as Organizer
+      login: Log In
+    features:
+      title: Platform Features
+      easy_management:
+        title: Easy Contest Management
+        description: Anyone can easily host and manage photo contests with our intuitive admin panel.
+      security:
+        title: Reliable Security
+        description: Two-factor authentication, account locking, and comprehensive security measures.
+      community:
+        title: Local Community
+        description: Share local charm through photos and strengthen community bonds.
+    cta:
+      title: Get Started Now
+      description: Create an account and host a local photo contest!
+      register_free: Register for Free

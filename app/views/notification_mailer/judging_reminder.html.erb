@@ -16,24 +16,24 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>審査のリマインダー</h1>
+      <h1><%= t('mailers.notification.judging_reminder.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>コンテスト「<strong><%= @contest.title %></strong>」の審査が未完了です。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.judging_reminder.body', contest_title: @contest.title) %></p>
 
-      <p>審査進捗: <strong><%= @progress %>%</strong></p>
+      <p><%= t('mailers.notification.judging_reminder.progress') %> <strong><%= @progress %>%</strong></p>
       <div class="progress">
         <div class="progress-bar" style="width: <%= @progress %>%"></div>
       </div>
 
       <p style="text-align: center;">
-        <a href="<%= my_judge_assignment_url(@contest_judge) %>" class="button">審査を続ける</a>
+        <a href="<%= my_judge_assignment_url(@contest_judge) %>" class="button"><%= t('mailers.notification.judging_reminder.view_button') %></a>
       </p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

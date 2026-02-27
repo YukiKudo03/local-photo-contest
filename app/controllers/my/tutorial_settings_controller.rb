@@ -10,10 +10,10 @@ module My
 
     def update
       if current_user.update_tutorial_settings(tutorial_settings_params)
-        redirect_to my_tutorial_settings_path, notice: "チュートリアル設定を更新しました"
+        redirect_to my_tutorial_settings_path, notice: t('flash.tutorial_settings.updated')
       else
         @tutorial_progresses = tutorial_types_with_progress
-        flash.now[:alert] = "設定の更新に失敗しました"
+        flash.now[:alert] = t('flash.tutorial_settings.update_failed')
         render :show, status: :unprocessable_entity
       end
     end
@@ -60,29 +60,11 @@ module My
     end
 
     def tutorial_type_label(type)
-      {
-        "participant_onboarding" => "参加者向けガイド",
-        "organizer_onboarding" => "運営者向けガイド",
-        "admin_onboarding" => "管理者向けガイド",
-        "judge_onboarding" => "審査員向けガイド",
-        "contest_creation" => "コンテスト作成",
-        "area_management" => "エリア管理",
-        "photo_submission" => "写真投稿",
-        "voting" => "投票"
-      }[type] || type
+      t("tutorials.types.#{type}.label", default: type)
     end
 
     def tutorial_type_description(type)
-      {
-        "participant_onboarding" => "Local Photo Contestの基本的な使い方を学びます",
-        "organizer_onboarding" => "コンテストの運営に必要な機能を学びます",
-        "admin_onboarding" => "管理者向けの機能を学びます",
-        "judge_onboarding" => "審査員としての評価方法を学びます",
-        "contest_creation" => "新しいコンテストの作成方法を学びます",
-        "area_management" => "撮影エリアの管理方法を学びます",
-        "photo_submission" => "写真の投稿方法を学びます",
-        "voting" => "作品への投票方法を学びます"
-      }[type] || ""
+      t("tutorials.types.#{type}.description", default: "")
     end
   end
 end

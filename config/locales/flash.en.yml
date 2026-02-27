@@ -1,0 +1,146 @@
+en:
+  flash:
+    contests:
+      created: Contest created successfully.
+      updated: Contest updated successfully.
+      destroyed: Contest deleted successfully.
+      published: Contest published successfully.
+      finished: Contest has been finished.
+      not_authorized: You are not authorized to perform this action.
+      unpublished: Contest unpublished.
+    areas:
+      created: Area created successfully.
+      updated: Area updated successfully.
+      destroyed: Area deleted successfully.
+      has_contests: Cannot delete because it has associated contests.
+      not_authorized: You are not authorized to perform this action.
+    spots:
+      created: Spot created successfully.
+      updated: Spot updated successfully.
+      destroyed: Spot deleted successfully.
+      merged: "%{count} spots merged into \"%{name}\"."
+      merge_select_required: Please select both target and source spots.
+      merge_failed: "Merge failed: %{message}"
+    discovery_spots:
+      certified: Spot has been certified.
+      certified_name: "\"%{name}\" has been certified."
+      rejected: Spot certification has been rejected.
+      rejected_name: "\"%{name}\" has been rejected."
+      reject_reason_required: Please enter a rejection reason.
+      merged: "%{count} spots merged into \"%{name}\"."
+      merge_source_required: Please select source spots to merge.
+      not_found: The specified spot was not found.
+    discovery_challenges:
+      created: Challenge created successfully.
+      updated: Challenge updated successfully.
+      destroyed: Challenge deleted successfully.
+      activated: Challenge activated.
+      deactivated: Challenge deactivated.
+      cannot_delete_active: Cannot delete an active challenge.
+      cannot_start: This challenge cannot be started.
+      cannot_finish: This challenge cannot be finished.
+    moderation:
+      approved: Entry approved.
+      rejected: Entry hidden.
+      reject_reason_required: Please enter a reason for hiding.
+    judge_invitations:
+      created: Judge invitation sent.
+      created_with_email: "Invitation email sent to %{email}."
+      resent: Invitation resent.
+      destroyed: Invitation cancelled.
+      accepted: Judge invitation accepted.
+      declined: Judge invitation declined.
+      already_processed: This invitation has already been processed.
+      already_accepted: This invitation has already been accepted.
+      already_declined: This invitation has already been declined.
+      already_judge: Already registered as a judge for this contest.
+      expired: This invitation has expired.
+      invalid: Invalid invitation.
+    judging_settings:
+      updated: Judging settings updated.
+    contest_judges:
+      created: Judge added.
+      destroyed: Judge removed.
+    evaluation_criteria:
+      created: Evaluation criterion created.
+      updated: Evaluation criterion updated.
+      destroyed: Evaluation criterion deleted.
+      not_editable_after_results: Cannot modify evaluation criteria after results announcement.
+    judge_evaluations:
+      created: Evaluation saved.
+      updated: Evaluation updated.
+      cannot_evaluate_own: You cannot evaluate your own entry.
+    results:
+      announced: Results have been announced.
+      not_finished: Contest has not ended yet.
+      already_announced: Results have already been announced.
+      calculated: Scores calculated.
+      not_announced: Results have not been announced yet.
+    contest_templates:
+      created: Template saved.
+      destroyed: Template deleted.
+      applied: Template applied.
+      not_authorized: You are not authorized to access this template.
+      contest_not_found: Contest not found.
+    statistics:
+      export_success: Export completed.
+      not_authorized: You are not authorized to access this contest's statistics.
+    terms:
+      accepted: Terms of Service accepted.
+      required: You must accept the Terms of Service.
+    registrations:
+      upgraded: Upgraded to organizer account.
+      confirmation_sent: A confirmation email has been sent. Please click the link in the email to activate your account.
+    confirmations:
+      resent: Confirmation email resent.
+      confirmed: Your email has been confirmed. Please log in.
+    profiles:
+      updated: Profile updated successfully.
+    notifications:
+      marked_all_read: All notifications marked as read.
+    tutorial_settings:
+      updated: Tutorial settings updated.
+      update_failed: Failed to update settings.
+    email_preferences:
+      updated: Email notification settings updated.
+      invalid_link: Invalid link.
+    comments:
+      created: Comment posted.
+      destroyed: Comment deleted.
+      not_authorized: You are not authorized to perform this action.
+    votes:
+      created: Vote recorded.
+      already_voted: Already voted.
+      destroyed: Vote removed.
+      failed: Failed to remove vote.
+      voting_closed: Voting period has ended.
+    spot_votes:
+      created: Vote recorded.
+      destroyed: Vote removed.
+      failed: Failed to remove vote.
+      not_voteable: Cannot vote for this spot.
+    entries:
+      created: Your entry has been submitted.
+      created_with_discovery: Your entry has been submitted. The discovered spot will be certified after review by the organizer.
+      updated: Entry updated successfully.
+      destroyed: Entry deleted successfully.
+      not_authorized: You are not authorized to perform this action.
+      not_editable: Cannot edit because the submission period has ended.
+      not_deletable: Cannot delete because the submission period has ended.
+    admin:
+      admin_required: Admin privileges required.
+      users:
+        updated: User updated.
+        destroyed: User deleted.
+        suspended: Account suspended.
+        unsuspended: Account suspension removed.
+        role_changed: "Role changed to \"%{role}\"."
+        invalid_role: Invalid role.
+      contests:
+        destroyed: Contest deleted.
+        force_finished: Contest force-ended.
+      categories:
+        created: Category created.
+        updated: Category updated.
+        destroyed: Category deleted.
+        has_contests: Cannot delete because it has associated contests.

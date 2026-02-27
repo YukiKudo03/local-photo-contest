@@ -29,7 +29,7 @@ RSpec.describe "Organizers::SpotManagement", type: :system do
       fill_in "住所", with: "渋谷区道玄坂1-2-3"
       fill_in "説明", with: "おしゃれなカフェです。"
 
-      click_button "登録する"
+      click_button "作成する"
 
       expect(page).to have_content("渋谷カフェ")
       expect(page).to have_content("飲食店")
@@ -38,7 +38,7 @@ RSpec.describe "Organizers::SpotManagement", type: :system do
     it "shows validation errors for invalid input" do
       visit new_organizers_contest_spot_path(contest)
 
-      click_button "登録する"
+      click_button "作成する"
 
       expect(page).to have_content("Name を入力してください")
     end
@@ -143,7 +143,7 @@ RSpec.describe "Organizers::SpotManagement", type: :system do
     it "navigates to spots from contest detail page" do
       visit organizers_contest_path(contest)
 
-      click_link "スポット管理"
+      first(:link, I18n.t('organizers.spots.index.title')).click
 
       expect(page).to have_current_path(organizers_contest_spots_path(contest))
       expect(page).to have_content("テストスポット")
@@ -192,7 +192,7 @@ RSpec.describe "Organizers::SpotManagement", type: :system do
         click_button "統合を実行"
       end
 
-      expect(page).to have_content("スポットを統合しました")
+      expect(page).to have_content("に統合しました")
       expect(page).to have_content("メインスポット")
       expect(page).not_to have_content("重複スポット")
     end

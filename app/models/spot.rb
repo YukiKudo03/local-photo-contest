@@ -32,29 +32,19 @@ class Spot < ApplicationRecord
     rejected: 3           # 却下
   }, prefix: :discovery
 
-  # Category name translations
-  CATEGORY_NAMES = {
-    restaurant: "飲食店",
-    retail: "小売店",
-    service: "サービス業",
-    landmark: "名所・ランドマーク",
-    public_facility: "公共施設",
-    park: "公園・広場",
-    temple_shrine: "寺社仏閣",
-    other: "その他"
-  }.freeze
+  # Category and discovery status keys for i18n lookup
+  CATEGORY_KEYS = %i[restaurant retail service landmark public_facility park temple_shrine other].freeze
+  DISCOVERY_STATUS_KEYS = %i[organizer_created discovered certified rejected].freeze
 
-  DISCOVERY_STATUS_NAMES = {
-    organizer_created: "主催者作成",
-    discovered: "発掘中",
-    certified: "認定済み",
-    rejected: "却下"
-  }.freeze
+  # Returns category names hash for form selects (i18n-aware)
+  def self.category_names
+    CATEGORY_KEYS.index_with { |k| I18n.t("models.spot.categories.#{k}") }
+  end
 
   # Validations
   validates :name, presence: true,
                    length: { maximum: 100 },
-                   uniqueness: { scope: :contest_id, message: "は既にこのコンテストに登録されています" }
+                   uniqueness: { scope: :contest_id, message: :already_registered }
   validates :address, length: { maximum: 200 }, allow_blank: true
   validates :description, length: { maximum: 1000 }, allow_blank: true
   validates :category, presence: true
@@ -78,11 +68,11 @@ class Spot < ApplicationRecord
   end
 
   def category_name
-    CATEGORY_NAMES[category.to_sym]
+    I18n.t("models.spot.categories.#{category}")
   end
 
   def discovery_status_name
-    DISCOVERY_STATUS_NAMES[discovery_status.to_sym]
+    I18n.t("models.spot.discovery_statuses.#{discovery_status}")
   end
 
   def discovered?

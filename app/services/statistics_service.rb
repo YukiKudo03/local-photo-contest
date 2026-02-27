@@ -115,10 +115,10 @@ class StatisticsService
       # ランキングデータを構築
       rankings = spot_counts.map do |spot_id, count|
         if spot_id.nil?
-          { spot: nil, name: "スポット未指定", count: count }
+          { spot: nil, name: I18n.t('services.statistics.no_spot'), count: count }
         else
           spot = spots_by_id[spot_id]
-          { spot: spot, name: spot&.name || "不明", count: count }
+          { spot: spot, name: spot&.name || I18n.t('services.statistics.unknown'), count: count }
         end
       end
 

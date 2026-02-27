@@ -21,7 +21,7 @@ module Admin
 
     def update
       if @user.update(user_params)
-        redirect_to admin_user_path(@user), notice: "ユーザー情報を更新しました"
+        redirect_to admin_user_path(@user), notice: t('flash.admin.users.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -29,32 +29,26 @@ module Admin
 
     def destroy
       @user.destroy
-      redirect_to admin_users_path, notice: "ユーザーを削除しました"
+      redirect_to admin_users_path, notice: t('flash.admin.users.destroyed')
     end
 
     def suspend
       @user.update!(locked_at: Time.current)
-      redirect_to admin_user_path(@user), notice: "アカウントを停止しました"
+      redirect_to admin_user_path(@user), notice: t('flash.admin.users.suspended')
     end
 
     def unsuspend
       @user.update!(locked_at: nil, failed_attempts: 0)
-      redirect_to admin_user_path(@user), notice: "アカウント停止を解除しました"
+      redirect_to admin_user_path(@user), notice: t('flash.admin.users.unsuspended')
     end
 
     def change_role
       new_role = params[:role]
       if User.roles.keys.include?(new_role)
         @user.update!(role: new_role)
-        role_name = case new_role
-        when "participant" then "参加者"
-        when "organizer" then "主催者"
-        when "admin" then "管理者"
-        else new_role
-        end
-        redirect_to admin_user_path(@user), notice: "ロールを「#{role_name}」に変更しました"
+        redirect_to admin_user_path(@user), notice: t('flash.admin.users.role_changed', role: new_role)
       else
-        redirect_to admin_user_path(@user), alert: "無効なロールです"
+        redirect_to admin_user_path(@user), alert: t('flash.admin.users.invalid_role')
       end
     end
 

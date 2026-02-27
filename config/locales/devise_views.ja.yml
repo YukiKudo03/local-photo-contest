@@ -1,0 +1,64 @@
+ja:
+  devise_views:
+    sessions:
+      title: ログイン
+      subtitle: アカウントにログインしてください
+      email: メールアドレス
+      password: パスワード
+      remember_me: ログイン状態を保持する
+      submit: ログイン
+      forgot_password: パスワードをお忘れですか？
+      sign_up: 新規登録
+    registrations:
+      title: 新規登録
+      subtitle: アカウントを作成してコンテストを運営しましょう
+      email: メールアドレス
+      password: パスワード
+      password_placeholder: 8文字以上で入力
+      password_hint: 8文字以上で設定してください
+      password_confirmation: パスワード（確認）
+      password_confirmation_placeholder: パスワードを再入力
+      submit: アカウントを作成
+      already_have_account: すでにアカウントをお持ちの方はこちら
+      edit_title: アカウント設定
+      edit_subtitle: アカウント情報を変更
+      current_password: 現在のパスワード
+      current_password_hint: 変更を確認するために必要です
+      leave_blank: 変更しない場合は空欄のまま
+      update: 更新する
+      cancel_account: アカウント削除
+      cancel_confirm: 本当にアカウントを削除しますか？
+      unhappy: "アカウントを削除しますか？"
+      back: 戻る
+      waiting_confirmation: "確認中のメールアドレス: %{email}"
+      minimum_password_length: "%{count}文字以上"
+    passwords:
+      new_title: パスワードをお忘れですか？
+      new_subtitle: 登録したメールアドレスを入力してください
+      email: メールアドレス
+      submit: パスワードリセットメールを送信
+      back_to_login: ログインに戻る
+      edit_title: パスワードを変更
+      edit_subtitle: 新しいパスワードを設定してください
+      new_password: 新しいパスワード
+      new_password_placeholder: 8文字以上で入力
+      new_password_hint: 8文字以上で設定してください
+      new_password_confirmation: 新しいパスワード（確認）
+      new_password_confirmation_placeholder: パスワードを再入力
+      change_password: パスワードを変更
+    confirmations:
+      title: 確認メールを再送信
+      email: メールアドレス
+      submit: 確認メールを再送信
+      back_to_login: ログインに戻る
+    unlocks:
+      title: ロック解除メールを再送信
+      email: メールアドレス
+      submit: ロック解除メールを再送信
+    shared:
+      links:
+        login: ログイン
+        sign_up: 新規登録
+        forgot_password: パスワードをお忘れですか？
+        no_confirmation: 確認メールが届きませんか？
+        no_unlock: ロック解除メールが届きませんか？

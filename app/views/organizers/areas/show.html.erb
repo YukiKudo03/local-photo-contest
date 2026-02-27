@@ -6,14 +6,14 @@
         <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        エリア一覧に戻る
+        <%= t('organizers.areas.show.back') %>
       <% end %>
       <h1 class="text-2xl font-bold text-gray-900"><%= @area.name %></h1>
     </div>
     <div class="flex items-center space-x-3">
       <% if @area.has_boundary? %>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-          境界設定済み
+          <%= t('organizers.areas.index.boundary_set') %>
         </span>
       <% end %>
     </div>
@@ -26,7 +26,7 @@
     <!-- Map Preview -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">地図</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.areas.show.map') %></h2>
       </div>
       <div class="p-4">
         <% if @area.center_coordinates %>
@@ -48,7 +48,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <p class="mt-2 text-sm text-gray-400">座標が設定されていません</p>
+              <p class="mt-2 text-sm text-gray-400"><%= t('organizers.areas.show.no_coordinates') %></p>
             </div>
           </div>
         <% end %>
@@ -58,50 +58,50 @@
     <!-- Area Details -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">エリア詳細</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.areas.show.details') %></h2>
       </div>
       <div class="p-6 space-y-6">
         <% if @area.full_address.present? %>
           <div>
-            <dt class="text-sm font-medium text-gray-500">住所</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.spots.form.address_label') %></dt>
             <dd class="mt-1 text-gray-900"><%= @area.full_address %></dd>
           </div>
         <% end %>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <dt class="text-sm font-medium text-gray-500">都道府県</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.prefecture') %></dt>
             <dd class="mt-1 text-gray-900">
-              <%= @area.prefecture.presence || tag.span("未設定", class: "text-gray-400") %>
+              <%= @area.prefecture.presence || tag.span(t('organizers.contests.show.not_set'), class: 'text-gray-400') %>
             </dd>
           </div>
           <div>
-            <dt class="text-sm font-medium text-gray-500">市区町村</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.city') %></dt>
             <dd class="mt-1 text-gray-900">
-              <%= @area.city.presence || tag.span("未設定", class: "text-gray-400") %>
+              <%= @area.city.presence || tag.span(t('organizers.contests.show.not_set'), class: 'text-gray-400') %>
             </dd>
           </div>
           <div>
-            <dt class="text-sm font-medium text-gray-500">番地等</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.street') %></dt>
             <dd class="mt-1 text-gray-900">
-              <%= @area.address.presence || tag.span("未設定", class: "text-gray-400") %>
+              <%= @area.address.presence || tag.span(t('organizers.contests.show.not_set'), class: 'text-gray-400') %>
             </dd>
           </div>
         </div>
 
         <% if @area.description.present? %>
           <div>
-            <dt class="text-sm font-medium text-gray-500">説明</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.form.description_label') %></dt>
             <dd class="mt-1 text-gray-900 whitespace-pre-wrap"><%= @area.description %></dd>
           </div>
         <% end %>
 
         <% if @area.center_coordinates %>
           <div>
-            <dt class="text-sm font-medium text-gray-500">座標</dt>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.coordinates') %></dt>
             <dd class="mt-1">
               <span class="coordinate-display">
-                緯度: <%= @area.latitude %>, 経度: <%= @area.longitude %>
+                <%= t('organizers.areas.show.latitude') %>: <%= @area.latitude %>, <%= t('organizers.areas.show.longitude') %>: <%= @area.longitude %>
               </span>
             </dd>
           </div>
@@ -109,12 +109,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
           <div>
-            <dt class="text-sm font-medium text-gray-500">作成日時</dt>
-            <dd class="mt-1 text-gray-900"><%= @area.created_at.strftime('%Y年%m月%d日 %H:%M') %></dd>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.created_at') %></dt>
+            <dd class="mt-1 text-gray-900"><%= l(@area.created_at, format: :long) %></dd>
           </div>
           <div>
-            <dt class="text-sm font-medium text-gray-500">更新日時</dt>
-            <dd class="mt-1 text-gray-900"><%= @area.updated_at.strftime('%Y年%m月%d日 %H:%M') %></dd>
+            <dt class="text-sm font-medium text-gray-500"><%= t('organizers.areas.show.updated_at') %></dt>
+            <dd class="mt-1 text-gray-900"><%= l(@area.updated_at, format: :long) %></dd>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@
     <% if @area.contests.any? %>
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900">関連コンテスト</h2>
+          <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.areas.show.related_contests') %></h2>
         </div>
         <div class="divide-y divide-gray-100">
           <% @area.contests.each do |contest| %>
@@ -135,7 +135,7 @@
                   <p class="text-sm text-gray-500"><%= contest.theme %></p>
                 </div>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= contest.published? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
-                  <%= contest.published? ? '公開中' : '下書き' %>
+<%= contest.published? ? t('organizers.contests.index.published') : t('organizers.contests.index.draft') %>
                 </span>
               </div>
             <% end %>
@@ -150,7 +150,7 @@
     <!-- Action Buttons -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">アクション</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.contests.show.actions') %></h2>
       </div>
       <div class="p-6 space-y-3">
         <%= link_to edit_organizers_area_path(@area), class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors group" do %>
@@ -160,21 +160,21 @@
             </svg>
           </div>
           <div class="ml-3">
-            <p class="text-sm font-medium text-gray-900">編集</p>
-            <p class="text-xs text-gray-500">エリア情報を編集</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.areas.show.edit') %></p>
+            <p class="text-xs text-gray-500"><%= t('organizers.areas.show.edit_desc') %></p>
           </div>
         <% end %>
 
         <% if @area.contests.empty? %>
-          <%= button_to organizers_area_path(@area), method: :delete, data: { turbo_confirm: "エリアを削除しますか？この操作は取り消せません。" }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-colors group" do %>
+          <%= button_to organizers_area_path(@area), method: :delete, data: { turbo_confirm: t('organizers.areas.show.delete_confirm') }, class: "flex items-center w-full p-3 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-colors group" do %>
             <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
               <svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </div>
             <div class="ml-3 text-left">
-              <p class="text-sm font-medium text-gray-900">削除</p>
-              <p class="text-xs text-gray-500">エリアを削除する</p>
+<p class="text-sm font-medium text-gray-900"><%= t('organizers.areas.show.delete') %></p>
+              <p class="text-xs text-gray-500"><%= t('organizers.areas.show.delete_desc') %></p>
             </div>
           <% end %>
         <% else %>
@@ -185,8 +185,8 @@
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm font-medium text-gray-400">削除</p>
-              <p class="text-xs text-gray-400">コンテストがあるため削除できません</p>
+<p class="text-sm font-medium text-gray-400"><%= t('organizers.areas.show.delete') %></p>
+              <p class="text-xs text-gray-400"><%= t('organizers.areas.show.cannot_delete') %></p>
             </div>
           </div>
         <% end %>
@@ -196,24 +196,24 @@
     <!-- Stats -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">統計</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.areas.show.statistics') %></h2>
       </div>
       <div class="p-6">
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500">関連コンテスト</span>
-            <span class="text-lg font-semibold text-gray-900"><%= @area.contests.count %>件</span>
+            <span class="text-sm text-gray-500"><%= t('organizers.areas.show.related_contests') %></span>
+            <span class="text-lg font-semibold text-gray-900"><%= @area.contests.count %></span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500">境界設定</span>
+            <span class="text-sm text-gray-500"><%= t('organizers.areas.show.boundary_setting') %></span>
             <span class="text-sm font-medium <%= @area.has_boundary? ? 'text-green-600' : 'text-gray-400' %>">
-              <%= @area.has_boundary? ? '設定済み' : '未設定' %>
+<%= @area.has_boundary? ? t('organizers.areas.show.configured') : t('organizers.contests.show.not_set') %>
             </span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500">座標</span>
+            <span class="text-sm text-gray-500"><%= t('organizers.areas.show.coordinates') %></span>
             <span class="text-sm font-medium <%= @area.center_coordinates ? 'text-green-600' : 'text-gray-400' %>">
-              <%= @area.center_coordinates ? '設定済み' : '未設定' %>
+<%= @area.center_coordinates ? t('organizers.areas.show.configured') : t('organizers.contests.show.not_set') %>
             </span>
           </div>
         </div>

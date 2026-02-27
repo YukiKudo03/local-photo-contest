@@ -15,30 +15,30 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>発掘スポット認定依頼</h1>
+      <h1><%= t('mailers.notification.spot_certification_request.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>コンテスト「<strong><%= @contest.title %></strong>」で新しいスポットが発掘されました。認定の確認をお願いします。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.spot_certification_request.body', contest_title: @contest.title) %></p>
 
       <div class="spot-info">
-        <p><strong>スポット名:</strong> <%= @spot.name %></p>
+        <p><strong><%= t('mailers.notification.spot_certification_request.spot_name') %></strong> <%= @spot.name %></p>
         <% if @spot.address.present? %>
-          <p><strong>住所:</strong> <%= @spot.address %></p>
+          <p><strong><%= t('mailers.notification.spot_certification_request.address') %></strong> <%= @spot.address %></p>
         <% end %>
         <% if @spot.description.present? %>
-          <p><strong>説明:</strong> <%= @spot.description %></p>
+          <p><strong><%= t('mailers.notification.spot_certification_request.description') %></strong> <%= @spot.description %></p>
         <% end %>
-        <p><strong>カテゴリ:</strong> <%= @spot.category_name %></p>
+        <p><strong><%= t('mailers.notification.spot_certification_request.category') %></strong> <%= @spot.category_name %></p>
       </div>
 
       <p style="text-align: center;">
-        <a href="<%= organizers_contest_discovery_spots_url(@contest) %>" class="button">発掘スポットを確認する</a>
+        <a href="<%= organizers_contest_discovery_spots_url(@contest) %>" class="button"><%= t('mailers.notification.spot_certification_request.view_button') %></a>
       </p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

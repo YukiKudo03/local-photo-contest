@@ -19,8 +19,8 @@ class JudgeInvitationService
   end
 
   def resend(invitation)
-    raise "招待は既に処理されています" unless invitation.pending?
-    raise "招待の有効期限が切れています" if invitation.expired?
+    raise I18n.t('models.judge_invitation.already_processed') unless invitation.pending?
+    raise I18n.t('models.judge_invitation.expired') if invitation.expired?
 
     JudgeInvitationMailer.invite(invitation).deliver_later
     invitation

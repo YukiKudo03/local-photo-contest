@@ -7,8 +7,8 @@
 <!-- Page Header -->
 <div class="mb-8 flex items-center justify-between">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">ダッシュボード</h1>
-    <p class="mt-1 text-sm text-gray-500">ようこそ、<%= current_user.display_name %> さん</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.dashboard.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('organizers.dashboard.welcome', name: current_user.display_name) %></p>
   </div>
   <%= render "tutorials/help_button", tutorial_type: "organizer_onboarding" %>
 </div>
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="ml-4">
-        <p class="text-sm font-medium text-gray-500">コンテスト数</p>
+        <p class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.total_contests') %></p>
         <p class="text-2xl font-semibold text-gray-900"><%= current_user.contests.active.count %></p>
       </div>
     </div>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="ml-4">
-        <p class="text-sm font-medium text-gray-500">投稿写真数</p>
+        <p class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.total_entries') %></p>
         <p class="text-2xl font-semibold text-gray-900">0</p>
       </div>
     </div>
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="ml-4">
-        <p class="text-sm font-medium text-gray-500">審査待ち</p>
+        <p class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.pending_review') %></p>
         <p class="text-2xl font-semibold text-gray-900">0</p>
       </div>
     </div>
@@ -73,7 +73,7 @@
         </div>
       </div>
       <div class="ml-4">
-        <p class="text-sm font-medium text-gray-500">参加者数</p>
+        <p class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.total_participants') %></p>
         <p class="text-2xl font-semibold text-gray-900">0</p>
       </div>
     </div>
@@ -85,16 +85,16 @@
   <!-- Account Info Card -->
   <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">アカウント情報</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.dashboard.account_info') %></h2>
     </div>
     <div class="p-6">
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <dt class="text-sm font-medium text-gray-500">メールアドレス</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.email') %></dt>
           <dd class="mt-1 text-sm text-gray-900"><%= current_user.email %></dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">権限</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.role') %></dt>
           <dd class="mt-1">
             <% case current_user.role %>
             <% when "admin" %>
@@ -102,33 +102,33 @@
                 <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                管理者
+                <%= t('organizers.dashboard.role_admin') %>
               </span>
             <% when "organizer" %>
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                 <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                 </svg>
-                運営者
+                <%= t('organizers.dashboard.role_organizer') %>
               </span>
             <% else %>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">参加者</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"><%= t('organizers.dashboard.role_participant') %></span>
             <% end %>
           </dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">最終ログイン</dt>
+          <dt class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.last_login') %></dt>
           <dd class="mt-1 text-sm text-gray-900">
             <% if current_user.current_sign_in_at %>
-              <%= l(current_user.current_sign_in_at, format: :default) rescue current_user.current_sign_in_at.strftime('%Y年%m月%d日 %H:%M') %>
+              <%= l(current_user.current_sign_in_at, format: :default) %>
             <% else %>
               -
             <% end %>
           </dd>
         </div>
         <div>
-          <dt class="text-sm font-medium text-gray-500">ログイン回数</dt>
-          <dd class="mt-1 text-sm text-gray-900"><%= current_user.sign_in_count %> 回</dd>
+          <dt class="text-sm font-medium text-gray-500"><%= t('organizers.dashboard.login_count') %></dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= t('organizers.dashboard.login_count_value', count: current_user.sign_in_count) %></dd>
         </div>
       </dl>
     </div>
@@ -137,7 +137,7 @@
   <!-- Quick Actions Card -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">クイックアクション</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.dashboard.quick_actions') %></h2>
     </div>
     <div class="p-6 space-y-3">
       <%= link_to new_organizers_contest_path, class: "flex items-center p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors group", data: { tutorial: "create-contest" } do %>
@@ -147,8 +147,8 @@
           </svg>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-gray-900">新規コンテスト作成</p>
-          <p class="text-xs text-gray-500">フォトコンテストを作成</p>
+          <p class="text-sm font-medium text-gray-900"><%= t('organizers.dashboard.create_contest') %></p>
+          <p class="text-xs text-gray-500"><%= t('organizers.dashboard.create_contest_desc') %></p>
         </div>
       <% end %>
       <a href="#" class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-colors group">
@@ -158,8 +158,8 @@
           </svg>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-gray-900">審査を開始</p>
-          <p class="text-xs text-gray-500">準備中</p>
+          <p class="text-sm font-medium text-gray-900"><%= t('organizers.dashboard.start_judging') %></p>
+          <p class="text-xs text-gray-500"><%= t('organizers.dashboard.coming_soon') %></p>
         </div>
       </a>
       <a href="#" class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition-colors group">
@@ -169,8 +169,8 @@
           </svg>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-gray-900">レポートを見る</p>
-          <p class="text-xs text-gray-500">準備中</p>
+          <p class="text-sm font-medium text-gray-900"><%= t('organizers.dashboard.view_reports') %></p>
+          <p class="text-xs text-gray-500"><%= t('organizers.dashboard.coming_soon') %></p>
         </div>
       </a>
     </div>
@@ -180,15 +180,15 @@
 <!-- Recent Activity -->
 <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
   <div class="px-6 py-4 border-b border-gray-100">
-    <h2 class="text-lg font-semibold text-gray-900">最近のアクティビティ</h2>
+    <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.dashboard.recent_activity') %></h2>
   </div>
   <div class="p-6">
     <div class="text-center py-8">
       <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
-      <p class="mt-4 text-sm text-gray-500">アクティビティはまだありません</p>
-      <p class="text-xs text-gray-400">コンテストを作成すると、ここにアクティビティが表示されます</p>
+      <p class="mt-4 text-sm text-gray-500"><%= t('organizers.dashboard.no_activity') %></p>
+      <p class="text-xs text-gray-400"><%= t('organizers.dashboard.no_activity_hint') %></p>
     </div>
   </div>
 </div>

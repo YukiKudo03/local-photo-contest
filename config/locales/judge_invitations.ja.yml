@@ -1,0 +1,17 @@
+ja:
+  judge_invitations:
+    show:
+      title: 審査員への招待
+      expired: この招待は有効期限が切れています。主催者に連絡して再招待をリクエストしてください。
+      accepted: この招待は既に承諾されています。
+      declined: この招待は辞退されています。
+      theme: "テーマ:"
+      invitation_email: "招待メール:"
+      invitation_date: "招待日:"
+      accept: 審査員として参加する
+      login_to_accept: ログインして参加する
+      signup_prompt_html: "アカウントをお持ちでない場合は %{link} してください"
+      signup_link: 新規登録
+      decline: 辞退する
+      decline_confirm: 招待を辞退しますか？
+      back_to_top: トップページに戻る

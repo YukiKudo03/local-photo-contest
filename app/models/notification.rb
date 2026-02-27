@@ -45,26 +45,21 @@ class Notification < ApplicationRecord
       user: user,
       notifiable: contest,
       notification_type: TYPES[:results_announced],
-      title: "コンテスト「#{contest.title}」の結果が発表されました",
-      body: "あなたが参加したコンテストの結果をご確認ください。"
+      title: I18n.t('notifications.messages.results_announced.title', contest_title: contest.title),
+      body: I18n.t('notifications.messages.results_announced.body')
     )
   end
 
   def self.create_entry_ranked!(user:, entry:, rank:)
     contest = entry.contest
-    rank_label = case rank
-    when 1 then "1位"
-    when 2 then "2位"
-    when 3 then "3位"
-    else "#{rank}位"
-    end
+    rank_label = I18n.t('notifications.messages.entry_ranked.rank_label', rank: rank)
 
     create!(
       user: user,
       notifiable: entry,
       notification_type: TYPES[:entry_ranked],
-      title: "あなたの作品が#{rank_label}に入賞しました！",
-      body: "コンテスト「#{contest.title}」であなたの作品「#{entry.title}」が#{rank_label}に選ばれました。"
+      title: I18n.t('notifications.messages.entry_ranked.title', rank_label: rank_label),
+      body: I18n.t('notifications.messages.entry_ranked.body', contest_title: contest.title, entry_title: entry.title, rank_label: rank_label)
     )
   end
 end

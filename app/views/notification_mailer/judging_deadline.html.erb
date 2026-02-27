@@ -15,23 +15,23 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>審査期限のお知らせ</h1>
+      <h1><%= t('mailers.notification.judging_deadline.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>コンテスト「<strong><%= @contest.title %></strong>」の審査期限が迫っています。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.judging_deadline.body', contest_title: @contest.title) %></p>
 
-      <div class="deadline">あと<%= @days_remaining %>日</div>
+      <div class="deadline"><%= t('mailers.notification.judging_deadline.days_remaining', count: @days_remaining) %></div>
 
-      <p>お早めに審査を完了してください。</p>
+      <p><%= t('mailers.notification.judging_deadline.urgent') %></p>
 
       <p style="text-align: center;">
-        <a href="<%= my_judge_assignment_url(@contest_judge) %>" class="button">審査を続ける</a>
+        <a href="<%= my_judge_assignment_url(@contest_judge) %>" class="button"><%= t('mailers.notification.judging_deadline.view_button') %></a>
       </p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

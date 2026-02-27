@@ -5,7 +5,7 @@ class TutorialProgress < ApplicationRecord
   validates :tutorial_type, presence: true,
                             inclusion: { in: TutorialStep::TUTORIAL_TYPES.values }
   validates :user_id, uniqueness: { scope: :tutorial_type,
-                                    message: "のチュートリアル進捗は既に存在します" }
+                                    message: :already_exists }
 
   # Scopes
   scope :completed, -> { where(completed: true) }
@@ -112,10 +112,10 @@ class TutorialProgress < ApplicationRecord
 
   def status_label
     case status
-    when :completed then "完了"
-    when :skipped then "スキップ済"
-    when :in_progress then "進行中"
-    else "未開始"
+    when :completed then I18n.t('models.tutorial_progress.completed')
+    when :skipped then I18n.t('models.tutorial_progress.skipped')
+    when :in_progress then I18n.t('models.tutorial_progress.in_progress')
+    else I18n.t('models.tutorial_progress.not_started')
     end
   end
 

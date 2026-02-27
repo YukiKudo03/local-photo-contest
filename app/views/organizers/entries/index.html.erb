@@ -4,16 +4,16 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    コンテスト詳細に戻る
+    <%= t('organizers.entries.index.back') %>
   <% end %>
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">応募一覧</h1>
+      <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.entries.index.title') %></h1>
       <p class="mt-1 text-sm text-gray-500"><%= @contest.title %></p>
     </div>
     <div class="text-right">
       <p class="text-2xl font-bold text-indigo-600"><%= @entries.count %></p>
-      <p class="text-sm text-gray-500">件の応募</p>
+      <p class="text-sm text-gray-500"><%= t('organizers.entries.index.entries_count') %></p>
     </div>
   </div>
 </div>
@@ -27,7 +27,7 @@
         lat: e.spot.latitude.to_f,
         lng: e.spot.longitude.to_f,
         popup: {
-          title: e.title.presence || "無題",
+          title: e.title.presence || t('organizers.entries.index.table.untitled'),
           subtitle: e.spot.name,
           description: e.user.email
         },
@@ -55,7 +55,7 @@
           <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
           </svg>
-          リスト
+          <%= t('organizers.entries.index.list_view') %>
         </button>
         <% if has_map_entries %>
           <button type="button"
@@ -65,14 +65,14 @@
             <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
             </svg>
-            マップ
+            <%= t('organizers.entries.index.map_view') %>
           </button>
         <% end %>
       </div>
 
       <% if has_map_entries %>
         <p class="text-xs text-gray-500">
-          <span class="font-medium"><%= entries_with_spots.count %></span>/<%= @entries.count %> 件がスポット付き
+          <span class="font-medium"><%= entries_with_spots.count %></span>/<%= @entries.count %> <%= t('organizers.entries.index.spots_count_label') %>
         </p>
       <% end %>
     </div>
@@ -84,12 +84,12 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">写真</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">タイトル</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">応募者</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">スポット</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">応募日時</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.photo') %></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.title') %></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.submitter') %></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.spot') %></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.submitted_at') %></th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t('organizers.entries.index.table.actions') %></th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -98,7 +98,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                       <% if entry.photo.attached? %>
-                        <%= image_tag entry.photo.variant(resize_to_fill: [128, 128]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
+                        <%= image_tag entry.photo.variant(resize_to_fill: [128, 128]), alt: entry.title.presence || t('organizers.dashboard.untitled'), class: "w-full h-full object-cover", loading: "lazy" %>
                       <% end %>
                     </div>
                   </td>
@@ -106,7 +106,7 @@
                     <% if entry.title.present? %>
                       <div class="text-sm font-medium text-gray-900"><%= entry.title %></div>
                     <% else %>
-                      <div class="text-sm text-gray-400">無題</div>
+                      <div class="text-sm text-gray-400"><%= t('organizers.entries.index.table.untitled') %></div>
                     <% end %>
                     <% if entry.location.present? %>
                       <div class="text-xs text-gray-500"><%= entry.location %></div>
@@ -125,10 +125,10 @@
                     <% end %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= entry.created_at.strftime('%Y/%m/%d %H:%M') %>
+                    <%= l(entry.created_at, format: :short) %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <%= link_to "詳細", organizers_contest_entry_path(@contest, entry), class: "text-indigo-600 hover:text-indigo-900" %>
+                    <%= link_to t('organizers.entries.index.table.view'), organizers_contest_entry_path(@contest, entry), class: "text-indigo-600 hover:text-indigo-900" %>
                   </td>
                 </tr>
               <% end %>
@@ -151,7 +151,7 @@
           </div>
 
           <div class="mt-4">
-            <p class="text-xs text-gray-500 mb-2">マーカーをクリックして詳細を表示</p>
+            <p class="text-xs text-gray-500 mb-2"><%= t('organizers.entries.index.map_hint') %></p>
             <div class="flex flex-wrap gap-2">
               <% @contest.spots.ordered.each do |spot| %>
                 <% spot_entry_count = entries_with_spots.count { |e| e.spot_id == spot.id } %>
@@ -172,7 +172,7 @@
     <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
-    <h3 class="mt-4 text-lg font-medium text-gray-900">応募がありません</h3>
-    <p class="mt-2 text-sm text-gray-500">まだこのコンテストへの応募はありません</p>
+    <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('organizers.entries.index.no_entries') %></h3>
+    <p class="mt-2 text-sm text-gray-500"><%= t('organizers.entries.index.no_entries_desc') %></p>
   </div>
 <% end %>

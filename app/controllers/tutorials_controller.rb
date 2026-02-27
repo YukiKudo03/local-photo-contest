@@ -83,7 +83,7 @@ class TutorialsController < ApplicationController
 
     render json: {
       success: true,
-      message: "チュートリアルをリセットしました"
+      message: t('tutorials.api.reset_success')
     }
   end
 
@@ -96,12 +96,12 @@ class TutorialsController < ApplicationController
       render json: {
         success: true,
         settings: current_user.tutorial_settings,
-        message: "設定を更新しました"
+        message: t('tutorials.api.settings_updated')
       }
     else
       render json: {
         success: false,
-        error: "設定の更新に失敗しました"
+        error: t('tutorials.api.settings_update_failed')
       }, status: :unprocessable_entity
     end
   end
@@ -147,7 +147,7 @@ class TutorialsController < ApplicationController
     unless TutorialStep::TUTORIAL_TYPES.values.include?(params[:tutorial_type])
       render json: {
         success: false,
-        error: "無効なチュートリアルタイプです"
+        error: t('tutorials.api.invalid_tutorial_type')
       }, status: :bad_request
     end
   end

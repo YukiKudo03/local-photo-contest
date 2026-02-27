@@ -1,0 +1,21 @@
+ja:
+  email_preferences:
+    show:
+      title: メール通知設定
+      description: 受け取りたいメール通知を選択してください。
+      participant_section: 参加者向け通知
+      email_on_entry_submitted: 応募完了メール
+      email_on_entry_submitted_description: コンテストへの応募が完了した時に通知
+      email_on_comment: コメント通知メール
+      email_on_comment_description: 作品にコメントがついた時に通知
+      email_on_vote: 投票通知メール
+      email_on_vote_description: 作品に投票された時に通知（頻度が高い場合があります）
+      email_on_results: 審査結果・入賞メール
+      email_on_results_description: 審査結果発表や入賞の通知
+      organizer_section: 主催者向け通知
+      email_digest: 日次ダイジェストメール
+      email_digest_description: 前日の新規応募まとめを毎朝配信
+      judge_section: 審査員向け通知
+      email_on_judging: 審査関連メール
+      email_on_judging_description: 審査リマインダーや期限通知
+      submit: 設定を保存

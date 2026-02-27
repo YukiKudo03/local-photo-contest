@@ -17,7 +17,7 @@ class StatisticsExportService
     daily_data = build_daily_data
 
     csv_content = CSV.generate do |csv|
-      csv << [ "日付", "応募数", "投票数", "累計応募数", "累計投票数" ]
+      csv << [ I18n.t('services.export.date'), I18n.t('services.export.entries'), I18n.t('services.export.votes'), I18n.t('services.export.cumulative_entries'), I18n.t('services.export.cumulative_votes') ]
 
       cumulative_entries = 0
       cumulative_votes = 0
@@ -44,13 +44,13 @@ class StatisticsExportService
     stats = @stats_service.summary_stats
 
     csv_content = CSV.generate do |csv|
-      csv << [ "項目", "値" ]
-      csv << [ "総応募数", stats[:total_entries] ]
-      csv << [ "総投票数", stats[:total_votes] ]
-      csv << [ "参加者数", stats[:total_participants] ]
-      csv << [ "スポット数", stats[:total_spots] ]
-      csv << [ "本日の応募増減", stats[:entries_change] || 0 ]
-      csv << [ "本日の投票増減", stats[:votes_change] || 0 ]
+      csv << [ I18n.t('services.export.item'), I18n.t('services.export.value') ]
+      csv << [ I18n.t('services.export.total_entries'), stats[:total_entries] ]
+      csv << [ I18n.t('services.export.total_votes'), stats[:total_votes] ]
+      csv << [ I18n.t('services.export.total_participants'), stats[:total_participants] ]
+      csv << [ I18n.t('services.export.total_spots'), stats[:total_spots] ]
+      csv << [ I18n.t('services.export.entries_change_today'), stats[:entries_change] || 0 ]
+      csv << [ I18n.t('services.export.votes_change_today'), stats[:votes_change] || 0 ]
     end
 
     UTF8_BOM + csv_content
@@ -63,12 +63,12 @@ class StatisticsExportService
                      .order(created_at: :desc)
 
     csv_content = CSV.generate do |csv|
-      csv << [ "ID", "タイトル", "投稿者", "スポット", "投票数", "投稿日時", "モデレーション状態" ]
+      csv << [ "ID", I18n.t('services.export.title'), I18n.t('services.export.submitter'), I18n.t('services.export.spot'), I18n.t('services.export.votes'), I18n.t('services.export.submitted_at'), I18n.t('services.export.moderation_status') ]
 
       entries.each do |entry|
         csv << [
           entry.id,
-          entry.title.presence || "(無題)",
+          entry.title.presence || I18n.t('common.untitled'),
           entry.user.name,
           entry.spot&.name || "-",
           entry.votes.size,
@@ -88,7 +88,7 @@ class StatisticsExportService
                    .order(votes_count: :desc)
 
     csv_content = CSV.generate do |csv|
-      csv << [ "ID", "名前", "カテゴリ", "発掘ステータス", "応募数", "投票数", "発掘者", "認定日" ]
+      csv << [ "ID", I18n.t('services.export.name'), I18n.t('services.export.category'), I18n.t('services.export.discovery_status'), I18n.t('services.export.entries'), I18n.t('services.export.votes'), I18n.t('services.export.discoverer'), I18n.t('services.export.certified_date') ]
 
       spots.each do |spot|
         csv << [
@@ -131,22 +131,10 @@ class StatisticsExportService
   end
 
   def moderation_status_label(status)
-    case status
-    when "moderation_pending" then "保留中"
-    when "moderation_approved" then "承認済み"
-    when "moderation_hidden" then "非表示"
-    when "moderation_requires_review" then "要確認"
-    else status
-    end
+    I18n.t("services.export.moderation_statuses.#{status}", default: status)
   end
 
   def discovery_status_label(status)
-    case status
-    when "organizer_created" then "主催者作成"
-    when "discovered" then "発掘済み"
-    when "certified" then "認定済み"
-    when "rejected" then "却下"
-    else status
-    end
+    I18n.t("models.spot.discovery_statuses.#{status}", default: status)
   end
 end

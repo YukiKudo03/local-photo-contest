@@ -12,7 +12,7 @@ class JudgeInvitationsController < ApplicationController
   def accept
     if @invitation.contest.judge?(current_user)
       redirect_to my_judge_assignments_path,
-                  notice: "既にこのコンテストの審査員として登録されています。"
+                  notice: t('flash.judge_invitations.already_judge')
       return
     end
 
@@ -20,7 +20,7 @@ class JudgeInvitationsController < ApplicationController
     service.accept(@invitation, current_user)
 
     redirect_to my_judge_assignments_path,
-                notice: "審査員として登録されました。"
+                notice: t('flash.judge_invitations.accepted')
   rescue => e
     redirect_to judge_invitation_path(@invitation.token),
                 alert: e.message
@@ -31,7 +31,7 @@ class JudgeInvitationsController < ApplicationController
     service.decline(@invitation)
 
     redirect_to root_path,
-                notice: "招待を辞退しました。"
+                notice: t('flash.judge_invitations.declined')
   rescue => e
     redirect_to judge_invitation_path(@invitation.token),
                 alert: e.message
@@ -47,11 +47,11 @@ class JudgeInvitationsController < ApplicationController
     return if @invitation.pending? && !@invitation.expired?
 
     if @invitation.expired?
-      redirect_to root_path, alert: "この招待は有効期限が切れています。"
+      redirect_to root_path, alert: t('flash.judge_invitations.expired')
     elsif @invitation.accepted?
-      redirect_to root_path, alert: "この招待は既に承諾されています。"
+      redirect_to root_path, alert: t('flash.judge_invitations.already_accepted')
     elsif @invitation.declined?
-      redirect_to root_path, alert: "この招待は既に辞退されています。"
+      redirect_to root_path, alert: t('flash.judge_invitations.already_declined')
     end
   end
 end

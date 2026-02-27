@@ -1,6 +1,6 @@
 <% if area_distribution.present? %>
   <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">エリア別応募分布</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('organizers.statistics.area_chart.title') %></h2>
 
     <%= pie_chart area_distribution,
                   donut: true,

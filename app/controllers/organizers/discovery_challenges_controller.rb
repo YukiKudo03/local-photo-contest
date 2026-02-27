@@ -25,7 +25,7 @@ module Organizers
       @challenge = @contest.discovery_challenges.build(challenge_params)
 
       if @challenge.save
-        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: "発掘チャレンジを作成しました。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: t('flash.discovery_challenges.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -36,7 +36,7 @@ module Organizers
 
     def update
       if @challenge.update(challenge_params)
-        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: "発掘チャレンジを更新しました。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: t('flash.discovery_challenges.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -44,29 +44,29 @@ module Organizers
 
     def destroy
       if @challenge.challenge_active?
-        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: "進行中のチャレンジは削除できません。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: t('flash.discovery_challenges.cannot_delete_active')
         return
       end
 
       @challenge.destroy
-      redirect_to organizers_contest_discovery_challenges_path(@contest), notice: "発掘チャレンジを削除しました。"
+      redirect_to organizers_contest_discovery_challenges_path(@contest), notice: t('flash.discovery_challenges.destroyed')
     end
 
     def activate
       if @challenge.challenge_draft?
         @challenge.update!(status: :active)
-        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: "チャレンジを開始しました。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: t('flash.discovery_challenges.activated')
       else
-        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: "このチャレンジは開始できません。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: t('flash.discovery_challenges.cannot_start')
       end
     end
 
     def finish
       if @challenge.challenge_active?
         @challenge.update!(status: :finished)
-        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: "チャレンジを終了しました。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), notice: t('flash.discovery_challenges.deactivated')
       else
-        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: "このチャレンジは終了できません。"
+        redirect_to organizers_contest_discovery_challenges_path(@contest), alert: t('flash.discovery_challenges.cannot_finish')
       end
     end
 
@@ -79,7 +79,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_challenge

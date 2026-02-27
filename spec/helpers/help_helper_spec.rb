@@ -10,8 +10,6 @@ RSpec.describe HelpHelper, type: :helper do
 
     it "has required keys for each guide" do
       HelpHelper::GUIDES.each do |key, guide|
-        expect(guide).to have_key(:title), "#{key} guide missing :title"
-        expect(guide).to have_key(:description), "#{key} guide missing :description"
         expect(guide).to have_key(:icon), "#{key} guide missing :icon"
         expect(guide).to have_key(:file), "#{key} guide missing :file"
       end
@@ -20,8 +18,14 @@ RSpec.describe HelpHelper, type: :helper do
 
   describe "#guide_info" do
     context "without argument" do
-      it "returns all guides" do
-        expect(helper.guide_info).to eq(HelpHelper::GUIDES)
+      it "returns all guides with i18n titles and descriptions" do
+        result = helper.guide_info
+        result.each do |key, guide|
+          expect(guide).to have_key(:title), "#{key} guide missing :title"
+          expect(guide).to have_key(:description), "#{key} guide missing :description"
+          expect(guide).to have_key(:icon), "#{key} guide missing :icon"
+          expect(guide).to have_key(:file), "#{key} guide missing :file"
+        end
       end
     end
 

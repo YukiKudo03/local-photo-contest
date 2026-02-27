@@ -1,0 +1,17 @@
+en:
+  shared:
+    flash:
+      success: Success
+      error: Error
+      dismiss_notice: Dismiss notification
+      dismiss_error: Dismiss error notification
+      close: Close
+    share_buttons:
+      share: "Share:"
+      twitter_title: Share on X
+      facebook_title: Share on Facebook
+      line_title: Share on LINE
+      copy_link_title: Copy Link
+  pwa:
+    manifest:
+      description: Join local photo contests and showcase your photography

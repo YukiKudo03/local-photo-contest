@@ -27,7 +27,7 @@ RSpec.describe ContestTemplate, type: :model do
       create(:contest_template, user: organizer, name: "テンプレート1")
       template = build(:contest_template, user: organizer, name: "テンプレート1")
       expect(template).not_to be_valid
-      expect(template.errors[:name]).to include("は既に使用されています")
+      expect(template.errors[:name]).to include("はすでに使用されています")
     end
 
     it "is valid with same name for different users" do

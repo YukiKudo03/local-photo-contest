@@ -4,9 +4,9 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    応募一覧に戻る
+    <%= t('organizers.entries.show.back') %>
   <% end %>
-  <h1 class="text-2xl font-bold text-gray-900">応募詳細</h1>
+  <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.entries.show.title') %></h1>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -16,7 +16,7 @@
       <!-- Photo -->
       <div class="bg-gray-100">
         <% if @entry.photo.attached? %>
-          <%= image_tag @entry.photo, alt: @entry.title.presence || "フォトコンテスト応募作品", class: "w-full max-h-[600px] object-contain" %>
+          <%= image_tag @entry.photo, alt: @entry.title.presence || t('organizers.dashboard.untitled'), class: "w-full max-h-[600px] object-contain" %>
         <% end %>
       </div>
 
@@ -25,13 +25,13 @@
         <% if @entry.title.present? %>
           <h2 class="text-xl font-bold text-gray-900"><%= @entry.title %></h2>
         <% else %>
-          <h2 class="text-xl font-bold text-gray-400">無題</h2>
+          <h2 class="text-xl font-bold text-gray-400"><%= t('organizers.entries.show.untitled') %></h2>
         <% end %>
 
         <!-- Description -->
         <% if @entry.description.present? %>
           <div class="mt-4">
-            <h3 class="text-sm font-medium text-gray-500 mb-1">説明</h3>
+            <h3 class="text-sm font-medium text-gray-500 mb-1"><%= t('organizers.entries.show.description') %></h3>
             <p class="text-gray-700 whitespace-pre-wrap"><%= @entry.description %></p>
           </div>
         <% end %>
@@ -45,39 +45,39 @@
     <% if @contest.moderation_enabled? %>
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900">モデレーション</h2>
+          <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.entries.show.moderation') %></h2>
         </div>
         <div class="p-6 space-y-4">
           <div>
-            <h3 class="text-sm font-medium text-gray-500 mb-2">ステータス</h3>
+            <h3 class="text-sm font-medium text-gray-500 mb-2"><%= t('organizers.entries.show.status') %></h3>
             <% case @entry.moderation_status %>
             <% when "moderation_pending" %>
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
                 <svg class="mr-1.5 h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                確認待ち
+                <%= t('organizers.entries.show.moderation_pending') %>
               </span>
             <% when "moderation_approved" %>
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 <svg class="mr-1.5 h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
-                承認済み
+                <%= t('organizers.entries.show.moderation_approved') %>
               </span>
             <% when "moderation_hidden" %>
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                 <svg class="mr-1.5 h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                 </svg>
-                非表示
+                <%= t('organizers.entries.show.moderation_hidden') %>
               </span>
             <% when "moderation_requires_review" %>
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
                 <svg class="mr-1.5 h-4 w-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                要確認
+                <%= t('organizers.entries.show.moderation_requires_review') %>
               </span>
             <% end %>
           </div>
@@ -86,7 +86,7 @@
           <% if moderation_result.present? %>
             <% if moderation_result.labels.present? && moderation_result.labels.any? %>
               <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-2">検出ラベル</h3>
+                <h3 class="text-sm font-medium text-gray-500 mb-2"><%= t('organizers.entries.show.detected_labels') %></h3>
                 <div class="space-y-1">
                   <% moderation_result.labels.each do |label| %>
                     <div class="flex items-center justify-between text-sm">
@@ -100,21 +100,21 @@
 
             <% if moderation_result.max_confidence.present? %>
               <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">最大信頼度</h3>
+                <h3 class="text-sm font-medium text-gray-500 mb-1"><%= t('organizers.entries.show.max_confidence') %></h3>
                 <p class="text-gray-900"><%= "%.1f" % moderation_result.max_confidence %>%</p>
               </div>
             <% end %>
 
             <% if moderation_result.reviewed_at.present? %>
               <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">レビュー日時</h3>
-                <p class="text-gray-900"><%= moderation_result.reviewed_at.strftime('%Y年%m月%d日 %H:%M') %></p>
+                <h3 class="text-sm font-medium text-gray-500 mb-1"><%= t('organizers.entries.show.reviewed_at') %></h3>
+                <p class="text-gray-900"><%= l(moderation_result.reviewed_at, format: :long) %></p>
               </div>
             <% end %>
 
             <% if moderation_result.review_note.present? %>
               <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">レビューメモ</h3>
+                <h3 class="text-sm font-medium text-gray-500 mb-1"><%= t('organizers.entries.show.review_note') %></h3>
                 <p class="text-gray-700 text-sm"><%= moderation_result.review_note %></p>
               </div>
             <% end %>
@@ -123,13 +123,13 @@
           <!-- Quick Actions -->
           <% if @entry.moderation_requires_review? || @entry.moderation_hidden? %>
             <div class="pt-4 border-t border-gray-100 flex space-x-2">
-              <%= button_to "承認", approve_organizers_contest_moderation_path(@contest, entry_id: @entry.id),
+              <%= button_to t('organizers.entries.show.approve'), approve_organizers_contest_moderation_path(@contest, entry_id: @entry.id),
                   method: :post,
                   class: "flex-1 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors text-center" %>
               <% if @entry.moderation_requires_review? %>
-                <%= button_to "却下", reject_organizers_contest_moderation_path(@contest, entry_id: @entry.id),
+                <%= button_to t('organizers.entries.show.reject'), reject_organizers_contest_moderation_path(@contest, entry_id: @entry.id),
                     method: :post,
-                    data: { turbo_confirm: "この応募を却下しますか？非表示になります。" },
+                    data: { turbo_confirm: t('organizers.entries.show.reject_confirm') },
                     class: "flex-1 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors text-center" %>
               <% end %>
             </div>
@@ -141,30 +141,30 @@
     <!-- Entry Info -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">応募情報</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.entries.show.entry_info') %></h2>
       </div>
       <div class="p-6 space-y-4">
         <div>
-          <h3 class="text-sm font-medium text-gray-500">応募者</h3>
+          <h3 class="text-sm font-medium text-gray-500"><%= t('organizers.entries.show.submitter') %></h3>
           <p class="mt-1 text-gray-900"><%= @entry.user.email %></p>
         </div>
 
         <div>
-          <h3 class="text-sm font-medium text-gray-500">応募日時</h3>
-          <p class="mt-1 text-gray-900"><%= @entry.created_at.strftime('%Y年%m月%d日 %H:%M') %></p>
+          <h3 class="text-sm font-medium text-gray-500"><%= t('organizers.entries.show.submitted_at') %></h3>
+          <p class="mt-1 text-gray-900"><%= l(@entry.created_at, format: :long) %></p>
         </div>
 
         <% if @entry.location.present? %>
           <div>
-            <h3 class="text-sm font-medium text-gray-500">撮影場所</h3>
+            <h3 class="text-sm font-medium text-gray-500"><%= t('organizers.entries.show.location') %></h3>
             <p class="mt-1 text-gray-900"><%= @entry.location %></p>
           </div>
         <% end %>
 
         <% if @entry.taken_at.present? %>
           <div>
-            <h3 class="text-sm font-medium text-gray-500">撮影日</h3>
-            <p class="mt-1 text-gray-900"><%= @entry.taken_at.strftime('%Y年%m月%d日') %></p>
+            <h3 class="text-sm font-medium text-gray-500"><%= t('organizers.entries.show.taken_at') %></h3>
+            <p class="mt-1 text-gray-900"><%= l(@entry.taken_at, format: :default) %></p>
           </div>
         <% end %>
       </div>
@@ -173,7 +173,7 @@
     <!-- Contest Info -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-900">コンテスト情報</h2>
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.entries.show.contest_info') %></h2>
       </div>
       <div class="p-6">
         <h3 class="font-medium text-gray-900"><%= @contest.title %></h3>

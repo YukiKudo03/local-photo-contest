@@ -15,7 +15,7 @@ module Organizers
 
       respond_to do |format|
         format.html do
-          flash[:alert] = "この操作を行う権限がありません。"
+          flash[:alert] = t('flash.contests.not_authorized')
           redirect_to root_path, status: :forbidden
         end
         format.json { head :forbidden }

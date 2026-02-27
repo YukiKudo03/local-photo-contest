@@ -1,0 +1,89 @@
+en:
+  mailers:
+    common:
+      auto_sent: This email was sent automatically.
+      change_settings: Change notification settings
+      auto_sent_ignore: This email was sent automatically. Please ignore it if you were not expecting it.
+      greeting: "Dear %{name},"
+    notification:
+      entry_submitted:
+        subject: "[%{contest_title}] Entry submitted"
+        header: Entry Complete
+        body: "Your entry to \"%{contest_title}\" has been submitted."
+        work_title: "Work Title:"
+        view_button: View Entry
+        encouragement: We hope you receive many votes and comments!
+      comment_posted:
+        subject: "[%{contest_title}] New comment on your entry"
+        header: New Comment
+        body: "%{commenter} commented on your entry \"%{entry_title}\"."
+        untitled: Untitled
+        comment_content: "Comment:"
+        view_button: View Comment
+      entry_voted:
+        subject: "[%{contest_title}] Your entry received a vote"
+        header: New Vote
+        body: "Your entry \"%{entry_title}\" received a vote."
+        untitled: Untitled
+        current_votes: "Current votes:"
+        view_button: View Entry
+      results_announced:
+        subject: "[%{contest_title}] Results announced"
+        header: Results Announced
+        body: "The results for \"%{contest_title}\" have been announced."
+        view_button: View Results
+        thanks: Thank you for participating!
+      entry_ranked:
+        subject: "[%{contest_title}] Congratulations on your award!"
+        header: Congratulations!
+        body: "Your entry \"%{entry_title}\" won %{rank_label} in \"%{contest_title}\"!"
+        untitled: Untitled
+        view_button: View Results
+      daily_digest:
+        subject: "[Entry Summary] Entries for %{date}"
+        header: New Entry Summary
+        body: "Here is a summary of yesterday's new entries."
+        entries_count: "%{count} entries"
+        untitled: Untitled
+        more_entries: "%{count} more"
+        view_button: Open Dashboard
+      judging_complete:
+        subject: "[%{contest_title}] All judging complete"
+        header: Judging Complete
+        body: "All judges have completed their evaluations for \"%{contest_title}\"."
+        ready: Results are ready to be announced.
+        view_button: Manage Contest
+      spot_certification_request:
+        subject: "[%{contest_title}] Discovery spot certification request"
+        header: Spot Certification Request
+        body: "A new spot has been discovered in \"%{contest_title}\". Please review for certification."
+        spot_name: "Spot Name:"
+        address: "Address:"
+        description: "Description:"
+        category: "Category:"
+        view_button: Review Discovery Spot
+      judging_reminder:
+        subject: "[%{contest_title}] Judging reminder"
+        header: Judging Reminder
+        body: "Your judging for \"%{contest_title}\" is incomplete."
+        progress: "Judging progress:"
+        view_button: Continue Judging
+      judging_deadline:
+        subject: "[%{contest_title}] Judging deadline notice"
+        header: Judging Deadline Notice
+        body: "The judging deadline for \"%{contest_title}\" is approaching."
+        days_remaining: "%{count} days remaining"
+        deadline_notice: "The judging deadline for \"%{contest_title}\" is in %{count} days."
+        urgent: Please complete your judging as soon as possible.
+        view_button: Continue Judging
+    judge_invitation:
+      invite:
+        subject: "[%{contest_title}] Invitation to Judge"
+        header: Judge Invitation
+        greeting: "Hello,"
+        body: "You have been invited to judge the photo contest \"%{contest_title}\"."
+        theme: "Theme:"
+        instruction: If you would like to participate as a judge, please click the button below to accept the invitation.
+        view_button: View Invitation
+        expiry: "This invitation is valid for %{days} days."
+        contact: If you have any questions, please contact the contest organizer.

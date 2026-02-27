@@ -1,2 +1,2 @@
 <%= turbo_stream.remove dom_id(@entry) %>
-<%= turbo_stream.update "flash", partial: "shared/flash", locals: { notice: "エントリーを承認しました。" } %>
+<%= turbo_stream.update "flash", partial: "shared/flash", locals: { notice: t('organizers.moderation.flash.approved') } %>

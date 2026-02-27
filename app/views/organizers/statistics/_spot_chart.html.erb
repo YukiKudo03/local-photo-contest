@@ -1,5 +1,5 @@
 <div class="bg-white rounded-lg shadow p-6 mb-6">
-  <h2 class="text-lg font-semibold text-gray-900 mb-4">人気スポット（上位10件）</h2>
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('organizers.statistics.spot_chart.title') %></h2>
 
   <% if spot_rankings.empty? %>
     <div class="text-center py-12 text-gray-500">
@@ -7,29 +7,29 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
       </svg>
-      <p>スポットデータがありません</p>
+      <p><%= t('organizers.statistics.spot_chart.no_data') %></p>
     </div>
   <% else %>
     <div class="mb-4">
       <%= bar_chart spot_rankings.map { |r| [r[:name], r[:count]] },
-                    xtitle: "応募数",
+                    xtitle: t('organizers.statistics.spot_chart.entries'),
                     library: {
                       indexAxis: "y"
                     } %>
     </div>
 
     <div class="mt-6">
-      <h3 class="text-sm font-medium text-gray-700 mb-2">スポット別応募一覧</h3>
+      <h3 class="text-sm font-medium text-gray-700 mb-2"><%= t('organizers.statistics.spot_chart.spot_list') %></h3>
       <div class="space-y-2">
         <% spot_rankings.each do |ranking| %>
           <div class="flex justify-between items-center py-2 border-b border-gray-100">
             <span class="text-gray-700"><%= ranking[:name] %></span>
             <div class="flex items-center">
-              <span class="text-gray-900 font-medium mr-3"><%= ranking[:count] %> 件</span>
+              <span class="text-gray-900 font-medium mr-3"><%= ranking[:count] %> <%= t('organizers.statistics.spot_chart.count_unit') %></span>
               <% if ranking[:spot] %>
                 <%= link_to organizers_contest_entries_path(@contest, spot_id: ranking[:spot].id),
                             class: "text-blue-600 hover:text-blue-800 text-sm" do %>
-                  一覧 &rarr;
+                  <%= t('organizers.statistics.spot_chart.view_list') %> &rarr;
                 <% end %>
               <% end %>
             </div>

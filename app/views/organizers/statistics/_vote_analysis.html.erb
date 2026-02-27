@@ -1,26 +1,26 @@
 <div class="bg-white rounded-lg shadow p-6 mb-6">
-  <h2 class="text-lg font-semibold text-gray-900 mb-4">投票分析</h2>
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('organizers.statistics.vote_analysis.title') %></h2>
 
   <% unless voting_started %>
     <div class="text-center py-12 text-gray-500 bg-gray-50 rounded-lg">
       <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
-      <p>投票期間開始後に表示されます</p>
+      <p><%= t('organizers.statistics.vote_analysis.not_started') %></p>
     </div>
   <% else %>
     <!-- 投票サマリー -->
     <div class="grid grid-cols-3 gap-4 mb-6">
       <div class="bg-gray-50 rounded-lg p-4 text-center">
-        <p class="text-sm text-gray-500">総投票数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.vote_analysis.total_votes') %></p>
         <p class="text-xl font-bold text-gray-900"><%= vote_summary[:total] %></p>
       </div>
       <div class="bg-gray-50 rounded-lg p-4 text-center">
-        <p class="text-sm text-gray-500">ユニーク投票者数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.vote_analysis.unique_voters') %></p>
         <p class="text-xl font-bold text-gray-900"><%= vote_summary[:unique_voters] %></p>
       </div>
       <div class="bg-gray-50 rounded-lg p-4 text-center">
-        <p class="text-sm text-gray-500">平均投票数/作品</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.vote_analysis.avg_per_entry') %></p>
         <p class="text-xl font-bold text-gray-900"><%= vote_summary[:average_per_entry] %></p>
       </div>
     </div>
@@ -28,14 +28,14 @@
     <!-- 投票推移グラフ -->
     <% if daily_votes.empty? %>
       <div class="text-center py-8 text-gray-500">
-        <p>まだ投票データがありません</p>
+        <p><%= t('organizers.statistics.vote_analysis.no_data') %></p>
       </div>
     <% else %>
       <div class="mb-6">
-        <h3 class="text-sm font-medium text-gray-700 mb-2">日別投票数推移</h3>
+        <h3 class="text-sm font-medium text-gray-700 mb-2"><%= t('organizers.statistics.vote_analysis.daily_trend') %></h3>
         <%= line_chart daily_votes,
-                       xtitle: "日付",
-                       ytitle: "投票数",
+                       xtitle: t('organizers.statistics.vote_analysis.date'),
+                       ytitle: t('organizers.statistics.vote_analysis.votes'),
                        colors: ["#10B981"] %>
       </div>
     <% end %>
@@ -43,7 +43,7 @@
     <!-- 上位得票作品 -->
     <% if top_voted_entries.any? %>
       <div class="mt-6">
-        <h3 class="text-sm font-medium text-gray-700 mb-3">上位得票作品（Top 5）</h3>
+        <h3 class="text-sm font-medium text-gray-700 mb-3"><%= t('organizers.statistics.vote_analysis.top_entries') %></h3>
         <div class="space-y-3">
           <% top_voted_entries.each_with_index do |entry, index| %>
             <div class="flex items-center p-3 bg-gray-50 rounded-lg">
@@ -51,11 +51,11 @@
                 <%= index + 1 %>
               </span>
               <% if entry.photo.attached? %>
-                <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-12 h-12 rounded object-cover mr-3", loading: "lazy" %>
+                <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || t('organizers.dashboard.untitled'), class: "w-12 h-12 rounded object-cover mr-3", loading: "lazy" %>
               <% end %>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 truncate">
-                  <%= entry.title.presence || "無題" %>
+                  <%= entry.title.presence || t('organizers.dashboard.untitled') %>
                 </p>
                 <p class="text-xs text-gray-500 truncate">
                   <%= entry.user.name.presence || entry.user.email %>
@@ -63,7 +63,7 @@
               </div>
               <div class="flex-shrink-0 text-right">
                 <p class="text-lg font-bold text-gray-900"><%= entry.votes_count %></p>
-                <p class="text-xs text-gray-500">票</p>
+                <p class="text-xs text-gray-500"><%= t('organizers.statistics.vote_analysis.votes_unit') %></p>
               </div>
             </div>
           <% end %>

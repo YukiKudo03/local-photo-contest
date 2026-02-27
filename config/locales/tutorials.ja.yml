@@ -1,0 +1,70 @@
+ja:
+  my:
+    tutorial_settings:
+      show:
+        title: チュートリアル設定
+        subtitle: チュートリアルの表示設定と進捗状況を管理します
+        display_settings: 表示設定
+        show_tutorials_label: チュートリアルを表示する
+        show_tutorials_hint: 新しい画面にアクセスした際に、機能説明のチュートリアルを表示します
+        context_help_label: コンテキストヘルプを表示する
+        context_help_hint: 各画面で「？」アイコンをクリックした際にヘルプを表示します
+        reduced_motion_label: アニメーションを減らす
+        reduced_motion_hint: チュートリアルのアニメーション効果を控えめにします
+        save_settings: 設定を保存
+        progress_title: チュートリアル進捗
+        progress_subtitle: 各チュートリアルの完了状況を確認・リセットできます
+        status_completed: 完了
+        status_skipped: スキップ済み
+        status_in_progress: "%{current}/%{total} 完了"
+        status_not_started: 未開始
+        reset: リセット
+        reset_confirm: このチュートリアルの進捗をリセットしますか？
+        back_to_profile: マイページに戻る
+  tutorials:
+    api:
+      reset_success: チュートリアルをリセットしました
+      settings_updated: 設定を更新しました
+      settings_update_failed: 設定の更新に失敗しました
+      invalid_tutorial_type: 無効なチュートリアルタイプです
+    types:
+      participant_onboarding:
+        label: 参加者向けガイド
+        description: Local Photo Contestの基本的な使い方を学びます
+      organizer_onboarding:
+        label: 運営者向けガイド
+        description: コンテストの運営に必要な機能を学びます
+      admin_onboarding:
+        label: 管理者向けガイド
+        description: 管理者向けの機能を学びます
+      judge_onboarding:
+        label: 審査員向けガイド
+        description: 審査員としての評価方法を学びます
+      contest_creation:
+        label: コンテスト作成
+        description: 新しいコンテストの作成方法を学びます
+      area_management:
+        label: エリア管理
+        description: 撮影エリアの管理方法を学びます
+      photo_submission:
+        label: 写真投稿
+        description: 写真の投稿方法を学びます
+      voting:
+        label: 投票
+        description: 作品への投票方法を学びます
+    welcome_modal:
+      title: Local Photo Contestへようこそ！
+      organizer_subtitle: フォトコンテストの運営を簡単に
+      participant_subtitle: 地域の魅力を写真で発信
+      organizer_description: このチュートリアルでは、コンテストの作成から運営までの基本的な使い方をご案内します。
+      participant_description: このチュートリアルでは、写真の投稿や投票の方法をご案内します。
+      start: チュートリアルを開始
+      skip: スキップ
+      restart_note: チュートリアルは後からいつでも再開できます
+    help_button:
+      title: ヘルプを表示
+      label: ヘルプ
+    feature_unlock:
+      title: 新機能が使えるようになりました
+    progress_dots:
+      label: "進捗: %{current}/%{total}"

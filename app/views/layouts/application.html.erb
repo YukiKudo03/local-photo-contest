@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#4f46e5">
-    <meta name="description" content="<%= content_for(:meta_description) || 'フォトコンテストに参加して、あなたの写真を披露しましょう' %>">
+    <meta name="description" content="<%= content_for(:meta_description) || t('layouts.application.meta_description') %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -31,7 +31,7 @@
   </head>
 
   <body class="h-full bg-gray-50" <%= "data-controller=toast data-toast-user-id-value=#{current_user.id}" if user_signed_in? %>>
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-indigo-600 focus:font-medium">メインコンテンツへスキップ</a>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-indigo-600 focus:font-medium"><%= t('layouts.application.skip_to_content') %></a>
     <%= render "shared/flash" %>
 
     <div class="min-h-full flex flex-col">
@@ -54,7 +54,7 @@
 
         <% if content_for?(:right_sidebar) %>
           <!-- Right Sidebar -->
-          <aside class="w-full lg:w-64 bg-white border-l border-gray-200 p-4" aria-label="補足情報">
+          <aside class="w-full lg:w-64 bg-white border-l border-gray-200 p-4" aria-label="<%= t('layouts.application.supplementary_info') %>">
             <%= yield :right_sidebar %>
           </aside>
         <% end %>

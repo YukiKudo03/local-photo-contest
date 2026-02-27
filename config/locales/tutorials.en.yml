@@ -1,0 +1,70 @@
+en:
+  my:
+    tutorial_settings:
+      show:
+        title: Tutorial Settings
+        subtitle: Manage tutorial display settings and progress
+        display_settings: Display Settings
+        show_tutorials_label: Show Tutorials
+        show_tutorials_hint: Display feature tutorials when accessing new screens
+        context_help_label: Show Context Help
+        context_help_hint: Display help when clicking the "?" icon on each screen
+        reduced_motion_label: Reduce Animation
+        reduced_motion_hint: Reduce tutorial animation effects
+        save_settings: Save Settings
+        progress_title: Tutorial Progress
+        progress_subtitle: Check and reset tutorial completion status
+        status_completed: Completed
+        status_skipped: Skipped
+        status_in_progress: "%{current}/%{total} completed"
+        status_not_started: Not Started
+        reset: Reset
+        reset_confirm: Reset progress for this tutorial?
+        back_to_profile: Back to Profile
+  tutorials:
+    api:
+      reset_success: Tutorial has been reset
+      settings_updated: Settings updated
+      settings_update_failed: Failed to update settings
+      invalid_tutorial_type: Invalid tutorial type
+    types:
+      participant_onboarding:
+        label: Participant Guide
+        description: Learn the basics of using Local Photo Contest
+      organizer_onboarding:
+        label: Organizer Guide
+        description: Learn the features needed for contest management
+      admin_onboarding:
+        label: Admin Guide
+        description: Learn admin features
+      judge_onboarding:
+        label: Judge Guide
+        description: Learn how to evaluate entries as a judge
+      contest_creation:
+        label: Contest Creation
+        description: Learn how to create a new contest
+      area_management:
+        label: Area Management
+        description: Learn how to manage photo areas
+      photo_submission:
+        label: Photo Submission
+        description: Learn how to submit photos
+      voting:
+        label: Voting
+        description: Learn how to vote on entries
+    welcome_modal:
+      title: Welcome to Local Photo Contest!
+      organizer_subtitle: Easily manage photo contests
+      participant_subtitle: Share your region's charm through photos
+      organizer_description: This tutorial will guide you through the basics of creating and managing contests.
+      participant_description: This tutorial will guide you through submitting photos and voting.
+      start: Start Tutorial
+      skip: Skip
+      restart_note: You can restart the tutorial anytime
+    help_button:
+      title: Show Help
+      label: Help
+    feature_unlock:
+      title: New features are now available
+    progress_dots:
+      label: "Progress: %{current}/%{total}"

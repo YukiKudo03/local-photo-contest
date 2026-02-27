@@ -1,0 +1,89 @@
+ja:
+  mailers:
+    common:
+      auto_sent: このメールは自動送信されています。
+      change_settings: メール通知設定を変更する
+      auto_sent_ignore: このメールは自動送信されています。心当たりがない場合は無視してください。
+      greeting: "%{name}さん、"
+    notification:
+      entry_submitted:
+        subject: "【%{contest_title}】応募が完了しました"
+        header: 応募完了
+        body: "「%{contest_title}」への応募が完了しました。"
+        work_title: "作品タイトル:"
+        view_button: 作品を確認する
+        encouragement: たくさんの投票やコメントをお待ちください！
+      comment_posted:
+        subject: "【%{contest_title}】作品にコメントがつきました"
+        header: 新しいコメント
+        body: "あなたの作品「%{entry_title}」に%{commenter}さんからコメントがつきました。"
+        untitled: 無題
+        comment_content: "コメント内容:"
+        view_button: コメントを確認する
+      entry_voted:
+        subject: "【%{contest_title}】作品に投票されました"
+        header: 投票されました
+        body: "あなたの作品「%{entry_title}」に投票されました。"
+        untitled: 無題
+        current_votes: "現在の投票数:"
+        view_button: 作品を確認する
+      results_announced:
+        subject: "【%{contest_title}】審査結果が発表されました"
+        header: 審査結果発表
+        body: "「%{contest_title}」の審査結果が発表されました。"
+        view_button: 結果を確認する
+        thanks: ご参加いただきありがとうございました！
+      entry_ranked:
+        subject: "【%{contest_title}】入賞おめでとうございます！"
+        header: 入賞おめでとうございます！
+        body: "「%{contest_title}」であなたの作品「%{entry_title}」が%{rank_label}に入賞しました！"
+        untitled: 無題
+        view_button: 結果を確認する
+      daily_digest:
+        subject: "【新規応募まとめ】%{date}の応募状況"
+        header: 新規応募まとめ
+        body: 昨日の新規応募状況をお知らせします。
+        entries_count: "%{count}件"
+        untitled: 無題
+        more_entries: "他%{count}件"
+        view_button: ダッシュボードを開く
+      judging_complete:
+        subject: "【%{contest_title}】全審査が完了しました"
+        header: 審査完了
+        body: "「%{contest_title}」の全審査員による評価が完了しました。"
+        ready: 結果発表の準備が整いました。
+        view_button: コンテストを管理する
+      spot_certification_request:
+        subject: "【%{contest_title}】発掘スポットの認定依頼"
+        header: 発掘スポット認定依頼
+        body: "「%{contest_title}」で新しいスポットが発掘されました。認定の確認をお願いします。"
+        spot_name: "スポット名:"
+        address: "住所:"
+        description: "説明:"
+        category: "カテゴリ:"
+        view_button: 発掘スポットを確認する
+      judging_reminder:
+        subject: "【%{contest_title}】審査のリマインダー"
+        header: 審査のリマインダー
+        body: "「%{contest_title}」の審査が未完了です。"
+        progress: "審査進捗:"
+        view_button: 審査を続ける
+      judging_deadline:
+        subject: "【%{contest_title}】審査期限のお知らせ"
+        header: 審査期限のお知らせ
+        body: "「%{contest_title}」の審査期限が迫っています。"
+        days_remaining: "あと%{count}日"
+        deadline_notice: "「%{contest_title}」の審査期限まであと%{count}日です。"
+        urgent: お早めに審査を完了してください。
+        view_button: 審査を続ける
+    judge_invitation:
+      invite:
+        subject: "【%{contest_title}】審査員への招待"
+        header: 審査員への招待
+        greeting: "こんにちは、"
+        body: "あなたはフォトコンテスト「%{contest_title}」の審査員として招待されました。"
+        theme: "テーマ:"
+        instruction: 審査員として参加いただける場合は、以下のボタンをクリックして招待を承諾してください。
+        view_button: 招待を確認する
+        expiry: "この招待は%{days}日間有効です。"
+        contact: ご不明な点がございましたら、コンテスト主催者にお問い合わせください。

@@ -10,7 +10,7 @@ class VotesController < ApplicationController
 
     if @vote.save
       respond_to do |format|
-        format.html { redirect_to @entry, notice: "投票しました。" }
+        format.html { redirect_to @entry, notice: t('flash.votes.created') }
         format.turbo_stream
       end
     else
@@ -22,7 +22,7 @@ class VotesController < ApplicationController
   rescue ActiveRecord::RecordNotUnique
     # Handle race condition - vote already exists at database level
     respond_to do |format|
-      format.html { redirect_to @entry, alert: "既にこの作品に投票しています。" }
+      format.html { redirect_to @entry, alert: t('flash.votes.already_voted') }
       format.turbo_stream { render turbo_stream: turbo_stream.replace("vote_button_#{@entry.id}", partial: "votes/button", locals: { entry: @entry }) }
     end
   end
@@ -32,12 +32,12 @@ class VotesController < ApplicationController
 
     if @vote&.destroy
       respond_to do |format|
-        format.html { redirect_to @entry, notice: "投票を取り消しました。" }
+        format.html { redirect_to @entry, notice: t('flash.votes.destroyed') }
         format.turbo_stream
       end
     else
       respond_to do |format|
-        format.html { redirect_to @entry, alert: "投票の取り消しに失敗しました。" }
+        format.html { redirect_to @entry, alert: t('flash.votes.failed') }
         format.turbo_stream
       end
     end
@@ -53,7 +53,7 @@ class VotesController < ApplicationController
     return if @entry.contest.accepting_entries?
 
     respond_to do |format|
-      format.html { redirect_to @entry, alert: "投票期間が終了しています。" }
+      format.html { redirect_to @entry, alert: t('flash.votes.voting_closed') }
       format.turbo_stream { head :unprocessable_entity }
     end
   end

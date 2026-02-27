@@ -83,7 +83,7 @@ RSpec.describe "Admin::Categories", type: :request do
         expect(response).to redirect_to(admin_categories_path)
         expect(Category.exists?(category.id)).to be true
         follow_redirect!
-        expect(response.body).to include("関連するコンテストがあるため削除できません")
+        expect(response.body).to include("コンテストに関連付けられているため削除できません")
       end
     end
   end

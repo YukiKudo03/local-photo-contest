@@ -10,7 +10,7 @@ class JudgeEvaluation < ApplicationRecord
   validates :score, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :entry_id, uniqueness: {
     scope: [ :contest_judge_id, :evaluation_criterion_id ],
-    message: "は既にこの基準で評価済みです"
+    message: :already_evaluated
   }
   validate :score_within_max
   validate :cannot_evaluate_own_entry
@@ -30,7 +30,7 @@ class JudgeEvaluation < ApplicationRecord
     return unless score && evaluation_criterion
 
     if score > evaluation_criterion.max_score
-      errors.add(:score, "は#{evaluation_criterion.max_score}以下にしてください")
+      errors.add(:score, :score_out_of_range, max: evaluation_criterion.max_score)
     end
   end
 
@@ -38,7 +38,7 @@ class JudgeEvaluation < ApplicationRecord
     return unless contest_judge && entry
 
     if entry.user_id == contest_judge.user_id
-      errors.add(:base, "自分の作品は評価できません")
+      errors.add(:base, :cannot_evaluate_own_entry)
     end
   end
 
@@ -46,7 +46,7 @@ class JudgeEvaluation < ApplicationRecord
     return unless entry && contest_judge
 
     if entry.contest_id != contest_judge.contest_id
-      errors.add(:entry, "はこのコンテストの作品ではありません")
+      errors.add(:entry, :not_in_contest)
     end
   end
 
@@ -54,7 +54,7 @@ class JudgeEvaluation < ApplicationRecord
     return unless contest_judge&.contest
 
     if contest_judge.contest.results_announced?
-      errors.add(:base, "結果発表後は評価を変更できません")
+      errors.add(:base, :cannot_edit_after_results)
     end
   end
 end

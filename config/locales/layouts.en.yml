@@ -1,0 +1,51 @@
+en:
+  layouts:
+    application:
+      site_name: Local Photo Contest
+      skip_to_content: Skip to main content
+      meta_description: Participate in photo contests and showcase your photos
+      supplementary_info: Supplementary Information
+  header:
+    search_placeholder: "Search..."
+    search_label: Site Search
+    main_navigation: Main Navigation
+    mobile_navigation: Mobile Navigation
+    contests: Contests
+    gallery: Gallery
+    my_entries: My Entries
+    my_votes: My Votes
+    judge_assignments: Judging
+    notifications: Notifications
+    notifications_unread: "Notifications (%{count} unread)"
+    admin_panel: Admin Panel
+    dashboard: Dashboard
+    help: Help
+    logout: Log Out
+    login: Log In
+    sign_up: Sign Up
+    open_menu: Open Menu
+  sidebar:
+    organizer_menu: Organizer Menu
+    dashboard: Dashboard
+    contest_management: Contest Management
+    contest_list: Contests
+    new_contest: New Contest
+    templates: Templates
+    area_spot: Areas & Spots
+    area_management: Area Management
+    photo_management: Photo Management
+    submitted_photos: Submitted Photos
+    coming_soon: Coming Soon
+    moderation: Moderation
+    judging_results: Judging & Results
+    judge_management: Judge Management
+    statistics_analysis: Statistics & Analysis
+    results_announcement: Results
+    admin_menu: Admin Menu
+    user_management: Users
+    contest_management_admin: Contests
+    category_management: Categories
+    audit_logs: Audit Logs
+    help: Help
+    organizer_guide: Organizer Guide
+    all_manuals: All Manuals

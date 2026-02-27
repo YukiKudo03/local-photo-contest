@@ -1,13 +1,13 @@
-審査のリマインダー
+<%= t('mailers.notification.judging_reminder.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」の審査が未完了です。
+<%= t('mailers.notification.judging_reminder.body', contest_title: @contest.title) %>
 
-審査進捗: <%= @progress %>%
+<%= t('mailers.notification.judging_reminder.progress') %> <%= @progress %>%
 
-審査を続ける: <%= my_judge_assignment_url(@contest_judge) %>
+<%= t('mailers.notification.judging_reminder.view_button') %>: <%= my_judge_assignment_url(@contest_judge) %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -17,7 +17,7 @@
       <div class="mt-2 flex items-center gap-3 text-xs text-gray-500">
         <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-100 text-gray-600"><%= spot.category_name %></span>
         <span><%= spot.contest.title %></span>
-        <span><%= spot.entries.count %>作品</span>
+        <span><%= t('search.spot_result.entries_count', count: spot.entries.count) %></span>
       </div>
     </div>
   </div>

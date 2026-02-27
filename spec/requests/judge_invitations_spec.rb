@@ -51,7 +51,7 @@ RSpec.describe "JudgeInvitations", type: :request do
 
           expect(response).to redirect_to(my_judge_assignments_path)
           follow_redirect!
-          expect(response.body).to include("審査員として登録されました")
+          expect(response.body).to include("審査員の招待を承諾しました")
           expect(invitation.reload.accepted?).to be true
         end
       end

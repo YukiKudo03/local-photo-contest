@@ -38,10 +38,8 @@ class TutorialStep < ApplicationRecord
   validates :step_id, presence: true, uniqueness: { scope: :tutorial_type }
   validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :title, presence: true,
-                    length: { maximum: MAX_TITLE_LENGTH,
-                              message: "は#{MAX_TITLE_LENGTH}文字以内で入力してください" }
-  validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH,
-                                    message: "は#{MAX_DESCRIPTION_LENGTH}文字以内で入力してください" },
+                    length: { maximum: MAX_TITLE_LENGTH }
+  validates :description, length: { maximum: MAX_DESCRIPTION_LENGTH },
                           allow_blank: true
   validates :tooltip_position, inclusion: { in: TOOLTIP_POSITIONS }
   validates :action_type, inclusion: { in: ACTION_TYPES.values }, allow_nil: true
@@ -176,7 +174,7 @@ class TutorialStep < ApplicationRecord
   def tutorial_step_count_within_limit
     current_count = TutorialStep.where(tutorial_type: tutorial_type).count
     if current_count >= MAX_STEPS_PER_TUTORIAL
-      errors.add(:base, "チュートリアルは最大#{MAX_STEPS_PER_TUTORIAL}ステップまでです")
+      errors.add(:base, :max_steps_exceeded, max: MAX_STEPS_PER_TUTORIAL)
     end
   end
 end

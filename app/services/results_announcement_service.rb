@@ -24,8 +24,8 @@ class ResultsAnnouncementService
   end
 
   def announce!
-    raise "コンテストが終了していません" unless contest.finished?
-    raise "結果は既に発表されています" if contest.results_announced?
+    raise I18n.t('services.results.contest_not_finished') unless contest.finished?
+    raise I18n.t('services.results.already_announced') if contest.results_announced?
 
     ActiveRecord::Base.transaction do
       calculate_and_save
@@ -43,23 +43,23 @@ class ResultsAnnouncementService
     warnings = []
 
     if contest.judge_completion_rate < 100 && (contest.judging_judge_only? || contest.judging_hybrid?)
-      warnings << "審査員の採点が#{contest.judge_completion_rate}%しか完了していません"
+      warnings << I18n.t('services.results.incomplete_judging', rate: contest.judge_completion_rate)
     end
 
     if contest.entries.count.zero?
-      warnings << "応募作品がありません"
+      warnings << I18n.t('services.results.no_entries')
     end
 
     if contest.judging_judge_only? && contest.contest_judges.empty?
-      warnings << "審査員が登録されていません"
+      warnings << I18n.t('services.results.no_judges')
     end
 
     if contest.judging_judge_only? && contest.evaluation_criteria.empty?
-      warnings << "評価基準が設定されていません"
+      warnings << I18n.t('services.results.no_criteria')
     end
 
     if contest.rankings_outdated?
-      warnings << "新しい評価が追加されました。ランキングの再計算をお勧めします"
+      warnings << I18n.t('services.results.rankings_outdated')
     end
 
     warnings

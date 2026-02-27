@@ -17,7 +17,7 @@ module Organizers
       end
 
       current_user.accept_terms!(current_terms, request.remote_ip)
-      redirect_to organizers_dashboard_path, notice: "利用規約に同意しました。"
+      redirect_to organizers_dashboard_path, notice: t('flash.terms.accepted')
     end
   end
 end

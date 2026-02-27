@@ -19,7 +19,7 @@ module Organizers
       @spot = @contest.spots.build(spot_params)
 
       if @spot.save
-        redirect_to organizers_contest_spots_path(@contest), notice: "スポットを登録しました。"
+        redirect_to organizers_contest_spots_path(@contest), notice: t('flash.spots.created')
       else
         render :new, status: :unprocessable_entity
       end
@@ -30,7 +30,7 @@ module Organizers
 
     def update
       if @spot.update(spot_params)
-        redirect_to organizers_contest_spots_path(@contest), notice: "スポットを更新しました。"
+        redirect_to organizers_contest_spots_path(@contest), notice: t('flash.spots.updated')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -38,7 +38,7 @@ module Organizers
 
     def destroy
       @spot.destroy
-      redirect_to organizers_contest_spots_path(@contest), notice: "スポットを削除しました。"
+      redirect_to organizers_contest_spots_path(@contest), notice: t('flash.spots.destroyed')
     end
 
     def merge
@@ -56,10 +56,10 @@ module Organizers
       service.merge
 
       redirect_to organizers_contest_spots_path(@contest),
-                  notice: "スポットを統合しました（#{service.preview[:entries_to_move]}件の作品を移動）。"
+                  notice: t('flash.spots.merged', count: service.preview[:entries_to_move], name: primary_spot.name)
     rescue SpotMergeService::MergeError => e
       redirect_to merge_organizers_contest_spot_path(@contest, @spot),
-                  alert: "統合に失敗しました: #{e.message}"
+                  alert: t('flash.spots.merge_failed', message: e.message)
     end
 
     def update_positions
@@ -85,7 +85,7 @@ module Organizers
     def authorize_contest!
       return if @contest.user == current_user
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_spot

@@ -2,6 +2,14 @@
 if ENV["COVERAGE"] || ENV["CI"]
   require "simplecov"
 
+  if ENV["CI"]
+    require "simplecov-cobertura"
+    SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::CoberturaFormatter
+    ])
+  end
+
   SimpleCov.start "rails" do
     add_filter "/spec/"
     add_filter "/config/"
@@ -14,14 +22,9 @@ if ENV["COVERAGE"] || ENV["CI"]
     add_group "Mailers", "app/mailers"
     add_group "Jobs", "app/jobs"
 
-    # Gradually increase these thresholds as coverage improves
-    # minimum_coverage 70
-    # minimum_coverage_by_file 50
-  end
-
-  if ENV["CI"]
-    require "simplecov-cobertura"
-    SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+    minimum_coverage 80
+    minimum_coverage_by_file 50
+    merge_timeout 3600
   end
 end
 

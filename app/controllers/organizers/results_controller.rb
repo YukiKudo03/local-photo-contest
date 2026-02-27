@@ -19,7 +19,7 @@ module Organizers
       service.calculate_and_save
 
       redirect_to preview_organizers_contest_results_path(@contest),
-                  notice: "ランキングを計算しました。"
+                  notice: t('flash.results.calculated')
     rescue => e
       redirect_to preview_organizers_contest_results_path(@contest),
                   alert: e.message
@@ -30,7 +30,7 @@ module Organizers
       service.announce!
 
       redirect_to organizers_contest_path(@contest),
-                  notice: "結果を発表しました。"
+                  notice: t('flash.results.announced')
     rescue => e
       redirect_to preview_organizers_contest_results_path(@contest),
                   alert: e.message
@@ -45,7 +45,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
   end
 end

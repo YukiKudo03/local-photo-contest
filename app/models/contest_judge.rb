@@ -8,7 +8,7 @@ class ContestJudge < ApplicationRecord
   has_many :judge_comments, dependent: :destroy
 
   # Validations
-  validates :user_id, uniqueness: { scope: :contest_id, message: "は既にこのコンテストの審査員です" }
+  validates :user_id, uniqueness: { scope: :contest_id, message: :already_a_judge }
 
   # Scopes
   scope :for_contest, ->(contest) { where(contest: contest) }

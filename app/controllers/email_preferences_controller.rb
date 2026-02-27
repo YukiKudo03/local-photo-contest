@@ -9,7 +9,7 @@ class EmailPreferencesController < ApplicationController
   def update
     if @user.update(email_preferences_params)
       redirect_to email_preference_path(token: @user.unsubscribe_token),
-                  notice: "メール通知設定を更新しました。"
+                  notice: t('flash.email_preferences.updated')
     else
       render :show, status: :unprocessable_entity
     end
@@ -19,7 +19,7 @@ class EmailPreferencesController < ApplicationController
 
   def set_user_by_token
     @user = User.find_by(unsubscribe_token: params[:token])
-    redirect_to root_path, alert: "無効なリンクです。" unless @user
+    redirect_to root_path, alert: t('flash.email_preferences.invalid_link') unless @user
   end
 
   def email_preferences_params

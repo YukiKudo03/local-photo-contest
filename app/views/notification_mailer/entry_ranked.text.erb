@@ -1,11 +1,11 @@
-入賞おめでとうございます！
+<%= t('mailers.notification.entry_ranked.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」であなたの作品「<%= @entry.title.presence || "無題" %>」が<%= @rank_label %>に入賞しました！
+<%= t('mailers.notification.entry_ranked.body', contest_title: @contest.title, entry_title: @entry.title.presence || t('mailers.notification.entry_ranked.untitled'), rank_label: @rank_label) %>
 
-結果を確認する: <%= contest_results_url(@contest) %>
+<%= t('mailers.notification.entry_ranked.view_button') %>: <%= contest_results_url(@contest) %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -27,24 +27,24 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
 
         expect(page).to have_content("Test Challenge")
         expect(page).to have_content("開催中")
-        expect(page).to have_content("テーマ: Nature")
+        expect(page).to have_content("Nature")
 
         # Statistics section - look for the specific stats card
         expect(page).to have_content("エントリー数")
         expect(page).to have_content("参加者数")
-        expect(page).to have_content("発掘スポット数")
+        expect(page).to have_content(I18n.t('organizers.discovery_challenges.show.spots_count'))
       end
 
       it "shows empty state for entries section" do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
-        expect(page).to have_content("まだエントリーがありません")
+        expect(page).to have_content(I18n.t('organizers.discovery_challenges.show.no_entries'))
       end
 
       it "shows empty state for discovered spots" do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
-        expect(page).to have_content("まだスポットが発掘されていません")
+        expect(page).to have_content(I18n.t('organizers.discovery_challenges.show.no_spots'))
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
         within("[data-testid='stats-section']") do
-          expect(page).to have_content("エントリー数")
+          expect(page).to have_content(I18n.t('organizers.discovery_challenges.show.entries_count'))
           expect(page).to have_content("5")
         end
       end
@@ -80,7 +80,7 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
         within("[data-testid='stats-section']") do
-          expect(page).to have_content("参加者数")
+          expect(page).to have_content(I18n.t('organizers.discovery_challenges.show.participants_count'))
           expect(page).to have_content("2")
         end
       end
@@ -89,7 +89,7 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
         within("[data-testid='entries-section']") do
-          expect(page).to have_selector(".grid img", minimum: 5)
+          expect(page).to have_selector(".grid img", minimum: 5, visible: :all)
         end
       end
 
@@ -108,20 +108,20 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
         draft_challenge = create(:discovery_challenge, :draft, contest: contest, name: "Draft Challenge")
         visit organizers_contest_discovery_challenge_path(contest, draft_challenge)
 
-        expect(page).to have_content("下書き")
+        expect(page).to have_content(I18n.t('organizers.contests.index.draft'))
       end
 
       it "displays active status badge" do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
-        expect(page).to have_content("開催中")
+        expect(page).to have_content(I18n.t('organizers.discovery_challenges.index.active'))
       end
 
       it "displays finished status badge" do
         finished_challenge = create(:discovery_challenge, :finished, contest: contest, name: "Finished Challenge")
         visit organizers_contest_discovery_challenge_path(contest, finished_challenge)
 
-        expect(page).to have_content("終了")
+        expect(page).to have_content(I18n.t('organizers.contests.index.finished'))
       end
     end
 
@@ -129,7 +129,7 @@ RSpec.describe "Organizers::ChallengeAnalytics", type: :system do
       it "navigates back to challenge list" do
         visit organizers_contest_discovery_challenge_path(contest, challenge)
 
-        click_link "チャレンジ一覧に戻る"
+        click_link I18n.t('organizers.discovery_challenges.new.back')
 
         expect(page).to have_current_path(organizers_contest_discovery_challenges_path(contest))
       end

@@ -1,0 +1,93 @@
+en:
+  activerecord:
+    errors:
+      models:
+        entry:
+          attributes:
+            spot:
+              not_in_contest: does not belong to this contest
+            spot_id:
+              blank: must be selected
+        contest:
+          attributes:
+            entry_end_at:
+              after_start_date: must be after the start date
+            area_id:
+              must_be_own_area: must be an area you created
+            judging_method:
+              cannot_change_after_publish: cannot be changed after contest is published
+        judge_evaluation:
+          attributes:
+            entry_id:
+              already_evaluated: has already been evaluated for this criterion
+            score:
+              score_out_of_range: "must be %{max} or less"
+            entry:
+              not_in_contest: does not belong to this contest
+            base:
+              cannot_evaluate_own_entry: You cannot evaluate your own entry
+              cannot_edit_after_results: Cannot edit evaluations after results are announced
+        judge_comment:
+          attributes:
+            entry_id:
+              already_commented: has already been commented on
+            base:
+              cannot_comment_own_entry: You cannot comment on your own entry
+              cannot_edit_after_results: Cannot edit comments after results are announced
+        judge_invitation:
+          attributes:
+            email:
+              already_invited: has already been invited to this contest
+              already_a_judge: is already a judge for this contest
+        area:
+          attributes:
+            name:
+              duplicate_name: already exists with the same name
+            boundary_geojson:
+              invalid_json: must be valid JSON format
+        spot:
+          attributes:
+            name:
+              already_registered: has already been registered in this contest
+        spot_vote:
+          attributes:
+            user_id:
+              already_voted: has already voted for this spot
+            spot:
+              must_be_certified: can only be voted on if certified
+        discovery_challenge:
+          attributes:
+            ends_at:
+              after_start_date: must be after the start date
+        tutorial_step:
+          attributes:
+            base:
+              max_steps_exceeded: "Tutorial can have a maximum of %{max} steps"
+        tutorial_progress:
+          attributes:
+            user_id:
+              already_exists: tutorial progress already exists
+        evaluation_criterion:
+          attributes:
+            name:
+              already_registered: has already been registered in this contest
+        contest_ranking:
+          attributes:
+            entry_id:
+              already_ranked: has already been ranked in this contest
+        discovery_badge:
+          attributes:
+            badge_type:
+              already_earned: has already been earned
+        contest_judge:
+          attributes:
+            user_id:
+              already_a_judge: is already a judge for this contest
+        challenge_entry:
+          attributes:
+            entry_id:
+              already_participating: is already participating in this challenge
+        terms_acceptance:
+          attributes:
+            user_id:
+              already_accepted: has already accepted this terms version

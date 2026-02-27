@@ -13,12 +13,8 @@ class DiscoveryChallenge < ApplicationRecord
     finished: 2
   }, prefix: :challenge
 
-  # Status name translations
-  STATUS_NAMES = {
-    draft: "下書き",
-    active: "開催中",
-    finished: "終了"
-  }.freeze
+  # Status type keys for i18n lookup
+  STATUS_KEYS = %i[draft active finished].freeze
 
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
@@ -39,7 +35,7 @@ class DiscoveryChallenge < ApplicationRecord
 
   # Instance Methods
   def status_name
-    STATUS_NAMES[status.to_sym]
+    I18n.t("models.discovery_challenge.statuses.#{status}")
   end
 
   def active_now?
@@ -59,6 +55,6 @@ class DiscoveryChallenge < ApplicationRecord
   def end_date_after_start_date
     return unless ends_at <= starts_at
 
-    errors.add(:ends_at, "は開始日時より後に設定してください")
+    errors.add(:ends_at, :after_start_date)
   end
 end

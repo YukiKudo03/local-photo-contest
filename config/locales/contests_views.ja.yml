@@ -1,0 +1,35 @@
+ja:
+  contests:
+    index:
+      title: フォトコンテスト
+      subtitle: 現在応募受付中のコンテストをご覧いただけます
+      accepting_entries: 応募受付中
+      no_time_limit: 期間制限なし
+      until_date: "〜 %{date}"
+      empty:
+        title: 現在応募可能なコンテストはありません
+        description: 新しいコンテストが開催されるまでお待ちください
+    show:
+      back_to_list: コンテスト一覧に戻る
+      accepting_entries: 応募受付中
+      finished: 終了
+      outside_period: 応募期間外
+      contest_details: コンテスト詳細
+      entry_period: 応募期間
+      no_start_date: 開始日時なし
+      no_end_date: 終了日時なし
+      no_time_limit: 期間制限なし
+      area_spots: 撮影エリア・スポット
+      spots_count: "%{count}件の撮影スポット"
+      spot_required: スポット選択必須
+      spots_list: "撮影スポット一覧:"
+      submit_entry: このコンテストに応募する
+      login_required_html: "応募するには<a href='%{login_path}'>ログイン</a>または<a href='%{register_path}'>新規登録</a>してください。"
+      results_announced: 結果が発表されました！
+      view_results: 結果を見る
+      contest_ended: このコンテストは終了しました
+      outside_entry_period: 現在応募期間外です
+      entries_section: 応募作品
+      works_count: "%{count}作品"
+      entry_alt: フォトコンテスト応募作品
+      untitled: 無題

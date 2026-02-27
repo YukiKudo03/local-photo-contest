@@ -257,7 +257,7 @@ RSpec.describe "Organizers::Areas", type: :request do
         it "redirects with alert" do
           delete organizers_area_path(area)
           expect(response).to redirect_to(organizers_area_path(area))
-          expect(flash[:alert]).to eq("このエリアに関連するコンテストがあるため削除できません。")
+          expect(flash[:alert]).to eq("コンテストに関連付けられているため削除できません。")
         end
       end
     end

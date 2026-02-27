@@ -1,13 +1,13 @@
 <!-- Page Header -->
 <div class="mb-8">
-  <h1 class="text-2xl font-bold text-gray-900">チュートリアル設定</h1>
-  <p class="mt-1 text-sm text-gray-500">チュートリアルの表示設定と進捗状況を管理します</p>
+  <h1 class="text-2xl font-bold text-gray-900"><%= t('my.tutorial_settings.show.title') %></h1>
+  <p class="mt-1 text-sm text-gray-500"><%= t('my.tutorial_settings.show.subtitle') %></p>
 </div>
 
 <!-- Settings Form -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
   <div class="px-6 py-4 border-b border-gray-100">
-    <h2 class="text-lg font-semibold text-gray-900">表示設定</h2>
+    <h2 class="text-lg font-semibold text-gray-900"><%= t('my.tutorial_settings.show.display_settings') %></h2>
   </div>
   <div class="p-6">
     <%= form_with url: my_tutorial_settings_path, method: :patch, local: true, class: "space-y-6" do |f| %>
@@ -20,8 +20,8 @@
                 "true", "false" %>
           </div>
           <div class="ml-3 text-sm">
-            <%= f.label "tutorial_settings[show_tutorials]", "チュートリアルを表示する", class: "font-medium text-gray-700" %>
-            <p class="text-gray-500">新しい画面にアクセスした際に、機能説明のチュートリアルを表示します</p>
+            <%= f.label "tutorial_settings[show_tutorials]", t('my.tutorial_settings.show.show_tutorials_label'), class: "font-medium text-gray-700" %>
+            <p class="text-gray-500"><%= t('my.tutorial_settings.show.show_tutorials_hint') %></p>
           </div>
         </div>
 
@@ -33,8 +33,8 @@
                 "true", "false" %>
           </div>
           <div class="ml-3 text-sm">
-            <%= f.label "tutorial_settings[show_context_help]", "コンテキストヘルプを表示する", class: "font-medium text-gray-700" %>
-            <p class="text-gray-500">各画面で「？」アイコンをクリックした際にヘルプを表示します</p>
+            <%= f.label "tutorial_settings[show_context_help]", t('my.tutorial_settings.show.context_help_label'), class: "font-medium text-gray-700" %>
+            <p class="text-gray-500"><%= t('my.tutorial_settings.show.context_help_hint') %></p>
           </div>
         </div>
 
@@ -46,14 +46,14 @@
                 "true", "false" %>
           </div>
           <div class="ml-3 text-sm">
-            <%= f.label "tutorial_settings[reduced_motion]", "アニメーションを減らす", class: "font-medium text-gray-700" %>
-            <p class="text-gray-500">チュートリアルのアニメーション効果を控えめにします</p>
+            <%= f.label "tutorial_settings[reduced_motion]", t('my.tutorial_settings.show.reduced_motion_label'), class: "font-medium text-gray-700" %>
+            <p class="text-gray-500"><%= t('my.tutorial_settings.show.reduced_motion_hint') %></p>
           </div>
         </div>
       </div>
 
       <div class="pt-4 border-t border-gray-100">
-        <%= f.submit "設定を保存", class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+        <%= f.submit t('my.tutorial_settings.show.save_settings'), class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
       </div>
     <% end %>
   </div>
@@ -62,8 +62,8 @@
 <!-- Tutorial Progress -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
   <div class="px-6 py-4 border-b border-gray-100">
-    <h2 class="text-lg font-semibold text-gray-900">チュートリアル進捗</h2>
-    <p class="mt-1 text-sm text-gray-500">各チュートリアルの完了状況を確認・リセットできます</p>
+    <h2 class="text-lg font-semibold text-gray-900"><%= t('my.tutorial_settings.show.progress_title') %></h2>
+    <p class="mt-1 text-sm text-gray-500"><%= t('my.tutorial_settings.show.progress_subtitle') %></p>
   </div>
   <div class="divide-y divide-gray-100">
     <% @tutorial_progresses.each do |item| %>
@@ -83,13 +83,13 @@
             <!-- Status -->
             <span class="text-sm <%= tutorial_status_class(item[:type]) %> px-2 py-0.5 rounded-full">
               <% if item[:progress].completed? %>
-                完了
+                <%= t('my.tutorial_settings.show.status_completed') %>
               <% elsif item[:progress].skipped? %>
-                スキップ済み
+                <%= t('my.tutorial_settings.show.status_skipped') %>
               <% elsif item[:progress].persisted? && item[:progress].current_step_position > 1 %>
-                <%= item[:progress].current_step_position - 1 %>/<%= item[:step_count] %> 完了
+                <%= t('my.tutorial_settings.show.status_in_progress', current: item[:progress].current_step_position - 1, total: item[:step_count]) %>
               <% else %>
-                未開始
+                <%= t('my.tutorial_settings.show.status_not_started') %>
               <% end %>
             </span>
           </div>
@@ -98,11 +98,11 @@
         <!-- Actions -->
         <div class="ml-6 flex items-center space-x-2">
           <% if item[:progress].completed? || item[:progress].skipped? || (item[:progress].persisted? && item[:progress].current_step_position > 1) %>
-            <%= button_to "リセット",
+            <%= button_to t('my.tutorial_settings.show.reset'),
                 reset_tutorial_path(tutorial_type: item[:type]),
                 method: :post,
                 class: "px-3 py-1.5 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors",
-                data: { turbo_confirm: "このチュートリアルの進捗をリセットしますか？" } %>
+                data: { turbo_confirm: t('my.tutorial_settings.show.reset_confirm') } %>
           <% end %>
         </div>
       </div>
@@ -116,6 +116,6 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    マイページに戻る
+    <%= t('my.tutorial_settings.show.back_to_profile') %>
   <% end %>
 </div>

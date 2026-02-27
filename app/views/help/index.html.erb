@@ -1,9 +1,9 @@
-<% content_for :title, "利用マニュアル" %>
+<% content_for :title, t('help.index.title') %>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">利用マニュアル</h1>
-    <p class="text-gray-600">Local Photo Contest の使い方をご案内します。</p>
+    <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= t('help.index.title') %></h1>
+    <p class="text-gray-600"><%= t('help.index.description') %></p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -33,14 +33,14 @@
 
   <% if user_signed_in? %>
     <div class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-      <h3 class="font-medium text-blue-900 mb-2">おすすめのマニュアル</h3>
+      <h3 class="font-medium text-blue-900 mb-2"><%= t('help.index.recommended') %></h3>
       <p class="text-sm text-blue-700">
         <% if current_user.admin? %>
-          システム管理者の方は <%= link_to "管理者向けマニュアル", help_guide_path(:admin), class: "underline hover:text-blue-900" %> をご覧ください。
+          <%= t('help.index.admin_recommendation_html', link: link_to(t('help.guides.admin.title'), help_guide_path(:admin), class: "underline hover:text-blue-900")) %>
         <% elsif current_user.organizer? %>
-          主催者の方は <%= link_to "主催者向けマニュアル", help_guide_path(:organizer), class: "underline hover:text-blue-900" %> をご覧ください。
+          <%= t('help.index.organizer_recommendation_html', link: link_to(t('help.guides.organizer.title'), help_guide_path(:organizer), class: "underline hover:text-blue-900")) %>
         <% else %>
-          コンテストへの参加方法は <%= link_to "参加者向けマニュアル", help_guide_path(:participant), class: "underline hover:text-blue-900" %> をご覧ください。
+          <%= t('help.index.participant_recommendation_html', link: link_to(t('help.guides.participant.title'), help_guide_path(:participant), class: "underline hover:text-blue-900")) %>
         <% end %>
       </p>
     </div>

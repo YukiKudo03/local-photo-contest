@@ -60,7 +60,7 @@ class EntriesController < ApplicationController
   def update
     @contest = @entry.contest
     if @entry.update(entry_params)
-      redirect_to @entry, notice: "応募内容を更新しました。"
+      redirect_to @entry, notice: t('flash.entries.updated')
     else
       @areas = Area.ordered
       @spots = @contest.spots.ordered
@@ -70,7 +70,7 @@ class EntriesController < ApplicationController
 
   def destroy
     @entry.destroy
-    redirect_to my_entries_path, notice: "応募を削除しました。"
+    redirect_to my_entries_path, notice: t('flash.entries.destroyed')
   end
 
   private
@@ -104,19 +104,19 @@ class EntriesController < ApplicationController
   def authorize_entry!
     return if @entry.owned_by?(current_user)
 
-    redirect_to my_entries_path, alert: "この操作を行う権限がありません。"
+    redirect_to my_entries_path, alert: t('flash.entries.not_authorized')
   end
 
   def check_editable!
     return if @entry.editable?
 
-    redirect_to @entry, alert: "応募期間が終了しているため編集できません。"
+    redirect_to @entry, alert: t('flash.entries.not_editable')
   end
 
   def check_deletable!
     return if @entry.deletable?
 
-    redirect_to @entry, alert: "応募期間が終了しているため削除できません。"
+    redirect_to @entry, alert: t('flash.entries.not_deletable')
   end
 
   def entry_params
@@ -125,9 +125,9 @@ class EntriesController < ApplicationController
 
   def discovery_notice
     if params.dig(:entry, :discover_new_spot) == "1" && params.dig(:entry, :new_spot_name).present?
-      "応募が完了しました。発掘スポットは主催者の審査後に認定されます。"
+      t('flash.entries.created_with_discovery')
     else
-      "応募が完了しました。"
+      t('flash.entries.created')
     end
   end
 end

@@ -1,14 +1,14 @@
 <!-- Page Header -->
 <div class="mb-8 flex items-center justify-between">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">コンテスト一覧</h1>
-    <p class="mt-1 text-sm text-gray-500">作成したコンテストを管理します</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.contests.index.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('organizers.contests.index.subtitle') %></p>
   </div>
   <%= link_to new_organizers_contest_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
     <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
     </svg>
-    新規作成
+    <%= t('organizers.contests.index.new_contest') %>
   <% end %>
 </div>
 
@@ -16,16 +16,16 @@
 <div class="mb-6 border-b border-gray-200">
   <nav class="-mb-px flex space-x-8">
     <%= link_to organizers_contests_path, class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status].blank? ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
-      すべて
+      <%= t('organizers.contests.index.all') %>
     <% end %>
     <%= link_to organizers_contests_path(status: :draft), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'draft' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
-      下書き
+      <%= t('organizers.contests.index.draft') %>
     <% end %>
     <%= link_to organizers_contests_path(status: :published), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'published' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
-      公開中
+      <%= t('organizers.contests.index.published') %>
     <% end %>
     <%= link_to organizers_contests_path(status: :finished), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'finished' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
-      終了
+      <%= t('organizers.contests.index.finished') %>
     <% end %>
   </nav>
 </div>
@@ -52,15 +52,15 @@
             <% case contest.status %>
             <% when "draft" %>
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                下書き
+                <%= t('organizers.contests.index.draft') %>
               </span>
             <% when "published" %>
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                公開中
+                <%= t('organizers.contests.index.published') %>
               </span>
             <% when "finished" %>
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                終了
+                <%= t('organizers.contests.index.finished') %>
               </span>
             <% end %>
           </div>
@@ -81,15 +81,15 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <% if contest.entry_start_at.present? %>
-                  <%= contest.entry_start_at.strftime('%Y/%m/%d') %>
+                  <%= l(contest.entry_start_at, format: :short) %>
                 <% end %>
                 〜
                 <% if contest.entry_end_at.present? %>
-                  <%= contest.entry_end_at.strftime('%Y/%m/%d') %>
+                  <%= l(contest.entry_end_at, format: :short) %>
                 <% end %>
               </span>
             <% else %>
-              <span class="text-gray-300">期間未設定</span>
+              <span class="text-gray-300"><%= t('organizers.contests.index.no_period') %></span>
             <% end %>
           </div>
         </div>
@@ -102,14 +102,14 @@
     <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
     </svg>
-    <h3 class="mt-4 text-lg font-medium text-gray-900">コンテストがありません</h3>
-    <p class="mt-2 text-sm text-gray-500">新しいコンテストを作成して始めましょう</p>
+    <h3 class="mt-4 text-lg font-medium text-gray-900"><%= t('organizers.contests.index.no_contests') %></h3>
+    <p class="mt-2 text-sm text-gray-500"><%= t('organizers.contests.index.create_first') %></p>
     <div class="mt-6">
       <%= link_to new_organizers_contest_path, class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors" do %>
         <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        新規コンテスト作成
+        <%= t('organizers.contests.index.new_contest') %>
       <% end %>
     </div>
   </div>

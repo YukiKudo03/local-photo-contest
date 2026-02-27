@@ -28,3 +28,7 @@ en:
       previous: Previous
       next: Next
       truncate: "..."
+      first_aria: Go to first page
+      last_aria: Go to last page
+      next_aria: Go to next page
+      prev_aria: Go to previous page

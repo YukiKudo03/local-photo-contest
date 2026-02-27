@@ -20,6 +20,10 @@ ja:
     form:
       placeholder: コメントを入力...
       submit: コメントする
+    comment:
+      delete: 削除
+      delete_confirm: このコメントを削除しますか？
+      time_ago: "%{time}前"
     create:
       success: コメントを投稿しました。
     destroy:

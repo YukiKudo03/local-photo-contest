@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to entry_path(@entry), notice: "コメントを投稿しました。" }
+        format.html { redirect_to entry_path(@entry), notice: t('flash.comments.created') }
         format.turbo_stream
       else
         format.html { redirect_to entry_path(@entry), alert: @comment.errors.full_messages.join(", ") }
@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to entry_path(@entry), notice: "コメントを削除しました。" }
+      format.html { redirect_to entry_path(@entry), notice: t('flash.comments.destroyed') }
       format.turbo_stream
     end
   end
@@ -42,7 +42,7 @@ class CommentsController < ApplicationController
   def authorize_comment!
     return if @comment.user == current_user || @entry.user == current_user
 
-    redirect_to entry_path(@entry), alert: "この操作を行う権限がありません。"
+    redirect_to entry_path(@entry), alert: t('flash.comments.not_authorized')
   end
 
   def comment_params

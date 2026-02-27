@@ -23,7 +23,7 @@ RSpec.describe "Discovery Features", type: :system do
       it "displays pending spots for review" do
         visit organizers_contest_discovery_spots_path(contest)
 
-        expect(page).to have_content("発掘スポット審査")
+        expect(page).to have_content(I18n.t('organizers.discovery_spots.index.title'))
         expect(page).to have_content("発掘スポット1")
       end
 
@@ -59,9 +59,9 @@ RSpec.describe "Discovery Features", type: :system do
       it "can navigate to new challenge form" do
         visit organizers_contest_discovery_challenges_path(contest)
 
-        click_link "チャレンジ作成", match: :first
+        first(:link, I18n.t('organizers.discovery_challenges.index.new_challenge')).click
 
-        expect(page).to have_content("発掘チャレンジ作成")
+        expect(page).to have_content(I18n.t('organizers.discovery_challenges.new.title'))
       end
     end
   end

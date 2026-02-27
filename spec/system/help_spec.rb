@@ -104,7 +104,7 @@ RSpec.describe "Help Pages", type: :system do
       page.driver.browser.manage.window.resize_to(1280, 800)
 
       within("header") do
-        click_link "ヘルプ"
+        first(:link, I18n.t("help.navigation.help")).click
       end
 
       expect(page).to have_current_path(help_path)

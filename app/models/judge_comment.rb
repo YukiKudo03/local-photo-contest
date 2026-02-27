@@ -9,7 +9,7 @@ class JudgeComment < ApplicationRecord
   validates :comment, presence: true, length: { maximum: 2000 }
   validates :entry_id, uniqueness: {
     scope: :contest_judge_id,
-    message: "には既にコメント済みです"
+    message: :already_commented
   }
   validate :cannot_comment_own_entry
   validate :comment_editable
@@ -24,7 +24,7 @@ class JudgeComment < ApplicationRecord
     return unless contest_judge && entry
 
     if entry.user_id == contest_judge.user_id
-      errors.add(:base, "自分の作品にはコメントできません")
+      errors.add(:base, :cannot_comment_own_entry)
     end
   end
 
@@ -32,7 +32,7 @@ class JudgeComment < ApplicationRecord
     return unless contest_judge&.contest
 
     if contest_judge.contest.results_announced?
-      errors.add(:base, "結果発表後はコメントを変更できません")
+      errors.add(:base, :cannot_edit_after_results)
     end
   end
 end

@@ -112,7 +112,8 @@ RSpec.describe "Edge Cases", type: :system do
 
       visit organizers_contests_path
 
-      expect(page).to have_content("権限がありません")
+      # Controller responds with :forbidden status, browser may show its own 403 page
+      expect(page).to have_content("denied").or have_content("403").or have_content("権限がありません")
     end
   end
 

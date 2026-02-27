@@ -14,21 +14,21 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>審査結果発表</h1>
+      <h1><%= t('mailers.notification.results_announced.header') %></h1>
     </div>
     <div class="content">
-      <p><%= @user.display_name %>さん、</p>
-      <p>コンテスト「<strong><%= @contest.title %></strong>」の審査結果が発表されました。</p>
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+      <p><%= t('mailers.notification.results_announced.body', contest_title: @contest.title) %></p>
 
       <p style="text-align: center;">
-        <a href="<%= contest_results_url(@contest) %>" class="button">結果を確認する</a>
+        <a href="<%= contest_results_url(@contest) %>" class="button"><%= t('mailers.notification.results_announced.view_button') %></a>
       </p>
 
-      <p>ご参加いただきありがとうございました！</p>
+      <p><%= t('mailers.notification.results_announced.thanks') %></p>
     </div>
     <div class="footer">
-      <p>このメールは自動送信されています。</p>
-      <p><a href="<%= @unsubscribe_url %>">メール通知設定を変更する</a></p>
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
     </div>
   </div>
 </body>

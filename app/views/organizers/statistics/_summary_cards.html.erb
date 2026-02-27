@@ -3,7 +3,7 @@
   <div class="bg-white rounded-lg shadow p-4">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm text-gray-500">総応募数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.show.total_entries') %></p>
         <p class="text-2xl font-bold text-gray-900"><%= summary[:total_entries] %></p>
       </div>
       <div class="text-blue-500">
@@ -14,7 +14,7 @@
     </div>
     <% if summary[:entries_change] %>
       <p class="text-xs mt-2 <%= summary[:entries_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
-        <%= summary[:entries_change] >= 0 ? '+' : '' %><%= summary[:entries_change] %> 件（前日比）
+        <%= summary[:entries_change] >= 0 ? '+' : '' %><%= summary[:entries_change] %> <%= t('organizers.statistics.summary.entries_change') %>
       </p>
     <% end %>
   </div>
@@ -23,7 +23,7 @@
   <div class="bg-white rounded-lg shadow p-4">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm text-gray-500">総投票数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.show.total_votes') %></p>
         <p class="text-2xl font-bold text-gray-900"><%= summary[:total_votes] %></p>
       </div>
       <div class="text-green-500">
@@ -34,7 +34,7 @@
     </div>
     <% if summary[:votes_change] %>
       <p class="text-xs mt-2 <%= summary[:votes_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
-        <%= summary[:votes_change] >= 0 ? '+' : '' %><%= summary[:votes_change] %> 票（前日比）
+        <%= summary[:votes_change] >= 0 ? '+' : '' %><%= summary[:votes_change] %> <%= t('organizers.statistics.summary.votes_change') %>
       </p>
     <% end %>
   </div>
@@ -43,7 +43,7 @@
   <div class="bg-white rounded-lg shadow p-4">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm text-gray-500">参加ユーザー数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.summary.total_participants') %></p>
         <p class="text-2xl font-bold text-gray-900"><%= summary[:total_participants] %></p>
       </div>
       <div class="text-purple-500">
@@ -54,7 +54,7 @@
     </div>
     <% if summary[:participants_change] %>
       <p class="text-xs mt-2 <%= summary[:participants_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
-        <%= summary[:participants_change] >= 0 ? '+' : '' %><%= summary[:participants_change] %> 人（前日比）
+        <%= summary[:participants_change] >= 0 ? '+' : '' %><%= summary[:participants_change] %> <%= t('organizers.statistics.summary.participants_change') %>
       </p>
     <% end %>
   </div>
@@ -63,7 +63,7 @@
   <div class="bg-white rounded-lg shadow p-4">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm text-gray-500">登録スポット数</p>
+        <p class="text-sm text-gray-500"><%= t('organizers.statistics.summary.total_spots') %></p>
         <p class="text-2xl font-bold text-gray-900"><%= summary[:total_spots] %></p>
       </div>
       <div class="text-orange-500">
@@ -75,7 +75,7 @@
     </div>
     <% if summary[:spots_change] %>
       <p class="text-xs mt-2 <%= summary[:spots_change] >= 0 ? 'text-green-600' : 'text-red-600' %>">
-        <%= summary[:spots_change] >= 0 ? '+' : '' %><%= summary[:spots_change] %> 件（前日比）
+        <%= summary[:spots_change] >= 0 ? '+' : '' %><%= summary[:spots_change] %> <%= t('organizers.statistics.summary.spots_change') %>
       </p>
     <% end %>
   </div>

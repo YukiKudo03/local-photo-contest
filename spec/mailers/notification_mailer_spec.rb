@@ -119,7 +119,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     it "sends email with rank info" do
       mail = described_class.entry_ranked(user, entry, 1)
       expect(mail.to).to eq([ user.email ])
-      expect(mail.subject).to include("1位に入賞しました")
+      expect(mail.subject).to include("入賞おめでとうございます")
     end
   end
 
@@ -170,7 +170,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     it "sends deadline notice" do
       mail = described_class.judging_deadline(contest_judge, 3)
       expect(mail.to).to eq([ judge_user.email ])
-      expect(mail.subject).to include("あと3日")
+      expect(mail.subject).to include("審査期限のお知らせ")
     end
   end
 end

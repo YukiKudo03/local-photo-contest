@@ -15,7 +15,7 @@ module My
 
     def mark_all_as_read
       Notification.mark_all_as_read!(current_user)
-      redirect_to my_notifications_path, notice: "すべての通知を既読にしました。"
+      redirect_to my_notifications_path, notice: t('flash.notifications.marked_all_read')
     end
 
     private

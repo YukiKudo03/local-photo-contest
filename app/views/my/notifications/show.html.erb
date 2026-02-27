@@ -4,7 +4,7 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    通知一覧に戻る
+    <%= t('my.notifications.show.back_to_list') %>
   <% end %>
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -32,7 +32,7 @@
         <div class="ml-4 flex-1">
           <h1 class="text-xl font-bold text-gray-900"><%= @notification.title %></h1>
           <p class="mt-1 text-sm text-gray-500">
-            <%= @notification.created_at.strftime('%Y年%m月%d日 %H:%M') %>
+            <%= l(@notification.created_at, format: :default) %>
           </p>
         </div>
       </div>
@@ -52,7 +52,7 @@
             <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             </svg>
-            リンク先を開く
+            <%= t('my.notifications.show.open_link') %>
           <% end %>
         </div>
       <% end %>

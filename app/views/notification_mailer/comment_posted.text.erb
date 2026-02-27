@@ -1,14 +1,14 @@
-新しいコメント
+<%= t('mailers.notification.comment_posted.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-あなたの作品「<%= @entry.title.presence || "無題" %>」に<%= @comment.user.display_name %>さんからコメントがつきました。
+<%= t('mailers.notification.comment_posted.body', entry_title: @entry.title.presence || t('mailers.notification.comment_posted.untitled'), commenter: @comment.user.display_name) %>
 
-コメント内容:
+<%= t('mailers.notification.comment_posted.comment_content') %>
 <%= truncate(@comment.body, length: 200) %>
 
-コメントを確認する: <%= entry_url(@entry) %>
+<%= t('mailers.notification.comment_posted.view_button') %>: <%= entry_url(@entry) %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -1,8 +1,8 @@
 <div class="container mx-auto max-w-2xl px-4 py-8">
   <!-- Page Header -->
   <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">マイプロフィール</h1>
-    <p class="mt-1 text-sm text-gray-500">あなたのプロフィール情報</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('my.profile.show.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('my.profile.show.subtitle') %></p>
   </div>
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -12,7 +12,7 @@
         <!-- Avatar -->
         <div class="flex-shrink-0">
           <% if @user.avatar.attached? %>
-            <%= image_tag @user.avatar.variant(resize_to_fill: [120, 120]), alt: "プロフィール画像", class: "w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover", loading: "lazy" %>
+            <%= image_tag @user.avatar.variant(resize_to_fill: [120, 120]), alt: t('my.profile.edit.avatar_label'), class: "w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover", loading: "lazy" %>
           <% else %>
             <div class="w-24 h-24 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               <span class="text-3xl font-bold text-indigo-600"><%= @user.initial %></span>
@@ -32,31 +32,31 @@
     <div class="p-6 space-y-6">
       <!-- Bio -->
       <div>
-        <dt class="text-sm font-medium text-gray-500">自己紹介</dt>
+        <dt class="text-sm font-medium text-gray-500"><%= t('my.profile.show.bio_label') %></dt>
         <dd class="mt-1 text-gray-900">
           <% if @user.bio.present? %>
             <p class="whitespace-pre-wrap"><%= @user.bio %></p>
           <% else %>
-            <p class="text-gray-400">自己紹介が設定されていません</p>
+            <p class="text-gray-400"><%= t('my.profile.show.bio_placeholder') %></p>
           <% end %>
         </dd>
       </div>
 
       <!-- Stats -->
       <div class="pt-6 border-t border-gray-100">
-        <h3 class="text-sm font-medium text-gray-500 mb-4">活動情報</h3>
+        <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('my.profile.show.activity_title') %></h3>
         <div class="grid grid-cols-3 gap-4 text-center">
           <div class="bg-gray-50 rounded-lg p-4">
             <div class="text-2xl font-bold text-indigo-600"><%= @user.entries.count %></div>
-            <div class="text-sm text-gray-500">応募作品</div>
+            <div class="text-sm text-gray-500"><%= t('my.profile.show.entries_count') %></div>
           </div>
           <div class="bg-gray-50 rounded-lg p-4">
             <div class="text-2xl font-bold text-pink-500"><%= @user.votes.count %></div>
-            <div class="text-sm text-gray-500">投票</div>
+            <div class="text-sm text-gray-500"><%= t('my.profile.show.votes_count') %></div>
           </div>
           <div class="bg-gray-50 rounded-lg p-4">
             <div class="text-2xl font-bold text-green-500"><%= @user.comments.count %></div>
-            <div class="text-sm text-gray-500">コメント</div>
+            <div class="text-sm text-gray-500"><%= t('my.profile.show.comments_count') %></div>
           </div>
         </div>
       </div>
@@ -66,17 +66,17 @@
 
       <!-- Account Info -->
       <div class="pt-6 border-t border-gray-100">
-        <h3 class="text-sm font-medium text-gray-500 mb-4">アカウント情報</h3>
+        <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('my.profile.show.account_title') %></h3>
         <dl class="space-y-3">
           <div class="flex justify-between">
-            <dt class="text-sm text-gray-500">登録日</dt>
-            <dd class="text-sm text-gray-900"><%= @user.created_at.strftime('%Y年%m月%d日') %></dd>
+            <dt class="text-sm text-gray-500"><%= t('my.profile.show.registered_at') %></dt>
+            <dd class="text-sm text-gray-900"><%= l(@user.created_at, format: :default) %></dd>
           </div>
           <div class="flex justify-between">
-            <dt class="text-sm text-gray-500">最終ログイン</dt>
+            <dt class="text-sm text-gray-500"><%= t('my.profile.show.last_login') %></dt>
             <dd class="text-sm text-gray-900">
               <% if @user.current_sign_in_at %>
-                <%= @user.current_sign_in_at.strftime('%Y年%m月%d日 %H:%M') %>
+                <%= l(@user.current_sign_in_at, format: :default) %>
               <% else %>
                 -
               <% end %>
@@ -92,13 +92,13 @@
         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
-        プロフィールを編集
+        <%= t('my.profile.show.edit_button') %>
       <% end %>
       <%= link_to my_tutorial_settings_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-colors" do %>
         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
-        チュートリアル設定
+        <%= t('my.profile.show.tutorial_settings') %>
       <% end %>
     </div>
   </div>

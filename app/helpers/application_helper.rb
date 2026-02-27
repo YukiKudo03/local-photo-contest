@@ -14,10 +14,10 @@ module ApplicationHelper
 
   def rank_label(rank)
     case rank
-    when 1 then "最優秀賞"
-    when 2 then "優秀賞"
-    when 3 then "準優秀賞"
-    else "入賞"
+    when 1 then t('ranks.grand_prize')
+    when 2 then t('ranks.excellence')
+    when 3 then t('ranks.merit')
+    else t('ranks.award')
     end
   end
 end

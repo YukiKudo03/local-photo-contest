@@ -5,10 +5,10 @@
       <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-      評価基準一覧に戻る
+      <%= t('organizers.evaluation_criteria.edit.back') %>
     <% end %>
-    <h1 class="text-2xl font-bold text-gray-900">評価基準の編集</h1>
-    <p class="mt-1 text-sm text-gray-500"><%= @criterion.name %>を編集します</p>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('organizers.evaluation_criteria.edit.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('organizers.evaluation_criteria.edit.subtitle', name: @criterion.name) %></p>
   </div>
 </div>
 

@@ -101,8 +101,8 @@ RSpec.describe "Organizers Contest Templates", type: :system do
         visit new_organizers_contest_path
 
         expect(page).to have_content("テンプレートから作成")
-        expect(page).to have_css("select option", text: "テンプレートを選択...")
-        expect(page).to have_css("select option", text: /テストテンプレート/)
+        expect(page).to have_css("option", text: "テンプレートを選択...")
+        expect(page).to have_css("option", text: /テストテンプレート/)
       end
 
       it "creates contest from template via list page" do

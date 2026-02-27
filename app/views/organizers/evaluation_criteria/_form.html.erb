@@ -7,7 +7,7 @@
         </svg>
         <div class="ml-3">
           <h3 class="text-sm font-medium text-red-800">
-            <%= pluralize(criterion.errors.count, "件のエラー") %>があります
+            <%= t('organizers.evaluation_criteria.form.errors', count: criterion.errors.count) %>
           </h3>
           <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
             <% criterion.errors.full_messages.each do |message| %>
@@ -21,42 +21,42 @@
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900">基準情報</h2>
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.evaluation_criteria.form.criterion_info') %></h2>
     </div>
     <div class="p-6 space-y-6">
       <!-- Name -->
       <div>
-        <%= f.label :name, "基準名", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :name, placeholder: "例：構図、色彩、テーマへの適合性", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
-        <p class="mt-1 text-xs text-gray-500">50文字以内で入力してください（必須）</p>
+        <%= f.label :name, t('organizers.evaluation_criteria.form.name_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :name, placeholder: t('organizers.evaluation_criteria.form.name_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
+        <p class="mt-1 text-xs text-gray-500"><%= t('organizers.evaluation_criteria.form.name_hint') %></p>
       </div>
 
       <!-- Description -->
       <div>
-        <%= f.label :description, "説明", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_area :description, rows: 3, placeholder: "この評価基準で何を評価するかを説明してください", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
-        <p class="mt-1 text-xs text-gray-500">500文字以内（任意）</p>
+        <%= f.label :description, t('organizers.evaluation_criteria.form.description_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_area :description, rows: 3, placeholder: t('organizers.evaluation_criteria.form.description_placeholder'), class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none" %>
+        <p class="mt-1 text-xs text-gray-500"><%= t('organizers.evaluation_criteria.form.description_hint') %></p>
       </div>
 
       <!-- Max Score -->
       <div>
-        <%= f.label :max_score, "最大スコア", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.label :max_score, t('organizers.evaluation_criteria.form.max_score_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
         <%= f.number_field :max_score, min: 1, max: 100, value: criterion.max_score || 10, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
-        <p class="mt-1 text-xs text-gray-500">1〜100の整数（必須）</p>
+        <p class="mt-1 text-xs text-gray-500"><%= t('organizers.evaluation_criteria.form.max_score_hint') %></p>
       </div>
 
       <!-- Position -->
       <div>
-        <%= f.label :position, "表示順", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.label :position, t('organizers.evaluation_criteria.form.position_label'), class: "block text-sm font-medium text-gray-700 mb-1" %>
         <%= f.number_field :position, min: 1, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" %>
-        <p class="mt-1 text-xs text-gray-500">小さい数字が先に表示されます（任意、未入力時は自動設定）</p>
+        <p class="mt-1 text-xs text-gray-500"><%= t('organizers.evaluation_criteria.form.position_hint') %></p>
       </div>
     </div>
   </div>
 
   <!-- Form Actions -->
   <div class="flex items-center justify-end space-x-4">
-    <%= link_to "キャンセル", organizers_contest_evaluation_criteria_path(@contest), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
-    <%= f.submit criterion.persisted? ? "更新する" : "追加する", class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
+    <%= link_to t('organizers.evaluation_criteria.form.cancel'), organizers_contest_evaluation_criteria_path(@contest), class: "px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors" %>
+    <%= f.submit criterion.persisted? ? t('organizers.evaluation_criteria.form.submit_update') : t('organizers.evaluation_criteria.form.submit_create'), class: "px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg cursor-pointer transition-colors" %>
   </div>
 <% end %>

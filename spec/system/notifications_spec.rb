@@ -47,7 +47,7 @@ RSpec.describe "Notifications", type: :system do
       it "shows empty state" do
         visit my_notifications_path
 
-        expect(page).to have_content("通知がありません")
+        expect(page).to have_content("通知はありません")
       end
     end
   end

@@ -1,0 +1,146 @@
+ja:
+  flash:
+    contests:
+      created: コンテストを作成しました。
+      updated: コンテストを更新しました。
+      destroyed: コンテストを削除しました。
+      published: コンテストを公開しました。
+      finished: コンテストを終了しました。
+      not_authorized: この操作を行う権限がありません。
+      unpublished: コンテストを非公開にしました。
+    areas:
+      created: エリアを作成しました。
+      updated: エリアを更新しました。
+      destroyed: エリアを削除しました。
+      has_contests: コンテストに関連付けられているため削除できません。
+      not_authorized: この操作を行う権限がありません。
+    spots:
+      created: スポットを作成しました。
+      updated: スポットを更新しました。
+      destroyed: スポットを削除しました。
+      merged: "%{count}件のスポットを「%{name}」に統合しました。"
+      merge_select_required: 統合先と統合元を選択してください。
+      merge_failed: "統合に失敗しました: %{message}"
+    discovery_spots:
+      certified: スポットを認定しました。
+      certified_name: "「%{name}」を認定しました。"
+      rejected: スポットの認定を却下しました。
+      rejected_name: "「%{name}」を却下しました。"
+      reject_reason_required: 却下理由を入力してください。
+      merged: "%{count}件のスポットを「%{name}」に統合しました。"
+      merge_source_required: 統合元のスポットを選択してください。
+      not_found: 指定されたスポットが見つかりません。
+    discovery_challenges:
+      created: チャレンジを作成しました。
+      updated: チャレンジを更新しました。
+      destroyed: チャレンジを削除しました。
+      activated: チャレンジを有効にしました。
+      deactivated: チャレンジを無効にしました。
+      cannot_delete_active: 進行中のチャレンジは削除できません。
+      cannot_start: このチャレンジは開始できません。
+      cannot_finish: このチャレンジは終了できません。
+    moderation:
+      approved: 応募を承認しました。
+      rejected: 応募を非表示にしました。
+      reject_reason_required: 非表示理由を入力してください。
+    judge_invitations:
+      created: 審査員を招待しました。
+      created_with_email: "%{email} に招待メールを送信しました。"
+      resent: 招待を再送信しました。
+      destroyed: 招待を取り消しました。
+      accepted: 審査員の招待を承諾しました。
+      declined: 審査員の招待を辞退しました。
+      already_processed: 招待が既に処理されています。
+      already_accepted: この招待は既に承諾されています。
+      already_declined: この招待は既に辞退されています。
+      already_judge: 既にこのコンテストの審査員として登録されています。
+      expired: 招待の有効期限が切れています。
+      invalid: 無効な招待です。
+    judging_settings:
+      updated: 審査設定を更新しました。
+    contest_judges:
+      created: 審査員を追加しました。
+      destroyed: 審査員を解任しました。
+    evaluation_criteria:
+      created: 評価基準を作成しました。
+      updated: 評価基準を更新しました。
+      destroyed: 評価基準を削除しました。
+      not_editable_after_results: 結果発表後は評価基準を変更できません。
+    judge_evaluations:
+      created: 評価を保存しました。
+      updated: 評価を更新しました。
+      cannot_evaluate_own: 自分の作品は評価できません。
+    results:
+      announced: 結果を発表しました。
+      not_finished: コンテストが終了していません。
+      already_announced: 既に結果は発表されています。
+      calculated: スコアを計算しました。
+      not_announced: 結果はまだ発表されていません。
+    contest_templates:
+      created: テンプレートを保存しました。
+      destroyed: テンプレートを削除しました。
+      applied: テンプレートを適用しました。
+      not_authorized: このテンプレートにアクセスする権限がありません。
+      contest_not_found: コンテストが見つかりません。
+    statistics:
+      export_success: エクスポートが完了しました。
+      not_authorized: このコンテストにアクセスする権限がありません。
+    terms:
+      accepted: 利用規約に同意しました。
+      required: 利用規約への同意が必要です。
+    registrations:
+      upgraded: 運営者アカウントにアップグレードしました。
+      confirmation_sent: 確認メールを送信しました。メール内のリンクをクリックしてアカウントを有効化してください。
+    confirmations:
+      resent: 確認メールを再送信しました。
+      confirmed: メールアドレスが確認されました。ログインしてください。
+    profiles:
+      updated: プロフィールを更新しました。
+    notifications:
+      marked_all_read: すべての通知を既読にしました。
+    tutorial_settings:
+      updated: チュートリアル設定を更新しました。
+      update_failed: 設定の更新に失敗しました。
+    email_preferences:
+      updated: メール通知設定を更新しました。
+      invalid_link: 無効なリンクです。
+    comments:
+      created: コメントを投稿しました。
+      destroyed: コメントを削除しました。
+      not_authorized: この操作を行う権限がありません。
+    votes:
+      created: 投票しました。
+      already_voted: 既に投票しています。
+      destroyed: 投票を取り消しました。
+      failed: 投票の取り消しに失敗しました。
+      voting_closed: 投票期間が終了しています。
+    spot_votes:
+      created: 投票しました。
+      destroyed: 投票を取り消しました。
+      failed: 投票の取り消しに失敗しました。
+      not_voteable: このスポットには投票できません。
+    entries:
+      created: 応募が完了しました。
+      created_with_discovery: 応募が完了しました。発掘スポットは主催者の審査後に認定されます。
+      updated: 応募内容を更新しました。
+      destroyed: 応募を削除しました。
+      not_authorized: この操作を行う権限がありません。
+      not_editable: 応募期間が終了しているため編集できません。
+      not_deletable: 応募期間が終了しているため削除できません。
+    admin:
+      admin_required: 管理者権限が必要です。
+      users:
+        updated: ユーザー情報を更新しました。
+        destroyed: ユーザーを削除しました。
+        suspended: アカウントを停止しました。
+        unsuspended: アカウント停止を解除しました。
+        role_changed: "ロールを「%{role}」に変更しました。"
+        invalid_role: 無効なロールです。
+      contests:
+        destroyed: コンテストを削除しました。
+        force_finished: コンテストを強制終了しました。
+      categories:
+        created: カテゴリを作成しました。
+        updated: カテゴリを更新しました。
+        destroyed: カテゴリを削除しました。
+        has_contests: コンテストに関連付けられているため削除できません。

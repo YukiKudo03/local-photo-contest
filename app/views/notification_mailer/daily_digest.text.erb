@@ -1,21 +1,21 @@
-新規応募まとめ
+<%= t('mailers.notification.daily_digest.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-昨日の新規応募状況をお知らせします。
+<%= t('mailers.notification.daily_digest.body') %>
 
 <% @contests_with_entries.each do |contest, entries| -%>
-■ <%= contest.title %>（<%= entries.size %>件）
+■ <%= contest.title %>(<%= t('mailers.notification.daily_digest.entries_count', count: entries.size) %>)
 <% entries.first(5).each do |entry| -%>
-  ・<%= entry.title.presence || "無題" %> — <%= entry.user.display_name %>
+  ・<%= entry.title.presence || t('mailers.notification.daily_digest.untitled') %> — <%= entry.user.display_name %>
 <% end -%>
 <% if entries.size > 5 -%>
-  ...他<%= entries.size - 5 %>件
+  ...<%= t('mailers.notification.daily_digest.more_entries', count: entries.size - 5) %>
 <% end -%>
 
 <% end -%>
-ダッシュボードを開く: <%= organizers_dashboard_url %>
+<%= t('mailers.notification.daily_digest.view_button') %>: <%= organizers_dashboard_url %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

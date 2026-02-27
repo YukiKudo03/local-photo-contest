@@ -6,7 +6,7 @@ class TermsAcceptance < ApplicationRecord
   # Validations
   validates :accepted_at, presence: true
   validates :ip_address, presence: true
-  validates :user_id, uniqueness: { scope: :terms_of_service_id, message: "has already accepted this terms version" }
+  validates :user_id, uniqueness: { scope: :terms_of_service_id, message: :already_accepted }
 
   # Scopes
   scope :recent, -> { order(accepted_at: :desc) }

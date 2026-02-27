@@ -1,4 +1,11 @@
 en:
+  footer:
+    navigation_label: Footer Navigation
+    user_guide: User Guide
+    terms: Terms of Service
+    privacy: Privacy Policy
+    contact: Contact
+    about: About Us
   activerecord:
     models:
       user: User
@@ -157,12 +164,17 @@ en:
   help:
     index:
       title: User Guide
-      description: Learn how to use Local Photo Contest
+      description: Learn how to use Local Photo Contest.
       select_guide: Select a guide based on your role
+      recommended: Recommended Guide
+      admin_recommendation_html: "System administrators, please see the %{link}."
+      organizer_recommendation_html: "Organizers, please see the %{link}."
+      participant_recommendation_html: "To learn how to participate, see the %{link}."
     show:
       back_to_list: Back to Guide List
       table_of_contents: Table of Contents
       toggle_toc: Toggle Table of Contents
+      no_toc: No table of contents
       not_found: The specified guide was not found
     guides:
       participant:

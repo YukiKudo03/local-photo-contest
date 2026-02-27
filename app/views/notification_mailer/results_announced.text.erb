@@ -1,13 +1,13 @@
-審査結果発表
+<%= t('mailers.notification.results_announced.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」の審査結果が発表されました。
+<%= t('mailers.notification.results_announced.body', contest_title: @contest.title) %>
 
-結果を確認する: <%= contest_results_url(@contest) %>
+<%= t('mailers.notification.results_announced.view_button') %>: <%= contest_results_url(@contest) %>
 
-ご参加いただきありがとうございました！
+<%= t('mailers.notification.results_announced.thanks') %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -1,17 +1,17 @@
-応募完了
+<%= t('mailers.notification.entry_submitted.header') %>
 
-<%= @user.display_name %>さん、
+<%= t('mailers.common.greeting', name: @user.display_name) %>
 
-コンテスト「<%= @contest.title %>」への応募が完了しました。
+<%= t('mailers.notification.entry_submitted.body', contest_title: @contest.title) %>
 
 <% if @entry.title.present? -%>
-作品タイトル: <%= @entry.title %>
+<%= t('mailers.notification.entry_submitted.work_title') %> <%= @entry.title %>
 
 <% end -%>
-作品を確認する: <%= entry_url(@entry) %>
+<%= t('mailers.notification.entry_submitted.view_button') %>: <%= entry_url(@entry) %>
 
-たくさんの投票やコメントをお待ちください！
+<%= t('mailers.notification.entry_submitted.encouragement') %>
 
 ---
-このメールは自動送信されています。
-メール通知設定を変更する: <%= @unsubscribe_url %>
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -1,4 +1,4 @@
-<% content_for :title, "#{@contest.title} - 評価一覧" %>
+<% content_for :title, "#{@contest.title} - #{t('my.judge_evaluations.index.title')}" %>
 
 <!-- Breadcrumb -->
 <div class="mb-6">
@@ -6,13 +6,13 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    コンテスト詳細に戻る
+    <%= t('my.judge_evaluations.index.back_to_contest') %>
   <% end %>
 </div>
 
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
   <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= @contest.title %></h1>
-  <p class="text-gray-500 mb-6">評価する作品を選択してください</p>
+  <p class="text-gray-500 mb-6"><%= t('my.judge_evaluations.index.select_entry') %></p>
 
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <% @entries.each do |entry| %>
@@ -24,19 +24,19 @@
         <div class="aspect-square bg-gray-100">
           <% if entry.photo.attached? %>
             <%= image_tag entry.photo.variant(resize_to_fill: [200, 200]),
-                          alt: entry.title.presence || "フォトコンテスト応募作品",
+                          alt: entry.title.presence || t('entries.form.entry_alt'),
                           class: "w-full h-full object-cover",
                           loading: "lazy" %>
           <% end %>
         </div>
         <div class="p-2 text-center">
-          <p class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || "無題" %></p>
+          <p class="text-sm font-medium text-gray-900 truncate"><%= entry.title.presence || t('entries.show.untitled') %></p>
           <% if is_own %>
-            <span class="text-xs text-gray-500">自分の作品</span>
+            <span class="text-xs text-gray-500"><%= t('my.judge_evaluations.index.own_entry') %></span>
           <% elsif is_evaluated %>
-            <span class="text-xs text-green-600">評価済み</span>
+            <span class="text-xs text-green-600"><%= t('my.judge_evaluations.index.evaluated') %></span>
           <% else %>
-            <span class="text-xs text-amber-600">未評価</span>
+            <span class="text-xs text-amber-600"><%= t('my.judge_evaluations.index.not_evaluated') %></span>
           <% end %>
         </div>
       <% end %>

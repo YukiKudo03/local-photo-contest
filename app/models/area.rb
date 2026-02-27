@@ -8,7 +8,7 @@ class Area < ApplicationRecord
 
   # Validations
   validates :name, presence: true,
-                   uniqueness: { scope: :user_id, message: "同じ名前のエリアが既に存在します" },
+                   uniqueness: { scope: :user_id, message: :duplicate_name },
                    length: { maximum: 50 }
   validates :prefecture, length: { maximum: 20 }, allow_blank: true
   validates :city, length: { maximum: 50 }, allow_blank: true
@@ -61,6 +61,6 @@ class Area < ApplicationRecord
   def valid_boundary_geojson
     JSON.parse(boundary_geojson)
   rescue JSON::ParserError
-    errors.add(:boundary_geojson, "は有効なJSON形式である必要があります")
+    errors.add(:boundary_geojson, :invalid_json)
   end
 end

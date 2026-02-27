@@ -9,7 +9,7 @@ class ContestTemplate < ApplicationRecord
 
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
-  validates :name, uniqueness: { scope: :user_id, message: "は既に使用されています" }
+  validates :name, uniqueness: { scope: :user_id, message: :taken }
   validates :judging_method, inclusion: { in: Contest.judging_methods.keys }, allow_nil: true
   validates :judge_weight,
             numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
@@ -34,6 +34,6 @@ class ContestTemplate < ApplicationRecord
   end
 
   def source_contest_title
-    source_contest&.title || "(削除済み)"
+    source_contest&.title || I18n.t('models.contest_template.deleted')
   end
 end

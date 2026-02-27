@@ -33,6 +33,13 @@ en:
         registered_at: Registered
         last_login: Last Login
         edit_button: Edit Profile
+        tutorial_settings: Tutorial Settings
+        discovery_title: Discovery Record
+        certified_spots: Certified Spots
+        pending_review: Under Review
+        spot_votes: Spot Votes
+        earned_badges: Earned Badges
+        recent_certifications: Recent Certifications
 
       edit:
         title: Edit Profile

@@ -10,7 +10,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:entry_submitted)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】応募が完了しました")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.entry_submitted.subject', contest_title: @contest.title))
+    end
   end
 
   def comment_posted(comment)
@@ -21,7 +23,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:comment)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@entry.contest.title}】あなたの作品にコメントがつきました")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.comment_posted.subject', contest_title: @entry.contest.title))
+    end
   end
 
   def entry_voted(vote)
@@ -32,7 +36,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:vote)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@entry.contest.title}】あなたの作品に投票されました")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.entry_voted.subject', contest_title: @entry.contest.title))
+    end
   end
 
   def results_announced(user, contest)
@@ -41,7 +47,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:results)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】審査結果が発表されました")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.results_announced.subject', contest_title: @contest.title))
+    end
   end
 
   def entry_ranked(user, entry, rank)
@@ -53,7 +61,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:results)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】あなたの作品が#{@rank_label}に入賞しました！")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.entry_ranked.subject', contest_title: @contest.title))
+    end
   end
 
   # --- 主催者向け ---
@@ -64,7 +74,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:digest)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【新規応募まとめ】#{Date.current.strftime('%Y年%m月%d日')}の応募状況")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.daily_digest.subject', date: l(Date.current, format: :default)))
+    end
   end
 
   def judging_complete(user, contest)
@@ -73,7 +85,9 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:results)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】全審査員の評価が完了しました")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.judging_complete.subject', contest_title: @contest.title))
+    end
   end
 
   def spot_certification_request(user, spot)
@@ -82,7 +96,9 @@ class NotificationMailer < ApplicationMailer
     @contest = spot.contest
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】発掘スポットの認定依頼があります")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.spot_certification_request.subject', contest_title: @contest.title))
+    end
   end
 
   # --- 審査員向け ---
@@ -95,7 +111,9 @@ class NotificationMailer < ApplicationMailer
 
     @progress = contest_judge.evaluation_progress
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】審査のリマインダー")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.judging_reminder.subject', contest_title: @contest.title))
+    end
   end
 
   def judging_deadline(contest_judge, days_remaining)
@@ -106,6 +124,8 @@ class NotificationMailer < ApplicationMailer
     return unless @user.email_enabled?(:judging)
 
     @unsubscribe_url = unsubscribe_url_for(@user)
-    mail(to: @user.email, subject: "【#{@contest.title}】審査期限まであと#{days_remaining}日です")
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.judging_deadline.subject', contest_title: @contest.title))
+    end
   end
 end

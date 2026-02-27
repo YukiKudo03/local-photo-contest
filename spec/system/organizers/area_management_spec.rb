@@ -17,8 +17,8 @@ RSpec.describe "Organizers::AreaManagement", type: :system do
     it "creates a new area successfully" do
       visit organizers_areas_path
 
-      click_link "新規エリア作成"
-      expect(page).to have_content("新規エリア作成")
+      first(:link, "新規作成").click
+      expect(page).to have_content(I18n.t('organizers.areas.new.title'))
 
       fill_in "エリア名", with: "渋谷エリア"
       select "東京都", from: "都道府県"
@@ -136,7 +136,7 @@ RSpec.describe "Organizers::AreaManagement", type: :system do
       visit organizers_areas_path
 
       expect(page).to have_content("エリアがありません")
-      expect(page).to have_link("新規エリア作成")
+      expect(page).to have_link("新規作成")
     end
   end
 end

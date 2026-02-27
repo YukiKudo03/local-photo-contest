@@ -182,6 +182,62 @@ RSpec.describe "Gallery", type: :request do
       end
     end
 
+    describe "fragment caching" do
+      let(:memory_store) { ActiveSupport::Cache::MemoryStore.new }
+      let!(:entry) { create(:entry, contest: published_contest, title: "Cached Entry") }
+
+      around do |example|
+        original_perform_caching = ActionController::Base.perform_caching
+        original_cache_store = ActionController::Base.cache_store
+        original_cache = Rails.cache
+
+        ActionController::Base.perform_caching = true
+        ActionController::Base.cache_store = memory_store
+        Rails.cache = memory_store
+
+        example.run
+      ensure
+        ActionController::Base.perform_caching = original_perform_caching
+        ActionController::Base.cache_store = original_cache_store
+        Rails.cache = original_cache
+      end
+
+      it "caches entry card fragments" do
+        # First request - should populate cache
+        get gallery_index_path
+        expect(response.body).to include("Cached Entry")
+
+        # Verify cache entries were written
+        cache_data = memory_store.instance_variable_get(:@data)
+        expect(cache_data).not_to be_empty
+      end
+
+      it "invalidates cache when entry is updated" do
+        # Populate cache
+        get gallery_index_path
+        expect(response.body).to include("Cached Entry")
+
+        # Update entry - changes updated_at, busting cache key
+        entry.update!(title: "Updated Entry")
+
+        # Should show updated content
+        get gallery_index_path
+        expect(response.body).to include("Updated Entry")
+      end
+
+      it "invalidates cache when vote is added" do
+        original_updated_at = entry.updated_at
+
+        # Add vote - touch: true on Vote#entry should update entry.updated_at
+        voter = create(:user, :confirmed)
+        create(:vote, entry: entry, user: voter)
+
+        # Entry should have been touched
+        entry.reload
+        expect(entry.updated_at).to be > original_updated_at
+      end
+    end
+
     describe "contest list for filter" do
       it "includes published contests in filter dropdown" do
         get gallery_index_path

@@ -1,0 +1,51 @@
+ja:
+  layouts:
+    application:
+      site_name: Local Photo Contest
+      skip_to_content: メインコンテンツへスキップ
+      meta_description: フォトコンテストに参加して、あなたの写真を披露しましょう
+      supplementary_info: 補足情報
+  header:
+    search_placeholder: "検索..."
+    search_label: サイト内検索
+    main_navigation: メインナビゲーション
+    mobile_navigation: モバイルナビゲーション
+    contests: コンテスト
+    gallery: ギャラリー
+    my_entries: マイ応募
+    my_votes: 投票した作品
+    judge_assignments: 審査担当
+    notifications: 通知
+    notifications_unread: "通知 未読%{count}件"
+    admin_panel: 管理画面
+    dashboard: ダッシュボード
+    help: ヘルプ
+    logout: ログアウト
+    login: ログイン
+    sign_up: 新規登録
+    open_menu: メニューを開く
+  sidebar:
+    organizer_menu: 運営メニュー
+    dashboard: ダッシュボード
+    contest_management: コンテスト管理
+    contest_list: コンテスト一覧
+    new_contest: 新規コンテスト作成
+    templates: テンプレート
+    area_spot: エリア・スポット
+    area_management: エリア管理
+    photo_management: 写真管理
+    submitted_photos: 投稿写真一覧
+    coming_soon: 準備中
+    moderation: モデレーション
+    judging_results: 審査・結果
+    judge_management: 審査員管理
+    statistics_analysis: 統計・分析
+    results_announcement: 結果発表
+    admin_menu: 管理者メニュー
+    user_management: ユーザー管理
+    contest_management_admin: コンテスト管理
+    category_management: カテゴリ管理
+    audit_logs: 監査ログ
+    help: ヘルプ
+    organizer_guide: 主催者ガイド
+    all_manuals: 全マニュアル

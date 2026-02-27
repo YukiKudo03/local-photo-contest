@@ -18,7 +18,7 @@ module Organizers
 
       if @contest_judge.save
         redirect_to organizers_contest_judges_path(@contest),
-                    notice: "審査員を追加しました。"
+                    notice: t('flash.contest_judges.created')
       else
         @judges = @contest.contest_judges.includes(:user).order(created_at: :desc)
         @available_users = User.where.not(id: @contest.judges.pluck(:id)).order(:email)
@@ -30,7 +30,7 @@ module Organizers
     def destroy
       @contest_judge.destroy
       redirect_to organizers_contest_judges_path(@contest),
-                  notice: "審査員を削除しました。"
+                  notice: t('flash.contest_judges.destroyed')
     end
 
     private
@@ -42,7 +42,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_contest_judge

@@ -1,38 +1,38 @@
 <div class="container mx-auto px-4 py-8">
   <div class="mb-6">
-    <%= link_to "← コンテスト詳細に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+    <%= link_to t('organizers.results.preview.back'), organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
   </div>
 
-  <h1 class="text-2xl font-bold mb-6">結果発表管理: <%= @contest.title %></h1>
+  <h1 class="text-2xl font-bold mb-6"><%= t('organizers.results.preview.title') %>: <%= @contest.title %></h1>
 
   <!-- ステータス表示 -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-500">コンテストステータス</p>
+      <p class="text-sm text-gray-500"><%= t('organizers.results.preview.contest_status') %></p>
       <p class="text-lg font-semibold">
         <% if @contest.finished? %>
-          <span class="text-green-600">終了</span>
+          <span class="text-green-600"><%= t('organizers.results.preview.finished') %></span>
         <% elsif @contest.published? %>
-          <span class="text-yellow-600">公開中</span>
+          <span class="text-yellow-600"><%= t('organizers.results.preview.published') %></span>
         <% else %>
-          <span class="text-gray-600">下書き</span>
+          <span class="text-gray-600"><%= t('organizers.results.preview.draft') %></span>
         <% end %>
       </p>
     </div>
     <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-500">審査員採点完了率</p>
+      <p class="text-sm text-gray-500"><%= t('organizers.results.preview.judge_completion') %></p>
       <p class="text-lg font-semibold"><%= @judge_completion_rate %>%</p>
     </div>
     <div class="bg-white rounded-lg shadow p-4">
-      <p class="text-sm text-gray-500">応募作品数</p>
-      <p class="text-lg font-semibold"><%= @contest.entries.count %>件</p>
+      <p class="text-sm text-gray-500"><%= t('organizers.results.preview.entries_count') %></p>
+      <p class="text-lg font-semibold"><%= t('organizers.results.preview.entries_with_count', count: @contest.entries.count) %></p>
     </div>
   </div>
 
   <!-- 警告メッセージ -->
   <% if @warnings.any? %>
     <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4 mb-6">
-      <h3 class="font-semibold text-yellow-800 mb-2">警告</h3>
+      <h3 class="font-semibold text-yellow-800 mb-2"><%= t('organizers.results.preview.warnings') %></h3>
       <ul class="list-disc list-inside text-yellow-700">
         <% @warnings.each do |warning| %>
           <li><%= warning %></li>
@@ -45,10 +45,10 @@
   <% if @contest.results_announced? %>
     <div class="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
       <p class="text-green-800">
-        <strong>結果発表済み:</strong>
+        <strong><%= t('organizers.results.preview.results_announced') %>:</strong>
         <%= l(@contest.results_announced_at, format: :long) %>
         |
-        <%= link_to "結果ページを確認", contest_results_path(@contest), class: "text-green-600 hover:text-green-800 underline", target: "_blank" %>
+        <%= link_to t('organizers.results.preview.view_results_page'), contest_results_path(@contest), class: "text-green-600 hover:text-green-800 underline", target: "_blank" %>
       </p>
     </div>
   <% end %>
@@ -60,30 +60,29 @@
         <svg class="h-5 w-5 text-orange-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <p class="text-orange-800 font-medium">ランキングが最新ではありません</p>
+        <p class="text-orange-800 font-medium"><%= t('organizers.results.preview.rankings_outdated') %></p>
       </div>
       <p class="mt-2 text-orange-700 text-sm">
-        新しい評価が追加されたため、ランキングが変動している可能性があります。
-        下のプレビューは最新のデータを反映しています。保存したランキングを更新するには「ランキングを再計算」をクリックしてください。
+        <%= t('organizers.results.preview.rankings_outdated_desc') %>
       </p>
     </div>
   <% end %>
 
-  <!-- 暫定ランキング -->
+  <!-- <%= t('organizers.results.preview.provisional_rankings') %> -->
   <div class="bg-white rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
       <h2 class="text-lg font-semibold">
         <% if @contest.results_announced? %>
-          確定ランキング
+          <%= t('organizers.results.preview.final_rankings') %>
         <% else %>
-          暫定ランキング
+          <%= t('organizers.results.preview.provisional_rankings') %>
           <% if @preview_data[:rankings_outdated] %>
-            <span class="ml-2 text-xs font-normal text-orange-600 bg-orange-100 px-2 py-1 rounded">要再計算</span>
+            <span class="ml-2 text-xs font-normal text-orange-600 bg-orange-100 px-2 py-1 rounded"><%= t('organizers.results.preview.needs_recalculation') %></span>
           <% end %>
         <% end %>
       </h2>
       <% unless @contest.results_announced? %>
-        <%= button_to "ランキングを再計算", calculate_organizers_contest_results_path(@contest),
+        <%= button_to t('organizers.results.preview.recalculate'), calculate_organizers_contest_results_path(@contest),
             method: :post,
             class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm" %>
       <% end %>
@@ -94,15 +93,15 @@
         <table class="w-full">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">順位</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">作品</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">投稿者</th>
-              <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">総合スコア</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.rank') %></th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.entry') %></th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.submitter') %></th>
+              <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.total_score') %></th>
               <% if @contest.judging_judge_only? || @contest.judging_hybrid? %>
-                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">審査員スコア</th>
+                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.judge_score') %></th>
               <% end %>
               <% if @contest.judging_vote_only? || @contest.judging_hybrid? %>
-                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">投票数</th>
+                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700"><%= t('organizers.results.preview.vote_count') %></th>
               <% end %>
             </tr>
           </thead>
@@ -122,10 +121,10 @@
                 <td class="px-4 py-3">
                   <div class="flex items-center">
                     <% if entry.photo.attached? %>
-                      <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-12 h-12 rounded object-cover mr-3", loading: "lazy" %>
+                      <%= image_tag entry.photo.variant(resize_to_fill: [48, 48]), alt: entry.title.presence || t('organizers.dashboard.untitled'), class: "w-12 h-12 rounded object-cover mr-3", loading: "lazy" %>
                     <% end %>
                     <div>
-                      <p class="font-medium"><%= entry.title.presence || "無題" %></p>
+                      <p class="font-medium"><%= entry.title.presence || t('organizers.dashboard.untitled') %></p>
                     </div>
                   </div>
                 </td>
@@ -144,7 +143,7 @@
       </div>
     <% else %>
       <div class="px-6 py-8 text-center text-gray-500">
-        ランキングデータがありません
+        <%= t('organizers.results.preview.no_rankings') %>
       </div>
     <% end %>
   </div>
@@ -152,22 +151,21 @@
   <!-- 結果発表ボタン -->
   <% if @can_announce %>
     <div class="mt-8 p-6 bg-white rounded-lg shadow">
-      <h2 class="text-lg font-semibold mb-4">結果を発表</h2>
+      <h2 class="text-lg font-semibold mb-4"><%= t('organizers.results.preview.announce_title') %></h2>
       <p class="text-gray-600 mb-4">
-        結果を発表すると、参加者と一般ユーザーがランキングを閲覧できるようになります。
-        この操作は取り消せません。
+        <%= t('organizers.results.preview.announce_desc') %>
       </p>
-      <%= button_to "結果を発表する", announce_organizers_contest_results_path(@contest),
+      <%= button_to t('organizers.results.preview.announce_button'), announce_organizers_contest_results_path(@contest),
           method: :post,
-          data: { turbo_confirm: "結果を発表しますか？この操作は取り消せません。" },
+          data: { turbo_confirm: t('organizers.results.preview.announce_confirm') },
           class: "bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 cursor-pointer" %>
     </div>
   <% elsif !@contest.finished? %>
     <div class="mt-8 p-6 bg-gray-50 rounded-lg">
       <p class="text-gray-600">
-        結果を発表するには、まずコンテストを終了してください。
+        <%= t('organizers.results.preview.finish_first') %>
       </p>
-      <%= link_to "コンテスト管理に戻る", organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
+      <%= link_to t('organizers.results.preview.back_to_contest'), organizers_contest_path(@contest), class: "text-blue-600 hover:text-blue-800" %>
     </div>
   <% end %>
 </div>

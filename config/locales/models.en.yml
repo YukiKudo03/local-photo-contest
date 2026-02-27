@@ -1,0 +1,48 @@
+en:
+  ranks:
+    grand_prize: Grand Prize
+    excellence: Excellence Award
+    merit: Merit Award
+    award: Award
+  models:
+    contest_template:
+      deleted: "(Deleted)"
+    discovery_badge:
+      names:
+        pioneer: Pioneer
+        explorer: Explorer
+        curator: Curator
+        master: Master
+      descriptions:
+        pioneer: First submission to an unexplored area
+        explorer: Discovered 5 or more spots
+        curator: 10 or more spots certified
+        master: Participated in all discovery challenges
+    spot:
+      categories:
+        restaurant: Restaurant
+        retail: Retail
+        service: Service
+        landmark: Landmark
+        public_facility: Public Facility
+        park: Park
+        temple_shrine: Temple / Shrine
+        other: Other
+      discovery_statuses:
+        organizer_created: Organizer Created
+        discovered: Pending
+        certified: Certified
+        rejected: Rejected
+    discovery_challenge:
+      statuses:
+        draft: Draft
+        active: Active
+        finished: Finished
+    tutorial_progress:
+      completed: Completed
+      skipped: Skipped
+      in_progress: In Progress
+      not_started: Not Started
+    judge_invitation:
+      already_processed: This invitation has already been processed
+      expired: This invitation has expired

@@ -4,7 +4,7 @@
     <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
     </svg>
-    コンテスト一覧に戻る
+    <%= t('contests.show.back_to_list') %>
   <% end %>
 
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -30,15 +30,15 @@
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            応募受付中
+            <%= t('contests.show.accepting_entries') %>
           </span>
         <% elsif @contest.finished? %>
           <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-            終了
+            <%= t('contests.show.finished') %>
           </span>
         <% else %>
           <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-            応募期間外
+            <%= t('contests.show.outside_period') %>
           </span>
         <% end %>
       </div>
@@ -54,14 +54,14 @@
       <!-- Description -->
       <% if @contest.description.present? %>
         <div class="mt-6 prose prose-indigo max-w-none">
-          <h3 class="text-lg font-semibold text-gray-900">コンテスト詳細</h3>
+          <h3 class="text-lg font-semibold text-gray-900"><%= t('contests.show.contest_details') %></h3>
           <p class="text-gray-700 whitespace-pre-wrap"><%= @contest.description %></p>
         </div>
       <% end %>
 
       <!-- Entry Period -->
       <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-        <h3 class="text-sm font-semibold text-gray-900 mb-2">応募期間</h3>
+        <h3 class="text-sm font-semibold text-gray-900 mb-2"><%= t('contests.show.entry_period') %></h3>
         <div class="flex items-center text-gray-700">
           <svg class="mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -69,19 +69,19 @@
           <% if @contest.entry_start_at.present? || @contest.entry_end_at.present? %>
             <span>
               <% if @contest.entry_start_at.present? %>
-                <%= @contest.entry_start_at.strftime('%Y年%m月%d日 %H:%M') %>
+                <%= l(@contest.entry_start_at, format: :default) %>
               <% else %>
-                開始日時なし
+                <%= t('contests.show.no_start_date') %>
               <% end %>
-              〜
+              ~
               <% if @contest.entry_end_at.present? %>
-                <%= @contest.entry_end_at.strftime('%Y年%m月%d日 %H:%M') %>
+                <%= l(@contest.entry_end_at, format: :default) %>
               <% else %>
-                終了日時なし
+                <%= t('contests.show.no_end_date') %>
               <% end %>
             </span>
           <% else %>
-            <span>期間制限なし</span>
+            <span><%= t('contests.show.no_time_limit') %></span>
           <% end %>
         </div>
       </div>
@@ -94,7 +94,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            撮影エリア・スポット
+            <%= t('contests.show.area_spots') %>
           </h3>
 
           <% if @contest.area.present? %>
@@ -102,7 +102,7 @@
               <p class="text-sm text-teal-800">
                 <span class="font-medium"><%= @contest.area.name %></span>
                 <% if @contest.area.full_address.present? %>
-                  <span class="text-teal-600">（<%= @contest.area.full_address %>）</span>
+                  <span class="text-teal-600">(<%= @contest.area.full_address %>)</span>
                 <% end %>
               </p>
             </div>
@@ -111,10 +111,10 @@
           <% if @contest.spots.any? %>
             <div class="mb-3">
               <p class="text-sm text-teal-700">
-                <span class="font-medium"><%= @contest.spots.count %></span> 件の撮影スポット
+                <%= t('contests.show.spots_count', count: @contest.spots.count) %>
                 <% if @contest.require_spot %>
                   <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
-                    スポット選択必須
+                    <%= t('contests.show.spot_required') %>
                   </span>
                 <% end %>
               </p>
@@ -154,7 +154,7 @@
 
             <% if @contest.spots.any? %>
               <div class="mt-3">
-                <p class="text-xs text-teal-600 mb-2">撮影スポット一覧:</p>
+                <p class="text-xs text-teal-600 mb-2"><%= t('contests.show.spots_list') %></p>
                 <div class="flex flex-wrap gap-2">
                   <% @contest.spots.ordered.each do |spot| %>
                     <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-white border border-teal-200 text-teal-800">
@@ -177,16 +177,12 @@
               <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              このコンテストに応募する
+              <%= t('contests.show.submit_entry') %>
             <% end %>
           <% else %>
             <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p class="text-sm text-yellow-800">
-                応募するにはログインが必要です。
-                <%= link_to "ログイン", new_user_session_path, class: "font-semibold text-indigo-600 hover:text-indigo-700" %>
-                または
-                <%= link_to "新規登録", new_user_registration_path, class: "font-semibold text-indigo-600 hover:text-indigo-700" %>
-                してください。
+                <%= t('contests.show.login_required_html', login_path: new_user_session_path, register_path: new_user_registration_path).html_safe %>
               </p>
             </div>
           <% end %>
@@ -194,23 +190,23 @@
           <% if @contest.results_announced? %>
             <div class="space-y-4">
               <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-                <p class="text-yellow-800 font-medium">結果が発表されました！</p>
+                <p class="text-yellow-800 font-medium"><%= t('contests.show.results_announced') %></p>
               </div>
               <%= link_to contest_results_path(@contest), class: "inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl" do %>
                 <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
-                結果を見る
+                <%= t('contests.show.view_results') %>
               <% end %>
             </div>
           <% else %>
             <div class="p-4 bg-gray-100 rounded-lg text-center">
-              <p class="text-gray-600">このコンテストは終了しました</p>
+              <p class="text-gray-600"><%= t('contests.show.contest_ended') %></p>
             </div>
           <% end %>
         <% else %>
           <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-            <p class="text-yellow-800">現在応募期間外です</p>
+            <p class="text-yellow-800"><%= t('contests.show.outside_entry_period') %></p>
           </div>
         <% end %>
       </div>
@@ -222,8 +218,8 @@
   <% if visible_entries.any? %>
     <div class="mt-8">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold text-gray-900">応募作品</h2>
-        <span class="text-sm text-gray-500"><%= visible_entries.count %>作品</span>
+        <h2 class="text-xl font-bold text-gray-900"><%= t('contests.show.entries_section') %></h2>
+        <span class="text-sm text-gray-500"><%= t('contests.show.works_count', count: visible_entries.count) %></span>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -233,7 +229,7 @@
               <!-- Photo Thumbnail -->
               <div class="aspect-square bg-gray-100 relative">
                 <% if entry.photo.attached? %>
-                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title.presence || "フォトコンテスト応募作品", class: "w-full h-full object-cover", loading: "lazy" %>
+                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title.presence || t('contests.show.entry_alt'), class: "w-full h-full object-cover", loading: "lazy" %>
                 <% end %>
 
                 <!-- Vote Count Overlay -->
@@ -250,7 +246,7 @@
                 <% if entry.title.present? %>
                   <h3 class="text-sm font-medium text-gray-900 line-clamp-1 group-hover:text-indigo-600 transition-colors"><%= entry.title %></h3>
                 <% else %>
-                  <h3 class="text-sm font-medium text-gray-400 line-clamp-1">無題</h3>
+                  <h3 class="text-sm font-medium text-gray-400 line-clamp-1"><%= t('contests.show.untitled') %></h3>
                 <% end %>
               </div>
             </div>

@@ -9,7 +9,7 @@ class EvaluationCriterion < ApplicationRecord
 
   # Validations
   validates :name, presence: true, length: { maximum: 50 }
-  validates :name, uniqueness: { scope: :contest_id, message: "は既にこのコンテストに登録されています" }
+  validates :name, uniqueness: { scope: :contest_id, message: :already_registered }
   validates :description, length: { maximum: 500 }, allow_blank: true
   validates :max_score, presence: true,
                         numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100 }

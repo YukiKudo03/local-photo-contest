@@ -19,7 +19,7 @@ module Organizers
       )
 
       redirect_to organizers_contest_judge_invitations_path(@contest),
-                  notice: "#{@invitation.email} に招待メールを送信しました。"
+                  notice: t('flash.judge_invitations.created_with_email', email: @invitation.email)
     rescue ActiveRecord::RecordInvalid => e
       @invitations = @contest.judge_invitations.order(created_at: :desc)
       @judges = @contest.contest_judges.includes(:user).order(created_at: :desc)
@@ -30,7 +30,7 @@ module Organizers
     def destroy
       @invitation.destroy
       redirect_to organizers_contest_judge_invitations_path(@contest),
-                  notice: "招待を取り消しました。"
+                  notice: t('flash.judge_invitations.destroyed')
     end
 
     def resend
@@ -38,7 +38,7 @@ module Organizers
       service.resend(@invitation)
 
       redirect_to organizers_contest_judge_invitations_path(@contest),
-                  notice: "招待メールを再送信しました。"
+                  notice: t('flash.judge_invitations.resent')
     rescue => e
       redirect_to organizers_contest_judge_invitations_path(@contest),
                   alert: e.message
@@ -53,7 +53,7 @@ module Organizers
     def authorize_contest!
       return if @contest.owned_by?(current_user)
 
-      redirect_to organizers_contests_path, alert: "この操作を行う権限がありません。"
+      redirect_to organizers_contests_path, alert: t('flash.contests.not_authorized')
     end
 
     def set_invitation
