@@ -144,3 +144,55 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [test]
+    timeout-minutes: 30
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install Playwright dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Prepare test database and seed E2E data
+        env:
+          RAILS_ENV: test
+        run: |
+          bin/rails db:test:prepare
+          bin/rails e2e:seed
+
+      - name: Run Playwright tests
+        working-directory: e2e
+        env:
+          CI: true
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: e2e/playwright-report/
+          if-no-files-found: ignore
