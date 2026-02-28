@@ -549,6 +549,38 @@ en:
         votes: Votes
         top_entries: Top Voted Entries (Top 5)
         votes_unit: votes
+      advanced:
+        title: Advanced Analytics
+      demographics:
+        title: Participant Demographics
+        repeater_rate: Repeater Rate
+        repeater_description: Percentage of participants who also joined other contests by the same organizer
+        new_trend: New Participant Trend
+        cohort: Cohort Analysis (by Registration Month)
+        cohort_month: Registration Month
+        cohort_count: Participants
+        no_data: No participant data available
+      heatmap:
+        title: Submission Time Heatmap
+        subtitle: Day of Week × Hour Distribution
+        no_data: No data available
+        days: Sun,Mon,Tue,Wed,Thu,Fri,Sat
+        loading: Loading...
+      area_comparison:
+        title: Cross-Area Comparison Report
+        entries: Entries
+        votes: Votes
+        participants: Participants
+        score: Activity Score
+        distribution: Participant Distribution
+        no_areas: No area data available
+        view_detail: View Details
+      report:
+        title: PDF Report
+        generate: Generate Report
+        download: Download Report
+        generated_at: "Generated: %{time}"
+        not_yet_generated: Report has not been generated yet
     contest_templates:
       index:
         title: Templates

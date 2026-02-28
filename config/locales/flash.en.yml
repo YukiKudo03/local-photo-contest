@@ -85,6 +85,8 @@ en:
     statistics:
       export_success: Export completed.
       not_authorized: You are not authorized to access this contest's statistics.
+      report_generating: Report generation has started. You can download it once completed.
+      no_report: Report has not been generated yet.
     terms:
       accepted: Terms of Service accepted.
       required: You must accept the Terms of Service.

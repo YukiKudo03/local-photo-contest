@@ -41,6 +41,19 @@ en:
         moderation_approved: Approved
         moderation_hidden: Hidden
         moderation_requires_review: Requires Review
+    analytics_report:
+      title: Contest Analytics Report
+      generated_at: "Generated: %{time}"
+      summary: Summary
+      entries: Entries
+      participants: Participants
+      votes: Votes
+      repeater_rate: Repeater Rate
+      heatmap_title: Submission Time Distribution
+      day_names: Sun,Mon,Tue,Wed,Thu,Fri,Sat
+      area_title: Area Comparison
+      area_name: Area
+      score: Activity Score
     results:
       contest_not_finished: Contest has not finished
       already_announced: Results have already been announced

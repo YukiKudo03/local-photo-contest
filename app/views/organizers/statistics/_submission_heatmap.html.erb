@@ -1,0 +1,10 @@
+<div class="bg-white rounded-lg shadow p-6"
+     data-controller="heatmap"
+     data-heatmap-url-value="<%= heatmap_data_organizers_contest_statistics_path(contest) %>"
+     data-heatmap-days-value="<%= t('organizers.statistics.heatmap.days') %>">
+  <h2 class="text-lg font-semibold text-gray-900 mb-1"><%= t('organizers.statistics.heatmap.title') %></h2>
+  <p class="text-sm text-gray-500 mb-4"><%= t('organizers.statistics.heatmap.subtitle') %></p>
+  <div data-heatmap-target="container">
+    <p class="text-sm text-gray-400"><%= t('organizers.statistics.heatmap.loading') %></p>
+  </div>
+</div>

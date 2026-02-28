@@ -38,6 +38,31 @@
     </div>
   </div>
 
+  <!-- 高度な分析 -->
+  <div class="mt-8">
+    <h2 class="text-xl font-bold text-gray-900 mb-4"><%= t('organizers.statistics.advanced.title') %></h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <%= render "participant_demographics",
+                 repeater_rate: @repeater_rate,
+                 new_participant_trend: @new_participant_trend,
+                 cohort_analysis: @cohort_analysis %>
+      <%= render "submission_heatmap", contest: @contest %>
+    </div>
+  </div>
+
+  <!-- エリア間比較 -->
+  <div class="mt-6 bg-white rounded-lg shadow p-6">
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-900"><%= t('organizers.statistics.area_comparison.title') %></h2>
+      <%= link_to t('organizers.statistics.area_comparison.view_detail'),
+                  area_comparison_organizers_contest_statistics_path(@contest),
+                  class: "text-blue-600 hover:text-blue-800 text-sm" %>
+    </div>
+  </div>
+
+  <!-- PDFレポート -->
+  <%= render "report_downloads", contest: @contest %>
+
   <!-- 発掘統計 -->
   <div class="mt-6">
     <%= render "discovery", contest: @contest %>

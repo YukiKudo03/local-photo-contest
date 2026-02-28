@@ -1,0 +1,46 @@
+<div class="bg-white rounded-lg shadow p-6">
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('organizers.statistics.demographics.title') %></h2>
+
+  <!-- Repeater Rate -->
+  <div class="mb-6">
+    <div class="flex items-baseline gap-2 mb-1">
+      <span class="text-sm font-medium text-gray-700"><%= t('organizers.statistics.demographics.repeater_rate') %></span>
+      <span class="text-2xl font-bold text-indigo-600"><%= repeater_rate %>%</span>
+    </div>
+    <p class="text-xs text-gray-500"><%= t('organizers.statistics.demographics.repeater_description') %></p>
+  </div>
+
+  <!-- New Participant Trend -->
+  <% if new_participant_trend.present? %>
+    <div class="mb-6">
+      <h3 class="text-sm font-medium text-gray-700 mb-2"><%= t('organizers.statistics.demographics.new_trend') %></h3>
+      <%= line_chart new_participant_trend,
+            xtitle: t('organizers.statistics.entry_trend.date'),
+            ytitle: t('organizers.statistics.demographics.cohort_count'),
+            colors: ["#8b5cf6"] %>
+    </div>
+  <% end %>
+
+  <!-- Cohort Analysis -->
+  <% if cohort_analysis.present? %>
+    <div>
+      <h3 class="text-sm font-medium text-gray-700 mb-2"><%= t('organizers.statistics.demographics.cohort') %></h3>
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="text-left py-2 text-gray-600"><%= t('organizers.statistics.demographics.cohort_month') %></th>
+            <th class="text-right py-2 text-gray-600"><%= t('organizers.statistics.demographics.cohort_count') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cohort_analysis.each do |month, data| %>
+            <tr class="border-b border-gray-100">
+              <td class="py-2"><%= month %></td>
+              <td class="py-2 text-right font-medium"><%= data[:count] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

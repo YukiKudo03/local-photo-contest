@@ -545,6 +545,38 @@ ja:
         votes: 投票数
         top_entries: 上位得票作品（Top 5）
         votes_unit: 票
+      advanced:
+        title: 高度な分析
+      demographics:
+        title: 参加者デモグラフィクス
+        repeater_rate: リピーター率
+        repeater_description: 同じ主催者の他コンテストにも参加したユーザーの割合
+        new_trend: 新規参加者推移
+        cohort: コホート分析（登録月別）
+        cohort_month: 登録月
+        cohort_count: 参加者数
+        no_data: 参加者データがありません
+      heatmap:
+        title: 時間帯別投稿ヒートマップ
+        subtitle: 曜日 × 時間帯の投稿分布
+        no_data: データがありません
+        days: 日,月,火,水,木,金,土
+        loading: 読み込み中...
+      area_comparison:
+        title: エリア間比較レポート
+        entries: 応募数
+        votes: 投票数
+        participants: 参加者数
+        score: 活動スコア
+        distribution: 参加者分布
+        no_areas: エリアデータがありません
+        view_detail: 詳細を見る
+      report:
+        title: PDFレポート
+        generate: レポートを生成
+        download: レポートをダウンロード
+        generated_at: "生成日時: %{time}"
+        not_yet_generated: レポートはまだ生成されていません
     contest_templates:
       index:
         title: テンプレート一覧

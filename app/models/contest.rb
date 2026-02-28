@@ -17,6 +17,7 @@ class Contest < ApplicationRecord
   has_many :discovery_challenges, dependent: :destroy
   has_many :discovery_badges, dependent: :destroy
   has_one_attached :thumbnail
+  has_one_attached :analytics_report_pdf
 
   # Enums
   enum :status, { draft: 0, published: 1, finished: 2 }

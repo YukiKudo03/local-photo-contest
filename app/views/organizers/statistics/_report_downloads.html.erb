@@ -1,0 +1,22 @@
+<div class="mt-6 bg-white rounded-lg shadow p-6">
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('organizers.statistics.report.title') %></h2>
+
+  <div class="flex items-center gap-4">
+    <%= button_to t('organizers.statistics.report.generate'),
+                  generate_report_organizers_contest_statistics_path(contest),
+                  method: :post,
+                  class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700" %>
+
+    <% if contest.analytics_report_pdf.attached? %>
+      <%= link_to t('organizers.statistics.report.download'),
+                  download_report_organizers_contest_statistics_path(contest),
+                  class: "inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700" %>
+      <span class="text-sm text-gray-500">
+        <%= t('organizers.statistics.report.generated_at',
+              time: l(contest.analytics_report_pdf.blob.created_at, format: :short)) %>
+      </span>
+    <% else %>
+      <p class="text-sm text-gray-500"><%= t('organizers.statistics.report.not_yet_generated') %></p>
+    <% end %>
+  </div>
+</div>

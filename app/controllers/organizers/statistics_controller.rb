@@ -17,6 +17,38 @@ module Organizers
       @vote_summary = @service.vote_summary
       @top_voted_entries = @service.top_voted_entries
       @voting_started = @service.voting_started?
+
+      # Advanced analytics
+      @advanced = AdvancedStatisticsService.new(@contest)
+      @repeater_rate = @advanced.repeater_rate
+      @new_participant_trend = @advanced.new_participant_trend
+      @cohort_analysis = @advanced.cohort_analysis
+    end
+
+    def generate_report
+      AnalyticsReportJob.perform_later(@contest.id)
+      redirect_to organizers_contest_statistics_path(@contest),
+                  notice: t("flash.statistics.report_generating")
+    end
+
+    def download_report
+      if @contest.analytics_report_pdf.attached?
+        redirect_to rails_blob_path(@contest.analytics_report_pdf, disposition: "attachment")
+      else
+        redirect_to organizers_contest_statistics_path(@contest),
+                    alert: t("flash.statistics.no_report")
+      end
+    end
+
+    def area_comparison
+      @advanced = AdvancedStatisticsService.new(@contest)
+      @area_comparison = @advanced.area_comparison
+      @area_distribution = @advanced.area_participant_distribution
+    end
+
+    def heatmap_data
+      service = AdvancedStatisticsService.new(@contest)
+      render json: { heatmap: service.submission_heatmap }
     end
 
     def export

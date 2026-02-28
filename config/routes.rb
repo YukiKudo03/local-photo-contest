@@ -138,6 +138,10 @@ Rails.application.routes.draw do
       end
       resource :statistics, only: [ :show ] do
         get :export
+        get :heatmap_data, defaults: { format: :json }
+        get :area_comparison
+        post :generate_report
+        get :download_report
       end
       member do
         patch :publish

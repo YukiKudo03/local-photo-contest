@@ -85,6 +85,8 @@ ja:
     statistics:
       export_success: エクスポートが完了しました。
       not_authorized: このコンテストにアクセスする権限がありません。
+      report_generating: レポートの生成を開始しました。完了後にダウンロードできます。
+      no_report: レポートがまだ生成されていません。
     terms:
       accepted: 利用規約に同意しました。
       required: 利用規約への同意が必要です。

@@ -41,6 +41,19 @@ ja:
         moderation_approved: 承認済み
         moderation_hidden: 非表示
         moderation_requires_review: 要確認
+    analytics_report:
+      title: コンテスト分析レポート
+      generated_at: "生成日時: %{time}"
+      summary: サマリー
+      entries: 応募数
+      participants: 参加者数
+      votes: 投票数
+      repeater_rate: リピーター率
+      heatmap_title: 時間帯別投稿分布
+      day_names: 日,月,火,水,木,金,土
+      area_title: エリア間比較
+      area_name: エリア
+      score: 活動スコア
     results:
       contest_not_finished: コンテストが終了していません
       already_announced: 結果は既に発表されています
