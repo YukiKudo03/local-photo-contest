@@ -1,0 +1,22 @@
+<% content_for :title, t('pages.privacy_policy.title') %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6"><%= t('pages.privacy_policy.title') %></h1>
+
+  <div class="prose prose-gray max-w-none">
+    <% %i[intro collection usage sharing rights cookies contact].each do |section| %>
+      <section class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-3"><%= t("pages.privacy_policy.#{section}.title") %></h2>
+        <p class="text-gray-700 mb-3"><%= t("pages.privacy_policy.#{section}.body") %></p>
+        <% items = t("pages.privacy_policy.#{section}.items", default: nil) %>
+        <% if items.is_a?(Array) %>
+          <ul class="list-disc list-inside text-gray-700 space-y-1">
+            <% items.each do |item| %>
+              <li><%= item %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+</div>

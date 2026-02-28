@@ -32,12 +32,8 @@
     <div class="mt-8 border-t border-gray-200 pt-8">
       <nav class="flex flex-wrap justify-center space-x-6" aria-label="<%= t('footer.navigation_label', default: 'Footer Navigation') %>">
         <%= link_to t('footer.user_guide', default: 'User Guide'), help_path, class: "text-sm text-gray-500 hover:text-indigo-600 transition-colors" %>
-        <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          <%= t('footer.terms', default: 'Terms of Service') %>
-        </a>
-        <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-          <%= t('footer.privacy', default: 'Privacy Policy') %>
-        </a>
+        <%= link_to t('footer.terms', default: 'Terms of Service'), terms_of_service_path, class: "text-sm text-gray-500 hover:text-indigo-600 transition-colors" %>
+        <%= link_to t('footer.privacy', default: 'Privacy Policy'), privacy_policy_path, class: "text-sm text-gray-500 hover:text-indigo-600 transition-colors" %>
         <a href="#" class="text-sm text-gray-500 hover:text-indigo-600 transition-colors">
           <%= t('footer.contact', default: 'Contact') %>
         </a>

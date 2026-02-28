@@ -1,0 +1,7 @@
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= t('gdpr.account_deletion.mailer.cancelled.body') %>
+
+--
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

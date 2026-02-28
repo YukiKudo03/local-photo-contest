@@ -1,0 +1,11 @@
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= t('gdpr.data_export.mailer.body') %>
+
+<%= t('gdpr.data_export.mailer.expires', days: @days_until_expiry) %>
+
+<%= t('gdpr.data_export.mailer.view_button') %>: <%= my_data_export_url(@export_request) %>
+
+--
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

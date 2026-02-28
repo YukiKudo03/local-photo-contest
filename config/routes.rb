@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # Static pages (public access, no authentication required)
+  get "privacy-policy", to: "pages#privacy_policy", as: :privacy_policy
+  get "terms-of-service", to: "pages#terms_of_service", as: :terms_of_service
+
   # Help pages (public access, no authentication required)
   get "help", to: "help#index", as: :help
   get "help/:guide", to: "help#show", as: :help_guide,
@@ -49,6 +53,10 @@ Rails.application.routes.draw do
       end
     end
     resource :profile, only: [ :show, :edit, :update ]
+    resources :data_exports, only: [ :create, :show ] do
+      member { get :download }
+    end
+    resource :account_deletion, only: [ :new, :create, :destroy ]
     resource :tutorial_settings, only: [ :show, :update ]
 
     # Judge assignments dashboard

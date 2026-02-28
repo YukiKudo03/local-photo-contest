@@ -34,3 +34,12 @@ production:
   contest_auto_archive:
     class: ContestAutoArchiveJob
     schedule: at 2am Asia/Tokyo every day
+  data_export_cleanup:
+    class: DataExportCleanupJob
+    schedule: at 3am Asia/Tokyo every day
+  account_deletion:
+    class: AccountDeletionJob
+    schedule: at 4am Asia/Tokyo every day
+  deletion_reminder:
+    class: DeletionReminderJob
+    schedule: at 9:30am Asia/Tokyo every day

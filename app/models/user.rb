@@ -21,12 +21,21 @@ class User < ApplicationRecord
   has_many :discovered_spots, class_name: "Spot", foreign_key: :discovered_by_id, dependent: :nullify
   has_many :certified_spots, class_name: "Spot", foreign_key: :certified_by_id, dependent: :nullify
   has_many :spot_votes, dependent: :destroy
+  has_many :data_export_requests, dependent: :destroy
   has_many :discovery_badges, dependent: :destroy
   has_many :tutorial_progresses, dependent: :destroy
   has_one_attached :avatar
 
   # Role enum
   enum :role, { participant: 0, organizer: 1, admin: 2 }
+
+  # Account deletion scopes
+  scope :pending_deletion, -> { where.not(deletion_scheduled_at: nil).where("deletion_scheduled_at <= ?", Time.current) }
+  scope :deletion_reminder_due, -> {
+    target_date = 7.days.from_now.to_date
+    where.not(deletion_scheduled_at: nil)
+      .where(deletion_scheduled_at: target_date.beginning_of_day..target_date.end_of_day)
+  }
 
   # Email preference mapping
   EMAIL_PREFERENCE_MAP = {
@@ -137,6 +146,30 @@ class User < ApplicationRecord
 
   def update_tutorial_settings(settings)
     update(tutorial_settings: (tutorial_settings || {}).merge(settings))
+  end
+
+  # Account deletion methods
+  def request_deletion!
+    update!(
+      deletion_requested_at: Time.current,
+      deletion_scheduled_at: 30.days.from_now
+    )
+  end
+
+  def cancel_deletion!
+    update!(
+      deletion_requested_at: nil,
+      deletion_scheduled_at: nil
+    )
+  end
+
+  def deletion_requested?
+    deletion_requested_at.present?
+  end
+
+  def days_until_deletion
+    return nil unless deletion_scheduled_at
+    ((deletion_scheduled_at - Time.current) / 1.day).ceil
   end
 
   def email_enabled?(notification_type)

@@ -1,0 +1,8 @@
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= t('gdpr.account_deletion.mailer.requested.body', days: @days_until_deletion) %>
+
+<%= t('gdpr.account_deletion.mailer.requested.cancel_info') %>
+
+--
+<%= t('mailers.common.auto_sent') %>

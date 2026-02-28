@@ -1,0 +1,13 @@
+<% content_for :title, t('pages.terms_of_service.title') %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6"><%= t('pages.terms_of_service.title') %></h1>
+
+  <div class="prose prose-gray max-w-none">
+    <% if @terms %>
+      <div class="text-gray-700 whitespace-pre-wrap"><%= @terms.content %></div>
+    <% else %>
+      <p class="text-gray-500"><%= t('pages.terms_of_service.no_terms') %></p>
+    <% end %>
+  </div>
+</div>

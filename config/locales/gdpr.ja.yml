@@ -1,0 +1,69 @@
+ja:
+  gdpr:
+    cookie_consent:
+      title: Cookie設定
+      description: "当サービスでは、基本機能の提供にCookieを使用しています。サービス改善のための分析Cookieの許可を選択できます。"
+      privacy_link: 詳しくはプライバシーポリシーをご覧ください。
+      accept_all: すべて許可
+      essential_only: 必須のみ
+      customize: カスタマイズ
+      save_preferences: 設定を保存
+      essential_title: 必須Cookie
+      essential_description: サイトの正常な動作に必要です。無効にできません。
+      analytics_title: 分析Cookie
+      analytics_description: 訪問者がサイトをどのように利用しているかを理解し、体験を改善するのに役立ちます。
+    data_export:
+      title: データエクスポート
+      requested: データエクスポートのリクエストを受け付けました。準備が完了次第メールでお知らせします。
+      rate_limited: データエクスポートは24時間に1回のみリクエストできます。
+      expired: このエクスポートは期限切れです。
+      download_button: ダウンロード
+      back_to_profile: プロフィールに戻る
+      requested_at: "リクエスト日時: %{time}"
+      expires_at: "ダウンロード期限: %{time}"
+      status:
+        pending: 準備中
+        processing: 処理中
+        completed: 完了
+        expired: 期限切れ
+      mailer:
+        subject: データエクスポートの準備ができました
+        header: データエクスポート完了
+        body: リクエストされたデータエクスポートの準備が完了しました。以下のリンクからダウンロードしてください。
+        expires: "ダウンロード期限は%{days}日間です。期限を過ぎるとダウンロードできなくなります。"
+        view_button: ダウンロードページへ
+    account_deletion:
+      title: アカウント削除
+      requested: アカウント削除をリクエストしました。30日後にアカウントが削除されます。
+      cancelled: アカウント削除リクエストをキャンセルしました。
+      wrong_password: パスワードが正しくありません。
+      confirm: 本当にアカウントを削除しますか？この操作は30日後に実行されます。
+      pending_title: アカウント削除がリクエスト済みです
+      pending_body: "アカウントは%{days}日後に削除されます。キャンセルする場合は以下のボタンを押してください。"
+      cancel_button: 削除をキャンセル
+      warning_title: アカウント削除について
+      warning_1: アカウント削除をリクエストすると、30日間の猶予期間後にアカウントが完全に削除されます。
+      warning_2: 削除されたデータは復元できません。
+      warning_3: 猶予期間中はいつでもキャンセルできます。
+      password_label: パスワードを入力して確認
+      submit_button: アカウント削除をリクエスト
+      back_to_profile: プロフィールに戻る
+      mailer:
+        requested:
+          subject: アカウント削除リクエストを受け付けました
+          header: アカウント削除リクエスト
+          body: "アカウント削除のリクエストを受け付けました。%{days}日後にアカウントが削除されます。"
+          cancel_info: キャンセルする場合は、プロフィール設定からアカウント削除のキャンセルを行ってください。
+        reminder:
+          subject: "【重要】アカウント削除まであと7日です"
+          header: アカウント削除のリマインダー
+          body: "アカウント削除まであと%{days}日です。"
+          cancel_info: キャンセルする場合は、プロフィール設定からアカウント削除のキャンセルを行ってください。
+        completed:
+          subject: アカウントが削除されました
+          header: アカウント削除完了
+          body: ご利用いただきありがとうございました。アカウントのデータは完全に削除されました。
+        cancelled:
+          subject: アカウント削除がキャンセルされました
+          header: アカウント削除キャンセル
+          body: アカウント削除リクエストがキャンセルされました。引き続きサービスをご利用いただけます。

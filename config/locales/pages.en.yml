@@ -1,0 +1,63 @@
+en:
+  pages:
+    privacy_policy:
+      title: Privacy Policy
+      last_updated: "Last updated: %{date}"
+      intro:
+        title: Introduction
+        body: >
+          Local Photo Contest ("we", "us", or "our") is committed to protecting
+          your privacy. This Privacy Policy explains how we collect, use, disclose,
+          and safeguard your information when you use our service.
+      collection:
+        title: Information We Collect
+        body: >
+          We collect the following types of information:
+        items:
+          - Account information (name, email address, password)
+          - Profile information (bio, avatar image)
+          - Contest entries (photographs, titles, descriptions, location data)
+          - Voting and comment activity
+          - Usage data (access logs, IP addresses)
+      usage:
+        title: How We Use Your Information
+        body: >
+          We use your information to:
+        items:
+          - Provide and maintain our service
+          - Process contest entries and voting
+          - Send notifications about contests and results
+          - Improve our service and user experience
+          - Comply with legal obligations
+      sharing:
+        title: Information Sharing
+        body: >
+          We do not sell your personal information. We may share your information
+          only in the following circumstances:
+        items:
+          - With your consent
+          - To comply with legal obligations
+          - To protect the rights and safety of our users
+      rights:
+        title: Your Rights
+        body: >
+          You have the right to:
+        items:
+          - Access your personal data
+          - Request correction of inaccurate data
+          - Request deletion of your data
+          - Export your data in a portable format
+          - Withdraw consent for data processing
+      cookies:
+        title: Cookies
+        body: >
+          We use essential cookies to maintain your session and preferences.
+          For more details, please refer to our cookie consent settings.
+      contact:
+        title: Contact Us
+        body: >
+          If you have questions about this Privacy Policy, please contact the
+          site administrator.
+    terms_of_service:
+      title: Terms of Service
+      no_terms: Terms of Service are currently being prepared. Please check back later.

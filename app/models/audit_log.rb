@@ -24,6 +24,9 @@ class AuditLog < ApplicationRecord
     contest_auto_finish
     contest_auto_archive
     contest_unarchive
+    account_deletion_requested
+    account_deletion_cancelled
+    account_data_purged
   ].freeze
 
   validates :action, presence: true, inclusion: { in: ACTIONS }

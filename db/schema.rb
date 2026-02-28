@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_28_100002) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_28_101121) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -190,6 +190,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_100002) do
     t.index ["status", "deleted_at"], name: "index_contests_on_status_and_deleted_at"
     t.index ["status"], name: "index_contests_on_status"
     t.index ["user_id"], name: "index_contests_on_user_id"
+  end
+
+  create_table "data_export_requests", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "requested_at"
+    t.datetime "completed_at"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_data_export_requests_on_user_id"
   end
 
   create_table "discovery_badges", force: :cascade do |t|
@@ -490,6 +501,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_100002) do
     t.boolean "email_on_judging", default: true, null: false
     t.string "unsubscribe_token"
     t.string "locale", limit: 5
+    t.datetime "deletion_requested_at"
+    t.datetime "deletion_scheduled_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["feature_level"], name: "index_users_on_feature_level"
@@ -528,6 +541,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_100002) do
   add_foreign_key "contests", "areas"
   add_foreign_key "contests", "categories"
   add_foreign_key "contests", "users"
+  add_foreign_key "data_export_requests", "users"
   add_foreign_key "discovery_badges", "contests"
   add_foreign_key "discovery_badges", "users"
   add_foreign_key "discovery_challenges", "contests"

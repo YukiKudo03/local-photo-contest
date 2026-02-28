@@ -1,0 +1,69 @@
+en:
+  gdpr:
+    cookie_consent:
+      title: Cookie Settings
+      description: "We use cookies to ensure the basic functionality of our service. You can choose to allow analytics cookies to help us improve the service."
+      privacy_link: Learn more in our Privacy Policy.
+      accept_all: Accept All
+      essential_only: Essential Only
+      customize: Customize
+      save_preferences: Save Preferences
+      essential_title: Essential Cookies
+      essential_description: Required for the site to function properly. Cannot be disabled.
+      analytics_title: Analytics Cookies
+      analytics_description: Help us understand how visitors use our site to improve the experience.
+    data_export:
+      title: Data Export
+      requested: Your data export request has been submitted. You will receive an email when it's ready.
+      rate_limited: You can only request a data export once every 24 hours.
+      expired: This export has expired.
+      download_button: Download
+      back_to_profile: Back to Profile
+      requested_at: "Requested at: %{time}"
+      expires_at: "Download expires: %{time}"
+      status:
+        pending: Pending
+        processing: Processing
+        completed: Completed
+        expired: Expired
+      mailer:
+        subject: Your data export is ready
+        header: Data Export Ready
+        body: Your requested data export is ready. Please download it from the link below.
+        expires: "The download link will expire in %{days} days."
+        view_button: Go to Download Page
+    account_deletion:
+      title: Delete Account
+      requested: Your account deletion has been requested. Your account will be deleted in 30 days.
+      cancelled: Your account deletion request has been cancelled.
+      wrong_password: Incorrect password.
+      confirm: Are you sure you want to delete your account? This will be executed after 30 days.
+      pending_title: Account Deletion Requested
+      pending_body: "Your account will be deleted in %{days} days. Click below to cancel."
+      cancel_button: Cancel Deletion
+      warning_title: About Account Deletion
+      warning_1: After requesting deletion, your account will be permanently deleted after a 30-day grace period.
+      warning_2: Deleted data cannot be recovered.
+      warning_3: You can cancel at any time during the grace period.
+      password_label: Enter your password to confirm
+      submit_button: Request Account Deletion
+      back_to_profile: Back to Profile
+      mailer:
+        requested:
+          subject: Account deletion request received
+          header: Account Deletion Request
+          body: "Your account deletion request has been received. Your account will be deleted in %{days} days."
+          cancel_info: To cancel, go to your profile settings and cancel the account deletion.
+        reminder:
+          subject: "[Important] Your account will be deleted in 7 days"
+          header: Account Deletion Reminder
+          body: "Your account will be deleted in %{days} days."
+          cancel_info: To cancel, go to your profile settings and cancel the account deletion.
+        completed:
+          subject: Your account has been deleted
+          header: Account Deleted
+          body: Thank you for using our service. Your account data has been permanently deleted.
+        cancelled:
+          subject: Account deletion has been cancelled
+          header: Account Deletion Cancelled
+          body: Your account deletion request has been cancelled. You can continue using the service.
