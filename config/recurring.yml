@@ -22,3 +22,15 @@ production:
   judging_deadline:
     class: JudgingDeadlineJob
     schedule: at 9am Asia/Tokyo every day
+  contest_state_transition:
+    class: ContestStateTransitionJob
+    schedule: every 5 minutes
+  graduated_judging_reminder:
+    class: GraduatedJudgingReminderJob
+    schedule: at 9am Asia/Tokyo every day
+  winner_notification_scan:
+    class: WinnerNotificationJob
+    schedule: at 10am Asia/Tokyo every day
+  contest_auto_archive:
+    class: ContestAutoArchiveJob
+    schedule: at 2am Asia/Tokyo every day

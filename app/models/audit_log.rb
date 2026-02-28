@@ -20,6 +20,10 @@ class AuditLog < ApplicationRecord
     category_update
     category_delete
     user_update
+    contest_auto_publish
+    contest_auto_finish
+    contest_auto_archive
+    contest_unarchive
   ].freeze
 
   validates :action, presence: true, inclusion: { in: ACTIONS }

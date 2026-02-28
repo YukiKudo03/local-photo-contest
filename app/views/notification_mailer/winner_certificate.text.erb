@@ -1,0 +1,17 @@
+<%= t('mailers.notification.winner_certificate.header') %>
+
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= @rank_label %>
+
+<%= t('mailers.notification.winner_certificate.body', contest_title: @contest.title, entry_title: @entry.title.presence || t('mailers.notification.entry_ranked.untitled'), rank_label: @rank_label) %>
+
+<% if @ranking.certificate_pdf.attached? %>
+<%= t('mailers.notification.winner_certificate.certificate_attached') %>
+<% end %>
+
+<%= t('mailers.notification.winner_certificate.view_button') %>: <%= contest_results_url(@contest) %>
+
+---
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -18,7 +18,8 @@ class Notification < ApplicationRecord
   # Notification types
   TYPES = {
     results_announced: "results_announced",
-    entry_ranked: "entry_ranked"
+    entry_ranked: "entry_ranked",
+    winner_certificate: "winner_certificate"
   }.freeze
 
   # Instance methods
@@ -47,6 +48,19 @@ class Notification < ApplicationRecord
       notification_type: TYPES[:results_announced],
       title: I18n.t('notifications.messages.results_announced.title', contest_title: contest.title),
       body: I18n.t('notifications.messages.results_announced.body')
+    )
+  end
+
+  def self.create_winner_certificate!(user:, entry:, rank:)
+    contest = entry.contest
+    rank_label = I18n.t('notifications.messages.entry_ranked.rank_label', rank: rank)
+
+    create!(
+      user: user,
+      notifiable: entry,
+      notification_type: TYPES[:winner_certificate],
+      title: I18n.t('notifications.messages.winner_certificate.title', rank_label: rank_label),
+      body: I18n.t('notifications.messages.winner_certificate.body', contest_title: contest.title, rank_label: rank_label)
     )
   end
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #f59e0b; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9fafb; }
+    .rank { font-size: 48px; text-align: center; margin: 16px 0; }
+    .button { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .footer { padding: 20px; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><%= t('mailers.notification.winner_certificate.header') %></h1>
+    </div>
+    <div class="content">
+      <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+
+      <div class="rank"><%= @rank_label %></div>
+
+      <p><%= t('mailers.notification.winner_certificate.body',
+               contest_title: @contest.title,
+               entry_title: @entry.title.presence || t('mailers.notification.entry_ranked.untitled'),
+               rank_label: @rank_label) %></p>
+
+      <% if @ranking.certificate_pdf.attached? %>
+        <p><%= t('mailers.notification.winner_certificate.certificate_attached') %></p>
+      <% end %>
+
+      <p style="text-align: center;">
+        <a href="<%= contest_results_url(@contest) %>" class="button"><%= t('mailers.notification.winner_certificate.view_button') %></a>
+      </p>
+    </div>
+    <div class="footer">
+      <p><%= t('mailers.common.auto_sent') %></p>
+      <p><a href="<%= @unsubscribe_url %>"><%= t('mailers.common.change_settings') %></a></p>
+    </div>
+  </div>
+</body>
+</html>

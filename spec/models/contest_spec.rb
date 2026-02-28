@@ -410,6 +410,172 @@ RSpec.describe Contest, type: :model do
     end
   end
 
+  describe "scheduling validations" do
+    describe "scheduled_publish_at" do
+      context "when contest is draft" do
+        it "allows a future scheduled_publish_at" do
+          contest = build(:contest, :draft, scheduled_publish_at: 1.day.from_now)
+          expect(contest).to be_valid
+        end
+
+        it "rejects a past scheduled_publish_at on new record" do
+          contest = build(:contest, :draft, scheduled_publish_at: 1.hour.ago)
+          expect(contest).not_to be_valid
+          expect(contest.errors[:scheduled_publish_at]).to be_present
+        end
+
+        it "rejects a past scheduled_publish_at on update" do
+          contest = create(:contest, :draft)
+          contest.scheduled_publish_at = 1.hour.ago
+          expect(contest).not_to be_valid
+          expect(contest.errors[:scheduled_publish_at]).to be_present
+        end
+
+        it "allows nil scheduled_publish_at" do
+          contest = build(:contest, :draft, scheduled_publish_at: nil)
+          expect(contest).to be_valid
+        end
+      end
+
+      context "when contest is already published" do
+        it "ignores scheduled_publish_at validation" do
+          contest = create(:contest, :published)
+          contest.scheduled_publish_at = 1.hour.ago
+          expect(contest).to be_valid
+        end
+      end
+    end
+
+    describe "scheduled_finish_at" do
+      context "when both scheduled_publish_at and scheduled_finish_at are set" do
+        it "rejects scheduled_finish_at before scheduled_publish_at" do
+          contest = build(:contest, :draft,
+                          scheduled_publish_at: 2.days.from_now,
+                          scheduled_finish_at: 1.day.from_now)
+          expect(contest).not_to be_valid
+          expect(contest.errors[:scheduled_finish_at]).to be_present
+        end
+
+        it "allows scheduled_finish_at after scheduled_publish_at" do
+          contest = build(:contest, :draft,
+                          scheduled_publish_at: 1.day.from_now,
+                          scheduled_finish_at: 2.days.from_now)
+          expect(contest).to be_valid
+        end
+      end
+    end
+
+    describe "judging_deadline_at" do
+      it "allows nil judging_deadline_at" do
+        contest = build(:contest, judging_deadline_at: nil)
+        expect(contest).to be_valid
+      end
+
+      it "rejects judging_deadline_at before entry_end_at" do
+        contest = build(:contest,
+                        entry_start_at: 1.day.from_now,
+                        entry_end_at: 1.month.from_now,
+                        judging_deadline_at: 2.weeks.from_now)
+        expect(contest).not_to be_valid
+        expect(contest.errors[:judging_deadline_at]).to be_present
+      end
+
+      it "allows judging_deadline_at after entry_end_at" do
+        contest = build(:contest,
+                        entry_start_at: 1.day.from_now,
+                        entry_end_at: 1.month.from_now,
+                        judging_deadline_at: 2.months.from_now)
+        expect(contest).to be_valid
+      end
+    end
+  end
+
+  describe "#schedulable_for_publish?" do
+    it "returns true for draft contests with scheduled_publish_at in the past" do
+      contest = create(:contest, :past_scheduled_publish)
+      expect(contest.schedulable_for_publish?).to be true
+    end
+
+    it "returns false for draft contests with scheduled_publish_at in the future" do
+      contest = create(:contest, :scheduled_for_publish)
+      expect(contest.schedulable_for_publish?).to be false
+    end
+
+    it "returns false for already-published contests" do
+      contest = create(:contest, :published, scheduled_publish_at: 1.hour.ago)
+      expect(contest.schedulable_for_publish?).to be false
+    end
+
+    it "returns false for draft contests without scheduled_publish_at" do
+      contest = create(:contest, :draft)
+      expect(contest.schedulable_for_publish?).to be false
+    end
+  end
+
+  describe "#schedulable_for_finish?" do
+    it "returns true for published contests with scheduled_finish_at in the past" do
+      contest = create(:contest, :past_scheduled_finish)
+      expect(contest.schedulable_for_finish?).to be true
+    end
+
+    it "returns false for published contests with scheduled_finish_at in the future" do
+      contest = create(:contest, :scheduled_for_finish)
+      expect(contest.schedulable_for_finish?).to be false
+    end
+
+    it "returns false for already-finished contests" do
+      contest = create(:contest, :finished, scheduled_finish_at: 1.hour.ago)
+      expect(contest.schedulable_for_finish?).to be false
+    end
+
+    it "returns false for published contests without scheduled_finish_at" do
+      contest = create(:contest, :published)
+      expect(contest.schedulable_for_finish?).to be false
+    end
+  end
+
+  describe "scopes" do
+    describe ".pending_auto_publish" do
+      let!(:eligible) { create(:contest, :past_scheduled_publish) }
+      let!(:future) { create(:contest, :scheduled_for_publish) }
+      let!(:published) { create(:contest, :published) }
+      let!(:deleted) { create(:contest, :past_scheduled_publish, :deleted) }
+
+      it "returns only draft contests with past scheduled_publish_at" do
+        results = Contest.pending_auto_publish
+        expect(results).to include(eligible)
+        expect(results).not_to include(future)
+        expect(results).not_to include(published)
+        expect(results).not_to include(deleted)
+      end
+    end
+
+    describe ".pending_auto_finish" do
+      let!(:eligible) { create(:contest, :past_scheduled_finish) }
+      let!(:future) { create(:contest, :scheduled_for_finish) }
+      let!(:draft) { create(:contest, :draft) }
+      let!(:deleted) { create(:contest, :past_scheduled_finish, :deleted) }
+
+      it "returns only published contests with past scheduled_finish_at" do
+        results = Contest.pending_auto_finish
+        expect(results).to include(eligible)
+        expect(results).not_to include(future)
+        expect(results).not_to include(draft)
+        expect(results).not_to include(deleted)
+      end
+    end
+
+    describe ".not_archived" do
+      let!(:active_contest) { create(:contest) }
+      let!(:archived_contest) { create(:contest, :archived) }
+
+      it "excludes archived contests" do
+        expect(Contest.not_archived).to include(active_contest)
+        expect(Contest.not_archived).not_to include(archived_contest)
+      end
+    end
+  end
+
   describe "#rankings_outdated?" do
     let(:organizer) { create(:user, :organizer) }
     let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
@@ -466,6 +632,105 @@ RSpec.describe Contest, type: :model do
         evaluation.update!(score: 9)
         expect(contest.rankings_outdated?).to be true
       end
+    end
+  end
+
+  describe "#archive!" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+
+    context "when contest is finished and results announced" do
+      let(:contest) { create(:contest, :finished, user: organizer, results_announced_at: 1.day.ago) }
+
+      it "sets archived_at" do
+        contest.archive!
+        expect(contest.archived?).to be true
+        expect(contest.archived_at).to be_present
+      end
+    end
+
+    context "when contest is not finished" do
+      let(:contest) { create(:contest, :published, user: organizer) }
+
+      it "raises an error" do
+        expect { contest.archive! }.to raise_error(RuntimeError)
+      end
+    end
+
+    context "when results are not announced" do
+      let(:contest) { create(:contest, :finished, user: organizer) }
+
+      it "raises an error" do
+        expect { contest.archive! }.to raise_error(RuntimeError)
+      end
+    end
+
+    context "when already archived" do
+      let(:contest) { create(:contest, :archived, user: organizer) }
+
+      it "raises an error" do
+        expect { contest.archive! }.to raise_error(RuntimeError)
+      end
+    end
+  end
+
+  describe "#unarchive!" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:contest) { create(:contest, :archived, user: organizer) }
+
+    it "clears archived_at" do
+      contest.unarchive!
+      expect(contest.archived?).to be false
+      expect(contest.archived_at).to be_nil
+    end
+  end
+
+  describe "#archivable?" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+
+    it "returns true for finished contest with results announced" do
+      contest = create(:contest, :finished, user: organizer, results_announced_at: 1.day.ago)
+      expect(contest.archivable?).to be true
+    end
+
+    it "returns false for non-finished contest" do
+      contest = create(:contest, :published, user: organizer)
+      expect(contest.archivable?).to be false
+    end
+
+    it "returns false when results not announced" do
+      contest = create(:contest, :finished, user: organizer)
+      expect(contest.archivable?).to be false
+    end
+
+    it "returns false when already archived" do
+      contest = create(:contest, :archived, user: organizer)
+      expect(contest.archivable?).to be false
+    end
+  end
+
+  describe "scope: pending_auto_archive" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+
+    it "returns contests past auto_archive_days since results announcement" do
+      contest = create(:contest, :archivable, user: organizer)
+      expect(Contest.pending_auto_archive).to include(contest)
+    end
+
+    it "excludes contests within auto_archive_days" do
+      contest = create(:contest, :finished, user: organizer,
+                        results_announced_at: 10.days.ago, auto_archive_days: 90)
+      expect(Contest.pending_auto_archive).not_to include(contest)
+    end
+
+    it "excludes already archived contests" do
+      contest = create(:contest, :archived, user: organizer)
+      expect(Contest.pending_auto_archive).not_to include(contest)
+    end
+
+    it "excludes contests with nil auto_archive_days" do
+      contest = create(:contest, :finished, user: organizer,
+                        results_announced_at: 100.days.ago, auto_archive_days: nil)
+      expect(Contest.pending_auto_archive).not_to include(contest)
     end
   end
 end

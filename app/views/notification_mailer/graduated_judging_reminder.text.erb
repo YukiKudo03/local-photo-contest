@@ -1,0 +1,11 @@
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= t("mailers.notification.graduated_judging_reminder.#{@urgency}.body", contest_title: @contest.title) %>
+
+<%= t('mailers.notification.graduated_judging_reminder.progress', rate: @progress) %>
+
+<%= t('mailers.notification.graduated_judging_reminder.view_button') %>: <%= my_judge_assignment_url(@contest_judge) %>
+
+---
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

@@ -76,6 +76,40 @@ ja:
         deadline_notice: "「%{contest_title}」の審査期限まであと%{count}日です。"
         urgent: お早めに審査を完了してください。
         view_button: 審査を続ける
+      graduated_judging_reminder:
+        progress: "審査進捗: %{rate}%"
+        view_button: 審査を続ける
+        warning:
+          subject: "【%{contest_title}】審査期限まであと3日です"
+          header: 審査期限のお知らせ
+          body: "「%{contest_title}」の審査期限が3日後に迫っています。"
+        urgent:
+          subject: "【%{contest_title}】審査期限まであと1日です（至急）"
+          header: 【至急】審査期限のお知らせ
+          body: "「%{contest_title}」の審査期限が明日です。至急ご対応ください。"
+        final:
+          subject: "【%{contest_title}】本日が審査期限です（最終通知）"
+          header: 【最終通知】審査期限
+          body: "「%{contest_title}」の審査期限は本日です。未完了の場合、主催者に通知されます。"
+      winner_certificate:
+        subject: "【%{contest_title}】おめでとうございます！%{rank_label}"
+        header: 賞状のお届け
+        body: "「%{contest_title}」であなたの作品「%{entry_title}」が%{rank_label}に入賞しました！賞状を添付いたします。"
+        certificate_attached: 賞状PDFがこのメールに添付されています。
+        view_button: 結果を確認する
+      contest_archived:
+        subject: "【%{contest_title}】コンテストがアーカイブされました"
+        header: コンテストのアーカイブ
+        body: "コンテスト「%{contest_title}」が自動アーカイブされました。"
+        explanation: アーカイブされたコンテストは一般公開されなくなります。ダッシュボードからアーカイブを解除できます。
+        view_button: コンテストを管理する
+      judging_escalation:
+        subject: "【%{contest_title}】審査員の審査が遅延しています"
+        header: 審査遅延のお知らせ
+        body: "「%{contest_title}」の審査員 %{judge_name} さんの審査が期限までに完了していません。"
+        progress: "審査進捗: %{rate}%"
+        suggestion: 審査期限の延長または現在の評価での結果発表をご検討ください。
+        view_button: コンテストを管理する
     judge_invitation:
       invite:
         subject: "【%{contest_title}】審査員への招待"

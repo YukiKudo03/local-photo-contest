@@ -31,6 +31,7 @@ ja:
     types:
       results_announced: 結果発表
       entry_ranked: 入賞
+      winner_certificate: 賞状
     messages:
       results_announced:
         title: "コンテスト「%{contest_title}」の結果が発表されました"
@@ -39,3 +40,6 @@ ja:
         rank_label: "%{rank}位"
         title: "あなたの作品が%{rank_label}に入賞しました！"
         body: "コンテスト「%{contest_title}」であなたの作品「%{entry_title}」が%{rank_label}に選ばれました。"
+      winner_certificate:
+        title: "賞状をお届けします（%{rank_label}）"
+        body: "コンテスト「%{contest_title}」で%{rank_label}に入賞した賞状をお届けいたします。"

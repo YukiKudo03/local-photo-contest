@@ -1,0 +1,13 @@
+<%= t('mailers.common.greeting', name: @organizer.display_name) %>
+
+<%= t('mailers.notification.judging_escalation.body', contest_title: @contest.title, judge_name: @judge.display_name) %>
+
+<%= t('mailers.notification.judging_escalation.progress', rate: @progress) %>
+
+<%= t('mailers.notification.judging_escalation.suggestion') %>
+
+<%= t('mailers.notification.judging_escalation.view_button') %>: <%= organizers_contest_url(@contest) %>
+
+---
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

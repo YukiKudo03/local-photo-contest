@@ -4,6 +4,7 @@ class ContestRanking < ApplicationRecord
   # Associations
   belongs_to :contest
   belongs_to :entry
+  has_one_attached :certificate_pdf
 
   # Validations
   validates :rank, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -30,5 +31,13 @@ class ContestRanking < ApplicationRecord
     when 3 then I18n.t('ranks.merit')
     else I18n.t('ranks.award')
     end
+  end
+
+  def certificate_generated?
+    certificate_generated_at.present?
+  end
+
+  def winner_notified?
+    winner_notified_at.present?
   end
 end

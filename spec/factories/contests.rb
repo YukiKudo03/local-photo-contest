@@ -40,5 +40,43 @@ FactoryBot.define do
     trait :deleted do
       deleted_at { Time.current }
     end
+
+    trait :scheduled_for_publish do
+      status { :draft }
+      scheduled_publish_at { 1.day.from_now }
+    end
+
+    trait :past_scheduled_publish do
+      status { :draft }
+      after(:create) do |contest|
+        contest.update_column(:scheduled_publish_at, 1.hour.ago)
+      end
+    end
+
+    trait :scheduled_for_finish do
+      status { :published }
+      scheduled_finish_at { 1.month.from_now }
+    end
+
+    trait :past_scheduled_finish do
+      status { :published }
+      scheduled_finish_at { 1.hour.ago }
+    end
+
+    trait :with_judging_deadline do
+      judging_deadline_at { 2.weeks.from_now }
+    end
+
+    trait :archived do
+      status { :finished }
+      results_announced_at { 100.days.ago }
+      archived_at { Time.current }
+    end
+
+    trait :archivable do
+      status { :finished }
+      results_announced_at { 100.days.ago }
+      auto_archive_days { 90 }
+    end
   end
 end

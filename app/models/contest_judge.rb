@@ -33,4 +33,38 @@ class ContestJudge < ApplicationRecord
     fully_evaluated_count = contest.entries.count { |entry| fully_evaluated_entry?(entry) }
     (fully_evaluated_count.to_f / entries_count * 100).round
   end
+
+  # Reminder tracking
+  REMINDER_SCHEDULE = [3, 1, 0].freeze
+
+  def effective_deadline
+    contest.judging_deadline_at || contest.entry_end_at
+  end
+
+  def needs_reminder?
+    return false if evaluation_progress >= 100
+    return false unless effective_deadline
+
+    days_remaining = (effective_deadline.to_date - Date.current).to_i
+    return false if days_remaining < 0
+    return false unless REMINDER_SCHEDULE.include?(days_remaining)
+
+    expected_count = REMINDER_SCHEDULE.index(days_remaining) + 1
+    reminder_count < expected_count
+  end
+
+  def reminder_urgency
+    return nil unless needs_reminder?
+
+    days_remaining = (effective_deadline.to_date - Date.current).to_i
+    case days_remaining
+    when 3 then :warning
+    when 1 then :urgent
+    when 0 then :final
+    end
+  end
+
+  def record_reminder_sent!
+    update!(last_reminder_sent_at: Time.current, reminder_count: reminder_count + 1)
+  end
 end

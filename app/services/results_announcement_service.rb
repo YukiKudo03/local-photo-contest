@@ -31,6 +31,8 @@ class ResultsAnnouncementService
       calculate_and_save
       contest.announce_results!
     end
+
+    WinnerNotificationJob.perform_later(contest.id)
   end
 
   def can_announce?

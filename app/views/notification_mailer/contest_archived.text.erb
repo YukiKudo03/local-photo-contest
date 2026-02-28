@@ -1,0 +1,13 @@
+<%= t('mailers.notification.contest_archived.header') %>
+
+<%= t('mailers.common.greeting', name: @user.display_name) %>
+
+<%= t('mailers.notification.contest_archived.body', contest_title: @contest.title) %>
+
+<%= t('mailers.notification.contest_archived.explanation') %>
+
+<%= t('mailers.notification.contest_archived.view_button') %>: <%= organizers_contest_url(@contest) %>
+
+---
+<%= t('mailers.common.auto_sent') %>
+<%= t('mailers.common.change_settings') %>: <%= @unsubscribe_url %>

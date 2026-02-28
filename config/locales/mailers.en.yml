@@ -76,6 +76,40 @@ en:
         deadline_notice: "The judging deadline for \"%{contest_title}\" is in %{count} days."
         urgent: Please complete your judging as soon as possible.
         view_button: Continue Judging
+      graduated_judging_reminder:
+        progress: "Judging progress: %{rate}%"
+        view_button: Continue Judging
+        warning:
+          subject: "[%{contest_title}] Judging deadline in 3 days"
+          header: Judging Deadline Reminder
+          body: "The judging deadline for \"%{contest_title}\" is in 3 days."
+        urgent:
+          subject: "[%{contest_title}] Judging deadline tomorrow (Urgent)"
+          header: "[Urgent] Judging Deadline Reminder"
+          body: "The judging deadline for \"%{contest_title}\" is tomorrow. Please complete your evaluation urgently."
+        final:
+          subject: "[%{contest_title}] Judging deadline today (Final Notice)"
+          header: "[Final Notice] Judging Deadline"
+          body: "Today is the judging deadline for \"%{contest_title}\". The organizer will be notified if your evaluation is incomplete."
+      winner_certificate:
+        subject: "[%{contest_title}] Congratulations! %{rank_label}"
+        header: Certificate of Award
+        body: "Your entry \"%{entry_title}\" won %{rank_label} in \"%{contest_title}\"! A certificate is attached."
+        certificate_attached: Your certificate PDF is attached to this email.
+        view_button: View Results
+      contest_archived:
+        subject: "[%{contest_title}] Contest archived"
+        header: Contest Archived
+        body: "Your contest \"%{contest_title}\" has been automatically archived."
+        explanation: Archived contests are no longer displayed publicly. You can unarchive from the dashboard if needed.
+        view_button: Manage Contest
+      judging_escalation:
+        subject: "[%{contest_title}] Judge evaluation delayed"
+        header: Judge Evaluation Delayed
+        body: "Judge %{judge_name}'s evaluation for \"%{contest_title}\" has not been completed by the deadline."
+        progress: "Judging progress: %{rate}%"
+        suggestion: Please consider extending the deadline or proceeding with the current evaluations.
+        view_button: Manage Contest
     judge_invitation:
       invite:
         subject: "[%{contest_title}] Invitation to Judge"

@@ -12,6 +12,11 @@ ja:
         entry_end_at: 応募終了日時
         thumbnail: サムネイル画像
         deleted_at: 削除日時
+        scheduled_publish_at: 公開予定日時
+        scheduled_finish_at: 終了予定日時
+        judging_deadline_at: 審査期限
+        archived_at: アーカイブ日時
+        auto_archive_days: 自動アーカイブまでの日数
     errors:
       models:
         contest:
@@ -23,6 +28,15 @@ ja:
               too_long: は%{count}文字以内で入力してください
             entry_end_at:
               invalid: は開始日時より後にしてください
+            scheduled_publish_at:
+              must_be_future: は現在日時より後にしてください
+            scheduled_finish_at:
+              must_be_after_publish: は公開予定日時より後にしてください
+            judging_deadline_at:
+              must_be_after_entry_end: は応募終了日時より後にしてください
+  contests:
+    errors:
+      not_archivable: アーカイブできません（終了済み・結果発表済みで未アーカイブのコンテストのみ対象）
   enums:
     contest:
       status:

@@ -101,6 +101,25 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  def winner_certificate(user, ranking)
+    @user = user
+    @ranking = ranking
+    @entry = ranking.entry
+    @contest = ranking.contest
+    @rank_label = ranking.prize_label
+    return unless @user.email_enabled?(:results)
+
+    if ranking.certificate_pdf.attached?
+      attachments["certificate.pdf"] = ranking.certificate_pdf.download
+    end
+
+    @unsubscribe_url = unsubscribe_url_for(@user)
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.winner_certificate.subject',
+                                        contest_title: @contest.title, rank_label: @rank_label))
+    end
+  end
+
   # --- 審査員向け ---
 
   def judging_reminder(contest_judge)
@@ -126,6 +145,45 @@ class NotificationMailer < ApplicationMailer
     @unsubscribe_url = unsubscribe_url_for(@user)
     I18n.with_locale(@user.locale || I18n.default_locale) do
       mail(to: @user.email, subject: t('mailers.notification.judging_deadline.subject', contest_title: @contest.title))
+    end
+  end
+
+  def graduated_judging_reminder(contest_judge, urgency)
+    @contest_judge = contest_judge
+    @user = contest_judge.user
+    @contest = contest_judge.contest
+    @urgency = urgency
+    @progress = contest_judge.evaluation_progress
+    @days_remaining = contest_judge.effective_deadline ? (contest_judge.effective_deadline.to_date - Date.current).to_i : 0
+    return unless @user.email_enabled?(:judging)
+
+    @unsubscribe_url = unsubscribe_url_for(@user)
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t("mailers.notification.graduated_judging_reminder.#{urgency}.subject", contest_title: @contest.title))
+    end
+  end
+
+  def contest_archived(user, contest)
+    @user = user
+    @contest = contest
+
+    @unsubscribe_url = unsubscribe_url_for(@user)
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.contest_archived.subject', contest_title: @contest.title))
+    end
+  end
+
+  def judging_escalation(organizer, contest_judge)
+    @organizer = organizer
+    @contest_judge = contest_judge
+    @contest = contest_judge.contest
+    @judge = contest_judge.user
+    @progress = contest_judge.evaluation_progress
+    return unless @organizer.email_enabled?(:judging)
+
+    @unsubscribe_url = unsubscribe_url_for(@organizer)
+    I18n.with_locale(@organizer.locale || I18n.default_locale) do
+      mail(to: @organizer.email, subject: t('mailers.notification.judging_escalation.subject', contest_title: @contest.title))
     end
   end
 end

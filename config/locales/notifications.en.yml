@@ -31,6 +31,7 @@ en:
     types:
       results_announced: Results Announced
       entry_ranked: Prize Winner
+      winner_certificate: Certificate
     messages:
       results_announced:
         title: "Results announced for contest \"%{contest_title}\""
@@ -39,3 +40,6 @@ en:
         rank_label: "%{rank}th place"
         title: "Your entry won %{rank_label}!"
         body: "Your entry \"%{entry_title}\" was awarded %{rank_label} in contest \"%{contest_title}\"."
+      winner_certificate:
+        title: "Your certificate (%{rank_label})"
+        body: "Your certificate for winning %{rank_label} in contest \"%{contest_title}\" is ready."

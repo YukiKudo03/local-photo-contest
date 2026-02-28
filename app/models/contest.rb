@@ -37,11 +37,29 @@ class Contest < ApplicationRecord
             allow_nil: true
   validate :entry_dates_validity
   validate :area_belongs_to_user
+  validate :scheduling_dates_validity
 
   # Scopes
   scope :active, -> { where(deleted_at: nil) }
+  scope :not_archived, -> { where(archived_at: nil) }
   scope :by_status, ->(status) { where(status: status) }
   scope :recent, -> { order(created_at: :desc) }
+  scope :pending_auto_publish, -> {
+    active.where(status: :draft)
+          .where("scheduled_publish_at <= ?", Time.current)
+  }
+  scope :pending_auto_finish, -> {
+    active.where(status: :published)
+          .where("scheduled_finish_at <= ?", Time.current)
+  }
+  scope :pending_auto_archive, -> {
+    candidates = where(status: :finished)
+      .where.not(results_announced_at: nil)
+      .where(archived_at: nil)
+      .where.not(auto_archive_days: nil)
+    ids = candidates.select(&:auto_archive_due?).map(&:id)
+    where(id: ids)
+  }
 
   # Instance Methods
   def results_announced?
@@ -92,6 +110,36 @@ class Contest < ApplicationRecord
 
   def deleted?
     deleted_at.present?
+  end
+
+  def archived?
+    archived_at.present?
+  end
+
+  def archivable?
+    finished? && results_announced? && !archived?
+  end
+
+  def archive!
+    raise I18n.t('contests.errors.not_archivable') unless archivable?
+    update!(archived_at: Time.current)
+  end
+
+  def unarchive!
+    update!(archived_at: nil)
+  end
+
+  def auto_archive_due?
+    return false unless results_announced_at && auto_archive_days
+    results_announced_at + auto_archive_days.days <= Time.current
+  end
+
+  def schedulable_for_publish?
+    draft? && !deleted? && scheduled_publish_at.present? && scheduled_publish_at <= Time.current
+  end
+
+  def schedulable_for_finish?
+    published? && !deleted? && scheduled_finish_at.present? && scheduled_finish_at <= Time.current
   end
 
   def moderation_enabled?
@@ -147,6 +195,26 @@ class Contest < ApplicationRecord
     return if area&.user_id == user_id
 
     errors.add(:area_id, :must_be_own_area)
+  end
+
+  def scheduling_dates_validity
+    if scheduled_publish_at.present? && draft? && scheduled_publish_at_changed?
+      if scheduled_publish_at <= Time.current
+        errors.add(:scheduled_publish_at, :must_be_future)
+      end
+    end
+
+    if scheduled_finish_at.present? && scheduled_publish_at.present?
+      if scheduled_finish_at <= scheduled_publish_at
+        errors.add(:scheduled_finish_at, :must_be_after_publish)
+      end
+    end
+
+    if judging_deadline_at.present? && entry_end_at.present?
+      if judging_deadline_at < entry_end_at
+        errors.add(:judging_deadline_at, :must_be_after_entry_end)
+      end
+    end
   end
 
   def send_results_notifications

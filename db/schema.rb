@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_27_100000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_28_100002) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -106,6 +106,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_100000) do
     t.datetime "invited_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_reminder_sent_at"
+    t.integer "reminder_count", default: 0
     t.index ["contest_id", "user_id"], name: "index_contest_judges_on_contest_id_and_user_id", unique: true
     t.index ["contest_id"], name: "index_contest_judges_on_contest_id"
     t.index ["user_id"], name: "index_contest_judges_on_user_id"
@@ -122,6 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_100000) do
     t.datetime "calculated_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "certificate_generated_at"
+    t.datetime "winner_notified_at"
     t.index ["contest_id", "entry_id"], name: "index_contest_rankings_on_contest_id_and_entry_id", unique: true
     t.index ["contest_id", "rank"], name: "index_contest_rankings_on_contest_id_and_rank"
     t.index ["contest_id"], name: "index_contest_rankings_on_contest_id"
@@ -172,9 +176,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_100000) do
     t.integer "judge_weight", default: 70
     t.integer "prize_count", default: 3
     t.boolean "show_detailed_scores", default: false
+    t.datetime "scheduled_publish_at"
+    t.datetime "scheduled_finish_at"
+    t.datetime "judging_deadline_at"
+    t.datetime "archived_at"
+    t.integer "auto_archive_days", default: 90
+    t.index ["archived_at"], name: "index_contests_on_archived_at"
     t.index ["area_id"], name: "index_contests_on_area_id"
     t.index ["category_id"], name: "index_contests_on_category_id"
     t.index ["deleted_at"], name: "index_contests_on_deleted_at"
+    t.index ["scheduled_finish_at"], name: "index_contests_on_scheduled_finish_at"
+    t.index ["scheduled_publish_at"], name: "index_contests_on_scheduled_publish_at"
     t.index ["status", "deleted_at"], name: "index_contests_on_status_and_deleted_at"
     t.index ["status"], name: "index_contests_on_status"
     t.index ["user_id"], name: "index_contests_on_user_id"

@@ -97,7 +97,7 @@ module Organizers
     end
 
     def contest_params
-      params.require(:contest).permit(:title, :description, :theme, :entry_start_at, :entry_end_at, :thumbnail, :category_id, :area_id, :require_spot, :moderation_enabled, :moderation_threshold)
+      params.require(:contest).permit(:title, :description, :theme, :entry_start_at, :entry_end_at, :thumbnail, :category_id, :area_id, :require_spot, :moderation_enabled, :moderation_threshold, :scheduled_publish_at, :scheduled_finish_at, :judging_deadline_at, :auto_archive_days)
     end
   end
 end

@@ -147,4 +147,107 @@ RSpec.describe ContestJudge, type: :model do
       end
     end
   end
+
+  describe "reminder tracking" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:judge_user) { create(:user, :confirmed) }
+
+    describe "#effective_deadline" do
+      it "returns judging_deadline_at when set" do
+        contest = create(:contest, :finished, user: organizer, judging_deadline_at: 3.days.from_now)
+        cj = create(:contest_judge, contest: contest, user: judge_user)
+        expect(cj.effective_deadline).to eq(contest.judging_deadline_at)
+      end
+
+      it "falls back to entry_end_at when judging_deadline_at is nil" do
+        contest = create(:contest, :finished, user: organizer,
+                         entry_start_at: 2.months.ago, entry_end_at: 3.days.from_now)
+        cj = create(:contest_judge, contest: contest, user: judge_user)
+        expect(cj.effective_deadline).to eq(contest.entry_end_at)
+      end
+
+      it "returns nil when neither is set" do
+        contest = create(:contest, :finished, user: organizer)
+        cj = create(:contest_judge, contest: contest, user: judge_user)
+        expect(cj.effective_deadline).to be_nil
+      end
+    end
+
+    describe "#needs_reminder?" do
+      let(:contest) do
+        create(:contest, :accepting_entries, user: organizer, judging_method: :judge_only)
+      end
+      let!(:criterion) { create(:evaluation_criterion, contest: contest) }
+      let!(:entry) { create(:entry, contest: contest) }
+      let(:cj) { create(:contest_judge, contest: contest, user: judge_user) }
+
+      before do
+        contest.finish!
+        contest.update_column(:judging_deadline_at, 3.days.from_now)
+      end
+
+      it "returns true when 3 days before deadline and no reminder sent" do
+        expect(cj.needs_reminder?).to be true
+      end
+
+      it "returns false when reminder already sent for this stage" do
+        cj.update!(reminder_count: 1, last_reminder_sent_at: 1.hour.ago)
+        expect(cj.needs_reminder?).to be false
+      end
+
+      it "returns false when evaluation is 100% complete" do
+        create(:judge_evaluation, contest_judge: cj, entry: entry, evaluation_criterion: criterion)
+        expect(cj.needs_reminder?).to be false
+      end
+
+      it "returns false when no deadline is set" do
+        contest.update_column(:judging_deadline_at, nil)
+        expect(cj.needs_reminder?).to be false
+      end
+    end
+
+    describe "#reminder_urgency" do
+      let(:contest) { create(:contest, :accepting_entries, user: organizer, judging_method: :judge_only) }
+      let!(:criterion) { create(:evaluation_criterion, contest: contest) }
+      let!(:entry) { create(:entry, contest: contest) }
+      let(:cj) { create(:contest_judge, contest: contest, user: judge_user) }
+
+      before do
+        contest.finish!
+      end
+
+      it "returns :warning when 3 days before deadline" do
+        contest.update_column(:judging_deadline_at, 3.days.from_now)
+        expect(cj.reminder_urgency).to eq(:warning)
+      end
+
+      it "returns :urgent when 1 day before deadline" do
+        contest.update_column(:judging_deadline_at, 1.day.from_now)
+        expect(cj.reminder_urgency).to eq(:urgent)
+      end
+
+      it "returns :final when deadline day" do
+        contest.update_column(:judging_deadline_at, Time.current.end_of_day)
+        expect(cj.reminder_urgency).to eq(:final)
+      end
+
+      it "returns nil when no reminder needed" do
+        contest.update_column(:judging_deadline_at, 5.days.from_now)
+        expect(cj.reminder_urgency).to be_nil
+      end
+    end
+
+    describe "#record_reminder_sent!" do
+      let(:contest) { create(:contest, :finished, user: organizer) }
+      let(:cj) { create(:contest_judge, contest: contest, user: judge_user) }
+
+      it "updates last_reminder_sent_at and increments reminder_count" do
+        expect(cj.reminder_count).to eq(0)
+        cj.record_reminder_sent!
+        cj.reload
+        expect(cj.reminder_count).to eq(1)
+        expect(cj.last_reminder_sent_at).to be_present
+      end
+    end
+  end
 end
