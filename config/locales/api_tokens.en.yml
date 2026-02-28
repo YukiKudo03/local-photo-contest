@@ -1,0 +1,24 @@
+en:
+  my:
+    api_tokens:
+      created: "API token created successfully."
+      revoked: "API token has been revoked."
+      not_found: "Token not found."
+      index:
+        title: "API Token Management"
+        description: "Manage API tokens for external service integrations."
+        new_token: "Create New Token"
+        token_name: "Token Name"
+        name_placeholder: "e.g. Mobile App"
+        create: "Create"
+        token_created: "Token created. Save this value securely (it will not be shown again):"
+        token_warning: "This token is only shown once. Make sure to copy and store it securely."
+        name_header: "Name"
+        last_used: "Last Used"
+        created: "Created"
+        actions: "Actions"
+        never_used: "Never"
+        revoke: "Revoke"
+        revoke_confirm: "Are you sure you want to revoke this token? This cannot be undone."
+        no_tokens: "No API tokens"
+        create_first: "Create your first token using the form above."

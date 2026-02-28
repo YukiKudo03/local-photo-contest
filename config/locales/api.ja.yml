@@ -1,0 +1,8 @@
+ja:
+  api:
+    errors:
+      unauthorized: "認証に失敗しました。有効なAPIトークンを指定してください。"
+      not_found: "リソースが見つかりません。"
+      forbidden: "この操作を実行する権限がありません。"
+      insufficient_scope: "APIトークンに必要なスコープがありません。"
+      cannot_vote_own: "自分の作品には投票できません。"

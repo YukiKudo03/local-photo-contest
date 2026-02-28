@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_28_101121) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_28_130753) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_101121) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "token", null: false
+    t.string "name", limit: 100, null: false
+    t.json "scopes", default: "[\"read\"]"
+    t.datetime "last_used_at"
+    t.datetime "revoked_at"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_api_tokens_on_token", unique: true
+    t.index ["user_id", "revoked_at"], name: "index_api_tokens_on_user_id_and_revoked_at"
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
   end
 
   create_table "areas", force: :cascade do |t|
@@ -522,8 +537,37 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_101121) do
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
+  create_table "webhook_deliveries", force: :cascade do |t|
+    t.integer "webhook_id", null: false
+    t.string "event_type"
+    t.integer "status_code"
+    t.text "request_body"
+    t.text "response_body"
+    t.integer "retry_count", default: 0, null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "delivered_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["webhook_id"], name: "index_webhook_deliveries_on_webhook_id"
+  end
+
+  create_table "webhooks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "contest_id"
+    t.string "url", null: false
+    t.string "secret"
+    t.json "event_types", default: "[]"
+    t.boolean "active", default: true, null: false
+    t.integer "failures_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contest_id"], name: "index_webhooks_on_contest_id"
+    t.index ["user_id"], name: "index_webhooks_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "areas", "users"
   add_foreign_key "audit_logs", "users"
   add_foreign_key "challenge_entries", "discovery_challenges"
@@ -573,4 +617,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_28_101121) do
   add_foreign_key "user_milestones", "users"
   add_foreign_key "votes", "entries"
   add_foreign_key "votes", "users"
+  add_foreign_key "webhook_deliveries", "webhooks"
+  add_foreign_key "webhooks", "contests"
+  add_foreign_key "webhooks", "users"
 end

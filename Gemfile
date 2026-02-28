@@ -86,6 +86,9 @@ gem "prawn-table"
 # ZIP generation for data export
 gem "rubyzip"
 
+# CORS support for API
+gem "rack-cors"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -118,4 +121,7 @@ group :test do
   # Code coverage
   gem "simplecov", require: false
   gem "simplecov-cobertura", require: false
+
+  # HTTP request stubbing for webhook tests
+  gem "webmock"
 end

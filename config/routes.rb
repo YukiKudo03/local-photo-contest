@@ -1,4 +1,22 @@
 Rails.application.routes.draw do
+  # API
+  namespace :api do
+    namespace :v1 do
+      resource :me, only: [ :show ], controller: "me"
+      resources :contests, only: [ :index, :show ] do
+        resources :entries, only: [ :index, :create ]
+        resources :spots, only: [ :index ]
+        resources :rankings, only: [ :index ]
+      end
+      resources :entries, only: [ :show ] do
+        resource :votes, only: [ :create, :destroy ], controller: "votes"
+      end
+      resources :webhooks, only: [ :index, :show, :create, :update, :destroy ] do
+        member { get :deliveries }
+      end
+    end
+  end
+
   # Locale switching
   patch "locale", to: "locales#update", as: :locale
 
@@ -58,6 +76,7 @@ Rails.application.routes.draw do
     end
     resource :account_deletion, only: [ :new, :create, :destroy ]
     resource :tutorial_settings, only: [ :show, :update ]
+    resources :api_tokens, only: [ :index, :create, :destroy ]
 
     # Judge assignments dashboard
     resources :judge_assignments, only: [ :index, :show ] do

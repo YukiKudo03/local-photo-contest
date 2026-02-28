@@ -1,0 +1,8 @@
+en:
+  api:
+    errors:
+      unauthorized: "Authentication failed. Please provide a valid API token."
+      not_found: "Resource not found."
+      forbidden: "You do not have permission to perform this action."
+      insufficient_scope: "API token does not have the required scope."
+      cannot_vote_own: "You cannot vote for your own entry."

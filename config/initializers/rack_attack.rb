@@ -64,6 +64,27 @@ class Rack::Attack
     end
   end
 
+  ### API Rate Limiting ###
+
+  # Throttle API requests by token (100 per minute)
+  throttle("api/token", limit: 100, period: 1.minute) do |req|
+    if req.path.start_with?("/api/")
+      req.env["HTTP_AUTHORIZATION"]&.split(" ", 2)&.last
+    end
+  end
+
+  # Throttle API requests by IP (300 per 5 minutes)
+  throttle("api/ip", limit: 300, period: 5.minutes) do |req|
+    req.ip if req.path.start_with?("/api/")
+  end
+
+  # Throttle API write operations by token (30 per minute)
+  throttle("api/writes/token", limit: 30, period: 1.minute) do |req|
+    if req.path.start_with?("/api/") && %w[POST PUT PATCH DELETE].include?(req.request_method)
+      req.env["HTTP_AUTHORIZATION"]&.split(" ", 2)&.last
+    end
+  end
+
   ### Blocklist ###
 
   # Block requests containing potential attacks

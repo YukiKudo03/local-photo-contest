@@ -1,0 +1,24 @@
+ja:
+  my:
+    api_tokens:
+      created: "APIトークンを作成しました。"
+      revoked: "APIトークンを無効化しました。"
+      not_found: "トークンが見つかりません。"
+      index:
+        title: "APIトークン管理"
+        description: "外部サービスとの連携に使用するAPIトークンを管理します。"
+        new_token: "新しいトークンを作成"
+        token_name: "トークン名"
+        name_placeholder: "例: モバイルアプリ用"
+        create: "作成"
+        token_created: "トークンが作成されました。この値を安全に保存してください（再表示はできません）:"
+        token_warning: "このトークンは一度しか表示されません。必ずコピーして安全な場所に保管してください。"
+        name_header: "名前"
+        last_used: "最終使用"
+        created: "作成日"
+        actions: "操作"
+        never_used: "未使用"
+        revoke: "無効化"
+        revoke_confirm: "このトークンを無効化しますか？この操作は元に戻せません。"
+        no_tokens: "APIトークンがありません"
+        create_first: "上のフォームから最初のトークンを作成してください。"
