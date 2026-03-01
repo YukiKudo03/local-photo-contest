@@ -24,6 +24,8 @@ class GalleryController < ApplicationController
       @contests = Contest.where(status: [ :published, :finished ]).active.order(created_at: :desc)
       @categories = Category.ordered
       @areas = Area.ordered
+      @camera_makes = Entry.visible.distinct_camera_makes
+      @camera_models = Entry.visible.distinct_camera_models
     end
 
     # Respond with just the entries partial for Turbo Frame requests

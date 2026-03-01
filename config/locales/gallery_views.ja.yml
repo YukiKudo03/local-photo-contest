@@ -16,6 +16,9 @@ ja:
       submit_filter: 絞り込む
       clear_filter: クリア
       works_count: "%{count}作品"
+      camera_filter: カメラメーカー
+      camera_model_filter: カメラ機種
+      slideshow: スライドショー
       view_on_map: マップで見る
       empty:
         title: 作品がありません

@@ -13,6 +13,10 @@ class EntryFilterService
     apply_area_filter
     apply_spot_filter
     apply_discovery_status_filter
+    apply_camera_make_filter
+    apply_camera_model_filter
+    apply_focal_length_filter
+    apply_iso_filter
     @scope
   end
 
@@ -53,6 +57,34 @@ class EntryFilterService
       @scope = @scope.where(spots: { discovery_status: :certified })
     when "organizer"
       @scope = @scope.where(spots: { discovery_status: :organizer_created })
+    end
+  end
+
+  def apply_camera_make_filter
+    return unless @params[:camera_make].present?
+    @scope = @scope.where("json_extract(entries.exif_data, '$.Make') = ?", @params[:camera_make])
+  end
+
+  def apply_camera_model_filter
+    return unless @params[:camera_model].present?
+    @scope = @scope.where("json_extract(entries.exif_data, '$.Model') = ?", @params[:camera_model])
+  end
+
+  def apply_focal_length_filter
+    if @params[:focal_length_min].present?
+      @scope = @scope.where("CAST(json_extract(entries.exif_data, '$.FocalLength') AS REAL) >= ?", @params[:focal_length_min].to_f)
+    end
+    if @params[:focal_length_max].present?
+      @scope = @scope.where("CAST(json_extract(entries.exif_data, '$.FocalLength') AS REAL) <= ?", @params[:focal_length_max].to_f)
+    end
+  end
+
+  def apply_iso_filter
+    if @params[:iso_min].present?
+      @scope = @scope.where("CAST(json_extract(entries.exif_data, '$.ISOSpeedRatings') AS INTEGER) >= ?", @params[:iso_min].to_i)
+    end
+    if @params[:iso_max].present?
+      @scope = @scope.where("CAST(json_extract(entries.exif_data, '$.ISOSpeedRatings') AS INTEGER) <= ?", @params[:iso_max].to_i)
     end
   end
 end

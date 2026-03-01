@@ -238,6 +238,24 @@ RSpec.describe "Gallery", type: :request do
       end
     end
 
+    describe "slideshow button" do
+      it "includes slideshow button" do
+        get gallery_index_path
+        expect(response.body).to include(I18n.t('gallery.index.slideshow'))
+      end
+    end
+
+    describe "filtering by camera make" do
+      let!(:canon_entry) { create(:entry, :with_exif, contest: published_contest, title: "Canon Photo") }
+      let!(:nikon_entry) { create(:entry, :with_exif_nikon, contest: published_contest, title: "Nikon Photo") }
+
+      it "filters entries by camera_make" do
+        get gallery_index_path, params: { camera_make: "Canon" }
+        expect(response.body).to include("Canon Photo")
+        expect(response.body).not_to include("Nikon Photo")
+      end
+    end
+
     describe "contest list for filter" do
       it "includes published contests in filter dropdown" do
         get gallery_index_path

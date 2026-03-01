@@ -49,6 +49,7 @@ class EntriesController < ApplicationController
 
   def show
     @ogp = helpers.set_entry_ogp(@entry)
+    @similar_entries = SimilarEntriesService.new(@entry).find
   end
 
   def edit

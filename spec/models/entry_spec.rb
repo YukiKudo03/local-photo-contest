@@ -179,6 +179,37 @@ RSpec.describe Entry, type: :model do
     end
   end
 
+  describe 'class methods' do
+    describe '.distinct_camera_makes' do
+      before do
+        contest = create(:contest, :published)
+        create(:entry, :with_exif, contest: contest)        # Canon
+        create(:entry, :with_exif_nikon, contest: contest)  # Nikon
+        create(:entry, :with_exif, contest: contest)        # Canon (duplicate)
+        create(:entry, contest: contest)                     # no exif
+      end
+
+      it 'returns unique camera makes' do
+        makes = Entry.distinct_camera_makes
+        expect(makes).to contain_exactly('Canon', 'Nikon')
+      end
+    end
+
+    describe '.distinct_camera_models' do
+      before do
+        contest = create(:contest, :published)
+        create(:entry, :with_exif, contest: contest)        # Canon EOS R5
+        create(:entry, :with_exif_nikon, contest: contest)  # Nikon Z6
+        create(:entry, :with_exif, contest: contest)        # Canon EOS R5 (duplicate)
+      end
+
+      it 'returns unique camera models' do
+        models = Entry.distinct_camera_models
+        expect(models).to contain_exactly('Canon EOS R5', 'Nikon Z6')
+      end
+    end
+  end
+
   describe 'instance methods' do
     describe '#editable?' do
       it 'returns true when contest is accepting entries' do
@@ -215,6 +246,93 @@ RSpec.describe Entry, type: :model do
         entry = build(:entry, user: user, contest: contest)
         entry.save(validate: false)
         expect(entry.deletable?).to be false
+      end
+    end
+
+    describe '#has_exif_data?' do
+      it 'returns false when exif_data is nil' do
+        entry = build(:entry, exif_data: nil)
+        expect(entry.has_exif_data?).to be false
+      end
+
+      it 'returns false when exif_data is empty hash' do
+        entry = build(:entry, exif_data: {})
+        expect(entry.has_exif_data?).to be false
+      end
+
+      it 'returns true when exif_data has data' do
+        entry = build(:entry, :with_exif)
+        expect(entry.has_exif_data?).to be true
+      end
+    end
+
+    describe '#exif_camera_model' do
+      it 'returns Make + Model when both present' do
+        entry = build(:entry, :with_exif)
+        expect(entry.exif_camera_model).to eq('Canon Canon EOS R5')
+      end
+
+      it 'returns Model only when Make is absent' do
+        entry = build(:entry, :with_exif_model_only)
+        expect(entry.exif_camera_model).to eq('iPhone 15 Pro')
+      end
+
+      it 'returns nil when no camera info' do
+        entry = build(:entry, exif_data: { "FNumber" => "28/10" })
+        expect(entry.exif_camera_model).to be_nil
+      end
+
+      it 'returns nil when exif_data is nil' do
+        entry = build(:entry, exif_data: nil)
+        expect(entry.exif_camera_model).to be_nil
+      end
+    end
+
+    describe '#exif_focal_length' do
+      it 'converts rational format to mm' do
+        entry = build(:entry, :with_exif)
+        expect(entry.exif_focal_length).to eq('50mm')
+      end
+
+      it 'returns nil when not present' do
+        entry = build(:entry, exif_data: {})
+        expect(entry.exif_focal_length).to be_nil
+      end
+    end
+
+    describe '#exif_aperture' do
+      it 'converts rational format to f-stop' do
+        entry = build(:entry, :with_exif)
+        expect(entry.exif_aperture).to eq('f/2.8')
+      end
+
+      it 'returns nil when not present' do
+        entry = build(:entry, exif_data: {})
+        expect(entry.exif_aperture).to be_nil
+      end
+    end
+
+    describe '#exif_shutter_speed' do
+      it 'formats exposure time with s suffix' do
+        entry = build(:entry, :with_exif)
+        expect(entry.exif_shutter_speed).to eq('1/250s')
+      end
+
+      it 'returns nil when not present' do
+        entry = build(:entry, exif_data: {})
+        expect(entry.exif_shutter_speed).to be_nil
+      end
+    end
+
+    describe '#exif_iso' do
+      it 'formats ISO value' do
+        entry = build(:entry, :with_exif)
+        expect(entry.exif_iso).to eq('ISO 400')
+      end
+
+      it 'returns nil when not present' do
+        entry = build(:entry, exif_data: {})
+        expect(entry.exif_iso).to be_nil
       end
     end
 

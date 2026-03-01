@@ -61,5 +61,39 @@ FactoryBot.define do
     trait :with_long_location do
       location { "あ" * 255 }
     end
+
+    trait :with_exif do
+      exif_data do
+        {
+          "Make" => "Canon",
+          "Model" => "Canon EOS R5",
+          "FNumber" => "28/10",
+          "ExposureTime" => "1/250",
+          "ISOSpeedRatings" => "400",
+          "FocalLength" => "50/1"
+        }
+      end
+    end
+
+    trait :with_exif_nikon do
+      exif_data do
+        {
+          "Make" => "Nikon",
+          "Model" => "Nikon Z6",
+          "FNumber" => "18/10",
+          "ExposureTime" => "1/1000",
+          "ISOSpeedRatings" => "200",
+          "FocalLength" => "85/1"
+        }
+      end
+    end
+
+    trait :with_exif_model_only do
+      exif_data do
+        {
+          "Model" => "iPhone 15 Pro"
+        }
+      end
+    end
   end
 end

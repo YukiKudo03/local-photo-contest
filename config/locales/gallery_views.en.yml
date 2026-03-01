@@ -16,6 +16,9 @@ en:
       submit_filter: Filter
       clear_filter: Clear
       works_count: "%{count} entries"
+      camera_filter: Camera Make
+      camera_model_filter: Camera Model
+      slideshow: Slideshow
       view_on_map: View on Map
       empty:
         title: No entries

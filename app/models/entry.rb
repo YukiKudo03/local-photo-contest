@@ -2,6 +2,7 @@ class Entry < ApplicationRecord
   include Searchable
   include Moderatable
   include EntryNotifications
+  include ExifAccessible
   search_by :title, :description, :location
 
   PHOTO_VARIANTS = {
