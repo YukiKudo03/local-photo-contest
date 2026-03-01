@@ -86,12 +86,19 @@ Rails.application.routes.draw do
 
   # Admin namespace
   namespace :admin do
-    resource :dashboard, only: [ :show ], controller: "dashboard"
+    resource :dashboard, only: [ :show ], controller: "dashboard" do
+      patch :preferences
+    end
     resources :users, only: [ :index, :show, :edit, :update, :destroy ] do
       member do
         patch :suspend
         patch :unsuspend
         patch :change_role
+      end
+      collection do
+        post :bulk_suspend
+        post :bulk_unsuspend
+        post :bulk_change_role
       end
     end
     resources :contests, only: [ :index, :show, :destroy ] do
@@ -99,9 +106,16 @@ Rails.application.routes.draw do
         patch :force_finish
       end
     end
+    resources :entries, only: [ :index ] do
+      collection do
+        post :bulk_approve
+        post :bulk_reject
+      end
+    end
     resources :categories
     resources :audit_logs, only: [ :index, :show ]
     resource :tutorial_analytics, only: [ :show ], controller: "tutorial_analytics"
+    resource :system_health, only: [ :show ], controller: "system_health"
   end
 
   # Organizers namespace

@@ -52,6 +52,67 @@ module Admin
       end
     end
 
+    MAX_BULK_SIZE = 100
+
+    def bulk_suspend
+      user_ids = Array(params[:user_ids]).first(MAX_BULK_SIZE)
+      if user_ids.empty?
+        return redirect_to admin_users_path, alert: t("flash.admin.users.no_users_selected")
+      end
+
+      users = User.where(id: user_ids).where.not(role: :admin).where(locked_at: nil)
+      count = 0
+      users.find_each do |user|
+        user.update!(locked_at: Time.current)
+        AuditLog.log(action: "account_suspend", user: current_user, target: user, details: { bulk: true }, ip_address: request.remote_ip)
+        count += 1
+      end
+
+      redirect_to admin_users_path, notice: t("flash.admin.users.bulk_suspended", count: count)
+    end
+
+    def bulk_unsuspend
+      user_ids = Array(params[:user_ids]).first(MAX_BULK_SIZE)
+      if user_ids.empty?
+        return redirect_to admin_users_path, alert: t("flash.admin.users.no_users_selected")
+      end
+
+      users = User.where(id: user_ids).where.not(locked_at: nil)
+      count = 0
+      users.find_each do |user|
+        user.update!(locked_at: nil, failed_attempts: 0)
+        AuditLog.log(action: "account_unsuspend", user: current_user, target: user, details: { bulk: true }, ip_address: request.remote_ip)
+        count += 1
+      end
+
+      redirect_to admin_users_path, notice: t("flash.admin.users.bulk_unsuspended", count: count)
+    end
+
+    def bulk_change_role
+      user_ids = Array(params[:user_ids]).first(MAX_BULK_SIZE)
+      new_role = params[:role]
+
+      unless User.roles.keys.include?(new_role)
+        return redirect_to admin_users_path, alert: t("flash.admin.users.invalid_role")
+      end
+
+      if user_ids.empty?
+        return redirect_to admin_users_path, alert: t("flash.admin.users.no_users_selected")
+      end
+
+      users = User.where(id: user_ids)
+      count = 0
+      users.find_each do |user|
+        old_role = user.role
+        next if old_role == new_role
+        user.update!(role: new_role)
+        AuditLog.log(action: "role_change", user: current_user, target: user, details: { old_role: old_role, new_role: new_role, bulk: true }, ip_address: request.remote_ip)
+        count += 1
+      end
+
+      redirect_to admin_users_path, notice: t("flash.admin.users.bulk_role_changed", count: count, role: new_role)
+    end
+
     private
 
     def set_user

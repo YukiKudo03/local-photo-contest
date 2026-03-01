@@ -138,6 +138,16 @@ en:
         unsuspended: Account suspension removed.
         role_changed: "Role changed to \"%{role}\"."
         invalid_role: Invalid role.
+        no_users_selected: No users selected.
+        bulk_suspended: "Suspended %{count} accounts."
+        bulk_unsuspended: "Unsuspended %{count} accounts."
+        bulk_role_changed: "Changed role to \"%{role}\" for %{count} users."
+      dashboard:
+        preferences_saved: Dashboard preferences saved.
+      entries:
+        no_entries_selected: No entries selected.
+        bulk_approved: "Approved %{count} entries."
+        bulk_rejected: "Rejected %{count} entries."
       contests:
         destroyed: Contest deleted.
         force_finished: Contest force-ended.

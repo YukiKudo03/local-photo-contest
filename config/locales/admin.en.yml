@@ -7,8 +7,10 @@ en:
       users: Users
       contests: Contests
       categories: Categories
+      entries: Entries
       audit_logs: Audit Logs
       tutorial_analytics: Tutorial Analytics
+      system_health: System Health
       admin_guide: Admin Guide
       back_to_site: Back to Site
       logout: Log Out
@@ -56,6 +58,10 @@ en:
         suspended: Suspended
         unconfirmed: Unconfirmed
         details: Details
+        selected: " selected"
+        suspend_selected: Suspend Selected
+        unsuspend_selected: Unsuspend Selected
+        change_role_selected: Change Role
       show:
         title: User Details
         back: "← Back to Users"
@@ -147,6 +153,19 @@ en:
         moderation_hidden: Hidden
         moderation_requires_review: Requires Review
         moderation_pending: Pending Review
+    entries:
+      index:
+        title: Entry Moderation
+        subtitle: Manage entries that require moderation review.
+        entry: Entry
+        contest: Contest
+        user: User
+        status: Status
+        submitted_at: Submitted
+        untitled: Untitled
+        selected: " selected"
+        approve_selected: Approve Selected
+        reject_selected: Reject Selected
     categories:
       index:
         title: Category Management
@@ -237,3 +256,26 @@ en:
         step: "Step: %{step_id}"
         times: "%{count} times"
         no_skip_data: No skip data available
+    system_health:
+      title: System Health
+      subtitle: Monitor system status and health
+      healthy: Healthy
+      unhealthy: Unhealthy
+      database: Database
+      connected: Connected
+      adapter: Adapter
+      pool_size: Pool Size
+      storage: Storage
+      blob_count: Stored Files
+      total_size: Total Size
+      queue: Job Queue
+      available: Available
+      not_configured: Not Configured
+      pending_jobs: Pending Jobs
+      failed_jobs: Failed Jobs
+      application: Application
+      rails_version: Rails Version
+      ruby_version: Ruby Version
+      environment: Environment
+      yes: "Yes"
+      "no": "No"

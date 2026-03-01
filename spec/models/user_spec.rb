@@ -117,6 +117,47 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "dashboard settings" do
+    let(:user) { create(:user, :admin, :confirmed) }
+
+    describe "#update_dashboard_settings" do
+      it "merges new settings with existing ones" do
+        user.update_dashboard_settings("widgets" => { "stats" => true })
+        user.update_dashboard_settings("widgets" => { "charts" => false })
+        expect(user.reload.dashboard_settings["widgets"]).to eq("stats" => true, "charts" => false)
+      end
+    end
+
+    describe "#widget_visible?" do
+      it "returns true by default for any widget" do
+        expect(user.widget_visible?("stats")).to be true
+        expect(user.widget_visible?("charts")).to be true
+      end
+
+      it "returns false when explicitly hidden" do
+        user.update_dashboard_settings("widget_visibility" => { "charts" => false })
+        expect(user.widget_visible?("charts")).to be false
+      end
+
+      it "returns true when explicitly shown" do
+        user.update_dashboard_settings("widget_visibility" => { "stats" => true })
+        expect(user.widget_visible?("stats")).to be true
+      end
+    end
+
+    describe "#widget_order" do
+      it "returns default order when not customized" do
+        expect(user.widget_order).to eq(User::DEFAULT_WIDGET_ORDER)
+      end
+
+      it "returns custom order when set" do
+        custom_order = %w[recent_entries stats charts recent_users recent_contests]
+        user.update_dashboard_settings("widget_order" => custom_order)
+        expect(user.widget_order).to eq(custom_order)
+      end
+    end
+  end
+
   describe "avatar attachment" do
     let(:user) { create(:user, :confirmed) }
 

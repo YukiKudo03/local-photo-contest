@@ -59,6 +59,21 @@ class User < ApplicationRecord
   # Callbacks
   before_create :generate_unsubscribe_token
 
+  # Dashboard widget settings
+  DEFAULT_WIDGET_ORDER = %w[stats charts recent_users recent_contests recent_entries].freeze
+
+  def update_dashboard_settings(settings)
+    update(dashboard_settings: (dashboard_settings || {}).deep_merge(settings))
+  end
+
+  def widget_visible?(widget_name)
+    dashboard_settings&.dig("widget_visibility", widget_name) != false
+  end
+
+  def widget_order
+    dashboard_settings&.dig("widget_order") || DEFAULT_WIDGET_ORDER
+  end
+
   # Display name (returns name if set, otherwise email)
   def display_name
     name.presence || email.split("@").first

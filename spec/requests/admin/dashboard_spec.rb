@@ -57,4 +57,38 @@ RSpec.describe "Admin::Dashboard", type: :request do
       end
     end
   end
+
+  describe "PATCH /admin/dashboard/preferences" do
+    before { sign_in admin }
+
+    it "saves widget visibility settings" do
+      patch preferences_admin_dashboard_path, params: {
+        widget_visibility: { "stats" => "0", "charts" => "1" }
+      }
+      expect(response).to redirect_to(admin_dashboard_path)
+      admin.reload
+      expect(admin.widget_visible?("stats")).to be false
+      expect(admin.widget_visible?("charts")).to be true
+    end
+
+    it "saves widget order" do
+      custom_order = %w[recent_entries stats charts recent_users recent_contests]
+      patch preferences_admin_dashboard_path, params: {
+        widget_order: custom_order
+      }
+      expect(response).to redirect_to(admin_dashboard_path)
+      expect(admin.reload.widget_order).to eq(custom_order)
+    end
+  end
+
+  describe "GET /admin/dashboard with hidden widgets" do
+    before { sign_in admin }
+
+    it "hides widgets that are disabled" do
+      admin.update_dashboard_settings("widget_visibility" => { "recent_users" => false })
+      get admin_dashboard_path
+      expect(response).to have_http_status(:success)
+      expect(response.body).not_to include("recent-users-widget")
+    end
+  end
 end

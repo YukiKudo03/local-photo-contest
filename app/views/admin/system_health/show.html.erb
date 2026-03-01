@@ -1,0 +1,113 @@
+<% content_for :title, t('admin.system_health.title') %>
+
+<div class="mb-8">
+  <h1 class="text-2xl font-bold text-gray-900"><%= t('admin.system_health.title') %></h1>
+  <p class="mt-1 text-sm text-gray-500"><%= t('admin.system_health.subtitle') %></p>
+</div>
+
+<!-- Overall Status -->
+<div class="mb-6">
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex items-center">
+      <div class="flex-shrink-0">
+        <% if @overall == :healthy %>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            <%= t('admin.system_health.healthy') %>
+          </span>
+        <% else %>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+            <%= t('admin.system_health.unhealthy') %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- Database Status -->
+  <div id="database-status" class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.system_health.database') %></h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.connected') %></dt>
+        <dd class="text-sm font-medium">
+          <% if @database[:connected] %>
+            <span class="text-green-600"><%= t('admin.system_health.yes') %></span>
+          <% else %>
+            <span class="text-red-600"><%= t('admin.system_health.no') %></span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.adapter') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= @database[:adapter] %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.pool_size') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= @database[:pool_size] %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Storage Status -->
+  <div id="storage-status" class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.system_health.storage') %></h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.blob_count') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= number_with_delimiter(@storage[:blob_count]) %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.total_size') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= number_to_human_size(@storage[:total_size]) %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Queue Status -->
+  <div id="queue-status" class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.system_health.queue') %></h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.available') %></dt>
+        <dd class="text-sm font-medium">
+          <% if @queue[:available] %>
+            <span class="text-green-600"><%= t('admin.system_health.yes') %></span>
+          <% else %>
+            <span class="text-gray-500"><%= t('admin.system_health.not_configured') %></span>
+          <% end %>
+        </dd>
+      </div>
+      <% if @queue[:available] %>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500"><%= t('admin.system_health.pending_jobs') %></dt>
+          <dd class="text-sm font-medium text-gray-900"><%= @queue[:pending] %></dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500"><%= t('admin.system_health.failed_jobs') %></dt>
+          <dd class="text-sm font-medium text-gray-900"><%= @queue[:failed] %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <!-- Application Info -->
+  <div id="app-info" class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('admin.system_health.application') %></h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.rails_version') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= @app_info[:rails_version] %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.ruby_version') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= @app_info[:ruby_version] %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-gray-500"><%= t('admin.system_health.environment') %></dt>
+        <dd class="text-sm font-medium text-gray-900"><%= @app_info[:environment] %></dd>
+      </div>
+    </dl>
+  </div>
+</div>

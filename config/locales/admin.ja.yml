@@ -7,8 +7,10 @@ ja:
       users: ユーザー
       contests: コンテスト
       categories: カテゴリ
+      entries: エントリー
       audit_logs: 監査ログ
       tutorial_analytics: チュートリアル分析
+      system_health: システムヘルス
       admin_guide: 管理者ガイド
       back_to_site: サイトに戻る
       logout: ログアウト
@@ -56,6 +58,10 @@ ja:
         suspended: 停止中
         unconfirmed: 未確認
         details: 詳細
+        selected: 件選択中
+        suspend_selected: 選択を停止
+        unsuspend_selected: 選択の停止解除
+        change_role_selected: ロール変更
       show:
         title: ユーザー詳細
         back: "← ユーザー一覧に戻る"
@@ -147,6 +153,19 @@ ja:
         moderation_hidden: 非表示
         moderation_requires_review: 要確認
         moderation_pending: 審査待ち
+    entries:
+      index:
+        title: エントリーモデレーション
+        subtitle: 審査が必要なエントリーを管理します。
+        entry: エントリー
+        contest: コンテスト
+        user: 投稿者
+        status: ステータス
+        submitted_at: 投稿日
+        untitled: 無題
+        selected: 件選択中
+        approve_selected: 選択を承認
+        reject_selected: 選択を非表示
     categories:
       index:
         title: カテゴリ管理
@@ -237,3 +256,26 @@ ja:
         step: "ステップ: %{step_id}"
         times: "%{count} 回"
         no_skip_data: スキップデータがありません
+    system_health:
+      title: システムヘルス
+      subtitle: システムの状態を監視します
+      healthy: 正常
+      unhealthy: 異常
+      database: データベース
+      connected: 接続状態
+      adapter: アダプター
+      pool_size: プールサイズ
+      storage: ストレージ
+      blob_count: 保存ファイル数
+      total_size: 合計サイズ
+      queue: ジョブキュー
+      available: 利用可能
+      not_configured: 未設定
+      pending_jobs: 待機中ジョブ
+      failed_jobs: 失敗ジョブ
+      application: アプリケーション
+      rails_version: Railsバージョン
+      ruby_version: Rubyバージョン
+      environment: 環境
+      yes: はい
+      "no": いいえ

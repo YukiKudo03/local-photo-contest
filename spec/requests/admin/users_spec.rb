@@ -104,4 +104,79 @@ RSpec.describe "Admin::Users", type: :request do
       expect(User.exists?(participant.id)).to be false
     end
   end
+
+  describe "POST /admin/users/bulk_suspend" do
+    it "suspends multiple users" do
+      post bulk_suspend_admin_users_path, params: { user_ids: [ participant.id, organizer.id ] }
+      expect(participant.reload.access_locked?).to be true
+      expect(organizer.reload.access_locked?).to be true
+    end
+
+    it "redirects with count notice" do
+      post bulk_suspend_admin_users_path, params: { user_ids: [ participant.id ] }
+      expect(response).to redirect_to(admin_users_path)
+    end
+
+    it "creates audit log entries" do
+      expect {
+        post bulk_suspend_admin_users_path, params: { user_ids: [ participant.id, organizer.id ] }
+      }.to change(AuditLog, :count).by(2)
+    end
+
+    it "skips admin users" do
+      other_admin = create(:user, :admin, :confirmed)
+      post bulk_suspend_admin_users_path, params: { user_ids: [ other_admin.id, participant.id ] }
+      expect(other_admin.reload.access_locked?).to be false
+      expect(participant.reload.access_locked?).to be true
+    end
+
+    it "redirects with alert when no users selected" do
+      post bulk_suspend_admin_users_path, params: { user_ids: [] }
+      expect(response).to redirect_to(admin_users_path)
+    end
+  end
+
+  describe "POST /admin/users/bulk_unsuspend" do
+    before do
+      participant.update!(locked_at: Time.current, failed_attempts: 5)
+      organizer.update!(locked_at: Time.current, failed_attempts: 3)
+    end
+
+    it "unsuspends multiple users" do
+      post bulk_unsuspend_admin_users_path, params: { user_ids: [ participant.id, organizer.id ] }
+      expect(participant.reload.access_locked?).to be false
+      expect(organizer.reload.access_locked?).to be false
+    end
+
+    it "resets failed_attempts" do
+      post bulk_unsuspend_admin_users_path, params: { user_ids: [ participant.id ] }
+      expect(participant.reload.failed_attempts).to eq(0)
+    end
+
+    it "creates audit log entries" do
+      expect {
+        post bulk_unsuspend_admin_users_path, params: { user_ids: [ participant.id, organizer.id ] }
+      }.to change(AuditLog, :count).by(2)
+    end
+  end
+
+  describe "POST /admin/users/bulk_change_role" do
+    it "changes role for multiple users" do
+      post bulk_change_role_admin_users_path, params: { user_ids: [ participant.id ], role: "organizer" }
+      expect(participant.reload.role).to eq("organizer")
+    end
+
+    it "rejects invalid role" do
+      post bulk_change_role_admin_users_path, params: { user_ids: [ participant.id ], role: "superadmin" }
+      expect(response).to redirect_to(admin_users_path)
+      expect(participant.reload.role).to eq("participant")
+    end
+
+    it "creates audit log with role details" do
+      post bulk_change_role_admin_users_path, params: { user_ids: [ participant.id ], role: "organizer" }
+      log = AuditLog.last
+      expect(log.action).to eq("role_change")
+      expect(log.details).to include("new_role" => "organizer")
+    end
+  end
 end

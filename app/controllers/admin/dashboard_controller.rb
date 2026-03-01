@@ -22,6 +22,22 @@ module Admin
                           .transform_keys { |k| k.to_s }
     end
 
+    def preferences
+      settings = {}
+
+      if params[:widget_visibility].present?
+        visibility = params[:widget_visibility].to_unsafe_h.transform_values { |v| v == "1" }
+        settings["widget_visibility"] = visibility
+      end
+
+      if params[:widget_order].present?
+        settings["widget_order"] = Array(params[:widget_order])
+      end
+
+      current_user.update_dashboard_settings(settings)
+      redirect_to admin_dashboard_path, notice: t("flash.admin.dashboard.preferences_saved")
+    end
+
     private
 
     def dashboard_stats_service

@@ -138,6 +138,16 @@ ja:
         unsuspended: アカウント停止を解除しました。
         role_changed: "ロールを「%{role}」に変更しました。"
         invalid_role: 無効なロールです。
+        no_users_selected: ユーザーが選択されていません。
+        bulk_suspended: "%{count}件のアカウントを停止しました。"
+        bulk_unsuspended: "%{count}件のアカウント停止を解除しました。"
+        bulk_role_changed: "%{count}件のロールを「%{role}」に変更しました。"
+      dashboard:
+        preferences_saved: ダッシュボード設定を保存しました。
+      entries:
+        no_entries_selected: エントリーが選択されていません。
+        bulk_approved: "%{count}件のエントリーを承認しました。"
+        bulk_rejected: "%{count}件のエントリーを非表示にしました。"
       contests:
         destroyed: コンテストを削除しました。
         force_finished: コンテストを強制終了しました。
