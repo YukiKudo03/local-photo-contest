@@ -19,6 +19,19 @@ en:
       entry_image_alt: Photo contest entry
       untitled: Untitled
       announced_at: "Results Announced: %{date}"
+      slideshow: Slideshow
+      slideshow_play: Play
+      slideshow_pause: Pause
+      slideshow_prev: Previous
+      slideshow_next: Next
+      slideshow_close: Close
+      comparison:
+        title: Photo Comparison
+        select_left: Select left photo
+        select_right: Select right photo
+        side_by_side: Side by Side
+        slider: Slider
+        select_photos: Select photos to compare
     discovery_ranking:
       title: Discovery Ranking
       subtitle: By certified spot count

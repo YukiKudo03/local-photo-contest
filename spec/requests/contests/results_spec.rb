@@ -50,6 +50,21 @@ RSpec.describe "Contests::Results", type: :request do
           expect(response.body).to include("5")
           expect(response.body).to include("3")
         end
+
+        it "includes slideshow controller" do
+          get contest_results_path(published_contest)
+          expect(response.body).to include('data-controller="slideshow"')
+        end
+
+        it "includes slideshow button" do
+          get contest_results_path(published_contest)
+          expect(response.body).to include(I18n.t('results.show.slideshow'))
+        end
+
+        it "includes comparison controller" do
+          get contest_results_path(published_contest)
+          expect(response.body).to include('data-controller="comparison"')
+        end
       end
     end
 

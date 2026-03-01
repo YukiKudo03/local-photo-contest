@@ -21,6 +21,14 @@ ja:
       comments_section: コメント
       login_to_comment: コメントするにはログインしてください。
       no_comments: まだコメントがありません
+      exif:
+        title: 撮影情報
+        camera: カメラ
+        focal_length: 焦点距離
+        aperture: 絞り値
+        shutter_speed: シャッタースピード
+        iso: ISO感度
+      similar_entries: 関連作品
     new:
       back_to_contest: コンテストに戻る
       title: 写真を応募

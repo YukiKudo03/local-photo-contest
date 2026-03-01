@@ -176,6 +176,42 @@ RSpec.describe "Entries", type: :request do
       end
     end
 
+    context "when similar entries exist" do
+      let!(:entry_with_similar) { create(:entry, :with_exif, user: user, contest: contest, moderation_status: :moderation_approved) }
+      let!(:similar_entry) { create(:entry, user: user, contest: contest, title: "Similar Work", moderation_status: :moderation_approved) }
+
+      it "displays related works section" do
+        get entry_path(entry_with_similar)
+        expect(response.body).to include(I18n.t('entries.show.similar_entries'))
+      end
+    end
+
+    context "when entry has EXIF data" do
+      let!(:entry_with_exif) { create(:entry, :with_exif, user: user, contest: contest, moderation_status: :moderation_approved) }
+
+      it "displays camera model" do
+        get entry_path(entry_with_exif)
+        expect(response.body).to include("Canon Canon EOS R5")
+      end
+
+      it "displays shooting parameters" do
+        get entry_path(entry_with_exif)
+        expect(response.body).to include("f/2.8")
+        expect(response.body).to include("1/250s")
+        expect(response.body).to include("ISO 400")
+        expect(response.body).to include("50mm")
+      end
+    end
+
+    context "when entry has no EXIF data" do
+      let!(:entry_no_exif) { create(:entry, user: user, contest: contest, exif_data: nil, moderation_status: :moderation_approved) }
+
+      it "does not display EXIF section" do
+        get entry_path(entry_no_exif)
+        expect(response.body).not_to include("exif-section")
+      end
+    end
+
     context "when entry has spot" do
       let(:spot) { create(:spot, :with_coordinates, contest: contest, name: "テストスポット") }
       let!(:entry_with_spot) { create(:entry, user: user, contest: contest, spot: spot, moderation_status: :moderation_approved) }

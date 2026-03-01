@@ -21,6 +21,14 @@ en:
       comments_section: Comments
       login_to_comment: Please log in to comment.
       no_comments: No comments yet
+      exif:
+        title: Shooting Info
+        camera: Camera
+        focal_length: Focal Length
+        aperture: Aperture
+        shutter_speed: Shutter Speed
+        iso: ISO
+      similar_entries: Related Works
     new:
       back_to_contest: Back to Contest
       title: Submit Photo

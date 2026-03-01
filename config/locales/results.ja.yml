@@ -19,6 +19,19 @@ ja:
       entry_image_alt: フォトコンテスト応募作品
       untitled: 無題
       announced_at: "結果発表日: %{date}"
+      slideshow: スライドショー
+      slideshow_play: 再生
+      slideshow_pause: 一時停止
+      slideshow_prev: 前へ
+      slideshow_next: 次へ
+      slideshow_close: 閉じる
+      comparison:
+        title: 写真比較
+        select_left: 左の写真を選択
+        select_right: 右の写真を選択
+        side_by_side: 並べて比較
+        slider: スライダー比較
+        select_photos: 比較する写真を選択してください
     discovery_ranking:
       title: 発掘ランキング
       subtitle: 認定スポット数順
