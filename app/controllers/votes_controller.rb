@@ -9,6 +9,8 @@ class VotesController < ApplicationController
     @vote = @entry.votes.build(user: current_user)
 
     if @vote.save
+      MilestoneService.new(current_user).check_and_award(:vote, { entry_id: @entry.id })
+      PointService.new(current_user).award_for_action("vote", source: @vote)
       respond_to do |format|
         format.html { redirect_to @entry, notice: t('flash.votes.created') }
         format.turbo_stream

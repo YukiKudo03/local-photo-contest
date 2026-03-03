@@ -1,0 +1,74 @@
+en:
+  gamification:
+    milestones:
+      consecutive_3_contests:
+        name: "3 Consecutive"
+        description: "Participated in 3 consecutive contests"
+      consecutive_5_contests:
+        name: "5 Consecutive"
+        description: "Participated in 5 consecutive contests"
+      consecutive_10_contests:
+        name: "10 Consecutive"
+        description: "Participated in 10 consecutive contests"
+      prize_bronze:
+        name: "Bronze"
+        description: "Won 1 prize"
+      prize_silver:
+        name: "Silver"
+        description: "Won 3 prizes"
+      prize_gold:
+        name: "Gold"
+        description: "Won 5 prizes"
+      comments_10:
+        name: "Commentator"
+        description: "Posted 10 comments"
+      comments_50:
+        name: "Top Commentator"
+        description: "Posted 50 comments"
+      votes_10:
+        name: "Voting Master"
+        description: "Voted 10 times"
+      votes_50:
+        name: "Voting Expert"
+        description: "Voted 50 times"
+    points:
+      submit_entry: "+10 pts - Entry submitted"
+      vote: "+1 pt - Voted"
+      comment: "+3 pts - Commented"
+      prize_1st: "+50 pts - 1st place"
+      prize_2nd: "+30 pts - 2nd place"
+      prize_3rd: "+20 pts - 3rd place"
+    levels:
+      title: "Level"
+      current: "Level %{level}"
+      progress: "%{current}/%{next} points"
+      level_up: "Level Up!"
+      level_up_message: "Congratulations! You reached Level %{level}!"
+    rankings:
+      title: "Rankings"
+      subtitle: "Overall user rankings by points"
+      rank: "Rank"
+      user: "User"
+      level: "Level"
+      points: "Points"
+      your_rank: "Your Rank"
+      no_users: "No users with points yet"
+      empty_state: "Rankings will appear once users start earning points."
+    profile:
+      achievements_title: "Achievements"
+      level_title: "Level & Points"
+      points_label: "Points"
+      next_level: "Next Level"
+      no_achievements: "No achievements yet"
+    season_rankings:
+      monthly_title: "Monthly Rankings"
+      quarterly_title: "Quarterly Rankings"
+      period_label: "Period"
+      total_participants: "Participants"
+      total_points: "Total Points Awarded"
+      previous_period: "Previous"
+      next_period: "Next"
+      empty_state: "No ranking data for this period yet."
+      tab_overall: "Overall"
+      tab_monthly: "Monthly"
+      tab_quarterly: "Quarterly"

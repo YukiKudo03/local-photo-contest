@@ -64,6 +64,40 @@
       <!-- Discovery Stats -->
       <%= render "my/profiles/discovery_stats", user: @user %>
 
+      <!-- Level & Points -->
+      <div class="pt-6 border-t border-gray-100">
+        <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('gamification.profile.level_title') %></h3>
+        <div class="flex items-center gap-4 mb-4">
+          <%= render "shared/level_badge", level: @user.level %>
+          <span class="text-lg font-bold text-gray-900"><%= number_with_delimiter(@user.total_points) %> pt</span>
+        </div>
+        <% if @level_progress[:current_level] < LevelCalculator::MAX_LEVEL %>
+          <div class="w-full bg-gray-200 rounded-full h-2.5" role="progress" aria-label="<%= t('gamification.profile.next_level') %>">
+            <div class="bg-indigo-600 h-2.5 rounded-full progress" style="width: <%= @level_progress[:progress_percent] %>%"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            <%= t('gamification.profile.next_level') %>: <%= @level_progress[:points_to_next] %> pt
+          </p>
+        <% end %>
+      </div>
+
+      <!-- Achievements -->
+      <div class="pt-6 border-t border-gray-100">
+        <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('gamification.profile.achievements_title') %></h3>
+        <% if @achievements.any? %>
+          <div class="flex flex-wrap gap-2">
+            <% @achievements.each do |milestone| %>
+              <% badge = milestone.badge_info %>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-<%= badge[:color] %>-100 text-<%= badge[:color] %>-800">
+                <%= badge[:name] %>
+              </span>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-sm text-gray-400"><%= t('gamification.profile.no_achievements') %></p>
+        <% end %>
+      </div>
+
       <!-- Account Info -->
       <div class="pt-6 border-t border-gray-100">
         <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('my.profile.show.account_title') %></h3>

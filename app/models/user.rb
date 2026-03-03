@@ -23,6 +23,7 @@ class User < ApplicationRecord
   has_many :spot_votes, dependent: :destroy
   has_many :data_export_requests, dependent: :destroy
   has_many :discovery_badges, dependent: :destroy
+  has_many :user_points, dependent: :destroy
   has_many :tutorial_progresses, dependent: :destroy
   has_many :api_tokens, dependent: :destroy
   has_many :webhooks, dependent: :destroy

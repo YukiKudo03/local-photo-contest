@@ -29,6 +29,13 @@ module Organizers
       service = ResultsAnnouncementService.new(@contest)
       service.announce!
 
+      # Award milestones and points for prize winners
+      @contest.contest_rankings.each do |ranking|
+        entry_owner = ranking.entry.user
+        MilestoneService.new(entry_owner).check_and_award(:win_prize, { ranking_id: ranking.id })
+        PointService.new(entry_owner).award_for_prize(ranking)
+      end
+
       redirect_to organizers_contest_path(@contest),
                   notice: t('flash.results.announced')
     rescue => e

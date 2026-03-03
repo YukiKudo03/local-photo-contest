@@ -12,6 +12,8 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        MilestoneService.new(current_user).check_and_award(:comment, { entry_id: @entry.id })
+        PointService.new(current_user).award_for_action("comment", source: @comment)
         format.html { redirect_to entry_path(@entry), notice: t('flash.comments.created') }
         format.turbo_stream
       else

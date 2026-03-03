@@ -29,6 +29,7 @@
       <nav class="hidden md:flex items-center space-x-4" aria-label="<%= t('header.main_navigation') %>">
         <%= link_to t('header.contests'), contests_path, data: { tutorial: "contests-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
         <%= link_to t('header.gallery'), gallery_index_path, data: { tutorial: "gallery-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
+        <%= link_to t('gamification.rankings.title'), rankings_path, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
         <% if user_signed_in? %>
           <%= link_to t('header.my_entries'), my_entries_path, data: { tutorial: "my-entries-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>
           <%= link_to t('header.my_votes'), my_votes_path, data: { tutorial: "my-votes-link" }, class: "text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors" %>

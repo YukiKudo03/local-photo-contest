@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_01_132834) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -483,6 +483,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_132834) do
     t.index ["user_id"], name: "index_user_milestones_on_user_id"
   end
 
+  create_table "user_points", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "points", null: false
+    t.string "action_type", null: false
+    t.string "source_type"
+    t.integer "source_id"
+    t.json "metadata", default: {}
+    t.datetime "earned_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_type", "source_id"], name: "index_user_points_on_source_type_and_source_id"
+    t.index ["user_id", "action_type"], name: "index_user_points_on_user_id_and_action_type"
+    t.index ["user_id", "earned_at"], name: "index_user_points_on_user_id_and_earned_at"
+    t.index ["user_id"], name: "index_user_points_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -519,11 +535,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_132834) do
     t.datetime "deletion_requested_at"
     t.datetime "deletion_scheduled_at"
     t.json "dashboard_settings", default: {}
+    t.integer "total_points", default: 0, null: false
+    t.integer "level", default: 1, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["feature_level"], name: "index_users_on_feature_level"
+    t.index ["level"], name: "index_users_on_level"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role"], name: "index_users_on_role"
+    t.index ["total_points"], name: "index_users_on_total_points"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["unsubscribe_token"], name: "index_users_on_unsubscribe_token", unique: true
   end
@@ -616,6 +636,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_132834) do
   add_foreign_key "terms_acceptances", "users"
   add_foreign_key "tutorial_progresses", "users"
   add_foreign_key "user_milestones", "users"
+  add_foreign_key "user_points", "users"
   add_foreign_key "votes", "entries"
   add_foreign_key "votes", "users"
   add_foreign_key "webhook_deliveries", "webhooks"

@@ -34,6 +34,8 @@ class EntriesController < ApplicationController
       end
 
       if @entry.save
+        MilestoneService.new(current_user).check_and_award(:submit_entry, { entry_id: @entry.id })
+        PointService.new(current_user).award_for_action("submit_entry", source: @entry)
         redirect_to @entry, notice: discovery_notice
       else
         raise ActiveRecord::Rollback

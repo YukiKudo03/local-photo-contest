@@ -49,6 +49,39 @@ RSpec.describe "My::Profile", type: :request do
         get my_profile_path
         expect(response.body).to include("1")
       end
+
+      context "gamification section" do
+        it "displays user level" do
+          user.update!(level: 3, total_points: 150)
+          get my_profile_path
+          expect(response.body).to include("Lv.3")
+        end
+
+        it "displays total points" do
+          user.update!(total_points: 150)
+          get my_profile_path
+          expect(response.body).to include("150")
+        end
+
+        it "displays level progress bar" do
+          user.update!(level: 2, total_points: 100)
+          get my_profile_path
+          expect(response.body).to include("progress")
+        end
+
+        it "displays earned achievement badges" do
+          UserMilestone.achieve!(user, "first_vote")
+          UserMilestone.achieve!(user, "votes_10", { count: 10 })
+          get my_profile_path
+          expect(response.body).to include("初投票")
+          expect(response.body).to include("投票マスター")
+        end
+
+        it "shows empty state when no achievements" do
+          get my_profile_path
+          expect(response.body).to include(I18n.t("gamification.profile.no_achievements"))
+        end
+      end
     end
   end
 

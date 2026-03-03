@@ -6,6 +6,8 @@ module My
 
     def show
       @user = current_user
+      @level_progress = LevelCalculator.progress_to_next_level(@user.total_points)
+      @achievements = @user.milestones.recent
     end
 
     def edit

@@ -1,0 +1,74 @@
+ja:
+  gamification:
+    milestones:
+      consecutive_3_contests:
+        name: "3連続参加"
+        description: "3つの連続するコンテストに参加"
+      consecutive_5_contests:
+        name: "5連続参加"
+        description: "5つの連続するコンテストに参加"
+      consecutive_10_contests:
+        name: "10連続参加"
+        description: "10の連続するコンテストに参加"
+      prize_bronze:
+        name: "ブロンズ"
+        description: "1回入賞"
+      prize_silver:
+        name: "シルバー"
+        description: "3回入賞"
+      prize_gold:
+        name: "ゴールド"
+        description: "5回入賞"
+      comments_10:
+        name: "コメンテーター"
+        description: "10回コメント"
+      comments_50:
+        name: "トップコメンテーター"
+        description: "50回コメント"
+      votes_10:
+        name: "投票マスター"
+        description: "10回投票"
+      votes_50:
+        name: "投票の達人"
+        description: "50回投票"
+    points:
+      submit_entry: "+10 pt - 作品投稿"
+      vote: "+1 pt - 投票"
+      comment: "+3 pt - コメント"
+      prize_1st: "+50 pt - 最優秀賞"
+      prize_2nd: "+30 pt - 優秀賞"
+      prize_3rd: "+20 pt - 入選"
+    levels:
+      title: "レベル"
+      current: "レベル %{level}"
+      progress: "%{current}/%{next} ポイント"
+      level_up: "レベルアップ！"
+      level_up_message: "おめでとうございます！レベル %{level} に到達しました！"
+    rankings:
+      title: "ランキング"
+      subtitle: "ポイントによる総合ランキング"
+      rank: "順位"
+      user: "ユーザー"
+      level: "レベル"
+      points: "ポイント"
+      your_rank: "あなたの順位"
+      no_users: "まだポイントを獲得したユーザーはいません"
+      empty_state: "ユーザーがポイントを獲得し始めるとランキングが表示されます。"
+    profile:
+      achievements_title: "実績"
+      level_title: "レベル & ポイント"
+      points_label: "ポイント"
+      next_level: "次のレベル"
+      no_achievements: "まだ実績がありません"
+    season_rankings:
+      monthly_title: "月間ランキング"
+      quarterly_title: "四半期ランキング"
+      period_label: "期間"
+      total_participants: "参加者数"
+      total_points: "合計獲得ポイント"
+      previous_period: "前へ"
+      next_period: "次へ"
+      empty_state: "この期間のランキングデータはまだありません。"
+      tab_overall: "総合"
+      tab_monthly: "月間"
+      tab_quarterly: "四半期"
