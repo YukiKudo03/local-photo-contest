@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_03_235815) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_04_100002) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -262,14 +262,30 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_03_235815) do
     t.integer "moderation_status", default: 0, null: false
     t.json "exif_data"
     t.integer "reactions_count", default: 0, null: false
+    t.float "quality_score"
+    t.string "image_hash", limit: 16
+    t.datetime "image_analysis_completed_at"
     t.index ["area_id"], name: "index_entries_on_area_id"
     t.index ["contest_id", "moderation_status"], name: "index_entries_on_contest_id_and_moderation_status"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
     t.index ["created_at"], name: "index_entries_on_created_at"
+    t.index ["image_hash"], name: "index_entries_on_image_hash"
     t.index ["moderation_status"], name: "index_entries_on_moderation_status"
+    t.index ["quality_score"], name: "index_entries_on_quality_score"
     t.index ["spot_id"], name: "index_entries_on_spot_id"
     t.index ["user_id", "contest_id"], name: "index_entries_on_user_id_and_contest_id"
     t.index ["user_id"], name: "index_entries_on_user_id"
+  end
+
+  create_table "entry_tags", force: :cascade do |t|
+    t.integer "entry_id", null: false
+    t.integer "tag_id", null: false
+    t.float "confidence"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_id", "tag_id"], name: "index_entry_tags_on_entry_id_and_tag_id", unique: true
+    t.index ["entry_id"], name: "index_entry_tags_on_entry_id"
+    t.index ["tag_id"], name: "index_entry_tags_on_tag_id"
   end
 
   create_table "evaluation_criteria", force: :cascade do |t|
@@ -427,6 +443,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_03_235815) do
     t.index ["discovered_by_id"], name: "index_spots_on_discovered_by_id"
     t.index ["discovery_status"], name: "index_spots_on_discovery_status"
     t.index ["merged_into_id"], name: "index_spots_on_merged_into_id", where: "merged_into_id IS NOT NULL"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "name_ja", limit: 100
+    t.string "category", limit: 50
+    t.integer "entries_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category"], name: "index_tags_on_category"
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "terms_acceptances", force: :cascade do |t|
@@ -638,6 +665,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_03_235815) do
   add_foreign_key "entries", "contests"
   add_foreign_key "entries", "spots"
   add_foreign_key "entries", "users"
+  add_foreign_key "entry_tags", "entries"
+  add_foreign_key "entry_tags", "tags"
   add_foreign_key "evaluation_criteria", "contests"
   add_foreign_key "feature_unlocks", "users"
   add_foreign_key "follows", "users", column: "followed_id"

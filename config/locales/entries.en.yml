@@ -2,6 +2,8 @@ en:
   activerecord:
     models:
       entry: Entry
+      tag: Tag
+      entry_tag: Entry Tag
     attributes:
       entry:
         photo: Photo

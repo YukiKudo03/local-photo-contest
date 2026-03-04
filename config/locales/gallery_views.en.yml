@@ -12,7 +12,9 @@ en:
       sort_label: Sort By
       sort_newest: Newest
       sort_popular: Most Popular
+      sort_quality: Quality Score
       sort_oldest: Oldest
+      tag_filter: Tag
       submit_filter: Filter
       clear_filter: Clear
       works_count: "%{count} entries"

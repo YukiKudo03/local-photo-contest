@@ -22,8 +22,28 @@ module Moderation
       class ConfigurationError < StandardError; end
       class AnalysisError < StandardError; end
 
+      LabelResult = Struct.new(:labels, :raw_response, keyword_init: true)
+
       def name
         "rekognition"
+      end
+
+      # Detects labels in an image using Rekognition DetectLabels API
+      # @param attachment [ActiveStorage::Attached] the image attachment to analyze
+      # @return [LabelResult] the detected labels
+      # @raise [AnalysisError] if the API call fails
+      def detect_labels(attachment)
+        image_bytes = download_attachment(attachment)
+        response = client.detect_labels(
+          image: { bytes: image_bytes },
+          max_labels: 20,
+          min_confidence: 70.0
+        )
+        parse_labels_response(response)
+      rescue Aws::Rekognition::Errors::ServiceError => e
+        raise AnalysisError, "Rekognition detect_labels error: #{e.message}"
+      rescue Aws::Errors::MissingCredentialsError => e
+        raise ConfigurationError, "AWS credentials not configured: #{e.message}"
       end
 
       # Analyzes an image attachment for moderation labels
@@ -107,6 +127,25 @@ module Moderation
         return nil if labels.empty?
 
         labels.map { |l| l["Confidence"] }.max
+      end
+
+      def parse_labels_response(response)
+        labels = response.labels.map do |label|
+          {
+            "Name" => label.name,
+            "Confidence" => label.confidence.round(2),
+            "Categories" => label.respond_to?(:categories) ? label.categories&.map(&:name) : [],
+            "Parents" => label.respond_to?(:parents) ? label.parents&.map(&:name) : []
+          }
+        end
+
+        LabelResult.new(
+          labels: labels,
+          raw_response: {
+            "Labels" => labels,
+            "LabelModelVersion" => response.respond_to?(:label_model_version) ? response.label_model_version : nil
+          }
+        )
       end
 
       def serialize_response(response)

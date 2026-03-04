@@ -1,0 +1,10 @@
+ja:
+  image_analysis:
+    quality_score:
+      excellent: 優秀
+      good: 良好
+      average: 平均的
+      below_average: 改善の余地あり
+    similar_images:
+      title: 類似画像
+      duplicate_warning: 視覚的に類似した画像が検出されました

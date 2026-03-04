@@ -70,5 +70,30 @@ RSpec.describe SimilarEntriesService do
         expect(result).not_to include(hidden_entry)
       end
     end
+
+    context "same tags" do
+      let!(:tagged_entry) { create(:entry, user: other_user, contest: contest) }
+      let(:tag) { create(:tag, name: "nature") }
+
+      before do
+        create(:entry_tag, entry: source_entry, tag: tag)
+        create(:entry_tag, entry: tagged_entry, tag: tag)
+      end
+
+      it "includes entries with the same tags" do
+        result = described_class.new(source_entry).find
+        expect(result).to include(tagged_entry)
+      end
+    end
+
+    context "perceptually similar (dHash)" do
+      let!(:similar_entry) { create(:entry, user: other_user, contest: contest, image_hash: "0000000000000001") }
+
+      it "includes entries with similar image hash" do
+        source_entry.update_columns(image_hash: "0000000000000000")
+        result = described_class.new(source_entry.reload).find
+        expect(result).to include(similar_entry)
+      end
+    end
   end
 end

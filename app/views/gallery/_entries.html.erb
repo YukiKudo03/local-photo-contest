@@ -33,6 +33,15 @@
                 </span>
               <% end %>
             </div>
+            <% if entry.tags.any? %>
+              <div class="flex flex-wrap gap-0.5 mt-0.5">
+                <% entry.tags.first(3).each do |tag| %>
+                  <span class="inline-block px-1 py-0.5 text-[9px] font-medium bg-cyan-50 text-cyan-700 rounded">
+                    <%= tag.name %>
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>

@@ -28,6 +28,9 @@ class ModerationJob < ApplicationJob
     else
       log_failure(entry, result)
     end
+
+    # Auto-tagging after moderation (non-blocking)
+    perform_auto_tagging(entry)
   rescue StandardError => e
     handle_unexpected_error(entry_id, e)
     raise # Re-raise to trigger retry
@@ -46,6 +49,12 @@ class ModerationJob < ApplicationJob
 
   def log_failure(entry, result)
     Rails.logger.error("ModerationJob: Entry #{entry.id} moderation failed: #{result.error}")
+  end
+
+  def perform_auto_tagging(entry)
+    ImageAnalysis::AutoTaggingService.new(entry).perform
+  rescue => e
+    Rails.logger.warn("ModerationJob: Auto-tagging failed for entry #{entry.id}: #{e.message}")
   end
 
   def handle_unexpected_error(entry_id, error)

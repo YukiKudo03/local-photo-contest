@@ -43,6 +43,12 @@ ja:
       skipped: スキップ済
       in_progress: 進行中
       not_started: 未開始
+    tag:
+      categories:
+        scene: シーン
+        object: オブジェクト
+        activity: アクティビティ
+        general: 一般
     judge_invitation:
       already_processed: 招待は既に処理されています
       expired: 招待の有効期限が切れています

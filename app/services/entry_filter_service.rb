@@ -17,6 +17,7 @@ class EntryFilterService
     apply_camera_model_filter
     apply_focal_length_filter
     apply_iso_filter
+    apply_tag_filter
     @scope
   end
 
@@ -86,5 +87,10 @@ class EntryFilterService
     if @params[:iso_max].present?
       @scope = @scope.where("CAST(json_extract(entries.exif_data, '$.ISOSpeedRatings') AS INTEGER) <= ?", @params[:iso_max].to_i)
     end
+  end
+
+  def apply_tag_filter
+    return unless @params[:tag_id].present?
+    @scope = @scope.joins(:entry_tags).where(entry_tags: { tag_id: @params[:tag_id] })
   end
 end

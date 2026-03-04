@@ -20,6 +20,8 @@ RSpec.describe ModerationJob, type: :job do
   before do
     allow(Moderation::Providers).to receive(:current).and_return(mock_provider)
     allow(mock_provider).to receive(:analyze).and_return(clean_result)
+    # Stub auto-tagging to avoid AWS calls in moderation tests
+    allow_any_instance_of(ImageAnalysis::AutoTaggingService).to receive(:perform)
   end
 
   describe "#perform" do

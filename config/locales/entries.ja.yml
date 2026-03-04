@@ -2,6 +2,8 @@ ja:
   activerecord:
     models:
       entry: 応募
+      tag: タグ
+      entry_tag: エントリータグ
     attributes:
       entry:
         photo: 写真

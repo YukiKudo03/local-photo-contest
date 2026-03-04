@@ -28,6 +28,8 @@ en:
         aperture: Aperture
         shutter_speed: Shutter Speed
         iso: ISO
+      tags_title: Tags
+      quality_score: Quality Score
       similar_entries: Related Works
     new:
       back_to_contest: Back to Contest

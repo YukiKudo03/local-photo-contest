@@ -1,0 +1,10 @@
+en:
+  image_analysis:
+    quality_score:
+      excellent: Excellent
+      good: Good
+      average: Average
+      below_average: Below Average
+    similar_images:
+      title: Similar Images
+      duplicate_warning: A visually similar image was detected

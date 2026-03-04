@@ -145,6 +145,84 @@ RSpec.describe Moderation::Providers::RekognitionProvider, type: :service do
     end
   end
 
+  describe "#detect_labels" do
+    context "when AWS SDK is available", if: defined?(Aws::Rekognition) do
+      let(:mock_client) { instance_double(Aws::Rekognition::Client) }
+      let(:label) do
+        double(
+          "Label",
+          name: "Mountain",
+          confidence: 95.5,
+          categories: [ double(name: "Nature") ],
+          parents: [ double(name: "Outdoors") ]
+        )
+      end
+      let(:labels_response) do
+        double(
+          "DetectLabelsResponse",
+          labels: [ label ],
+          label_model_version: "3.0"
+        )
+      end
+
+      before do
+        allow(Aws::Rekognition::Client).to receive(:new).and_return(mock_client)
+      end
+
+      context "when labels are detected" do
+        before do
+          allow(mock_client).to receive(:detect_labels).and_return(labels_response)
+        end
+
+        it "returns LabelResult with labels" do
+          result = provider.detect_labels(entry.photo)
+
+          expect(result).to be_a(described_class::LabelResult)
+          expect(result.labels.size).to eq(1)
+          expect(result.labels.first["Name"]).to eq("Mountain")
+          expect(result.labels.first["Confidence"]).to eq(95.5)
+        end
+
+        it "includes categories and parents" do
+          result = provider.detect_labels(entry.photo)
+
+          expect(result.labels.first["Categories"]).to eq([ "Nature" ])
+          expect(result.labels.first["Parents"]).to eq([ "Outdoors" ])
+        end
+
+        it "stores raw response" do
+          result = provider.detect_labels(entry.photo)
+
+          expect(result.raw_response["Labels"]).to be_present
+        end
+      end
+
+      context "when API error occurs" do
+        before do
+          allow(mock_client).to receive(:detect_labels)
+            .and_raise(Aws::Rekognition::Errors::ServiceError.new(nil, "API Error"))
+        end
+
+        it "raises AnalysisError" do
+          expect { provider.detect_labels(entry.photo) }
+            .to raise_error(described_class::AnalysisError, /detect_labels/)
+        end
+      end
+
+      context "when credentials not configured" do
+        before do
+          allow(mock_client).to receive(:detect_labels)
+            .and_raise(Aws::Errors::MissingCredentialsError.new("Missing credentials"))
+        end
+
+        it "raises ConfigurationError" do
+          expect { provider.detect_labels(entry.photo) }
+            .to raise_error(described_class::ConfigurationError, /credentials/)
+        end
+      end
+    end
+  end
+
   describe "registration" do
     it "is registered with the Providers module" do
       Moderation::Providers.load_providers!

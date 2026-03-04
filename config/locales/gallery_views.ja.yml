@@ -12,7 +12,9 @@ ja:
       sort_label: 並び順
       sort_newest: 新着順
       sort_popular: 人気順
+      sort_quality: 画質スコア順
       sort_oldest: 古い順
+      tag_filter: タグ
       submit_filter: 絞り込む
       clear_filter: クリア
       works_count: "%{count}作品"

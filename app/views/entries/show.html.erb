@@ -164,6 +164,42 @@
         </div>
       <% end %>
 
+      <!-- Tags -->
+      <% if @entry.tags.any? %>
+        <div class="mt-6 p-4 bg-cyan-50 rounded-lg">
+          <div class="flex items-center mb-3">
+            <svg class="h-5 w-5 text-cyan-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            <h3 class="text-sm font-semibold text-gray-700"><%= t('entries.show.tags_title') %></h3>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <% @entry.tags.each do |tag| %>
+              <%= link_to gallery_index_path(tag_id: tag.id), class: "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-white text-cyan-800 border border-cyan-200 hover:bg-cyan-100 transition-colors" do %>
+                <%= tag.name %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Quality Score -->
+      <% if @entry.quality_score.present? %>
+        <div class="mt-6 p-4 bg-amber-50 rounded-lg">
+          <div class="flex items-center mb-3">
+            <svg class="h-5 w-5 text-amber-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+            <h3 class="text-sm font-semibold text-gray-700"><%= t('entries.show.quality_score') %></h3>
+            <span class="ml-auto text-sm font-bold text-amber-700"><%= @entry.quality_score.round(1) %> / 100</span>
+          </div>
+          <div class="w-full bg-amber-200 rounded-full h-2.5">
+            <div class="bg-amber-500 h-2.5 rounded-full" style="width: <%= @entry.quality_score %>%"></div>
+          </div>
+          <p class="mt-1 text-xs text-amber-600"><%= quality_score_label(@entry.quality_score) %></p>
+        </div>
+      <% end %>
+
       <!-- Spot Info -->
       <% if @entry.spot.present? %>
         <div class="mt-6 p-4 bg-teal-50 rounded-lg">

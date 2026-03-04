@@ -7,6 +7,7 @@ module EntryNotifications
     after_create_commit :broadcast_new_entry_notification
     after_create_commit :send_entry_submitted_email
     after_create_commit :enqueue_exif_extraction
+    after_create_commit :enqueue_image_analysis
     after_create_commit :notify_followers
     after_commit :clear_statistics_cache, on: [ :create, :destroy ]
   end
@@ -42,5 +43,12 @@ module EntryNotifications
     ExifExtractionJob.perform_later(id)
   rescue => e
     Rails.logger.error("Failed to enqueue EXIF extraction: #{e.message}")
+  end
+
+  def enqueue_image_analysis
+    return unless photo.attached?
+    ImageAnalysisJob.perform_later(id)
+  rescue => e
+    Rails.logger.error("Failed to enqueue image analysis: #{e.message}")
   end
 end

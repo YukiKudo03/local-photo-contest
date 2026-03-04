@@ -28,6 +28,8 @@ ja:
         aperture: 絞り値
         shutter_speed: シャッタースピード
         iso: ISO感度
+      tags_title: タグ
+      quality_score: 画質スコア
       similar_entries: 関連作品
     new:
       back_to_contest: コンテストに戻る

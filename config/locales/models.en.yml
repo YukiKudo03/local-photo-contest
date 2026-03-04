@@ -43,6 +43,12 @@ en:
       skipped: Skipped
       in_progress: In Progress
       not_started: Not Started
+    tag:
+      categories:
+        scene: Scene
+        object: Object
+        activity: Activity
+        general: General
     judge_invitation:
       already_processed: This invitation has already been processed
       expired: This invitation has expired

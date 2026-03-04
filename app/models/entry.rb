@@ -30,6 +30,8 @@ class Entry < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :challenge_entries, dependent: :destroy
   has_many :discovery_challenges, through: :challenge_entries
+  has_many :entry_tags, dependent: :destroy
+  has_many :tags, through: :entry_tags
 
   # Enums
   enum :location_source, { manual: 0, exif: 1, gps: 2 }, prefix: :location
@@ -46,6 +48,7 @@ class Entry < ApplicationRecord
   scope :by_contest, ->(contest) { where(contest: contest) }
   scope :by_user, ->(user) { where(user: user) }
   scope :recent, -> { order(created_at: :desc) }
+  scope :by_tag, ->(tag_id) { joins(:entry_tags).where(entry_tags: { tag_id: tag_id }) }
 
   # Instance Methods
   def optimized_photo(size = :medium)
