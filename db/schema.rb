@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_04_100002) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_04_200202) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -265,6 +265,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_04_100002) do
     t.float "quality_score"
     t.string "image_hash", limit: 16
     t.datetime "image_analysis_completed_at"
+    t.integer "votes_count", default: 0, null: false
     t.index ["area_id"], name: "index_entries_on_area_id"
     t.index ["contest_id", "moderation_status"], name: "index_entries_on_contest_id_and_moderation_status"
     t.index ["contest_id"], name: "index_entries_on_contest_id"

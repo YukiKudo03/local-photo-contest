@@ -3,7 +3,7 @@
 class Vote < ApplicationRecord
   # Associations
   belongs_to :user
-  belongs_to :entry, touch: true
+  belongs_to :entry, counter_cache: true, touch: true
 
   # Validations
   validates :user_id, uniqueness: { scope: :entry_id }

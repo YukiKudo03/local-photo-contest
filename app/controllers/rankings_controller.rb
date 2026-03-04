@@ -3,6 +3,7 @@
 class RankingsController < ApplicationController
   def index
     @rankings = User.where("total_points > 0")
+                    .includes(avatar_attachment: :blob)
                     .order(total_points: :desc, level: :desc)
                     .page(params[:page])
                     .per(20)

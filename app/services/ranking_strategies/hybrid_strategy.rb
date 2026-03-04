@@ -16,7 +16,7 @@ module RankingStrategies
 
       rankings = entries.map do |entry|
         judge_avg = calculate_judge_average(entry)
-        vote_count = entry.votes.count
+        vote_count = entry.votes_count
 
         normalized_judge_score = normalize_score(judge_avg, max_score.positive? ? max_score : 1)
         normalized_vote_score = normalize_score(vote_count, max_vote_count)

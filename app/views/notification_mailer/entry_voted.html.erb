@@ -19,7 +19,7 @@
     <div class="content">
       <p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
       <p><%= t('mailers.notification.entry_voted.body', entry_title: @entry.title.presence || t('mailers.notification.entry_voted.untitled')) %></p>
-      <p><%= t('mailers.notification.entry_voted.current_votes') %> <strong><%= @entry.votes.count %></strong></p>
+      <p><%= t('mailers.notification.entry_voted.current_votes') %> <strong><%= @entry.votes_count %></strong></p>
 
       <p style="text-align: center;">
         <a href="<%= entry_url(@entry) %>" class="button"><%= t('mailers.notification.entry_voted.view_button') %></a>

@@ -4,7 +4,7 @@
 
 <%= t('mailers.notification.entry_voted.body', entry_title: @entry.title.presence || t('mailers.notification.entry_voted.untitled')) %>
 
-<%= t('mailers.notification.entry_voted.current_votes') %> <%= @entry.votes.count %>
+<%= t('mailers.notification.entry_voted.current_votes') %> <%= @entry.votes_count %>
 
 <%= t('mailers.notification.entry_voted.view_button') %>: <%= entry_url(@entry) %>
 

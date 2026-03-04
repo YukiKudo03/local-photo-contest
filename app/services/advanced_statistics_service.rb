@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class AdvancedStatisticsService
+  CACHE_TTL = 10.minutes
+  CACHE_NAMESPACE = "advanced_stats"
+
   attr_reader :contest
 
   def initialize(contest)
@@ -54,17 +57,29 @@ class AdvancedStatisticsService
     areas = Area.where(user_id: contest.user_id).ordered
     return [] if areas.empty?
 
+    # Batch-load all counts in single queries
+    entries_by_area = contest.entries.where(area_id: areas.map(&:id)).group(:area_id)
+    entry_counts = entries_by_area.count
+    participant_counts = entries_by_area.distinct.count(:user_id)
+
+    # Batch-load vote counts: get entry_ids grouped by area
+    area_entry_ids = contest.entries.where(area_id: areas.map(&:id)).group_by(&:area_id)
+    all_entry_ids = area_entry_ids.values.flatten.map(&:id)
+    vote_counts_by_entry = Vote.where(entry_id: all_entry_ids).group(:entry_id).count
+
     areas.map do |area|
-      area_entries = contest.entries.where(area: area)
-      entry_ids = area_entries.pluck(:id)
+      area_entries = area_entry_ids[area.id] || []
+      vote_count = area_entries.sum { |e| vote_counts_by_entry[e.id] || 0 }
+      entry_count = entry_counts[area.id] || 0
+      participant_count = participant_counts[area.id] || 0
 
       {
         id: area.id,
         name: area.name,
-        entries: area_entries.count,
-        votes: entry_ids.any? ? Vote.where(entry_id: entry_ids).count : 0,
-        participants: area_entries.distinct.count(:user_id),
-        score: activity_score(area)
+        entries: entry_count,
+        votes: vote_count,
+        participants: participant_count,
+        score: compute_activity_score(entry_count, vote_count, participant_count)
       }
     end
   end
@@ -73,8 +88,14 @@ class AdvancedStatisticsService
     areas = Area.where(user_id: contest.user_id).ordered
     return {} if areas.empty?
 
-    areas.each_with_object({}) do |area, result|
-      count = contest.entries.where(area: area).distinct.count(:user_id)
+    participant_counts = contest.entries.where(area_id: areas.map(&:id))
+                                .group(:area_id)
+                                .distinct
+                                .count(:user_id)
+    areas_by_id = areas.index_by(&:id)
+
+    participant_counts.each_with_object({}) do |(area_id, count), result|
+      area = areas_by_id[area_id]
       result[area.name] = count if count > 0
     end
   end
@@ -88,21 +109,58 @@ class AdvancedStatisticsService
     vote_count = Vote.where(entry_id: entry_ids).count
     participant_count = area_entries.distinct.count(:user_id)
 
-    (entry_count * 1.0 + vote_count * 0.5 + participant_count * 2.0)
+    compute_activity_score(entry_count, vote_count, participant_count)
   end
 
   # --- Phase 2: Submission Heatmap ---
 
   def submission_heatmap
+    Rails.cache.fetch(cache_key("heatmap"), expires_in: CACHE_TTL) do
+      compute_submission_heatmap
+    end
+  end
+
+  private
+
+  def compute_submission_heatmap
+    # Initialize 7x24 zero matrix
     matrix = (0..6).each_with_object({}) do |day, h|
       h[day] = (0..23).each_with_object({}) { |hour, hh| hh[hour] = 0 }
     end
 
-    contest.entries.find_each do |entry|
-      tokyo_time = entry.created_at.in_time_zone("Tokyo")
-      matrix[tokyo_time.wday][tokyo_time.hour] += 1
+    # Use SQL aggregation with timezone conversion
+    entries = contest.entries
+
+    if sqlite?
+      # SQLite: store times as UTC, convert to Tokyo (UTC+9) with +9 hours
+      rows = entries.group(
+        Arel.sql("CAST(strftime('%w', datetime(created_at, '+9 hours')) AS INTEGER)"),
+        Arel.sql("CAST(strftime('%H', datetime(created_at, '+9 hours')) AS INTEGER)")
+      ).count
+    else
+      # PostgreSQL: use AT TIME ZONE
+      rows = entries.group(
+        Arel.sql("EXTRACT(DOW FROM created_at AT TIME ZONE 'Asia/Tokyo')::integer"),
+        Arel.sql("EXTRACT(HOUR FROM created_at AT TIME ZONE 'Asia/Tokyo')::integer")
+      ).count
+    end
+
+    rows.each do |(day, hour), count|
+      matrix[day][hour] = count if matrix[day] && matrix[day].key?(hour)
     end
 
     matrix
+  end
+
+  def compute_activity_score(entry_count, vote_count, participant_count)
+    (entry_count * 1.0 + vote_count * 0.5 + participant_count * 2.0)
+  end
+
+  def sqlite?
+    ActiveRecord::Base.connection.adapter_name == "SQLite"
+  end
+
+  def cache_key(suffix)
+    "#{CACHE_NAMESPACE}/#{contest.id}/#{suffix}"
   end
 end

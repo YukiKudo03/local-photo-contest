@@ -9,7 +9,7 @@ module RankingStrategies
       rankings = entries.map do |entry|
         judge_avg = calculate_judge_average(entry)
         normalized_judge_score = normalize_score(judge_avg, max_score.positive? ? max_score : 1)
-        vote_count = entry.votes.count
+        vote_count = entry.votes_count
 
         {
           entry: entry,

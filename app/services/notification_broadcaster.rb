@@ -32,7 +32,7 @@ class NotificationBroadcaster
         entry,
         type: "vote_update",
         entry_id: entry.id,
-        vote_count: entry.votes.count
+        vote_count: entry.votes_count
       )
     end
 

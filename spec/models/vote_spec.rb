@@ -104,6 +104,32 @@ RSpec.describe Vote, type: :model do
     end
   end
 
+  describe 'counter_cache' do
+    it 'increments votes_count on entry when vote is created' do
+      entry = create(:entry)
+      expect {
+        create(:vote, entry: entry)
+      }.to change { entry.reload.votes_count }.from(0).to(1)
+    end
+
+    it 'decrements votes_count on entry when vote is destroyed' do
+      entry = create(:entry)
+      vote = create(:vote, entry: entry)
+      expect {
+        vote.destroy
+      }.to change { entry.reload.votes_count }.from(1).to(0)
+    end
+
+    it 'tracks multiple votes accurately' do
+      entry = create(:entry)
+      votes = 3.times.map { create(:vote, entry: entry) }
+      expect(entry.reload.votes_count).to eq(3)
+
+      votes.first.destroy
+      expect(entry.reload.votes_count).to eq(2)
+    end
+  end
+
   describe 'database constraints' do
     let(:user) { create(:user, :confirmed) }
     let(:entry) { create(:entry) }

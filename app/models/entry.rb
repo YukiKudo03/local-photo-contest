@@ -77,10 +77,6 @@ class Entry < ApplicationRecord
     votes.exists?(user: other_user)
   end
 
-  def votes_count
-    votes.count
-  end
-
   def liked_by?(other_user)
     reactions.exists?(user: other_user, reaction_type: "like")
   end

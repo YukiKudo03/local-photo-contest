@@ -190,17 +190,26 @@ class StatisticsService
     query = base_entries.left_joins(:votes)
 
     if date_range_active?
-      # Filter votes within date range for counting
+      # Filter votes within date range using parameterized conditions
       vote_conditions = []
-      vote_conditions << "votes.created_at >= '#{start_date.to_date.beginning_of_day}'" if start_date
-      vote_conditions << "votes.created_at <= '#{end_date.to_date.end_of_day}'" if end_date
+      vote_params = []
+
+      if start_date
+        vote_conditions << "votes.created_at >= ?"
+        vote_params << start_date.to_date.beginning_of_day
+      end
+      if end_date
+        vote_conditions << "votes.created_at <= ?"
+        vote_params << end_date.to_date.end_of_day
+      end
 
       if vote_conditions.any?
         vote_filter = vote_conditions.join(" AND ")
+        sanitized_filter = ActiveRecord::Base.sanitize_sql_array([vote_filter] + vote_params)
         query = query
                   .group(:id)
-                  .select("entries.*, COUNT(CASE WHEN #{vote_filter} THEN votes.id END) as votes_count")
-                  .order(Arel.sql("COUNT(CASE WHEN #{vote_filter} THEN votes.id END) DESC"), "entries.created_at ASC")
+                  .select("entries.*, COUNT(CASE WHEN #{sanitized_filter} THEN votes.id END) as votes_count")
+                  .order(Arel.sql("COUNT(CASE WHEN #{sanitized_filter} THEN votes.id END) DESC"), "entries.created_at ASC")
       else
         query = query
                   .group(:id)

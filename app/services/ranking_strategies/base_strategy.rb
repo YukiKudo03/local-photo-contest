@@ -63,7 +63,7 @@ module RankingStrategies
     end
 
     def max_votes(entries)
-      entries.map { |e| e.votes.count }.max || 1
+      entries.map { |e| e.votes_count }.max || 1
     end
 
     def max_judge_score
