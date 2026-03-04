@@ -27,6 +27,11 @@ class User < ApplicationRecord
   has_many :tutorial_progresses, dependent: :destroy
   has_many :api_tokens, dependent: :destroy
   has_many :webhooks, dependent: :destroy
+  has_many :active_follows, class_name: "Follow", foreign_key: :follower_id, dependent: :destroy
+  has_many :passive_follows, class_name: "Follow", foreign_key: :followed_id, dependent: :destroy
+  has_many :following, through: :active_follows, source: :followed
+  has_many :followers, through: :passive_follows, source: :follower
+  has_many :reactions, dependent: :destroy
   has_one_attached :avatar
 
   # Role enum
@@ -47,7 +52,9 @@ class User < ApplicationRecord
     vote: :email_on_vote,
     results: :email_on_results,
     digest: :email_digest,
-    judging: :email_on_judging
+    judging: :email_on_judging,
+    new_follower: :email_on_new_follower,
+    followed_entry: :email_on_followed_entry
   }.freeze
 
   # Validations
@@ -188,6 +195,14 @@ class User < ApplicationRecord
   def days_until_deletion
     return nil unless deletion_scheduled_at
     ((deletion_scheduled_at - Time.current) / 1.day).ceil
+  end
+
+  def following?(other_user)
+    active_follows.exists?(followed_id: other_user.id)
+  end
+
+  def liked?(entry)
+    reactions.exists?(entry_id: entry.id, reaction_type: "like")
   end
 
   def email_enabled?(notification_type)

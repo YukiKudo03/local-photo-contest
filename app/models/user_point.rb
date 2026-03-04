@@ -12,7 +12,9 @@ class UserPoint < ApplicationRecord
     "prize_2nd" => 30,
     "prize_3rd" => 20,
     "prize_other" => 10,
-    "milestone_achieved" => 5
+    "milestone_achieved" => 5,
+    "follow" => 2,
+    "like" => 1
   }.freeze
 
   ACTION_TYPES = POINT_VALUES.keys.freeze

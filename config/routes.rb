@@ -57,7 +57,13 @@ Rails.application.routes.draw do
   resources :entries, only: [ :show, :edit, :update, :destroy ] do
     resource :vote, only: [ :create, :destroy ]
     resources :comments, only: [ :create, :destroy ]
+    resource :reaction, only: [ :create, :destroy ]
   end
+  # Public user profiles & follows
+  resources :users, only: [ :show ] do
+    resource :follow, only: [ :create, :destroy ]
+  end
+
   resources :spots, only: [] do
     resource :spot_vote, only: [ :create, :destroy ]
   end
@@ -77,6 +83,7 @@ Rails.application.routes.draw do
     resource :account_deletion, only: [ :new, :create, :destroy ]
     resource :tutorial_settings, only: [ :show, :update ]
     resources :api_tokens, only: [ :index, :create, :destroy ]
+    resources :activity_feed, only: [ :index ]
 
     # Judge assignments dashboard
     resources :judge_assignments, only: [ :index, :show ] do

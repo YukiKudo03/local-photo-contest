@@ -20,7 +20,12 @@ class UserMilestone < ApplicationRecord
     comments_10: "comments_10",
     comments_50: "comments_50",
     votes_10: "votes_10",
-    votes_50: "votes_50"
+    votes_50: "votes_50",
+    first_follow: "first_follow",
+    followers_10: "followers_10",
+    followers_50: "followers_50",
+    likes_received_10: "likes_received_10",
+    likes_received_50: "likes_received_50"
   }.freeze
 
   # バッジ情報
@@ -40,7 +45,12 @@ class UserMilestone < ApplicationRecord
     "comments_10" => { name: "コメンテーター", icon: "chat-bubble-left", color: "teal" },
     "comments_50" => { name: "トップコメンテーター", icon: "chat-bubble-left-right", color: "cyan" },
     "votes_10" => { name: "投票マスター", icon: "hand-thumb-up", color: "pink" },
-    "votes_50" => { name: "投票の達人", icon: "hand-thumb-up", color: "rose" }
+    "votes_50" => { name: "投票の達人", icon: "hand-thumb-up", color: "rose" },
+    "first_follow" => { name: "初フォロー", icon: "user-plus", color: "blue" },
+    "followers_10" => { name: "人気者", icon: "users", color: "purple" },
+    "followers_50" => { name: "インフルエンサー", icon: "users", color: "indigo" },
+    "likes_received_10" => { name: "いいねマスター", icon: "heart", color: "pink" },
+    "likes_received_50" => { name: "いいねの達人", icon: "heart", color: "rose" }
   }.freeze
 
   validates :milestone_type, presence: true, inclusion: { in: TYPES.values }

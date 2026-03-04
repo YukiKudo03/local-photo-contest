@@ -7,6 +7,7 @@ module EntryNotifications
     after_create_commit :broadcast_new_entry_notification
     after_create_commit :send_entry_submitted_email
     after_create_commit :enqueue_exif_extraction
+    after_create_commit :notify_followers
     after_commit :clear_statistics_cache, on: [ :create, :destroy ]
   end
 
@@ -28,6 +29,12 @@ module EntryNotifications
     StatisticsService.clear_cache(contest)
   rescue => e
     Rails.logger.error("Failed to clear statistics cache: #{e.message}")
+  end
+
+  def notify_followers
+    FollowedUserEntryNotificationJob.perform_later(id)
+  rescue => e
+    Rails.logger.error("Failed to notify followers: #{e.message}")
   end
 
   def enqueue_exif_extraction

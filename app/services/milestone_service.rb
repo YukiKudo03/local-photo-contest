@@ -24,6 +24,12 @@ class MilestoneService
       check_first_contest_completed(metadata)
     when :complete_judging
       check_all_entries_judged(metadata)
+    when :follow
+      check_first_follow(metadata)
+    when :gain_follower
+      check_follower_count_milestones
+    when :receive_like
+      check_likes_received_milestones
     end
 
     # 機能レベル更新
@@ -118,6 +124,25 @@ class MilestoneService
     award_if_threshold("consecutive_3_contests", max_streak, 3)
     award_if_threshold("consecutive_5_contests", max_streak, 5)
     award_if_threshold("consecutive_10_contests", max_streak, 10)
+  end
+
+  def check_first_follow(metadata)
+    return if @user.achieved_milestone?("first_follow")
+
+    UserMilestone.achieve!(@user, "first_follow", metadata)
+    broadcast_achievement("first_follow")
+  end
+
+  def check_follower_count_milestones
+    count = @user.followers_count
+    award_if_threshold("followers_10", count, 10)
+    award_if_threshold("followers_50", count, 50)
+  end
+
+  def check_likes_received_milestones
+    count = Reaction.joins(:entry).where(entries: { user_id: @user.id }).count
+    award_if_threshold("likes_received_10", count, 10)
+    award_if_threshold("likes_received_50", count, 50)
   end
 
   def award_if_threshold(milestone_type, current_count, threshold)

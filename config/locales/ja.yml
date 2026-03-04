@@ -82,6 +82,7 @@ ja:
       too_long: は%{count}文字以下で入力してください
       invalid: は有効ではありません
       confirmation: と%{attribute}が一致しません
+      cannot_follow_self: 自分自身をフォローすることはできません
   helpers:
     submit:
       create: 作成する

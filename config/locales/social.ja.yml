@@ -1,0 +1,41 @@
+ja:
+  social:
+    follows:
+      follow: フォロー
+      unfollow: フォロー解除
+      following: フォロー中
+      followers: フォロワー
+      following_count: フォロー中
+      no_followers: まだフォロワーはいません
+      no_following: まだ誰もフォローしていません
+    reactions:
+      like: いいね
+      liked: いいね済み
+      likes_count:
+        zero: "まだいいねはありません"
+        one: "%{count}いいね"
+        other: "%{count}いいね"
+    activity_feed:
+      title: アクティビティフィード
+      subtitle: フォロー中のユーザーの活動
+      empty_state: フォロー中のユーザーの新しい活動はありません
+      empty_no_follows: 他のフォトグラファーをフォローして、活動を確認しましょう
+      new_entry: "%{user}が「%{contest}」に作品を投稿しました"
+      new_award: "%{user}が「%{contest}」で%{rank}位を獲得しました"
+      browse_gallery: ギャラリーを見る
+    profile:
+      entries: 作品数
+      portfolio_title: ポートフォリオ
+      award_history_title: 受賞歴
+      no_awards: まだ受賞歴はありません
+      no_portfolio: まだ作品がありません
+      likes_received: 獲得いいね
+      prizes_won: 受賞回数
+  flash:
+    follows:
+      created: フォローしました
+      destroyed: フォローを解除しました
+      cannot_follow_self: 自分自身をフォローすることはできません
+      already_following: 既にフォローしています
+    reactions:
+      toggled: いいねを更新しました

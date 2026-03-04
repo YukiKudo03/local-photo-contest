@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_03_235815) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -261,6 +261,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
     t.integer "location_source", default: 0
     t.integer "moderation_status", default: 0, null: false
     t.json "exif_data"
+    t.integer "reactions_count", default: 0, null: false
     t.index ["area_id"], name: "index_entries_on_area_id"
     t.index ["contest_id", "moderation_status"], name: "index_entries_on_contest_id_and_moderation_status"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
@@ -293,6 +294,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
     t.datetime "updated_at", null: false
     t.index ["user_id", "feature_key"], name: "index_feature_unlocks_on_user_id_and_feature_key", unique: true
     t.index ["user_id"], name: "index_feature_unlocks_on_user_id"
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.integer "follower_id", null: false
+    t.integer "followed_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id", "follower_id"], name: "index_follows_on_followed_id_and_follower_id"
+    t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
   end
 
   create_table "judge_comments", force: :cascade do |t|
@@ -368,6 +378,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
     t.index ["user_id", "created_at"], name: "index_notifications_on_user_id_and_created_at"
     t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "reactions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "entry_id", null: false
+    t.string "reaction_type", limit: 20, default: "like", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_id", "reaction_type"], name: "index_reactions_on_entry_id_and_reaction_type"
+    t.index ["user_id", "entry_id", "reaction_type"], name: "idx_reactions_user_entry_type", unique: true
   end
 
   create_table "spot_votes", force: :cascade do |t|
@@ -537,6 +557,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
     t.json "dashboard_settings", default: {}
     t.integer "total_points", default: 0, null: false
     t.integer "level", default: 1, null: false
+    t.integer "followers_count", default: 0, null: false
+    t.integer "following_count", default: 0, null: false
+    t.boolean "email_on_new_follower", default: true, null: false
+    t.boolean "email_on_followed_entry", default: true, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["feature_level"], name: "index_users_on_feature_level"
@@ -616,6 +640,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
   add_foreign_key "entries", "users"
   add_foreign_key "evaluation_criteria", "contests"
   add_foreign_key "feature_unlocks", "users"
+  add_foreign_key "follows", "users", column: "followed_id"
+  add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "judge_comments", "contest_judges"
   add_foreign_key "judge_comments", "entries"
   add_foreign_key "judge_evaluations", "contest_judges"
@@ -627,6 +653,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_02_103202) do
   add_foreign_key "moderation_results", "entries"
   add_foreign_key "moderation_results", "users", column: "reviewed_by_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "reactions", "entries"
+  add_foreign_key "reactions", "users"
   add_foreign_key "spot_votes", "spots"
   add_foreign_key "spot_votes", "users"
   add_foreign_key "spots", "contests"

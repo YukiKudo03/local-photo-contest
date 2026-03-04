@@ -1,0 +1,16 @@
+<h2><%= t('mailers.notification.followed_user_entry.header') %></h2>
+
+<p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+
+<p><%= t('mailers.notification.followed_user_entry.body', user: @author.display_name, contest_title: @contest.title) %></p>
+
+<p>
+  <%= link_to t('mailers.notification.followed_user_entry.view_button'), entry_url(@entry) %>
+</p>
+
+<hr>
+<p style="color: #999; font-size: 12px;">
+  <%= t('mailers.common.auto_sent') %>
+  <br>
+  <%= link_to t('mailers.common.change_settings'), @unsubscribe_url %>
+</p>

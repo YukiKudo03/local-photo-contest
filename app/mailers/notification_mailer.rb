@@ -66,6 +66,31 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  # --- ソーシャル ---
+
+  def new_follower(follow)
+    @follow = follow
+    @user = follow.followed
+    @follower = follow.follower
+
+    @unsubscribe_url = unsubscribe_url_for(@user)
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.new_follower.subject', user: @follower.display_name))
+    end
+  end
+
+  def followed_user_entry(entry, follower)
+    @entry = entry
+    @user = follower
+    @author = entry.user
+    @contest = entry.contest
+
+    @unsubscribe_url = unsubscribe_url_for(@user)
+    I18n.with_locale(@user.locale || I18n.default_locale) do
+      mail(to: @user.email, subject: t('mailers.notification.followed_user_entry.subject', user: @author.display_name))
+    end
+  end
+
   # --- 主催者向け ---
 
   def daily_digest(user, contests_with_entries)

@@ -31,6 +31,21 @@ en:
       votes_50:
         name: "Voting Expert"
         description: "Voted 50 times"
+      first_follow:
+        name: "First Follow"
+        description: "Followed a user for the first time"
+      followers_10:
+        name: "Popular"
+        description: "Gained 10 followers"
+      followers_50:
+        name: "Influencer"
+        description: "Gained 50 followers"
+      likes_received_10:
+        name: "Like Master"
+        description: "Received 10 likes"
+      likes_received_50:
+        name: "Like Expert"
+        description: "Received 50 likes"
     points:
       submit_entry: "+10 pts - Entry submitted"
       vote: "+1 pt - Voted"
@@ -38,6 +53,8 @@ en:
       prize_1st: "+50 pts - 1st place"
       prize_2nd: "+30 pts - 2nd place"
       prize_3rd: "+20 pts - 3rd place"
+      follow: "+2 pts - Followed"
+      like: "+1 pt - Liked"
     levels:
       title: "Level"
       current: "Level %{level}"

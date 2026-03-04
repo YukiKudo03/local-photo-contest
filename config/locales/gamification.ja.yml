@@ -31,6 +31,21 @@ ja:
       votes_50:
         name: "投票の達人"
         description: "50回投票"
+      first_follow:
+        name: "初フォロー"
+        description: "初めてユーザーをフォロー"
+      followers_10:
+        name: "人気者"
+        description: "10人のフォロワーを獲得"
+      followers_50:
+        name: "インフルエンサー"
+        description: "50人のフォロワーを獲得"
+      likes_received_10:
+        name: "いいねマスター"
+        description: "10いいねを獲得"
+      likes_received_50:
+        name: "いいねの達人"
+        description: "50いいねを獲得"
     points:
       submit_entry: "+10 pt - 作品投稿"
       vote: "+1 pt - 投票"
@@ -38,6 +53,8 @@ ja:
       prize_1st: "+50 pt - 最優秀賞"
       prize_2nd: "+30 pt - 優秀賞"
       prize_3rd: "+20 pt - 入選"
+      follow: "+2 pt - フォロー"
+      like: "+1 pt - いいね"
     levels:
       title: "レベル"
       current: "レベル %{level}"

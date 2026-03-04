@@ -45,7 +45,7 @@
       <!-- Stats -->
       <div class="pt-6 border-t border-gray-100">
         <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('my.profile.show.activity_title') %></h3>
-        <div class="grid grid-cols-3 gap-4 text-center">
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-4 text-center">
           <div class="bg-gray-50 rounded-lg p-4">
             <div class="text-2xl font-bold text-indigo-600"><%= @user.entries.count %></div>
             <div class="text-sm text-gray-500"><%= t('my.profile.show.entries_count') %></div>
@@ -58,8 +58,60 @@
             <div class="text-2xl font-bold text-green-500"><%= @user.comments.count %></div>
             <div class="text-sm text-gray-500"><%= t('my.profile.show.comments_count') %></div>
           </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <div class="text-2xl font-bold text-purple-600"><%= @user.followers_count %></div>
+            <div class="text-sm text-gray-500"><%= t('social.follows.followers') %></div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <div class="text-2xl font-bold text-blue-500"><%= @user.following_count %></div>
+            <div class="text-sm text-gray-500"><%= t('social.follows.following_count') %></div>
+          </div>
         </div>
       </div>
+
+      <!-- Portfolio -->
+      <% if @portfolio.any? %>
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('social.profile.portfolio_title') %></h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <% @portfolio.each do |entry| %>
+              <%= link_to entry_path(entry), class: "group relative rounded-lg overflow-hidden aspect-square" do %>
+                <% if entry.photo.attached? %>
+                  <%= image_tag entry.photo.variant(resize_to_fill: [300, 300]), alt: entry.title, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-200", loading: "lazy" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Award History -->
+      <% if @award_history.any? %>
+        <div class="pt-6 border-t border-gray-100">
+          <h3 class="text-sm font-medium text-gray-500 mb-4"><%= t('social.profile.award_history_title') %></h3>
+          <div class="space-y-2">
+            <% @award_history.each do |ranking| %>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold
+                    <%= case ranking.rank
+                        when 1 then 'bg-yellow-100 text-yellow-700'
+                        when 2 then 'bg-gray-100 text-gray-700'
+                        when 3 then 'bg-amber-100 text-amber-700'
+                        else 'bg-blue-100 text-blue-700'
+                        end %>">
+                    <%= ranking.rank %>
+                  </span>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900"><%= ranking.entry.contest.title %></p>
+                    <p class="text-xs text-gray-500"><%= ranking.prize_label %></p>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
       <!-- Discovery Stats -->
       <%= render "my/profiles/discovery_stats", user: @user %>

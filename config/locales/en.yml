@@ -82,6 +82,7 @@ en:
       too_long: is too long (maximum is %{count} characters)
       invalid: is invalid
       confirmation: doesn't match %{attribute}
+      cannot_follow_self: You cannot follow yourself
   helpers:
     submit:
       create: Create

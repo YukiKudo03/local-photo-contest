@@ -78,3 +78,7 @@ en:
         accepting_entries: is now accepting entries
         finished: has finished accepting entries
         results_announced: results have been announced
+      new_follower_title: "%{user} started following you"
+      new_follower_message: You have a new follower
+      followed_user_entry_title: "%{user} submitted a new entry"
+      followed_user_entry_message: "%{user} submitted an entry to contest \"%{contest}\""

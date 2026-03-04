@@ -1,0 +1,16 @@
+<h2><%= t('mailers.notification.new_follower.header') %></h2>
+
+<p><%= t('mailers.common.greeting', name: @user.display_name) %></p>
+
+<p><%= t('mailers.notification.new_follower.body', user: @follower.display_name) %></p>
+
+<p>
+  <%= link_to t('mailers.notification.new_follower.view_button'), user_url(@follower) %>
+</p>
+
+<hr>
+<p style="color: #999; font-size: 12px;">
+  <%= t('mailers.common.auto_sent') %>
+  <br>
+  <%= link_to t('mailers.common.change_settings'), @unsubscribe_url %>
+</p>

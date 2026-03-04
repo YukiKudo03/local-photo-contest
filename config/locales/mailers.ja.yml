@@ -103,6 +103,16 @@ ja:
         body: "コンテスト「%{contest_title}」が自動アーカイブされました。"
         explanation: アーカイブされたコンテストは一般公開されなくなります。ダッシュボードからアーカイブを解除できます。
         view_button: コンテストを管理する
+      new_follower:
+        subject: "%{user}さんがあなたをフォローしました"
+        header: 新しいフォロワー
+        body: "%{user}さんがあなたをフォローしました。"
+        view_button: プロフィールを見る
+      followed_user_entry:
+        subject: "%{user}さんが新しい作品を投稿しました"
+        header: フォロー中のユーザーの新着
+        body: "%{user}さんがコンテスト「%{contest_title}」に新しい作品を投稿しました。"
+        view_button: 作品を見る
       judging_escalation:
         subject: "【%{contest_title}】審査員の審査が遅延しています"
         header: 審査遅延のお知らせ

@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "reaction_button_#{entry.id}" do %>
+  <% liked = current_user&.liked?(entry) %>
+  <%= button_to entry_reaction_path(entry), method: liked ? :delete : :post, class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors #{liked ? 'bg-pink-100 text-pink-700 hover:bg-pink-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}", data: { controller: "reaction" } do %>
+    <svg class="h-4 w-4" fill="<%= liked ? 'currentColor' : 'none' %>" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+    <span><%= entry.reactions_count %></span>
+  <% end %>
+<% end %>

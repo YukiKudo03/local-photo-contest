@@ -1,0 +1,79 @@
+<div class="container mx-auto max-w-2xl px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('social.activity_feed.title') %></h1>
+    <p class="mt-1 text-sm text-gray-500"><%= t('social.activity_feed.subtitle') %></p>
+  </div>
+
+  <% if @following_count == 0 %>
+    <!-- Empty: not following anyone -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+      </svg>
+      <p class="mt-4 text-gray-500"><%= t('social.activity_feed.empty_no_follows') %></p>
+      <%= link_to t('social.activity_feed.browse_gallery'), gallery_index_path, class: "mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium" %>
+    </div>
+  <% elsif @feed[:entries].empty? && @feed[:rankings].empty? %>
+    <!-- Empty: following but no activity -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <p class="text-gray-500"><%= t('social.activity_feed.empty_state') %></p>
+    </div>
+  <% else %>
+    <div class="space-y-4">
+      <!-- Recent Entries from followed users -->
+      <% @feed[:entries].each do |entry| %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="p-4">
+            <div class="flex items-center gap-3 mb-3">
+              <% if entry.user.avatar.attached? %>
+                <%= link_to user_path(entry.user) do %>
+                  <%= image_tag entry.user.avatar.variant(resize_to_fill: [40, 40]), alt: entry.user.display_name, class: "w-10 h-10 rounded-full object-cover", loading: "lazy" %>
+                <% end %>
+              <% else %>
+                <%= link_to user_path(entry.user), class: "w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center" do %>
+                  <span class="text-sm font-bold text-indigo-600"><%= entry.user.initial %></span>
+                <% end %>
+              <% end %>
+              <div>
+                <p class="text-sm text-gray-900">
+                  <%= t('social.activity_feed.new_entry', user: entry.user.display_name, contest: entry.contest.title) %>
+                </p>
+                <p class="text-xs text-gray-400"><%= time_ago_in_words(entry.created_at) %></p>
+              </div>
+            </div>
+            <% if entry.photo.attached? %>
+              <%= link_to entry_path(entry) do %>
+                <%= image_tag entry.photo.variant(resize_to_limit: [600, 400]), alt: entry.title, class: "w-full rounded-lg object-cover", loading: "lazy" %>
+              <% end %>
+            <% end %>
+            <% if entry.title.present? %>
+              <p class="mt-2 text-sm font-medium text-gray-900"><%= entry.title %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Recent Awards from followed users -->
+      <% @feed[:rankings].each do |ranking| %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full text-lg font-bold
+              <%= case ranking.rank
+                  when 1 then 'bg-yellow-100 text-yellow-700'
+                  when 2 then 'bg-gray-100 text-gray-700'
+                  when 3 then 'bg-amber-100 text-amber-700'
+                  end %>">
+              <%= ranking.rank %>
+            </span>
+            <div>
+              <p class="text-sm text-gray-900">
+                <%= t('social.activity_feed.new_award', user: ranking.entry.user.display_name, contest: ranking.entry.contest.title, rank: ranking.rank) %>
+              </p>
+              <p class="text-xs text-gray-500"><%= ranking.prize_label %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

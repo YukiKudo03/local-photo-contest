@@ -78,3 +78,7 @@ ja:
         accepting_entries: の応募が開始されました
         finished: の応募が終了しました
         results_announced: の結果が発表されました
+      new_follower_title: "%{user}があなたをフォローしました"
+      new_follower_message: 新しいフォロワーが増えました
+      followed_user_entry_title: "%{user}が新しい作品を投稿しました"
+      followed_user_entry_message: "%{user}がコンテスト「%{contest}」に作品を投稿しました"

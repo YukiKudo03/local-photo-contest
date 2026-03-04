@@ -1,0 +1,41 @@
+en:
+  social:
+    follows:
+      follow: Follow
+      unfollow: Unfollow
+      following: Following
+      followers: Followers
+      following_count: Following
+      no_followers: No followers yet
+      no_following: Not following anyone yet
+    reactions:
+      like: Like
+      liked: Liked
+      likes_count:
+        zero: "No likes yet"
+        one: "%{count} like"
+        other: "%{count} likes"
+    activity_feed:
+      title: Activity Feed
+      subtitle: Activity from users you follow
+      empty_state: No new activity from users you follow
+      empty_no_follows: Follow other photographers to see their activity
+      new_entry: "%{user} submitted an entry to \"%{contest}\""
+      new_award: "%{user} won %{rank} place in \"%{contest}\""
+      browse_gallery: Browse Gallery
+    profile:
+      entries: Entries
+      portfolio_title: Portfolio
+      award_history_title: Award History
+      no_awards: No awards yet
+      no_portfolio: No entries yet
+      likes_received: Likes Received
+      prizes_won: Prizes Won
+  flash:
+    follows:
+      created: User followed
+      destroyed: User unfollowed
+      cannot_follow_self: You cannot follow yourself
+      already_following: Already following this user
+    reactions:
+      toggled: Reaction updated

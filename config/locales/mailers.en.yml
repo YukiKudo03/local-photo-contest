@@ -103,6 +103,16 @@ en:
         body: "Your contest \"%{contest_title}\" has been automatically archived."
         explanation: Archived contests are no longer displayed publicly. You can unarchive from the dashboard if needed.
         view_button: Manage Contest
+      new_follower:
+        subject: "%{user} started following you"
+        header: New Follower
+        body: "%{user} started following you."
+        view_button: View Profile
+      followed_user_entry:
+        subject: "%{user} submitted a new entry"
+        header: New Entry from Followed User
+        body: "%{user} submitted a new entry to contest \"%{contest_title}\"."
+        view_button: View Entry
       judging_escalation:
         subject: "[%{contest_title}] Judge evaluation delayed"
         header: Judge Evaluation Delayed

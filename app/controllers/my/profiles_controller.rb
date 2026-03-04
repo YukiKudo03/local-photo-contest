@@ -8,6 +8,9 @@ module My
       @user = current_user
       @level_progress = LevelCalculator.progress_to_next_level(@user.total_points)
       @achievements = @user.milestones.recent
+      profile_service = UserProfileService.new(@user)
+      @portfolio = profile_service.portfolio_entries
+      @award_history = profile_service.award_history
     end
 
     def edit

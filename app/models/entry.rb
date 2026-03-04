@@ -27,6 +27,7 @@ class Entry < ApplicationRecord
   has_many :judge_comments, dependent: :destroy
   has_one :moderation_result, dependent: :destroy
   has_one :contest_ranking, dependent: :destroy
+  has_many :reactions, dependent: :destroy
   has_many :challenge_entries, dependent: :destroy
   has_many :discovery_challenges, through: :challenge_entries
 
@@ -75,6 +76,10 @@ class Entry < ApplicationRecord
 
   def votes_count
     votes.count
+  end
+
+  def liked_by?(other_user)
+    reactions.exists?(user: other_user, reaction_type: "like")
   end
 
   def judge_average_score
