@@ -323,4 +323,4 @@
 
 ---
 
-*このマニュアルは Local Photo Contest v1.2 に基づいています。*
+*このマニュアルは Local Photo Contest v2.0 に基づいています。*

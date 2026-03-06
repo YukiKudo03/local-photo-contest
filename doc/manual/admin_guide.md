@@ -34,8 +34,10 @@
 ├─────────────────────────────────────────────────────────┤
 │  Database: PostgreSQL                                    │
 │  Storage: Active Storage (ローカル or S3)               │
-│  Job Queue: Solid Queue / Sidekiq                       │
-│  外部連携: AWS Rekognition (コンテンツ審査)             │
+│  Job Queue: Solid Queue (20ジョブ)                      │
+│  Cache: Solid Cache / Redis                              │
+│  Real-time: Action Cable (Solid Cable)                   │
+│  外部連携: AWS Rekognition (コンテンツ審査・画像分析)   │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -311,12 +313,13 @@ AWS Rekognition の画像処理料金：
 ```ruby
 # Rails コンソール
 
-# 保留中のジョブ数
-ModerationJob.queue_adapter.enqueued_jobs.count
+# Solid Queue のジョブ状態確認
+SolidQueue::Job.where(queue_name: "default").count
+SolidQueue::FailedExecution.count
 
-# Sidekiq使用時
-require 'sidekiq/api'
-Sidekiq::Queue.new('moderation').size
+# 特定のジョブクラスの確認
+SolidQueue::Job.where(class_name: "ModerationJob").count
+SolidQueue::Job.where(class_name: "ImageAnalysisJob").count
 ```
 
 ---
@@ -339,23 +342,38 @@ tail -f log/sidekiq.log
 
 | メトリクス | 確認方法 | 警告閾値 |
 |-----------|----------|----------|
-| ジョブキュー長 | Sidekiq Dashboard | > 100 |
+| ジョブキュー長 | Rails コンソール | > 100 |
 | 要確認応募数 | 管理画面 | > 10/日 |
 | エラーログ | log/production.log | 増加傾向 |
 | ディスク使用量 | df -h | > 80% |
+
+### 定期ジョブ
+
+システムには以下の定期ジョブが設定されています（`config/recurring.yml`）：
+
+| ジョブ | スケジュール | 説明 |
+|--------|------------|------|
+| ContestStateTransitionJob | 5分ごと | コンテスト自動状態遷移 |
+| StatisticsCacheWarmupJob | 30分ごと | 統計キャッシュ事前計算 |
+| DailyDigestJob | 毎日 8:00 | 日次ダイジェストメール |
+| JudgingReminderJob | 毎週月曜 9:00 | 審査リマインダー |
+| ContestAutoArchiveJob | 毎日 2:00 | コンテスト自動アーカイブ |
+| AccountDeletionJob | 毎日 4:00 | アカウント削除処理 |
 
 ### ジョブの再実行
 
 失敗したジョブを再実行：
 
 ```ruby
-# Sidekiq使用時
-require 'sidekiq/api'
-rs = Sidekiq::RetrySet.new
-rs.each(&:retry)
+# Solid Queue の失敗ジョブを確認・再実行
+SolidQueue::FailedExecution.find_each do |failed|
+  failed.retry
+end
 
-# 特定のジョブを再実行
-Sidekiq::RetrySet.new.select { |job| job.klass == 'ModerationJob' }.each(&:retry)
+# 特定のジョブクラスのみ再実行
+SolidQueue::FailedExecution.joins(:job)
+  .where(solid_queue_jobs: { class_name: "ModerationJob" })
+  .find_each(&:retry)
 ```
 
 ---
@@ -489,28 +507,26 @@ export AWS_SECRET_ACCESS_KEY=your_secret
 
 ### ジョブが詰まっている
 
-**症状**: モデレーションキューが増え続ける
+**症状**: ジョブキューが増え続ける
 
 **対処**:
 
-1. ワーカー数の確認
+1. Solid Queue プロセスの確認
 ```bash
-# Sidekiq
-ps aux | grep sidekiq
+ps aux | grep solid_queue
 ```
 
-2. ワーカーの追加
-```yaml
-# config/sidekiq.yml
-:concurrency: 10
-:queues:
-  - [moderation, 5]
-  - [default, 1]
-```
-
-3. キューのクリア（注意して実行）
+2. キューの状態確認
 ```ruby
-Sidekiq::Queue.new('moderation').clear
+# Rails コンソール
+SolidQueue::ReadyExecution.count    # 実行待ちジョブ数
+SolidQueue::ClaimedExecution.count  # 実行中ジョブ数
+SolidQueue::FailedExecution.count   # 失敗ジョブ数
+```
+
+3. 古い完了ジョブのクリア
+```ruby
+SolidQueue::Job.clear_finished_in_batches
 ```
 
 ### ディスク容量不足
@@ -581,4 +597,4 @@ bundle exec rails db:migrate
 
 ---
 
-*このマニュアルは Local Photo Contest v1.2 に基づいています。*
+*このマニュアルは Local Photo Contest v2.0 に基づいています。*

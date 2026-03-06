@@ -5,7 +5,7 @@
 - Ruby 3.4.x
 - Node.js (for asset compilation)
 - SQLite3 or PostgreSQL
-- ImageMagick (for image processing)
+- ImageMagick (for image processing, quality scoring, and image analysis features)
 
 ## Local Development Setup
 
@@ -65,13 +65,15 @@ SENTRY_DSN=your_sentry_dsn
 ### Run all tests
 
 ```bash
-bundle exec rspec
+bin/bundle exec rspec
 ```
+
+The test suite contains 2207+ tests covering models, controllers, services, jobs, and system tests. A full run may take several minutes.
 
 ### Run with coverage
 
 ```bash
-COVERAGE=true bundle exec rspec
+COVERAGE=true bin/bundle exec rspec
 ```
 
 Coverage report will be generated in `coverage/index.html`.
@@ -80,19 +82,28 @@ Coverage report will be generated in `coverage/index.html`.
 
 ```bash
 # Run model specs
-bundle exec rspec spec/models
+bin/bundle exec rspec spec/models
+
+# Run service specs
+bin/bundle exec rspec spec/services
+
+# Run job specs
+bin/bundle exec rspec spec/jobs
+
+# Run image analysis specs
+bin/bundle exec rspec spec/services/image_analysis/
 
 # Run a specific file
-bundle exec rspec spec/models/entry_spec.rb
+bin/bundle exec rspec spec/models/entry_spec.rb
 
 # Run a specific test
-bundle exec rspec spec/models/entry_spec.rb:42
+bin/bundle exec rspec spec/models/entry_spec.rb:42
 ```
 
 ### Run system tests
 
 ```bash
-bundle exec rspec spec/system
+bin/bundle exec rspec spec/system
 ```
 
 ## Code Quality
@@ -133,6 +144,42 @@ bin/rails db:rollback
 ```bash
 # Reset and reseed
 bin/rails db:reset
+```
+
+## Background Jobs
+
+The application uses Solid Queue as its job backend with 20 background jobs. Recurring job schedules are defined in `config/recurring.yml`.
+
+### Key jobs
+
+| Job | Purpose | Schedule |
+|-----|---------|----------|
+| `ContestStateTransitionJob` | Transition contests between states | Every 5 minutes |
+| `StatisticsCacheWarmupJob` | Pre-warm statistics caches | Every 30 minutes |
+| `DailyDigestJob` | Send daily digest emails | 8:00 AM JST daily |
+| `JudgingDeadlineJob` | Notify judges of approaching deadlines | 9:00 AM JST daily |
+| `GraduatedJudgingReminderJob` | Graduated reminders for pending judges | 9:00 AM JST daily |
+| `WinnerNotificationJob` | Notify contest winners | 10:00 AM JST daily |
+| `ContestAutoArchiveJob` | Archive old completed contests | 2:00 AM JST daily |
+| `DataExportCleanupJob` | Clean up expired data exports | 3:00 AM JST daily |
+| `AccountDeletionJob` | Process scheduled account deletions | 4:00 AM JST daily |
+| `DeletionReminderJob` | Remind users before account deletion | 9:30 AM JST daily |
+| `JudgingReminderJob` | Weekly judging reminders | 9:00 AM JST Mondays |
+| `AnalyticsReportJob` | Generate weekly analytics reports | 3:00 AM JST Mondays |
+| `ImageAnalysisJob` | Auto-tag and score images on upload | Triggered on entry creation |
+| `ModerationJob` | Content moderation via AWS Rekognition | Triggered on entry creation |
+| `ExifExtractionJob` | Extract EXIF metadata from photos | Triggered on entry creation |
+| `FollowNotificationJob` | Notify users of new followers | Event-driven |
+| `FollowedUserEntryNotificationJob` | Notify followers of new entries | Event-driven |
+| `WebhookDeliveryJob` | Deliver webhook payloads | Event-driven |
+| `UserDataExportJob` | Export user data (GDPR) | On user request |
+
+### Running jobs in development
+
+Jobs are processed inline in the test environment. In development, start the job runner alongside the Rails server:
+
+```bash
+bin/dev
 ```
 
 ## Common Tasks
@@ -218,13 +265,19 @@ View with Swagger UI or import into Postman.
 
 ### Image processing errors
 
-Ensure ImageMagick is installed:
+ImageMagick is required for image uploads, quality scoring (`QualityScoreService`), and image hash computation (`ImageHashService`). Ensure it is installed:
+
 ```bash
 # macOS
 brew install imagemagick
 
 # Ubuntu
 sudo apt-get install imagemagick
+```
+
+If image analysis jobs fail silently, verify ImageMagick is accessible:
+```bash
+convert --version
 ```
 
 ### Database connection issues

@@ -16,6 +16,7 @@
    - [投票](#投票)
    - [審査員評価](#審査員評価)
    - [結果発表](#結果発表)
+   - [AI画像分析フロー](#ai画像分析フロー)
 
 ---
 
@@ -48,6 +49,10 @@ flowchart TB
         UC32[言語を切り替え]
         UC33[チュートリアルを利用]
         UC34[ヘルプを参照]
+        UC46[フォロー/アンフォロー]
+        UC47[リアクション]
+        UC48[ランキング確認]
+        UC49[ポイント・レベル確認]
     end
 
     subgraph "主催者のユースケース"
@@ -89,6 +94,9 @@ flowchart TB
         UC28[ランキングを計算]
         UC44[EXIF情報を抽出]
         UC45[日次ダイジェストを送信]
+        UC50[画像分析（タグ・品質・ハッシュ）]
+        UC51[統計キャッシュ事前計算]
+        UC52[ポイント計算]
     end
 
     P --> UC1
@@ -107,6 +115,10 @@ flowchart TB
     P --> UC32
     P --> UC33
     P --> UC34
+    P --> UC46
+    P --> UC47
+    P --> UC48
+    P --> UC49
 
     O --> UC11
     O --> UC12
@@ -140,6 +152,9 @@ flowchart TB
     S --> UC28
     S --> UC44
     S --> UC45
+    S --> UC50
+    S --> UC51
+    S --> UC52
 
     UC3 -.->|トリガー| UC26
     UC3 -.->|トリガー| UC44
@@ -151,11 +166,11 @@ flowchart TB
 
 | アクター | ユースケース |
 |---------|-------------|
-| 参加者 | コンテスト閲覧、作品応募、投票、コメント、通知確認、スポット発見・投票、チャレンジ参加、検索、チュートリアル、ヘルプ |
+| 参加者 | コンテスト閲覧、作品応募、投票、コメント、通知確認、スポット発見・投票、チャレンジ参加、検索、チュートリアル、ヘルプ、フォロー/アンフォロー、リアクション、ランキング確認、ポイント・レベル確認 |
 | 主催者 | コンテスト管理、エリア/スポット管理、審査員招待、モデレーション、テンプレート管理、統計分析、発見スポット認定、チャレンジ管理 |
 | 審査員 | 招待受諾/辞退、作品評価、審査コメント記入 |
 | 管理者 | ユーザー管理、カテゴリ管理、監査ログ、チュートリアル分析 |
-| システム | 画像モデレーション、通知送信、ランキング計算、EXIF抽出、日次ダイジェスト |
+| システム | 画像モデレーション、通知送信、ランキング計算、EXIF抽出、日次ダイジェスト、画像分析（タグ・品質・ハッシュ）、統計キャッシュ事前計算、ポイント計算 |
 
 ---
 
@@ -177,6 +192,17 @@ erDiagram
     User ||--o{ TutorialProgress : "tracks"
     User ||--o{ UserMilestone : "achieves"
     User ||--o{ FeatureUnlock : "unlocks"
+    User ||--o{ Follow : "follows"
+    User ||--o{ Reaction : "reacts"
+    User ||--o{ UserPoint : "earns"
+    User ||--o{ DataExportRequest : "requests"
+    User ||--o{ Webhook : "configures"
+    User ||--o{ ApiToken : "creates"
+
+    Entry ||--o{ Reaction : "receives"
+    Entry ||--o{ EntryTag : "has"
+    Tag ||--o{ EntryTag : "applied to"
+    Webhook ||--o{ WebhookDelivery : "delivers"
 
     Contest ||--o{ Entry : "has"
     Contest ||--o{ Spot : "has"
@@ -270,6 +296,11 @@ erDiagram
         integer location_source "manual/exif/gps"
         integer moderation_status "pending/approved/hidden/requires_review"
         json exif_data
+        integer votes_count
+        integer reactions_count
+        float quality_score
+        string image_hash
+        datetime image_analysis_completed_at
     }
 
     Spot {
@@ -517,6 +548,79 @@ erDiagram
         integer terms_of_service_id FK
         datetime accepted_at
         string ip_address
+    }
+
+    Follow {
+        integer id PK
+        integer follower_id FK
+        integer followed_id FK
+        datetime created_at
+    }
+
+    Reaction {
+        integer id PK
+        integer user_id FK
+        integer entry_id FK
+        string reaction_type
+        datetime created_at
+    }
+
+    UserPoint {
+        integer id PK
+        integer user_id FK
+        integer points
+        string action
+        string pointable_type
+        integer pointable_id
+        datetime created_at
+    }
+
+    Tag {
+        integer id PK
+        string name UK
+        string tag_type
+        datetime created_at
+    }
+
+    EntryTag {
+        integer id PK
+        integer entry_id FK
+        integer tag_id FK
+        decimal confidence
+    }
+
+    DataExportRequest {
+        integer id PK
+        integer user_id FK
+        integer status
+        string file_path
+        datetime requested_at
+        datetime completed_at
+    }
+
+    Webhook {
+        integer id PK
+        integer user_id FK
+        string url
+        json events
+        boolean active
+    }
+
+    WebhookDelivery {
+        integer id PK
+        integer webhook_id FK
+        string event
+        json payload
+        integer response_code
+    }
+
+    ApiToken {
+        integer id PK
+        integer user_id FK
+        string name
+        string token_digest
+        json scopes
+        datetime expires_at
     }
 ```
 
@@ -905,6 +1009,39 @@ sequenceDiagram
     Rails-->>Browser: 通知一覧表示
 ```
 
+### AI画像分析フロー
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Queue as Solid Queue
+    participant Job as ImageAnalysisJob
+    participant Tagging as AutoTaggingService
+    participant Quality as QualityScoreService
+    participant Hash as ImageHashService
+    participant Entry as Entry Model
+    participant DB as データベース
+
+    Queue->>Job: perform(entry_id)
+    Job->>Entry: find(entry_id)
+
+    Job->>Tagging: call(entry)
+    Note over Tagging: AWS Rekognition detect_labels
+    Tagging->>DB: INSERT tags, entry_tags
+
+    Job->>Quality: call(entry)
+    Note over Quality: EXIF分析 + 画像メタデータ分析
+    Quality->>DB: UPDATE entries SET quality_score
+
+    Job->>Hash: call(entry)
+    Note over Hash: dHash(知覚ハッシュ)生成
+    Hash->>DB: UPDATE entries SET image_hash
+
+    Job->>Entry: update(image_analysis_completed_at)
+    Entry->>DB: UPDATE entries
+    Job-->>Queue: Job completed
+```
+
 ---
 
 ## 補足：状態遷移図
@@ -997,7 +1134,8 @@ stateDiagram-v2
 | 結果発表 | `app/models/concerns/contest_state_machine.rb#announce_results!`, `app/services/ranking_calculator.rb` |
 | スポット発見 | `app/services/discovery_spot_service.rb`, `app/controllers/organizers/discovery_spots_controller.rb` |
 | 統計 | `app/services/statistics_service.rb`, `app/services/statistics_export_service.rb` |
+| AI画像分析 | `app/jobs/image_analysis_job.rb`, `app/services/auto_tagging_service.rb`, `app/services/quality_score_service.rb`, `app/services/image_hash_service.rb` |
 
 ---
 
-*このドキュメントは Local Photo Contest v1.3 に基づいています（2026-02-28 更新）。*
+*このドキュメントは Local Photo Contest v2.0 に基づいています（2026-03-05 更新）。*

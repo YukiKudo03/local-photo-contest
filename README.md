@@ -15,12 +15,19 @@ Local Photo Contest は、市区町村、商店街、観光協会、地域コミ
 - テーマ設定（地域の風景、祭り、グルメ等）
 - 応募期間・審査期間の管理
 - コンテストテンプレートによる簡単作成
+- 自動状態遷移（公開・終了・アーカイブのスケジューリング）
 
 ### 写真投稿・応募
 - 写真アップロード（JPEG, PNG, GIF対応、最大10MB）
 - 撮影場所の位置情報登録
 - 撮影スポットの選択・新規登録
 - EXIF情報の自動抽出（撮影日時、GPS座標、カメラ情報）
+
+### AI/ML 画像分析
+- **自動タグ付け**: AWS Rekognition による画像内容の自動タグ生成
+- **品質スコア**: EXIF情報 + 画像メタデータに基づく0〜100点の品質評価
+- **画像ハッシュ**: dHash（知覚ハッシュ）による類似画像検出
+- **類似作品表示**: ハッシュ距離 + タグベースの類似作品レコメンド
 
 ### 審査・投票システム
 - 一般投票機能
@@ -29,11 +36,23 @@ Local Photo Contest は、市区町村、商店街、観光協会、地域コミ
 - 3つのランキング方式: 投票のみ / 審査員のみ / ハイブリッド（重み付け設定可）
 - 標準競技ランキング（1224方式）
 
+### ソーシャル機能
+- **フォロー**: ユーザー間のフォロー/アンフォロー
+- **リアクション**: 作品への「いいね」リアクション
+- **アクティビティフィード**: フォロー中ユーザーの新規投稿通知
+
+### ゲーミフィケーション
+- **ポイントシステム**: 応募・投票・コメント等のアクションにポイント付与
+- **レベル**: 累計ポイントに応じたレベルアップ
+- **マイルストーン**: 達成バッジ（初投稿、10投票など）
+- **ランキング**: 総合ポイントランキング、月次・四半期ランキング
+
 ### ギャラリー・マップ表示
 - 応募作品一覧表示（無限スクロール対応）
 - 地図上での撮影スポット表示（Leaflet.js + OpenStreetMap）
-- コンテスト・カテゴリ・エリア別フィルタリング
-- 新着順・人気順・古い順の並び替え
+- コンテスト・カテゴリ・エリア・タグ別フィルタリング
+- 新着順・人気順・古い順・品質スコア順の並び替え
+- 類似作品レコメンド表示
 
 ### コンテンツモデレーション
 - AWS Rekognitionによる自動画像審査
@@ -53,13 +72,16 @@ Local Photo Contest は、市区町村、商店街、観光協会、地域コミ
 - 応募数推移グラフ（日次・週次）
 - エリア別応募分布
 - 投票分析ダッシュボード
+- 投稿ヒートマップ（曜日×時間帯）
+- リピーター率・コホート分析
 - 日付範囲フィルタリング（プリセット: 直近7日/30日/今週/今月）
 - CSV エクスポート（日次統計・概要・エントリー詳細・スポット）
-- 5分間のRedisキャッシュ
+- 統計キャッシュの自動ウォームアップ（30分間隔）
 
 ### 通知・メール
 - リアルタイム通知（Action Cable）
 - 9種類のメール通知（応募確認、コメント、投票、結果発表、入賞、審査リマインダー等）
+- フォローユーザーの新規投稿通知
 - 日次ダイジェストメール
 - ユーザー別メール配信設定（6項目）
 - トークンベースのワンクリック配信停止
@@ -88,6 +110,9 @@ Local Photo Contest は、市区町村、商店街、観光協会、地域コミ
 - PWA対応（Service Worker、オフラインフォールバック）
 - レート制限（Rack::Attack）
 - エラー監視（Sentry）
+- データエクスポート（GDPR対応）
+- アカウント削除・データパージ
+- Webhook連携
 
 ## 技術スタック
 
@@ -97,6 +122,7 @@ Local Photo Contest は、市区町村、商店街、観光協会、地域コミ
 - **認証**: Devise
 - **データベース**: SQLite (開発) / PostgreSQL (Docker・本番)
 - **画像処理**: Active Storage, MiniMagick
+- **AI/画像分析**: AWS Rekognition (タグ付け + モデレーション)
 - **リアルタイム通信**: Action Cable (Solid Cable)
 - **バックグラウンドジョブ**: Solid Queue
 - **キャッシュ**: Solid Cache, Redis
@@ -156,7 +182,7 @@ DB_USER=postgres
 DB_PASSWORD=password
 DB_NAME=local_photo_contest_development
 
-# AWS Rekognition（コンテンツモデレーション用・任意）
+# AWS Rekognition（コンテンツモデレーション・画像分析用・任意）
 AWS_REGION=ap-northeast-1
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
@@ -194,6 +220,9 @@ REDIS_URL=redis://localhost:6379/0
 | `/contests/:id/results` | コンテスト結果 |
 | `/gallery` | ギャラリー |
 | `/gallery/map` | マップ表示 |
+| `/rankings` | ポイントランキング |
+| `/rankings/monthly` | 月次ランキング |
+| `/rankings/quarterly` | 四半期ランキング |
 | `/search` | 横断検索 |
 | `/help` | ヘルプセンター |
 | `/help/:guide` | ガイド（participant / organizer / judge / admin） |
@@ -240,16 +269,16 @@ REDIS_URL=redis://localhost:6379/0
 
 ```bash
 # 全テスト実行
-bundle exec rspec
+bin/bundle exec rspec
 
 # 特定のテスト実行
-bundle exec rspec spec/models/
-bundle exec rspec spec/requests/
-bundle exec rspec spec/system/
-bundle exec rspec spec/services/
+bin/bundle exec rspec spec/models/
+bin/bundle exec rspec spec/requests/
+bin/bundle exec rspec spec/system/
+bin/bundle exec rspec spec/services/
 
 # カバレッジ付きで実行
-COVERAGE=true bundle exec rspec
+COVERAGE=true bin/bundle exec rspec
 # レポート: coverage/index.html
 ```
 
@@ -280,51 +309,64 @@ app/
 │   ├── contests/                 # コンテスト結果
 │   ├── gallery/                  # マップコントローラー
 │   ├── my/                       # ユーザー個人機能
-│   └── organizers/               # 運営者機能
-├── jobs/
+│   ├── organizers/               # 運営者機能
+│   ├── follows_controller.rb     # フォロー機能
+│   ├── reactions_controller.rb   # リアクション機能
+│   ├── rankings_controller.rb    # ランキング機能
+│   └── ...
+├── jobs/                          # 20個のバックグラウンドジョブ
 │   ├── daily_digest_job.rb       # 日次ダイジェストメール
 │   ├── exif_extraction_job.rb    # EXIF情報抽出
-│   ├── judging_deadline_job.rb   # 審査締め切り通知
-│   ├── judging_reminder_job.rb   # 審査リマインダー
-│   └── moderation_job.rb         # 画像モデレーション
+│   ├── image_analysis_job.rb     # AI画像分析（タグ・品質・ハッシュ）
+│   ├── moderation_job.rb         # 画像モデレーション
+│   ├── statistics_cache_warmup_job.rb  # 統計キャッシュウォームアップ
+│   ├── follow_notification_job.rb      # フォロー通知
+│   └── ...
 ├── mailers/
 │   ├── judge_invitation_mailer.rb
 │   └── notification_mailer.rb    # 9種類のメール通知
-├── models/
+├── models/                        # 38モデル
 │   ├── concerns/
 │   │   ├── contest_state_machine.rb  # コンテスト状態遷移
 │   │   ├── entry_notifications.rb    # エントリー通知コールバック
+│   │   ├── exif_accessible.rb        # EXIF情報アクセス
 │   │   ├── moderatable.rb            # モデレーション機能
 │   │   ├── searchable.rb             # 全文検索
 │   │   └── tutorial_trackable.rb     # チュートリアル追跡
-│   └── ...                       # 29モデル
-├── services/
+│   ├── follow.rb                 # フォロー
+│   ├── reaction.rb               # リアクション
+│   ├── user_point.rb             # ポイント
+│   ├── user_milestone.rb         # マイルストーン
+│   ├── tag.rb                    # 画像タグ
+│   ├── entry_tag.rb              # エントリー-タグ関連
+│   └── ...
+├── services/                      # 45サービス
 │   ├── admin/                    # 管理者統計
+│   ├── image_analysis/           # AI画像分析
+│   │   ├── auto_tagging_service.rb     # 自動タグ付け
+│   │   ├── quality_score_service.rb    # 品質スコア算出
+│   │   └── image_hash_service.rb       # 画像ハッシュ生成
 │   ├── moderation/               # コンテンツモデレーション
-│   │   ├── moderation_service.rb
-│   │   ├── providers.rb
-│   │   └── providers/            # AWS Rekognition等
 │   ├── ranking_strategies/       # ランキング計算戦略
-│   │   ├── base_strategy.rb
-│   │   ├── hybrid_strategy.rb
-│   │   ├── judge_only_strategy.rb
-│   │   └── vote_only_strategy.rb
-│   ├── discovery_spot_service.rb
-│   ├── entry_filter_service.rb   # 共通フィルターロジック
-│   ├── map_marker_service.rb
-│   ├── notification_broadcaster.rb
-│   ├── ranking_calculator.rb
-│   ├── statistics_service.rb
-│   ├── statistics_export_service.rb
+│   ├── activity_feed_service.rb  # アクティビティフィード
+│   ├── follow_service.rb         # フォロー管理
+│   ├── point_service.rb          # ポイント管理
+│   ├── milestone_service.rb      # マイルストーン管理
+│   ├── reaction_service.rb       # リアクション管理
+│   ├── season_ranking_service.rb # シーズンランキング
+│   ├── similar_entries_service.rb # 類似作品レコメンド
+│   ├── statistics_service.rb     # 統計分析
+│   ├── advanced_statistics_service.rb # 高度な統計分析
 │   └── ...
 └── views/
 
 config/
-├── locales/                      # i18n（日本語・英語、57ファイル）
+├── locales/                      # i18n（日本語・英語、72ファイル）
+├── recurring.yml                 # 定期ジョブ設定
 ├── routes.rb
 └── ...
 
-spec/
+spec/                              # 2207テスト
 ├── factories/                    # FactoryBot
 ├── models/
 ├── requests/
@@ -353,6 +395,22 @@ spec/
 | participant | 一般参加者（デフォルト） |
 | organizer | 運営者（コンテスト作成・管理） |
 | admin | 管理者（全機能アクセス） |
+
+## 定期ジョブ
+
+| ジョブ | スケジュール | 説明 |
+|--------|------------|------|
+| ContestStateTransitionJob | 5分ごと | コンテスト自動状態遷移 |
+| StatisticsCacheWarmupJob | 30分ごと | 統計キャッシュ事前計算 |
+| DailyDigestJob | 毎日 8:00 (JST) | 日次ダイジェストメール |
+| JudgingReminderJob | 毎週月曜 9:00 (JST) | 審査リマインダー |
+| GraduatedJudgingReminderJob | 毎日 9:00 (JST) | 段階的審査リマインダー |
+| JudgingDeadlineJob | 毎日 9:00 (JST) | 審査締め切り通知 |
+| WinnerNotificationJob | 毎日 10:00 (JST) | 入賞通知 |
+| ContestAutoArchiveJob | 毎日 2:00 (JST) | コンテスト自動アーカイブ |
+| DataExportCleanupJob | 毎日 3:00 (JST) | データエクスポートクリーンアップ |
+| AccountDeletionJob | 毎日 4:00 (JST) | アカウント削除処理 |
+| AnalyticsReportJob | 毎週月曜 3:00 (JST) | 週次分析レポート |
 
 ## デプロイ
 
