@@ -1,0 +1,26 @@
+<h2 style="color: #dc2626;"><%= t("backup.mailer.backup_failed.title") %></h2>
+
+<p><%= t("backup.mailer.backup_failed.body") %></p>
+
+<table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.type") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.backup_type %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.database") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.database_name %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.error") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd; color: #dc2626;"><%= @backup_record.error_message %></td>
+  </tr>
+  <% if @backup_record.duration %>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.duration") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= "%.1f" % @backup_record.duration %> <%= t("backup.mailer.seconds") %></td>
+  </tr>
+  <% end %>
+</table>
+
+<p><%= t("backup.mailer.backup_failed.action_required") %></p>

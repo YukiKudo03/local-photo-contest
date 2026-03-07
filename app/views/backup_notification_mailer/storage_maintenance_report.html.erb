@@ -1,0 +1,45 @@
+<h2><%= t("backup.mailer.storage_maintenance_report.title") %></h2>
+
+<p><%= t("backup.mailer.storage_maintenance_report.body") %></p>
+
+<h3><%= t("backup.mailer.storage_maintenance_report.integrity_section") %></h3>
+<table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.total_blobs") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @integrity_result.total_blobs %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.checked") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @integrity_result.checked %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.missing") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd; <%= @integrity_result.missing > 0 ? 'color: #dc2626;' : '' %>"><%= @integrity_result.missing %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.checksum_mismatch") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd; <%= @integrity_result.checksum_mismatch > 0 ? 'color: #dc2626;' : '' %>"><%= @integrity_result.checksum_mismatch %></td>
+  </tr>
+  <% if @integrity_result.errors.any? %>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.errors") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd; color: #dc2626;"><%= @integrity_result.errors.length %></td>
+  </tr>
+  <% end %>
+</table>
+
+<h3><%= t("backup.mailer.storage_maintenance_report.cleanup_section") %></h3>
+<table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.orphaned_blobs") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @cleanup_result.orphaned_blobs %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.orphaned_attachments") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @cleanup_result.orphaned_attachments %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage_maintenance_report.purged_count") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @cleanup_result.purged_count %></td>
+  </tr>
+</table>

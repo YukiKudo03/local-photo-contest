@@ -1,0 +1,10 @@
+<%= t("backup.mailer.backup_failed.title") %>
+
+<%= t("backup.mailer.backup_failed.body") %>
+
+<%= t("backup.mailer.type") %>: <%= @backup_record.backup_type %>
+<%= t("backup.mailer.database") %>: <%= @backup_record.database_name %>
+<%= t("backup.mailer.error") %>: <%= @backup_record.error_message %>
+<% if @backup_record.duration %><%= t("backup.mailer.duration") %>: <%= "%.1f" % @backup_record.duration %> <%= t("backup.mailer.seconds") %><% end %>
+
+<%= t("backup.mailer.backup_failed.action_required") %>

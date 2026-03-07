@@ -1,0 +1,85 @@
+ja:
+  activerecord:
+    models:
+      backup_record: バックアップ記録
+    attributes:
+      backup_record:
+        backup_type: バックアップ種別
+        database_name: データベース名
+        status: ステータス
+        filename: ファイル名
+        file_size: ファイルサイズ
+        checksum: チェックサム
+        encrypted: 暗号化
+        storage_location: 保存先
+        error_message: エラーメッセージ
+  backup:
+    mailer:
+      type: 種別
+      database: データベース
+      filename: ファイル名
+      file_size: ファイルサイズ
+      storage: 保存先
+      encrypted: 暗号化
+      duration: 所要時間
+      seconds: 秒
+      checksum: チェックサム
+      error: エラー
+      "yes": はい
+      "no": いいえ
+      backup_completed:
+        subject: "[バックアップ完了] データベースバックアップが正常に完了しました"
+        title: データベースバックアップ完了
+        body: データベースのバックアップが正常に完了しました。以下は詳細情報です。
+      backup_failed:
+        subject: "[バックアップ失敗] データベースバックアップに失敗しました"
+        title: データベースバックアップ失敗
+        body: データベースのバックアップ処理中にエラーが発生しました。
+        action_required: 速やかにエラー内容を確認し、必要な対応を行ってください。
+      storage_maintenance_report:
+        subject: "[ストレージメンテナンス] 定期メンテナンスレポート"
+        title: ストレージメンテナンスレポート
+        body: Active Storageの定期メンテナンス結果をお知らせします。
+        integrity_section: 整合性チェック結果
+        total_blobs: 総Blob数
+        checked: チェック済み
+        missing: 欠損ファイル
+        checksum_mismatch: チェックサム不一致
+        errors: エラー
+        cleanup_section: クリーンアップ結果
+        orphaned_blobs: 孤立Blob
+        orphaned_attachments: 孤立添付ファイル
+        purged_count: 削除数
+    rake:
+      database:
+        starting: "データベースバックアップを開始します (種別: %{type})"
+        completed: "バックアップ完了: %{filename} (%{size})"
+        failed: "バックアップ失敗: %{error}"
+      restore:
+        confirm: "本当にデータベースをリストアしますか？この操作は元に戻せません。(yes/no)"
+        cancelled: リストアを中止しました
+        starting: "リストアを開始します: %{file}"
+        completed: リストアが完了しました
+        failed: "リストア失敗: %{error}"
+        file_not_found: "ファイルが見つかりません: %{file}"
+      list:
+        title: バックアップ一覧
+        no_records: バックアップ記録がありません
+      prune:
+        completed: "古いバックアップを削除しました (%{count}件)"
+        no_pruning: 削除対象のバックアップはありません
+      download:
+        completed: "ダウンロード完了: %{destination}"
+        failed: "ダウンロード失敗: %{error}"
+    storage:
+      integrity:
+        starting: ストレージ整合性チェックを開始します
+        completed: 整合性チェック完了
+      orphans:
+        starting: 孤立ファイル検出を開始します (dry run)
+        found: "%{count}件の孤立ファイルを検出しました"
+        none: 孤立ファイルはありません
+      cleanup:
+        confirm: "孤立ファイルを削除しますか？(yes/no)"
+        cancelled: クリーンアップを中止しました
+        completed: "クリーンアップ完了 (%{count}件削除)"

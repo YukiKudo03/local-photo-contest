@@ -1,0 +1,85 @@
+en:
+  activerecord:
+    models:
+      backup_record: Backup Record
+    attributes:
+      backup_record:
+        backup_type: Backup Type
+        database_name: Database Name
+        status: Status
+        filename: Filename
+        file_size: File Size
+        checksum: Checksum
+        encrypted: Encrypted
+        storage_location: Storage Location
+        error_message: Error Message
+  backup:
+    mailer:
+      type: Type
+      database: Database
+      filename: Filename
+      file_size: File Size
+      storage: Storage
+      encrypted: Encrypted
+      duration: Duration
+      seconds: seconds
+      checksum: Checksum
+      error: Error
+      "yes": "Yes"
+      "no": "No"
+      backup_completed:
+        subject: "[Backup Completed] Database backup completed successfully"
+        title: Database Backup Completed
+        body: The database backup has completed successfully. Below are the details.
+      backup_failed:
+        subject: "[Backup Failed] Database backup has failed"
+        title: Database Backup Failed
+        body: An error occurred during the database backup process.
+        action_required: Please review the error and take necessary action immediately.
+      storage_maintenance_report:
+        subject: "[Storage Maintenance] Periodic Maintenance Report"
+        title: Storage Maintenance Report
+        body: Here are the results of the Active Storage periodic maintenance.
+        integrity_section: Integrity Check Results
+        total_blobs: Total Blobs
+        checked: Checked
+        missing: Missing Files
+        checksum_mismatch: Checksum Mismatch
+        errors: Errors
+        cleanup_section: Cleanup Results
+        orphaned_blobs: Orphaned Blobs
+        orphaned_attachments: Orphaned Attachments
+        purged_count: Purged Count
+    rake:
+      database:
+        starting: "Starting database backup (type: %{type})"
+        completed: "Backup completed: %{filename} (%{size})"
+        failed: "Backup failed: %{error}"
+      restore:
+        confirm: "Are you sure you want to restore the database? This cannot be undone. (yes/no)"
+        cancelled: Restore cancelled
+        starting: "Starting restore: %{file}"
+        completed: Restore completed
+        failed: "Restore failed: %{error}"
+        file_not_found: "File not found: %{file}"
+      list:
+        title: Backup List
+        no_records: No backup records found
+      prune:
+        completed: "Pruned old backups (%{count} deleted)"
+        no_pruning: No backups to prune
+      download:
+        completed: "Download completed: %{destination}"
+        failed: "Download failed: %{error}"
+    storage:
+      integrity:
+        starting: Starting storage integrity check
+        completed: Integrity check completed
+      orphans:
+        starting: Starting orphan file detection (dry run)
+        found: "%{count} orphan files found"
+        none: No orphan files found
+      cleanup:
+        confirm: "Delete orphan files? (yes/no)"
+        cancelled: Cleanup cancelled
+        completed: "Cleanup completed (%{count} deleted)"

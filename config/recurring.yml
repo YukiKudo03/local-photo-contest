@@ -49,3 +49,14 @@ production:
   weekly_analytics_report:
     class: AnalyticsReportJob
     schedule: at 3am Asia/Tokyo every Monday
+  daily_database_backup:
+    class: DatabaseBackupJob
+    args: ["daily"]
+    schedule: at 3:30am Asia/Tokyo every day
+  weekly_database_backup:
+    class: DatabaseBackupJob
+    args: ["weekly"]
+    schedule: at 3:30am Asia/Tokyo every Sunday
+  active_storage_maintenance:
+    class: ActiveStorageMaintenanceJob
+    schedule: at 4:30am Asia/Tokyo every Sunday

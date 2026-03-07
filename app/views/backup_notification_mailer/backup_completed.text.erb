@@ -1,0 +1,12 @@
+<%= t("backup.mailer.backup_completed.title") %>
+
+<%= t("backup.mailer.backup_completed.body") %>
+
+<%= t("backup.mailer.type") %>: <%= @backup_record.backup_type %>
+<%= t("backup.mailer.database") %>: <%= @backup_record.database_name %>
+<%= t("backup.mailer.filename") %>: <%= @backup_record.filename %>
+<%= t("backup.mailer.file_size") %>: <%= number_to_human_size(@backup_record.file_size) %>
+<%= t("backup.mailer.storage") %>: <%= @backup_record.storage_location %>
+<%= t("backup.mailer.encrypted") %>: <%= @backup_record.encrypted? ? t("backup.mailer.yes") : t("backup.mailer.no") %>
+<% if @backup_record.duration %><%= t("backup.mailer.duration") %>: <%= "%.1f" % @backup_record.duration %> <%= t("backup.mailer.seconds") %><% end %>
+<%= t("backup.mailer.checksum") %>: <%= @backup_record.checksum %>

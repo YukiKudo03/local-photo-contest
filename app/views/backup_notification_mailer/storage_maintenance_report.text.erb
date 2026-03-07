@@ -1,0 +1,15 @@
+<%= t("backup.mailer.storage_maintenance_report.title") %>
+
+<%= t("backup.mailer.storage_maintenance_report.body") %>
+
+--- <%= t("backup.mailer.storage_maintenance_report.integrity_section") %> ---
+<%= t("backup.mailer.storage_maintenance_report.total_blobs") %>: <%= @integrity_result.total_blobs %>
+<%= t("backup.mailer.storage_maintenance_report.checked") %>: <%= @integrity_result.checked %>
+<%= t("backup.mailer.storage_maintenance_report.missing") %>: <%= @integrity_result.missing %>
+<%= t("backup.mailer.storage_maintenance_report.checksum_mismatch") %>: <%= @integrity_result.checksum_mismatch %>
+<% if @integrity_result.errors.any? %><%= t("backup.mailer.storage_maintenance_report.errors") %>: <%= @integrity_result.errors.length %><% end %>
+
+--- <%= t("backup.mailer.storage_maintenance_report.cleanup_section") %> ---
+<%= t("backup.mailer.storage_maintenance_report.orphaned_blobs") %>: <%= @cleanup_result.orphaned_blobs %>
+<%= t("backup.mailer.storage_maintenance_report.orphaned_attachments") %>: <%= @cleanup_result.orphaned_attachments %>
+<%= t("backup.mailer.storage_maintenance_report.purged_count") %>: <%= @cleanup_result.purged_count %>

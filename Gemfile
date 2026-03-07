@@ -59,6 +59,9 @@ gem "groupdate"
 # AWS SDK for content moderation (Rekognition)
 gem "aws-sdk-rekognition"
 
+# AWS SDK for backup storage (S3)
+gem "aws-sdk-s3"
+
 # Markdown rendering for help pages
 gem "redcarpet"
 gem "rouge"

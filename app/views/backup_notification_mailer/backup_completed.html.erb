@@ -1,0 +1,38 @@
+<h2><%= t("backup.mailer.backup_completed.title") %></h2>
+
+<p><%= t("backup.mailer.backup_completed.body") %></p>
+
+<table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.type") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.backup_type %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.database") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.database_name %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.filename") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.filename %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.file_size") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= number_to_human_size(@backup_record.file_size) %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.storage") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.storage_location %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.encrypted") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= @backup_record.encrypted? ? t("backup.mailer.yes") : t("backup.mailer.no") %></td>
+  </tr>
+  <% if @backup_record.duration %>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;"><%= t("backup.mailer.duration") %></td>
+    <td style="padding: 8px; border: 1px solid #ddd;"><%= "%.1f" % @backup_record.duration %> <%= t("backup.mailer.seconds") %></td>
+  </tr>
+  <% end %>
+</table>
+
+<p><%= t("backup.mailer.checksum") %>: <code><%= @backup_record.checksum %></code></p>

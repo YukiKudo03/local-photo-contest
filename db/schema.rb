@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_04_200202) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_06_231551) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -82,6 +82,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_04_200202) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_audit_logs_on_user_id"
+  end
+
+  create_table "backup_records", force: :cascade do |t|
+    t.string "backup_type", null: false
+    t.string "database_name", null: false
+    t.integer "status", default: 0, null: false
+    t.string "filename"
+    t.bigint "file_size"
+    t.string "checksum"
+    t.boolean "encrypted", default: false
+    t.string "storage_location"
+    t.string "s3_bucket"
+    t.string "s3_key"
+    t.text "error_message"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["backup_type", "created_at"], name: "index_backup_records_on_backup_type_and_created_at"
+    t.index ["status"], name: "index_backup_records_on_status"
   end
 
   create_table "categories", force: :cascade do |t|
