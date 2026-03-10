@@ -81,6 +81,15 @@ RSpec.describe "Organizers::Results", type: :request do
         expect(rankings.last.entry).to eq(entry2)
         expect(rankings.last.rank).to eq(2)
       end
+
+      it "redirects with alert when calculation fails" do
+        allow_any_instance_of(ResultsAnnouncementService).to receive(:calculate_and_save).and_raise(StandardError, "calculation error")
+
+        post calculate_organizers_contest_results_path(contest)
+
+        expect(response).to redirect_to(preview_organizers_contest_results_path(contest))
+        expect(flash[:alert]).to eq("calculation error")
+      end
     end
 
     context "when authenticated as different organizer" do
@@ -115,6 +124,25 @@ RSpec.describe "Organizers::Results", type: :request do
         follow_redirect!
         expect(response.body).to include("結果を発表しました")
         expect(finished_contest.reload.results_announced?).to be true
+      end
+
+      it "awards milestones and points for prize winners" do
+        # Pre-create rankings so they exist before announce! runs
+        # announce! calls calculate_and_save which destroys and recreates rankings,
+        # but the association cache on @contest may be stale.
+        # Stub the service to skip recalculation, leaving pre-existing rankings intact.
+        service = instance_double(ResultsAnnouncementService)
+        allow(ResultsAnnouncementService).to receive(:new).and_return(service)
+        allow(service).to receive(:announce!) do
+          finished_contest.update!(results_announced_at: Time.current)
+        end
+
+        expect_any_instance_of(MilestoneService).to receive(:check_and_award).with(:win_prize, hash_including(:ranking_id))
+        expect_any_instance_of(PointService).to receive(:award_for_prize)
+
+        post announce_organizers_contest_results_path(finished_contest)
+
+        expect(response).to redirect_to(organizers_contest_path(finished_contest))
       end
 
       context "when contest is not finished" do

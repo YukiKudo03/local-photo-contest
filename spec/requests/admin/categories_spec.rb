@@ -25,6 +25,22 @@ RSpec.describe "Admin::Categories", type: :request do
     end
   end
 
+  describe "GET /admin/categories/:id" do
+    it "returns success" do
+      get admin_category_path(category)
+      expect(response).to have_http_status(:success)
+    end
+
+    it "displays contests associated with the category" do
+      organizer = create(:user, :organizer, :confirmed)
+      create(:terms_acceptance, user: organizer, terms_of_service: terms)
+      create(:contest, user: organizer, category: category)
+
+      get admin_category_path(category)
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET /admin/categories/new" do
     it "returns success" do
       get new_admin_category_path
@@ -58,6 +74,11 @@ RSpec.describe "Admin::Categories", type: :request do
       patch admin_category_path(category), params: { category: { name: "山岳" } }
       expect(response).to redirect_to(admin_categories_path)
       expect(category.reload.name).to eq("山岳")
+    end
+
+    it "renders edit on invalid update" do
+      patch admin_category_path(category), params: { category: { name: "" } }
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 

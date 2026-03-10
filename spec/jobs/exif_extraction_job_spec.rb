@@ -74,6 +74,15 @@ RSpec.describe ExifExtractionJob, type: :job do
       expect(entry.exif_data).to be_nil
     end
 
+    it "handles invalid EXIF date format gracefully" do
+      mock_exif = { "DateTimeOriginal" => "not-a-date" }
+      allow_any_instance_of(MiniMagick::Image).to receive(:exif).and_return(mock_exif)
+
+      described_class.perform_now(entry.id)
+      entry.reload
+      expect(entry.taken_at).to be_nil
+    end
+
     it "handles MiniMagick errors gracefully" do
       allow_any_instance_of(MiniMagick::Image).to receive(:exif).and_raise(MiniMagick::Error)
 

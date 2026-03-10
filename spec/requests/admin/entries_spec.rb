@@ -50,6 +50,17 @@ RSpec.describe "Admin::Entries", type: :request do
         post bulk_approve_admin_entries_path, params: { entry_ids: [ entry1.id, entry2.id ] }
       }.to change(AuditLog, :count).by(2)
     end
+
+    it "redirects when no entries selected" do
+      post bulk_approve_admin_entries_path, params: { entry_ids: [] }
+      expect(response).to redirect_to(admin_entries_path)
+    end
+
+    it "redirects with alert when entry_ids is nil" do
+      post bulk_approve_admin_entries_path
+      expect(response).to redirect_to(admin_entries_path)
+      expect(flash[:alert]).to be_present
+    end
   end
 
   describe "POST /admin/entries/bulk_reject" do
@@ -62,6 +73,17 @@ RSpec.describe "Admin::Entries", type: :request do
       expect {
         post bulk_reject_admin_entries_path, params: { entry_ids: [ entry1.id ] }
       }.to change(AuditLog, :count).by(1)
+    end
+
+    it "redirects when no entries selected" do
+      post bulk_reject_admin_entries_path, params: { entry_ids: [] }
+      expect(response).to redirect_to(admin_entries_path)
+    end
+
+    it "redirects with alert when entry_ids is nil" do
+      post bulk_reject_admin_entries_path
+      expect(response).to redirect_to(admin_entries_path)
+      expect(flash[:alert]).to be_present
     end
   end
 

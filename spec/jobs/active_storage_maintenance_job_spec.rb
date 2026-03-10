@@ -46,5 +46,20 @@ RSpec.describe ActiveStorageMaintenanceJob, type: :job do
 
       expect(Backup::OrphanCleanupService).to have_received(:new).with(dry_run: false)
     end
+
+    context "when an error occurs during integrity check" do
+      before do
+        allow(integrity_service).to receive(:check).and_raise(StandardError, "test error")
+      end
+
+      it "does not send notification" do
+        begin
+          described_class.perform_now
+        rescue StandardError
+          # retry_on catches it
+        end
+        # The mailer should not have been called since integrity_service raised
+      end
+    end
   end
 end

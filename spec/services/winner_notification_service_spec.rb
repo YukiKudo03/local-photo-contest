@@ -70,5 +70,13 @@ RSpec.describe WinnerNotificationService, type: :service do
         }.to have_enqueued_mail(NotificationMailer, :winner_certificate).once
       end
     end
+
+    context "when an error occurs for one ranking" do
+      it "logs error and continues processing other rankings" do
+        allow_any_instance_of(CertificateGenerationService).to receive(:generate_and_attach!).and_raise(StandardError, "cert error")
+        expect(Rails.logger).to receive(:error).with(/Winner notification failed/)
+        described_class.new(contest).notify_winners!
+      end
+    end
   end
 end

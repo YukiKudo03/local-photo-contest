@@ -76,6 +76,19 @@ RSpec.describe "My::TutorialSettings", type: :request do
       expect(response.body).to include("チュートリアル設定を更新しました")
     end
 
+    context "when update fails" do
+      before do
+        allow_any_instance_of(User).to receive(:update_tutorial_settings).and_return(false)
+      end
+
+      it "renders show with error" do
+        patch my_tutorial_settings_path, params: {
+          tutorial_settings: { show_tutorials: "false" }
+        }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     context "when user is not authenticated" do
       before { sign_out user }
 

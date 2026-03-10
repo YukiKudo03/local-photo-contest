@@ -270,6 +270,17 @@ RSpec.describe Spot, type: :model do
     end
   end
 
+  describe "certification request email error handling" do
+    it "does not raise when email delivery fails" do
+      allow(NotificationMailer).to receive(:spot_certification_request).and_raise(StandardError, "mail error")
+      contest = create(:contest)
+      user = create(:user, :confirmed)
+      expect {
+        create(:spot, :discovered, contest: contest, discovered_by: user)
+      }.not_to raise_error
+    end
+  end
+
   describe "#voteable?" do
     it "returns true for organizer_created spots" do
       spot = build(:spot, :organizer_created)

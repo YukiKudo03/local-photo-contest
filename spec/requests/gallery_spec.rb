@@ -128,6 +128,12 @@ RSpec.describe "Gallery", type: :request do
         expect(response).to have_http_status(:success)
       end
 
+      it "sorts by quality" do
+        create(:entry, contest: published_contest, quality_score: 85)
+        get gallery_index_path, params: { sort: "quality" }
+        expect(response).to have_http_status(:success)
+      end
+
       it "sorts by oldest" do
         get gallery_index_path, params: { sort: "oldest" }
         expect(response).to have_http_status(:success)

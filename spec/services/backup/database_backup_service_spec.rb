@@ -56,6 +56,7 @@ RSpec.describe Backup::DatabaseBackupService do
           adapter: "postgresql",
           database: "local_photo_contest_production",
           host: "localhost",
+          port: 5432,
           username: "postgres",
           password: "secret"
         })
@@ -77,6 +78,33 @@ RSpec.describe Backup::DatabaseBackupService do
 
         FileUtils.rm_f(result)
       end
+
+      it "calls pg_dump with correct arguments including host, port, username, and password" do
+        expect(service).to receive(:system) do |env, *cmd|
+          expect(env).to eq({ "PGPASSWORD" => "secret" })
+          expect(cmd).to include("pg_dump", "--no-owner", "--no-acl", "-Fc")
+          expect(cmd).to include("-h", "localhost")
+          expect(cmd).to include("-p", "5432")
+          expect(cmd).to include("-U", "postgres")
+          expect(cmd).to include("local_photo_contest_production")
+          # Simulate creating the dump file
+          f_idx = cmd.index("-f")
+          File.write(cmd[f_idx + 1], "fake pg dump") if f_idx
+          true
+        end
+
+        result = service.perform
+        FileUtils.rm_f(result)
+      end
+
+      it "raises when pg_dump fails" do
+        allow(service).to receive(:system) do |*_args|
+          system("exit 1")
+          false
+        end
+
+        expect { service.perform }.to raise_error(RuntimeError, /pg_dump failed/)
+      end
     end
 
     context "when backup fails" do
@@ -93,6 +121,37 @@ RSpec.describe Backup::DatabaseBackupService do
         expect(record).to be_failed
         expect(record.error_message).to eq("backup command failed")
         expect(record.completed_at).to be_present
+      end
+    end
+
+    context "ensure cleanup of temp dump file" do
+      before do
+        allow(ActiveRecord::Base.connection).to receive(:adapter_name).and_return("SQLite")
+      end
+
+      it "removes the uncompressed dump file after successful backup" do
+        dump_path = backup_dir.join("backup_cleanup_test.sqlite3")
+        allow(service).to receive(:create_dump) do
+          File.write(dump_path, "fake data for cleanup test")
+          dump_path
+        end
+
+        result = service.perform
+
+        expect(File.exist?(dump_path)).to be false
+        FileUtils.rm_f(result)
+      end
+
+      it "removes the uncompressed dump file even when backup fails" do
+        dump_path = backup_dir.join("backup_fail_cleanup.sqlite3")
+        allow(service).to receive(:create_dump) do
+          File.write(dump_path, "fake data")
+          dump_path
+        end
+        allow(service).to receive(:compress).and_raise(RuntimeError, "compress failed")
+
+        expect { service.perform }.to raise_error(RuntimeError, "compress failed")
+        expect(File.exist?(dump_path)).to be false
       end
     end
 
@@ -118,6 +177,37 @@ RSpec.describe Backup::DatabaseBackupService do
     it "defaults to daily" do
       service = described_class.new
       expect(service.backup_type).to eq("daily")
+    end
+  end
+
+  describe "execute_sqlite_backup" do
+    before do
+      allow(ActiveRecord::Base.connection).to receive(:adapter_name).and_return("SQLite")
+    end
+
+    it "executes sqlite3 backup command and creates dump file" do
+      db_config = ActiveRecord::Base.connection_db_config.configuration_hash
+      db_path = db_config[:database]
+
+      allow(service).to receive(:system).with("sqlite3", db_path, anything) do |_cmd, _db, backup_arg|
+        # Extract dump path from backup command and create a fake file
+        dump_path = backup_arg.match(/\.backup '(.+)'/)[1]
+        File.write(dump_path, "fake sqlite data")
+        true
+      end
+
+      result = service.perform
+      expect(result.to_s).to end_with(".gz")
+      FileUtils.rm_f(result)
+    end
+
+    it "raises when sqlite3 backup command fails" do
+      allow(service).to receive(:system).with("sqlite3", anything, anything) do
+        system("exit 1")
+        false
+      end
+
+      expect { service.perform }.to raise_error(RuntimeError, /sqlite3 backup failed/)
     end
   end
 end

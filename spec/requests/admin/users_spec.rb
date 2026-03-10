@@ -62,6 +62,12 @@ RSpec.describe "Admin::Users", type: :request do
       expect(response).to redirect_to(admin_user_path(participant))
       expect(participant.reload.name).to eq("Updated Name")
     end
+
+    it "renders edit on invalid update" do
+      allow_any_instance_of(User).to receive(:update).and_return(false)
+      patch admin_user_path(participant), params: { user: { name: "" } }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "PATCH /admin/users/:id/suspend" do
@@ -134,6 +140,12 @@ RSpec.describe "Admin::Users", type: :request do
       post bulk_suspend_admin_users_path, params: { user_ids: [] }
       expect(response).to redirect_to(admin_users_path)
     end
+
+    it "redirects with no_users_selected alert when user_ids is nil" do
+      post bulk_suspend_admin_users_path
+      expect(response).to redirect_to(admin_users_path)
+      expect(flash[:alert]).to be_present
+    end
   end
 
   describe "POST /admin/users/bulk_unsuspend" do
@@ -158,6 +170,17 @@ RSpec.describe "Admin::Users", type: :request do
         post bulk_unsuspend_admin_users_path, params: { user_ids: [ participant.id, organizer.id ] }
       }.to change(AuditLog, :count).by(2)
     end
+
+    it "redirects when no users selected" do
+      post bulk_unsuspend_admin_users_path, params: { user_ids: [] }
+      expect(response).to redirect_to(admin_users_path)
+    end
+
+    it "redirects with no_users_selected alert when user_ids is nil" do
+      post bulk_unsuspend_admin_users_path
+      expect(response).to redirect_to(admin_users_path)
+      expect(flash[:alert]).to be_present
+    end
   end
 
   describe "POST /admin/users/bulk_change_role" do
@@ -177,6 +200,17 @@ RSpec.describe "Admin::Users", type: :request do
       log = AuditLog.last
       expect(log.action).to eq("role_change")
       expect(log.details).to include("new_role" => "organizer")
+    end
+
+    it "redirects when no users selected" do
+      post bulk_change_role_admin_users_path, params: { user_ids: [], role: "organizer" }
+      expect(response).to redirect_to(admin_users_path)
+    end
+
+    it "redirects with no_users_selected alert when user_ids is nil with valid role" do
+      post bulk_change_role_admin_users_path, params: { role: "organizer" }
+      expect(response).to redirect_to(admin_users_path)
+      expect(flash[:alert]).to be_present
     end
   end
 end

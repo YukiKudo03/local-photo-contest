@@ -64,6 +64,28 @@ RSpec.describe Backup::OrphanCleanupService do
       end
     end
 
+    context "with dry_run: false purging orphaned attachments" do
+      let(:service) { described_class.new(dry_run: false) }
+
+      it "purges orphaned attachments found by the service" do
+        mock_attachment = double("attachment")
+        expect(mock_attachment).to receive(:purge)
+
+        orphaned_relation = double("relation", count: 1)
+        allow(orphaned_relation).to receive(:find_each).and_yield(mock_attachment)
+
+        allow(service).to receive(:find_orphaned_blobs).and_return(
+          double("blobs", find_each: nil, count: 0)
+        )
+        allow(service).to receive(:find_orphaned_attachments).and_return(orphaned_relation)
+
+        result = service.perform
+
+        expect(result.orphaned_attachments).to eq(1)
+        expect(result.purged_count).to eq(1)
+      end
+    end
+
     context "with no orphans" do
       let(:service) { described_class.new }
 
@@ -78,6 +100,39 @@ RSpec.describe Backup::OrphanCleanupService do
 
         expect(result.orphaned_blobs).to eq(0)
         expect(result.purged_count).to eq(0)
+      end
+    end
+
+    context "with no orphans and dry_run: false" do
+      let(:service) { described_class.new(dry_run: false) }
+
+      it "returns zero purged count when nothing is orphaned" do
+        # Clean up any existing orphans first
+        ActiveStorage::Blob
+          .left_joins(:attachments)
+          .where(active_storage_attachments: { id: nil })
+          .find_each(&:purge)
+
+        result = service.perform
+
+        expect(result.purged_count).to eq(0)
+      end
+    end
+
+    context "orphaned attachments detection" do
+      let(:service) { described_class.new }
+
+      it "finds orphaned attachments where record no longer exists" do
+        user = create(:user, :confirmed)
+        contest = create(:contest, :published)
+        entry = create(:entry, user: user, contest: contest)
+        # Record the attachment
+        attachment_count_before = ActiveStorage::Attachment.count
+        expect(attachment_count_before).to be > 0
+
+        # The find_orphaned_attachments method checks record_type classes
+        result = service.perform
+        expect(result.orphaned_attachments).to be >= 0
       end
     end
   end

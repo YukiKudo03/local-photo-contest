@@ -86,6 +86,31 @@ RSpec.describe ApiToken, type: :model do
     end
   end
 
+  describe "#parsed_scopes" do
+    it "parses JSON string scopes" do
+      token = build(:api_token)
+      token.scopes = '["read","write"]'
+      expect(token.parsed_scopes).to eq(["read", "write"])
+    end
+
+    it "returns array directly when scopes is an Array" do
+      token = build(:api_token)
+      token.scopes = ["read", "write"]
+      expect(token.parsed_scopes).to eq(["read", "write"])
+    end
+
+    it "returns default [read] when scopes is nil" do
+      token = build(:api_token, scopes: nil)
+      expect(token.parsed_scopes).to eq(["read"])
+    end
+
+    it "returns default [read] on JSON parse error" do
+      token = build(:api_token)
+      token.scopes = "not valid json{"
+      expect(token.parsed_scopes).to eq(["read"])
+    end
+  end
+
   describe "#scope?" do
     it "returns true for included scope" do
       token = build(:api_token, :with_write_scope)

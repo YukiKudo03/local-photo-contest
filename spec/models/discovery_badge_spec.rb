@@ -65,6 +65,13 @@ RSpec.describe DiscoveryBadge, type: :model do
     end
   end
 
+  describe "#badge_description" do
+    it "returns i18n description for pioneer" do
+      badge = build(:discovery_badge, :pioneer)
+      expect(badge.badge_description).to be_present
+    end
+  end
+
   describe "factory" do
     it "creates a valid badge" do
       badge = build(:discovery_badge)

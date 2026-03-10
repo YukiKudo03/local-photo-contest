@@ -73,6 +73,15 @@ RSpec.describe Follow, type: :model do
     end
   end
 
+  describe "notification callback error handling" do
+    it "does not raise when follow notification job fails to enqueue" do
+      allow(FollowNotificationJob).to receive(:perform_later).and_raise(StandardError, "enqueue error")
+      user_a = create(:user, :confirmed)
+      user_b = create(:user, :confirmed)
+      expect { create(:follow, follower: user_a, followed: user_b) }.not_to raise_error
+    end
+  end
+
   describe "database constraints" do
     it "enforces unique index on [follower_id, followed_id]" do
       user_a = create(:user, :confirmed)

@@ -67,6 +67,32 @@ RSpec.describe Webhook, type: :model do
     end
   end
 
+  describe "#parsed_event_types" do
+    it "returns array when event_types is an Array" do
+      webhook = build(:webhook, event_types: ["entry.created"])
+      expect(webhook.parsed_event_types).to eq(["entry.created"])
+    end
+
+    it "returns empty array on JSON parse error" do
+      webhook = build(:webhook)
+      webhook.event_types = "not valid json{"
+      expect(webhook.parsed_event_types).to eq([])
+    end
+
+    it "returns empty array when event_types is nil" do
+      webhook = build(:webhook, event_types: nil)
+      expect(webhook.parsed_event_types).to eq([])
+    end
+  end
+
+  describe "url validation" do
+    it "adds invalid error for malformed URI" do
+      webhook = build(:webhook, url: "ht tp://bad url")
+      expect(webhook).not_to be_valid
+      expect(webhook.errors[:url]).to be_present
+    end
+  end
+
   describe "#compute_signature" do
     let(:webhook) { build(:webhook, secret: "test-secret") }
 

@@ -67,6 +67,29 @@ RSpec.describe CertificateGenerationService, type: :service do
     end
   end
 
+  describe "#generate_for_ranking with .ttf font" do
+    let!(:entry) { create(:entry, contest: contest, user: participant) }
+
+    before do
+      contest.finish!
+      contest.update_column(:results_announced_at, Time.current)
+    end
+
+    let!(:ranking) { create(:contest_ranking, :first_place, contest: contest, entry: entry) }
+
+    it "uses NotoSansJP font family for .ttf fonts" do
+      ttf_path = "/usr/share/fonts/Adwaita/AdwaitaMono-Regular.ttf"
+      skip "No .ttf font available" unless File.exist?(ttf_path)
+
+      stub_const("CertificateGenerationService::FONT_PATHS", [ ttf_path ])
+
+      service = described_class.new
+      pdf_data = service.generate_for_ranking(ranking)
+      expect(pdf_data).to be_present
+      expect(pdf_data).to start_with("%PDF")
+    end
+  end
+
   describe "#generate_all_for_contest" do
     let!(:entry1) { create(:entry, contest: contest, user: participant) }
     let!(:entry2) { create(:entry, contest: contest) }
@@ -104,6 +127,18 @@ RSpec.describe CertificateGenerationService, type: :service do
       service.generate_all_for_contest(contest)
 
       # ranking2 should still get generated
+      expect(ranking2.reload.certificate_pdf).to be_attached
+    end
+
+    it "handles errors for individual rankings and continues" do
+      allow_any_instance_of(described_class).to receive(:generate_for_ranking).with(ranking1).and_raise(StandardError, "render error")
+      allow_any_instance_of(described_class).to receive(:generate_for_ranking).with(ranking2).and_call_original
+
+      expect(Rails.logger).to receive(:error).with(/Certificate generation failed/)
+
+      service = described_class.new
+      service.generate_all_for_contest(contest)
+
       expect(ranking2.reload.certificate_pdf).to be_attached
     end
   end

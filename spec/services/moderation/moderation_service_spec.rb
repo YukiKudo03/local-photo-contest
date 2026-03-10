@@ -171,6 +171,20 @@ RSpec.describe Moderation::ModerationService, type: :service do
       end
     end
 
+    context "when provider raises configuration error" do
+      before do
+        allow(mock_provider).to receive(:analyze)
+          .and_raise(Moderation::Providers::RekognitionProvider::ConfigurationError, "Missing creds")
+      end
+
+      it "returns error result with requires_review" do
+        result = described_class.moderate(entry)
+        expect(result).not_to be_success
+        expect(result.error).to include("Missing creds")
+        expect(entry.reload).to be_moderation_requires_review
+      end
+    end
+
     context "when provider raises analysis error" do
       before do
         allow(mock_provider).to receive(:analyze)

@@ -349,5 +349,69 @@ RSpec.describe Entry, type: :model do
         expect(entry.owned_by?(other_user)).to be false
       end
     end
+
+    describe '#liked_by?' do
+      let(:entry) { create(:entry) }
+      let(:user) { create(:user, :confirmed) }
+
+      it 'returns true when user has liked the entry' do
+        create(:reaction, user: user, entry: entry, reaction_type: "like")
+        expect(entry.liked_by?(user)).to be true
+      end
+
+      it 'returns false when user has not liked the entry' do
+        expect(entry.liked_by?(user)).to be false
+      end
+    end
+
+    describe '#judge_average_score' do
+      let(:contest) { create(:contest, :published, judging_method: :judge_only) }
+      let(:entry) { create(:entry, contest: contest) }
+      let(:judge) { create(:user, :confirmed) }
+      let(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+      let(:criterion) { create(:evaluation_criterion, contest: contest) }
+
+      it 'returns 0 when no evaluations exist' do
+        expect(entry.judge_average_score).to eq(0)
+      end
+
+      it 'returns average score when evaluations exist' do
+        create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 8)
+        expect(entry.judge_average_score).to be_a(Numeric)
+      end
+    end
+
+    describe '#evaluated_by?' do
+      let(:contest) { create(:contest, :published, judging_method: :judge_only) }
+      let(:entry) { create(:entry, contest: contest) }
+      let(:judge) { create(:user, :confirmed) }
+      let(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+      let(:criterion) { create(:evaluation_criterion, contest: contest) }
+
+      it 'returns true when evaluated by the judge' do
+        create(:judge_evaluation, contest_judge: contest_judge, entry: entry, evaluation_criterion: criterion, score: 8)
+        expect(entry.evaluated_by?(contest_judge)).to be true
+      end
+
+      it 'returns false when not evaluated by the judge' do
+        expect(entry.evaluated_by?(contest_judge)).to be false
+      end
+    end
+
+    describe '#judge_comment_from' do
+      let(:contest) { create(:contest, :published, judging_method: :judge_only) }
+      let(:entry) { create(:entry, contest: contest) }
+      let(:judge) { create(:user, :confirmed) }
+      let(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+
+      it 'returns the judge comment when it exists' do
+        comment = create(:judge_comment, contest_judge: contest_judge, entry: entry)
+        expect(entry.judge_comment_from(contest_judge)).to eq(comment)
+      end
+
+      it 'returns nil when no judge comment exists' do
+        expect(entry.judge_comment_from(contest_judge)).to be_nil
+      end
+    end
   end
 end

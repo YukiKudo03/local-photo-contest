@@ -265,6 +265,42 @@ RSpec.describe "Organizers::Spots", type: :request do
     end
   end
 
+  describe "POST /organizers/contests/:contest_id/spots/:id/merge (do_merge)" do
+    let!(:spot) { create(:spot, contest: contest) }
+    let!(:primary_spot) { create(:spot, contest: contest) }
+
+    context "when authenticated as contest owner" do
+      before { sign_in organizer }
+
+      it "redirects with alert when merge fails" do
+        allow_any_instance_of(SpotMergeService).to receive(:merge).and_raise(SpotMergeService::MergeError, "merge failed")
+
+        post merge_organizers_contest_spot_path(contest, spot),
+             params: { primary_spot_id: primary_spot.id }
+
+        expect(response).to redirect_to(merge_organizers_contest_spot_path(contest, spot))
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "PATCH /organizers/contests/:contest_id/spots/update_positions - error handling" do
+    let!(:spot1) { create(:spot, contest: contest, position: 1) }
+
+    context "when authenticated as contest owner" do
+      before { sign_in organizer }
+
+      it "returns 422 when position update fails" do
+        allow_any_instance_of(Spot).to receive(:update!).and_raise(ActiveRecord::RecordInvalid.new(spot1))
+
+        patch update_positions_organizers_contest_spots_path(contest),
+              params: { positions: [ spot1.id ] }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
   describe "PATCH /organizers/contests/:contest_id/spots/update_positions" do
     let!(:spot1) { create(:spot, contest: contest, position: 1) }
     let!(:spot2) { create(:spot, contest: contest, position: 2) }

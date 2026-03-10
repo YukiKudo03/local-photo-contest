@@ -158,11 +158,59 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "avatar attachment" do
+  describe "#judge_for?" do
+    let(:user) { create(:user, :confirmed) }
+    let(:contest) { create(:contest, :published) }
+
+    it "returns true when user is a judge for the contest" do
+      create(:contest_judge, user: user, contest: contest)
+      expect(user.judge_for?(contest)).to be true
+    end
+
+    it "returns false when user is not a judge for the contest" do
+      expect(user.judge_for?(contest)).to be false
+    end
+  end
+
+  describe "#tutorial_completed?" do
     let(:user) { create(:user, :confirmed) }
 
-    it "can have an avatar attached" do
-      expect(user).to respond_to(:avatar)
+    it "returns true when tutorial is completed" do
+      create(:tutorial_progress, user: user, tutorial_type: "participant_onboarding", completed: true)
+      expect(user.tutorial_completed?("participant_onboarding")).to be true
+    end
+
+    it "returns false when tutorial is not completed" do
+      expect(user.tutorial_completed?("participant_onboarding")).to be false
+    end
+  end
+
+  describe "#tutorial_skipped?" do
+    let(:user) { create(:user, :confirmed) }
+
+    it "returns true when tutorial is skipped" do
+      create(:tutorial_progress, user: user, tutorial_type: "participant_onboarding", skipped: true)
+      expect(user.tutorial_skipped?("participant_onboarding")).to be true
+    end
+
+    it "returns false when tutorial is not skipped" do
+      expect(user.tutorial_skipped?("participant_onboarding")).to be false
+    end
+  end
+
+  describe "avatar validations" do
+    let(:user) { create(:user, :confirmed) }
+
+    it "rejects invalid content type" do
+      user.avatar.attach(io: StringIO.new("fake"), filename: "test.txt", content_type: "text/plain")
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
+    end
+
+    it "rejects file size over 5MB" do
+      user.avatar.attach(io: StringIO.new("x" * 6.megabytes), filename: "large.jpg", content_type: "image/jpeg")
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
     end
   end
 end

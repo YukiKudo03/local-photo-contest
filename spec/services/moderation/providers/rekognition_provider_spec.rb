@@ -234,4 +234,31 @@ RSpec.describe Moderation::Providers::RekognitionProvider, type: :service do
       expect(Moderation::Providers.get(:rekognition)).to be_a(described_class)
     end
   end
+
+  describe "client_options with credentials", if: defined?(Aws::Rekognition) do
+    it "includes credentials when AWS env vars are set" do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with("AWS_ACCESS_KEY_ID").and_return("test_key")
+      allow(ENV).to receive(:[]).with("AWS_SECRET_ACCESS_KEY").and_return("test_secret")
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with("AWS_REGION", "ap-northeast-1").and_return("us-east-1")
+
+      # Instantiate provider - the client_options method is called internally
+      new_provider = described_class.new
+      expect(new_provider).to be_a(described_class)
+    end
+
+    it "sets access_key_id and secret_access_key in client_options" do
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with("AWS_ACCESS_KEY_ID").and_return("test_key")
+      allow(ENV).to receive(:[]).with("AWS_SECRET_ACCESS_KEY").and_return("test_secret")
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with("AWS_REGION", "ap-northeast-1").and_return("us-east-1")
+
+      new_provider = described_class.new
+      options = new_provider.send(:client_options)
+      expect(options[:access_key_id]).to eq("test_key")
+      expect(options[:secret_access_key]).to eq("test_secret")
+    end
+  end
 end

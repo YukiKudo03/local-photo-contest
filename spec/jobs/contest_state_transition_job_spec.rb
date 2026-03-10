@@ -85,6 +85,20 @@ RSpec.describe ContestStateTransitionJob, type: :job do
 
         expect(good_contest.reload).to be_finished
       end
+
+      it "logs error and continues when auto-finish fails for a contest" do
+        # Make the good_contest's finish! raise an error
+        allow(ContestSchedulingService).to receive(:new).and_wrap_original do |method, contest|
+          service = method.call(contest)
+          if contest.id == good_contest.id
+            allow(service).to receive(:finish!).and_raise(StandardError, "finish error")
+          end
+          service
+        end
+
+        expect(Rails.logger).to receive(:error).with(/Auto-finish failed for contest ##{good_contest.id}/)
+        described_class.perform_now
+      end
     end
 
     context "idempotency" do

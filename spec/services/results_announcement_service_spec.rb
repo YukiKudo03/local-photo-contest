@@ -212,5 +212,21 @@ RSpec.describe ResultsAnnouncementService do
         expect(result[:warnings]).to include("評価基準が設定されていません")
       end
     end
+
+    context "when rankings are outdated" do
+      let(:contest) { create(:contest, :published, user: organizer, judging_method: :vote_only) }
+      let!(:entries) { create_list(:entry, 2, contest: contest) }
+      let(:service) { described_class.new(contest) }
+
+      before do
+        contest.finish!
+        allow(contest).to receive(:rankings_outdated?).and_return(true)
+      end
+
+      it "includes rankings outdated warning" do
+        result = service.preview
+        expect(result[:warnings]).to include(I18n.t("services.results.rankings_outdated"))
+      end
+    end
   end
 end

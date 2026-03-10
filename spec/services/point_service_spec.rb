@@ -85,6 +85,24 @@ RSpec.describe PointService do
       service.award_for_prize(ranking)
       expect(UserPoint.last.points).to eq(20)
     end
+
+    it "awards prize_other points for rank > 3" do
+      ranking = create(:contest_ranking, contest: contest, entry: entry, rank: 4, total_score: 40.0)
+      service.award_for_prize(ranking)
+      point = UserPoint.last
+      expect(point.action_type).to eq("prize_other")
+    end
+  end
+
+  describe "level up broadcast failure" do
+    it "does not raise when broadcast fails" do
+      allow(Turbo::StreamsChannel).to receive(:broadcast_append_to).and_raise(StandardError, "broadcast error")
+      expect(Rails.logger).to receive(:warn).with(/Failed to broadcast level up/)
+      # Trigger enough points to level up
+      user.update_column(:total_points, 0)
+      user.update_column(:level, 0)
+      service.award_for_action("submit_entry")
+    end
   end
 
   describe "#recalculate_total!" do

@@ -54,6 +54,44 @@ RSpec.describe DiscoveryChallenge, type: :model do
         expect(DiscoveryChallenge.active_now).not_to include(finished)
       end
     end
+
+    describe ".upcoming" do
+      let!(:draft_challenge) { create(:discovery_challenge, :draft, contest: contest) }
+      let!(:future_active) { create(:discovery_challenge, status: :active, contest: contest, starts_at: 1.day.from_now, ends_at: 3.days.from_now) }
+      let!(:past_active) { create(:discovery_challenge, :active_now, contest: contest) }
+
+      it "returns draft challenges and active challenges with future start" do
+        result = DiscoveryChallenge.upcoming
+        expect(result).to include(draft_challenge)
+        expect(result).to include(future_active)
+        expect(result).not_to include(past_active)
+      end
+    end
+
+    describe ".past" do
+      let!(:finished_challenge) { create(:discovery_challenge, :finished, contest: contest) }
+      let!(:expired_active) { create(:discovery_challenge, status: :active, contest: contest, starts_at: 3.days.ago, ends_at: 1.day.ago) }
+      let!(:current_active) { create(:discovery_challenge, :active_now, contest: contest) }
+
+      it "returns finished challenges and active challenges with past end" do
+        result = DiscoveryChallenge.past
+        expect(result).to include(finished_challenge)
+        expect(result).to include(expired_active)
+        expect(result).not_to include(current_active)
+      end
+    end
+  end
+
+  describe "#active_now?" do
+    it "returns true when active and within period" do
+      challenge = build(:discovery_challenge, :active_now)
+      expect(challenge.active_now?).to be true
+    end
+
+    it "returns false when draft" do
+      challenge = build(:discovery_challenge, :draft)
+      expect(challenge.active_now?).to be false
+    end
   end
 
   describe "#status_name" do

@@ -70,5 +70,33 @@ RSpec.describe "Health Check", type: :request do
       json = JSON.parse(response.body)
       expect(json["database"]["connected"]).to be true
     end
+
+    context "when database connection fails" do
+      before do
+        allow(ActiveRecord::Base).to receive(:connection).and_raise(ActiveRecord::ConnectionNotEstablished)
+      end
+
+      it "returns error details for database" do
+        get "/health/details"
+
+        json = JSON.parse(response.body)
+        expect(json["database"]["connected"]).to be false
+        expect(json["database"]["error"]).to be_present
+      end
+    end
+
+    context "when cache connection fails" do
+      it "returns unhealthy cache status" do
+        cache_double = instance_double(ActiveSupport::Cache::MemoryStore)
+        allow(cache_double).to receive(:class).and_return(ActiveSupport::Cache::MemoryStore)
+        allow(cache_double).to receive(:write).and_raise(StandardError, "cache error")
+        allow(Rails).to receive(:cache).and_return(cache_double)
+
+        get "/health/details"
+
+        json = JSON.parse(response.body)
+        expect(json["cache"]["healthy"]).to be false
+      end
+    end
   end
 end

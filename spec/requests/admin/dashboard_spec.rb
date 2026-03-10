@@ -28,6 +28,14 @@ RSpec.describe "Admin::Dashboard", type: :request do
         expect(response.body).to include("総ユーザー数")
         expect(response.body).to include("総コンテスト数")
       end
+
+      it "includes entry_stats with recent entries" do
+        contest = create(:contest, :published, user: create(:user, :organizer, :confirmed))
+        create(:entry, contest: contest, user: create(:user, :confirmed), created_at: 1.day.ago)
+
+        get admin_dashboard_path
+        expect(response).to have_http_status(:success)
+      end
     end
 
     context "when logged in as organizer" do

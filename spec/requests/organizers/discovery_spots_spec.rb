@@ -213,6 +213,52 @@ RSpec.describe "Organizers::DiscoverySpots", type: :request do
         expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
         expect(flash[:alert]).to be_present
       end
+
+      it "requires at least one valid source spot" do
+        post merge_organizers_contest_discovery_spots_path(contest),
+             params: { target_id: target_spot.id, source_ids: [ target_spot.id ] }
+
+        expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+        expect(flash[:alert]).to be_present
+      end
+    end
+  end
+
+  describe "PATCH certify - error handling" do
+    let!(:spot) { create(:spot, :certified, contest: contest) }
+
+    before { sign_in organizer }
+
+    it "redirects with alert when certify raises ArgumentError" do
+      patch certify_organizers_contest_discovery_spot_path(contest, spot)
+      expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+      expect(flash[:alert]).to be_present
+    end
+
+    it "responds with turbo_stream on certify error" do
+      patch certify_organizers_contest_discovery_spot_path(contest, spot),
+            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+    end
+  end
+
+  describe "PATCH reject - error handling" do
+    let!(:spot) { create(:spot, :certified, contest: contest) }
+
+    before { sign_in organizer }
+
+    it "redirects with alert when reject raises ArgumentError" do
+      patch reject_organizers_contest_discovery_spot_path(contest, spot),
+            params: { reason: "some reason" }
+      expect(response).to redirect_to(organizers_contest_discovery_spots_path(contest))
+      expect(flash[:alert]).to be_present
+    end
+
+    it "responds with turbo_stream on reject error" do
+      patch reject_organizers_contest_discovery_spot_path(contest, spot),
+            params: { reason: "some reason" },
+            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
     end
   end
 end

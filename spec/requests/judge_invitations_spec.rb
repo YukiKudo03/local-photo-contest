@@ -124,5 +124,40 @@ RSpec.describe "JudgeInvitations", type: :request do
         expect(response.body).to include("有効期限が切れています")
       end
     end
+
+    context "with already declined invitation" do
+      let(:declined_invitation) { create(:judge_invitation, :declined, contest: contest, invited_by: organizer) }
+
+      it "redirects with already declined error" do
+        post decline_judge_invitation_path(declined_invitation.token)
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to be_present
+      end
+    end
+
+    context "when decline raises error" do
+      it "redirects with error message" do
+        allow_any_instance_of(JudgeInvitationService).to receive(:decline).and_raise(StandardError, "decline error")
+
+        post decline_judge_invitation_path(invitation.token)
+
+        expect(response).to redirect_to(judge_invitation_path(invitation.token))
+        expect(flash[:alert]).to eq("decline error")
+      end
+    end
+  end
+
+  describe "POST /judge_invitations/:id/accept - error handling" do
+    before { sign_in user }
+
+    it "redirects with error when accept raises" do
+      allow_any_instance_of(JudgeInvitationService).to receive(:accept).and_raise(StandardError, "accept error")
+
+      post accept_judge_invitation_path(invitation.token)
+
+      expect(response).to redirect_to(judge_invitation_path(invitation.token))
+      expect(flash[:alert]).to eq("accept error")
+    end
   end
 end

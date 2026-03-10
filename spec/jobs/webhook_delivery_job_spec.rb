@@ -48,6 +48,19 @@ RSpec.describe WebhookDeliveryJob, type: :job do
       expect(webhook.reload.failures_count).to eq(0)
     end
 
+    context "when a network error occurs" do
+      it "marks delivery as failed and re-raises" do
+        stub_request(:post, webhook.url).to_raise(StandardError.new("connection reset"))
+
+        expect {
+          described_class.new.perform(delivery.id)
+        }.to raise_error(StandardError, "connection reset")
+
+        expect(delivery.reload.status).to eq("failed")
+        expect(webhook.reload.failures_count).to be >= 1
+      end
+    end
+
     it "disables webhook after 10 failures" do
       webhook.update!(failures_count: 9)
       stub_request(:post, webhook.url).to_return(status: 500, body: "Error")

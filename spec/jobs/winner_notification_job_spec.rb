@@ -58,6 +58,23 @@ RSpec.describe WinnerNotificationJob, type: :job do
       end
     end
 
+    context "when scan mode encounters an error" do
+      let(:contest) { create(:contest, :accepting_entries, user: organizer) }
+      let!(:entry) { create(:entry, contest: contest, user: participant) }
+
+      before do
+        contest.finish!
+        contest.update_column(:results_announced_at, Time.current)
+        create(:contest_ranking, :first_place, contest: contest, entry: entry)
+        allow(WinnerNotificationService).to receive(:new).and_raise(StandardError, "service error")
+      end
+
+      it "logs error and continues" do
+        expect(Rails.logger).to receive(:error).with(/Winner notification scan failed/)
+        expect { described_class.perform_now }.not_to raise_error
+      end
+    end
+
     context "when contest has no results announced" do
       let(:contest) { create(:contest, :accepting_entries, user: organizer) }
       let!(:entry) { create(:entry, contest: contest, user: participant) }

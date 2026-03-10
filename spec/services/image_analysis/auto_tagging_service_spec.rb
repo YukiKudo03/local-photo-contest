@@ -80,5 +80,78 @@ RSpec.describe ImageAnalysis::AutoTaggingService, type: :service do
         expect { service.perform }.not_to change(Tag, :count)
       end
     end
+
+    context "when ConfigurationError is raised", if: defined?(Aws::Rekognition) do
+      let(:provider) { instance_double(Moderation::Providers::RekognitionProvider) }
+
+      before do
+        allow(Moderation::Providers::RekognitionProvider).to receive(:new).and_return(provider)
+        allow(provider).to receive(:detect_labels).and_raise(
+          Moderation::Providers::RekognitionProvider::ConfigurationError, "AWS not configured"
+        )
+      end
+
+      it "logs info and does not raise" do
+        allow(Rails.logger).to receive(:info).and_call_original
+        expect { service.perform }.not_to raise_error
+        expect(Rails.logger).to have_received(:info).with(/AWS not configured/).at_least(:once)
+      end
+    end
+
+    context "when AnalysisError is raised", if: defined?(Aws::Rekognition) do
+      let(:provider) { instance_double(Moderation::Providers::RekognitionProvider) }
+
+      before do
+        allow(Moderation::Providers::RekognitionProvider).to receive(:new).and_return(provider)
+        allow(provider).to receive(:detect_labels).and_raise(
+          Moderation::Providers::RekognitionProvider::AnalysisError, "analysis failed"
+        )
+      end
+
+      it "logs error and does not raise" do
+        expect(Rails.logger).to receive(:error).with(/Analysis failed/)
+        expect { service.perform }.not_to raise_error
+      end
+    end
+
+    context "when unexpected StandardError is raised", if: defined?(Aws::Rekognition) do
+      let(:provider) { instance_double(Moderation::Providers::RekognitionProvider) }
+
+      before do
+        allow(Moderation::Providers::RekognitionProvider).to receive(:new).and_return(provider)
+        allow(provider).to receive(:detect_labels).and_raise(StandardError, "unexpected")
+      end
+
+      it "logs error and does not raise" do
+        expect(Rails.logger).to receive(:error).with(/Unexpected error/)
+        expect { service.perform }.not_to raise_error
+      end
+    end
+
+    context "category inference from Rekognition categories", if: defined?(Aws::Rekognition) do
+      let(:provider) { instance_double(Moderation::Providers::RekognitionProvider) }
+      let(:labels) do
+        [
+          { "Name" => "Surfing", "Confidence" => 90.0, "Categories" => ["Sport"], "Parents" => [] }
+        ]
+      end
+      let(:label_result) do
+        Moderation::Providers::RekognitionProvider::LabelResult.new(
+          labels: labels,
+          raw_response: { "Labels" => labels }
+        )
+      end
+
+      before do
+        allow(Moderation::Providers::RekognitionProvider).to receive(:new).and_return(provider)
+        allow(provider).to receive(:detect_labels).and_return(label_result)
+      end
+
+      it "infers category from Categories field" do
+        service.perform
+        tag = Tag.find_by(name: "surfing")
+        expect(tag.category).to eq("activity")
+      end
+    end
   end
 end

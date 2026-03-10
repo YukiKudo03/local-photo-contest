@@ -31,6 +31,25 @@ RSpec.describe Backup::ActiveStorageIntegrityService do
       end
     end
 
+    context "with checksum mismatch" do
+      let(:user) { create(:user, :confirmed) }
+      let(:contest) { create(:contest, :published) }
+      let!(:entry) { create(:entry, user: user, contest: contest) }
+
+      it "detects checksum mismatch" do
+        blob = ActiveStorage::Blob.first
+        allow(blob.service).to receive(:exist?).with(blob.key).and_return(true)
+        allow(blob).to receive(:open).and_yield(Tempfile.new("test"))
+        allow(Digest::MD5).to receive_message_chain(:file, :base64digest).and_return("wrong_checksum")
+        allow(ActiveStorage::Blob).to receive(:find_each).and_yield(blob)
+        allow(ActiveStorage::Blob).to receive(:count).and_return(1)
+
+        result = service.check
+        expect(result.checksum_mismatch).to eq(1)
+        expect(result.errors.first).to include("checksum mismatch")
+      end
+    end
+
     context "with missing blobs" do
       let(:user) { create(:user, :confirmed) }
       let(:contest) { create(:contest, :published) }

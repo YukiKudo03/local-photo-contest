@@ -26,10 +26,15 @@ module Admin
       skip_rate = total_progresses > 0 ? (skipped_tutorials.to_f / total_progresses * 100).round(1) : 0
 
       # 平均完了時間（秒）
+      avg_time_expr = if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
+        "EXTRACT(EPOCH FROM (completed_at - started_at))"
+      else
+        "strftime('%s', completed_at) - strftime('%s', started_at)"
+      end
       avg_completion_time = TutorialProgress
         .where(completed: true)
         .where.not(started_at: nil, completed_at: nil)
-        .average("EXTRACT(EPOCH FROM (completed_at - started_at))")
+        .average(avg_time_expr)
         &.to_i || 0
 
       {

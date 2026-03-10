@@ -130,6 +130,30 @@ RSpec.describe Vote, type: :model do
     end
   end
 
+  describe 'callbacks error handling' do
+    it 'does not raise when broadcast_vote_update fails' do
+      allow(NotificationBroadcaster).to receive(:vote_update).and_raise(StandardError, "broadcast error")
+      expect { create(:vote) }.not_to raise_error
+    end
+
+    it 'does not raise when clear_statistics_cache fails' do
+      allow(StatisticsService).to receive(:clear_cache).and_raise(StandardError, "cache error")
+      expect { create(:vote) }.not_to raise_error
+    end
+
+    it 'does not raise when send_vote_notification_email fails' do
+      allow(NotificationMailer).to receive(:entry_voted).and_raise(StandardError, "mail error")
+      expect { create(:vote) }.not_to raise_error
+    end
+
+    it 'logs error when broadcast_vote_update fails' do
+      vote = create(:vote)
+      allow(NotificationBroadcaster).to receive(:vote_update).and_raise(StandardError, "broadcast error")
+      expect(Rails.logger).to receive(:error).with(/Failed to broadcast vote update/)
+      vote.send(:broadcast_vote_update)
+    end
+  end
+
   describe 'database constraints' do
     let(:user) { create(:user, :confirmed) }
     let(:entry) { create(:entry) }

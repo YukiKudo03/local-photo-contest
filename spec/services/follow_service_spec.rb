@@ -29,6 +29,14 @@ RSpec.describe FollowService, type: :service do
       expect(result[:error]).to eq(:already_following)
     end
 
+    it "handles RecordNotUnique race condition gracefully" do
+      allow(Follow).to receive(:create!).and_raise(ActiveRecord::RecordNotUnique)
+      allow(follower).to receive(:following?).and_return(false)
+      result = subject.follow(target)
+      expect(result[:success]).to be false
+      expect(result[:error]).to eq(:already_following)
+    end
+
     it "awards points via PointService" do
       subject.follow(target)
       expect(follower.user_points.where(action_type: "follow")).to exist

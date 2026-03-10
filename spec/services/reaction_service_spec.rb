@@ -41,5 +41,15 @@ RSpec.describe ReactionService, type: :service do
       result = subject.toggle_like(entry)
       expect(result[:count]).to eq(0)
     end
+
+    context "when RecordNotUnique race condition occurs" do
+      it "handles gracefully and returns liked: true" do
+        allow(Reaction).to receive(:create!).and_raise(ActiveRecord::RecordNotUnique)
+        allow(user.reactions).to receive(:find_by).and_return(nil)
+        result = subject.toggle_like(entry)
+        expect(result[:success]).to be true
+        expect(result[:liked]).to be true
+      end
+    end
   end
 end

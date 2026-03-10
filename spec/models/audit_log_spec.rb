@@ -85,6 +85,17 @@ RSpec.describe AuditLog, type: :model do
 
       expect(log.target).to be_nil
     end
+
+    it "returns nil if target_type is invalid class" do
+      log = AuditLog.create!(
+        action: "role_change",
+        user: user,
+        target_type: "NonExistentClass",
+        target_id: 1
+      )
+
+      expect(log.target).to be_nil
+    end
   end
 
   describe "scopes" do

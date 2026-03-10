@@ -89,6 +89,41 @@ RSpec.describe "My::Notifications", type: :request do
     end
   end
 
+  describe "notification_redirect_path" do
+    let(:controller_instance) do
+      ctrl = My::NotificationsController.new
+      # Provide url_options so route helpers work
+      ctrl.define_singleton_method(:url_options) { { host: "localhost", port: 80 } }
+      ctrl
+    end
+
+    it "returns contest results path for Contest notifiable" do
+      organizer = create(:user, :organizer, :confirmed)
+      contest = create(:contest, :finished, user: organizer, results_announced_at: 1.day.ago)
+      notification = create(:notification, user: user, notifiable: contest)
+
+      path = controller_instance.send(:notification_redirect_path, notification)
+      expect(path).to include("/contests/#{contest.id}/results")
+    end
+
+    it "returns entry path for Entry notifiable" do
+      organizer = create(:user, :organizer, :confirmed)
+      contest = create(:contest, :published, user: organizer)
+      entry = create(:entry, contest: contest, user: user)
+      notification = create(:notification, :entry_ranked, user: user, notifiable: entry)
+
+      path = controller_instance.send(:notification_redirect_path, notification)
+      expect(path).to include("/entries/#{entry.id}")
+    end
+
+    it "returns notifications index path for unknown notifiable type" do
+      notification = build(:notification, user: user, notifiable_type: "Unknown", notifiable_id: 1)
+
+      path = controller_instance.send(:notification_redirect_path, notification)
+      expect(path).to eq("/my/notifications")
+    end
+  end
+
   describe "POST /my/notifications/mark_all_as_read" do
     context "when signed in" do
       before { sign_in user }

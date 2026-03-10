@@ -49,6 +49,32 @@ RSpec.describe ModerationJob, type: :job do
       end
     end
 
+    context "when moderation is skipped" do
+      let(:skipped_result) do
+        Moderation::ModerationService::Result.new(
+          entry: entry,
+          status: :skipped,
+          error: nil
+        )
+      end
+
+      before do
+        allow(Moderation::ModerationService).to receive(:moderate).and_return(skipped_result)
+      end
+
+      it "logs skipped message" do
+        expect(Rails.logger).to receive(:info).with(/moderation skipped/)
+        described_class.new.perform(entry.id)
+      end
+    end
+
+    context "when auto-tagging fails" do
+      it "does not raise error" do
+        allow_any_instance_of(ImageAnalysis::AutoTaggingService).to receive(:perform).and_raise(StandardError, "tagging error")
+        expect { described_class.new.perform(entry.id) }.not_to raise_error
+      end
+    end
+
     context "when ModerationService returns error" do
       let(:error_result) do
         Moderation::ModerationService::Result.new(

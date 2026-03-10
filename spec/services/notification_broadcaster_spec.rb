@@ -90,5 +90,46 @@ RSpec.describe NotificationBroadcaster, type: :service do
 
       NotificationBroadcaster.contest_status_change(contest, :finished)
     end
+
+    context "when contest has judges" do
+      let!(:judge_user) { create(:user, :confirmed) }
+      let!(:contest_judge) { create(:contest_judge, contest: contest, user: judge_user) }
+
+      it "notifies judges about contest status change" do
+        expect(NotificationsChannel).to receive(:broadcast_to).with(
+          participant,
+          hash_including(title: "コンテスト更新")
+        )
+        expect(NotificationsChannel).to receive(:broadcast_to).with(
+          judge_user,
+          hash_including(title: "コンテスト更新")
+        )
+
+        NotificationBroadcaster.contest_status_change(contest, :finished)
+      end
+    end
+  end
+
+  describe ".reaction_update" do
+    it "broadcasts reaction count update to entry channel" do
+      expect(EntryChannel).to receive(:broadcast_to).with(
+        entry,
+        hash_including(
+          type: "reaction_update",
+          entry_id: entry.id
+        )
+      )
+
+      NotificationBroadcaster.reaction_update(entry)
+    end
+  end
+
+  describe ".contest_update" do
+    it "broadcasts data to contest channel" do
+      data = { type: "update", message: "test" }
+      expect(ContestChannel).to receive(:broadcast_to).with(contest, data)
+
+      NotificationBroadcaster.contest_update(contest, data)
+    end
   end
 end

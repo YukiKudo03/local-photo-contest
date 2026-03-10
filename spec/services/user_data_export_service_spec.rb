@@ -80,5 +80,69 @@ RSpec.describe UserDataExportService, type: :service do
       zip_file&.close
       zip_file&.unlink
     end
+
+    it "includes avatar in ZIP when avatar is attached" do
+      user.avatar.attach(
+        io: StringIO.new("fake avatar data"),
+        filename: "avatar.jpg",
+        content_type: "image/jpeg"
+      )
+      zip_file = service.generate_zip
+      entries = []
+      Zip::File.open(zip_file.path) do |zip|
+        zip.each { |entry| entries << entry.name }
+      end
+      expect(entries.any? { |e| e.start_with?("avatar/") }).to be true
+    ensure
+      zip_file&.close
+      zip_file&.unlink
+    end
+
+    it "includes entry photos in ZIP" do
+      organizer = create(:user, :organizer, :confirmed)
+      contest = create(:contest, :published, user: organizer)
+      create(:entry, user: user, contest: contest)
+
+      zip_file = service.generate_zip
+      entries = []
+      Zip::File.open(zip_file.path) do |zip|
+        zip.each { |entry| entries << entry.name }
+      end
+      expect(entries.any? { |e| e.start_with?("photos/") }).to be true
+    ensure
+      zip_file&.close
+      zip_file&.unlink
+    end
+
+    it "handles entry photo download error gracefully" do
+      organizer = create(:user, :organizer, :confirmed)
+      contest = create(:contest, :published, user: organizer)
+      entry = create(:entry, user: user, contest: contest)
+
+      allow_any_instance_of(ActiveStorage::Blob).to receive(:download).and_raise(StandardError, "download error")
+
+      expect(Rails.logger).to receive(:warn).with(/Failed to add entry photo/).at_least(:once)
+      zip_file = service.generate_zip
+      expect(zip_file).to be_a(Tempfile)
+    ensure
+      zip_file&.close
+      zip_file&.unlink
+    end
+
+    it "handles avatar download error gracefully" do
+      user.avatar.attach(
+        io: StringIO.new("fake avatar data"),
+        filename: "avatar.jpg",
+        content_type: "image/jpeg"
+      )
+      allow(user.avatar).to receive(:download).and_raise(StandardError, "download error")
+
+      expect(Rails.logger).to receive(:warn).with(/Failed to add avatar/).at_least(:once)
+      zip_file = service.generate_zip
+      expect(zip_file).to be_a(Tempfile)
+    ensure
+      zip_file&.close
+      zip_file&.unlink
+    end
   end
 end

@@ -123,6 +123,25 @@ RSpec.describe "Help", type: :request do
       end
     end
 
+    context "when guide key is invalid but bypasses route constraint" do
+      it "raises RoutingError" do
+        controller = HelpController.new
+        allow(controller).to receive(:params).and_return(ActionController::Parameters.new(guide: "invalid_guide"))
+        expect {
+          controller.show
+        }.to raise_error(ActionController::RoutingError, "Guide not found")
+      end
+    end
+
+    context "when guide file does not exist" do
+      it "returns 404" do
+        allow_any_instance_of(HelpHelper).to receive(:guide_file_path).and_return("/nonexistent/path/guide.md")
+
+        get help_guide_path(:participant)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
     context "when not logged in" do
       it "allows access to guides" do
         get help_guide_path(:participant)

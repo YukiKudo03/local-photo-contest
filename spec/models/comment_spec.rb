@@ -39,6 +39,16 @@ RSpec.describe Comment, type: :model do
     end
   end
 
+  describe "notification callback error handling" do
+    it "does not raise when email delivery fails" do
+      allow(NotificationMailer).to receive(:comment_posted).and_raise(StandardError, "mail error")
+      organizer = create(:user, :organizer, :confirmed)
+      contest = create(:contest, :published, user: organizer)
+      entry = create(:entry, contest: contest)
+      expect { create(:comment, entry: entry) }.not_to raise_error
+    end
+  end
+
   describe "delegation" do
     let(:organizer) { create(:user, :organizer, :confirmed) }
     let(:contest) { create(:contest, :published, user: organizer) }

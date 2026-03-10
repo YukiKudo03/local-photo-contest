@@ -389,6 +389,68 @@ RSpec.describe Contest, type: :model do
     end
   end
 
+  describe "#contest_judge_for" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:judge) { create(:user, :confirmed) }
+    let(:contest) { create(:contest, :published, user: organizer) }
+
+    it "returns the contest_judge for the given user" do
+      cj = create(:contest_judge, contest: contest, user: judge)
+      expect(contest.contest_judge_for(judge)).to eq(cj)
+    end
+
+    it "returns nil when user is not a judge" do
+      expect(contest.contest_judge_for(judge)).to be_nil
+    end
+  end
+
+  describe "#judge_ranked_entries" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+    let!(:entry1) { create(:entry, contest: contest) }
+    let!(:entry2) { create(:entry, contest: contest) }
+    let(:judge) { create(:user, :confirmed) }
+    let!(:contest_judge) { create(:contest_judge, contest: contest, user: judge) }
+    let!(:criterion) { create(:evaluation_criterion, contest: contest) }
+
+    it "returns entries ordered by average judge score" do
+      create(:judge_evaluation, contest_judge: contest_judge, entry: entry1, evaluation_criterion: criterion, score: 5)
+      create(:judge_evaluation, contest_judge: contest_judge, entry: entry2, evaluation_criterion: criterion, score: 9)
+      ranked = contest.judge_ranked_entries.to_a
+      expect(ranked.first).to eq(entry2)
+    end
+  end
+
+  describe "#top_judge_entries" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+    let!(:entries) { create_list(:entry, 5, contest: contest) }
+
+    it "returns limited judge-ranked entries" do
+      result = contest.top_judge_entries(2).to_a
+      expect(result.length).to be <= 2
+    end
+  end
+
+  describe "#prize_entries" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:contest) { create(:contest, :published, user: organizer, prize_count: 2) }
+    let!(:entry1) { create(:entry, contest: contest) }
+    let!(:entry2) { create(:entry, contest: contest) }
+    let!(:entry3) { create(:entry, contest: contest) }
+
+    before do
+      3.times { create(:vote, entry: entry1) }
+      2.times { create(:vote, entry: entry2) }
+      1.times { create(:vote, entry: entry3) }
+      RankingCalculator.new(contest).calculate
+    end
+
+    it "returns only entries within prize_count" do
+      expect(contest.prize_entries.count).to eq(2)
+    end
+  end
+
   describe "#rankings_calculated?" do
     let(:contest) { create(:contest, :published) }
 

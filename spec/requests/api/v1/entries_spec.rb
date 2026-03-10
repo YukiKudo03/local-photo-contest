@@ -87,4 +87,54 @@ RSpec.describe "API V1 Entries", type: :request do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "POST /api/v1/contests/:contest_id/entries" do
+    let(:write_token) { create(:api_token, :with_write_scope, user: user) }
+
+    context "when contest is not accepting entries" do
+      let(:finished_contest) { create(:contest, :finished) }
+
+      it "returns 404" do
+        post "/api/v1/contests/#{finished_contest.id}/entries",
+             params: { entry: { title: "test" } }.to_json,
+             headers: api_headers(token: write_token.token)
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when published contest has closed entry period" do
+      let(:closed_contest) { create(:contest, :published, entry_end_at: 1.day.ago) }
+
+      it "returns 404 when entry period is over" do
+        post "/api/v1/contests/#{closed_contest.id}/entries",
+             params: { entry: { title: "test" } }.to_json,
+             headers: api_headers(token: write_token.token)
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "with invalid entry params" do
+      it "returns 422 with validation errors" do
+        post "/api/v1/contests/#{contest.id}/entries",
+             params: { entry: { title: "" } }.to_json,
+             headers: api_headers(token: write_token.token)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response["error"]["code"]).to eq("unprocessable_entity")
+      end
+    end
+
+    context "with missing entry parameter" do
+      it "returns 400 bad request" do
+        post "/api/v1/contests/#{contest.id}/entries",
+             params: {}.to_json,
+             headers: api_headers(token: write_token.token)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json_response["error"]["code"]).to eq("bad_request")
+      end
+    end
+  end
 end

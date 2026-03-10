@@ -173,4 +173,134 @@ RSpec.describe NotificationMailer, type: :mailer do
       expect(mail.subject).to include("審査期限のお知らせ")
     end
   end
+
+  describe "#new_follower" do
+    let(:follower) { create(:user, :confirmed) }
+    let(:follow) { create(:follow, follower: follower, followed: user) }
+
+    it "sends email to followed user" do
+      mail = described_class.new_follower(follow)
+      expect(mail.to).to eq([ user.email ])
+      expect(mail.subject).to include(follower.display_name)
+    end
+  end
+
+  describe "#followed_user_entry" do
+    let(:follower) { create(:user, :confirmed) }
+    let(:entry) { create(:entry, user: user, contest: contest) }
+
+    it "sends email to follower" do
+      mail = described_class.followed_user_entry(entry, follower)
+      expect(mail.to).to eq([ follower.email ])
+    end
+  end
+
+  describe "#judging_complete" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+
+    it "sends email" do
+      mail = described_class.judging_complete(organizer, contest)
+      expect(mail.to).to eq([ organizer.email ])
+      expect(mail.subject).to include("審査が完了")
+    end
+
+    context "when disabled" do
+      before { organizer.update!(email_on_results: false) }
+
+      it "does not send" do
+        mail = described_class.judging_complete(organizer, contest)
+        expect(mail.to).to be_nil
+      end
+    end
+  end
+
+  describe "#spot_certification_request" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:spot) { create(:spot, contest: contest) }
+
+    it "sends email" do
+      mail = described_class.spot_certification_request(organizer, spot)
+      expect(mail.to).to eq([ organizer.email ])
+    end
+  end
+
+  describe "#winner_certificate" do
+    let(:entry) { create(:entry, user: user, contest: contest) }
+    let(:ranking) { create(:contest_ranking, contest: contest, entry: entry, rank: 1) }
+
+    it "sends email" do
+      mail = described_class.winner_certificate(user, ranking)
+      expect(mail.to).to eq([ user.email ])
+    end
+
+    context "when certificate PDF is attached" do
+      before do
+        ranking.certificate_pdf.attach(
+          io: StringIO.new("%PDF-1.4 test"),
+          filename: "certificate.pdf",
+          content_type: "application/pdf"
+        )
+      end
+
+      it "includes certificate attachment" do
+        mail = described_class.winner_certificate(user, ranking)
+        expect(mail.attachments.count).to eq(1)
+        expect(mail.attachments.first.filename).to eq("certificate.pdf")
+      end
+    end
+
+    context "when disabled" do
+      before { user.update!(email_on_results: false) }
+
+      it "does not send" do
+        mail = described_class.winner_certificate(user, ranking)
+        expect(mail.to).to be_nil
+      end
+    end
+  end
+
+  describe "#contest_archived" do
+    it "sends email" do
+      mail = described_class.contest_archived(user, contest)
+      expect(mail.to).to eq([ user.email ])
+    end
+  end
+
+  describe "#judging_escalation" do
+    let(:organizer) { create(:user, :organizer, :confirmed) }
+    let(:contest_judge) { create(:contest_judge, contest: contest, user: create(:user, :confirmed)) }
+
+    it "sends to organizer" do
+      mail = described_class.judging_escalation(organizer, contest_judge)
+      expect(mail.to).to eq([ organizer.email ])
+    end
+
+    context "when disabled" do
+      before { organizer.update!(email_on_judging: false) }
+
+      it "does not send" do
+        mail = described_class.judging_escalation(organizer, contest_judge)
+        expect(mail.to).to be_nil
+      end
+    end
+  end
+
+  describe "#graduated_judging_reminder" do
+    let(:judge_user) { create(:user, :confirmed) }
+    let(:contest_judge) { create(:contest_judge, contest: contest, user: judge_user) }
+
+    it "sends reminder" do
+      mail = described_class.graduated_judging_reminder(contest_judge, :warning)
+      expect(mail.to).to eq([ judge_user.email ])
+    end
+
+    context "when disabled" do
+      before { judge_user.update!(email_on_judging: false) }
+
+      it "does not send" do
+        mail = described_class.graduated_judging_reminder(contest_judge, :warning)
+        expect(mail.to).to be_nil
+      end
+    end
+  end
 end

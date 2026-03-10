@@ -95,5 +95,15 @@ RSpec.describe SimilarEntriesService do
         expect(result).to include(similar_entry)
       end
     end
+
+    context "when perceptual hash lookup raises error" do
+      it "returns empty for that category and continues" do
+        source_entry.update_columns(image_hash: "0000000000000000")
+        allow(ImageAnalysis::ImageHashService).to receive(:new).and_raise(StandardError, "hash error")
+        result = described_class.new(source_entry.reload).find
+        # Should still include results from other strategies
+        expect(result).to be_an(Array)
+      end
+    end
   end
 end

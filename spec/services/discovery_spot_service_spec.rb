@@ -200,6 +200,31 @@ RSpec.describe DiscoverySpotService do
       # votes_count is recalculated at the end of merge
       expect(target.reload.votes_count).to eq(0)
     end
+
+    it "calls update on spot_vote when user has not voted on target" do
+      voter = create(:user, :confirmed)
+      source_vote = create(:spot_vote, spot: source1, user: voter)
+
+      expect_any_instance_of(SpotVote).to receive(:update!).with(spot_id: target.id).and_call_original
+
+      described_class.merge_spots(target: target, sources: [ source1 ])
+    end
+
+    it "skips duplicate spot_votes when user already voted on target" do
+      voter = create(:user, :confirmed)
+
+      # voter has voted on both target and source1
+      create(:spot_vote, spot: target, user: voter)
+      create(:spot_vote, spot: source1, user: voter)
+
+      # Should not raise UniqueViolation - duplicate is skipped
+      expect {
+        described_class.merge_spots(target: target, sources: [ source1, source2 ])
+      }.not_to raise_error
+
+      # voter keeps their original target vote
+      expect(target.reload.spot_votes.where(user_id: voter.id).count).to eq(1)
+    end
   end
 
   describe ".find_nearby_spots" do
@@ -302,6 +327,45 @@ RSpec.describe DiscoverySpotService do
     end
   end
 
+  describe ".discovery_statistics" do
+    let(:contest) { create(:contest, :published) }
+
+    context "when organizer notification fails" do
+      it "logs error and does not raise" do
+        allow(Notification).to receive(:create!).and_call_original
+        allow(Notification).to receive(:create!).with(hash_including(notification_type: "spot_discovered")).and_raise(StandardError, "notification error")
+
+        expect(Rails.logger).to receive(:error).with(/Failed to notify organizer/)
+        entry = build(:entry, contest: contest, user: create(:user))
+        # Should not raise
+        expect {
+          described_class.create_discovered_spot(
+            entry: entry,
+            name: "Test",
+            latitude: 35.0,
+            longitude: 139.0
+          )
+        }.not_to raise_error
+      end
+    end
+  end
+
+  describe ".certify_spot badge error handling" do
+    let(:contest) { create(:contest, :published) }
+    let(:certifier) { create(:user) }
+    let(:user) { create(:user) }
+
+    it "logs error when badge awarding fails" do
+      5.times { create(:spot, :certified, contest: contest, discovered_by: user) }
+      spot = create(:spot, :discovered, contest: contest, discovered_by: user)
+
+      allow(DiscoveryBadge).to receive(:create!).and_raise(StandardError, "badge error")
+      expect(Rails.logger).to receive(:error).with(/Failed to award badge/)
+
+      described_class.certify_spot(spot: spot, user: certifier)
+    end
+  end
+
   describe ".discovery_ranking" do
     let(:contest) { create(:contest, :published) }
     let(:user1) { create(:user) }
@@ -330,6 +394,19 @@ RSpec.describe DiscoverySpotService do
     it "respects the limit parameter" do
       ranking = described_class.discovery_ranking(contest, limit: 1)
       expect(ranking.to_a.size).to eq(1)
+    end
+  end
+
+  describe ".discovery_by_area" do
+    let(:contest) { create(:contest, :published) }
+
+    it "groups spots by grid coordinates" do
+      create(:spot, contest: contest, latitude: 35.6580, longitude: 139.7016)
+      create(:spot, contest: contest, latitude: 35.6585, longitude: 139.7016)
+
+      result = described_class.send(:discovery_by_area, contest)
+      expect(result).to be_a(Hash)
+      expect(result.values.sum).to eq(2)
     end
   end
 

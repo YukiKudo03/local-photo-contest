@@ -176,6 +176,28 @@ RSpec.describe "Entries", type: :request do
       end
     end
 
+    context "when contest is draft" do
+      it "returns not found for non-owner" do
+        # Create entry in published contest, then change contest to draft
+        draft_entry = create(:entry, user: user, contest: contest, moderation_status: :moderation_approved)
+        contest.update_column(:status, :draft)
+
+        sign_in other_user
+        get entry_path(draft_entry)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when contest is soft-deleted" do
+      let!(:deleted_entry) { create(:entry, user: user, contest: contest, moderation_status: :moderation_approved) }
+
+      it "returns not found" do
+        contest.update_column(:deleted_at, Time.current)
+        get entry_path(deleted_entry)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
     context "when similar entries exist" do
       let!(:entry_with_similar) { create(:entry, :with_exif, user: user, contest: contest, moderation_status: :moderation_approved) }
       let!(:similar_entry) { create(:entry, user: user, contest: contest, title: "Similar Work", moderation_status: :moderation_approved) }

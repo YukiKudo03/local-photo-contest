@@ -45,6 +45,14 @@ RSpec.describe "My API Tokens", type: :request do
       # Raw token should be displayed in flash or page
       expect(response.body).to include(ApiToken.last.token)
     end
+
+    it "renders index on invalid token creation" do
+      allow_any_instance_of(ApiToken).to receive(:save).and_return(false)
+
+      post my_api_tokens_path, params: { api_token: { name: "" } }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "DELETE /my/api_tokens/:id" do

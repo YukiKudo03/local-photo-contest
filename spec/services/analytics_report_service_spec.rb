@@ -25,6 +25,19 @@ RSpec.describe AnalyticsReportService, type: :service do
     end
   end
 
+  describe "#generate_pdf with area data" do
+    it "includes area comparison table when areas exist" do
+      area = create(:area, user: organizer, name: "TestArea")
+      user = create(:user, :confirmed)
+      entry = create(:entry, contest: contest, user: user, area: area)
+      create(:vote, entry: entry, user: create(:user, :confirmed))
+
+      pdf = service.generate_pdf
+      expect(pdf[0..3]).to eq("%PDF")
+      expect(pdf.length).to be > 100
+    end
+  end
+
   describe "#generate_and_attach!" do
     it "attaches PDF to contest via Active Storage" do
       service.generate_and_attach!

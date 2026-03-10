@@ -140,6 +140,17 @@ RSpec.describe RankingCalculator do
     end
   end
 
+  describe "unknown judging method fallback" do
+    let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }
+
+    it "falls back to JudgeOnlyStrategy for unknown method" do
+      allow(contest).to receive(:judging_method).and_return("unknown")
+      calculator = described_class.new(contest)
+      rankings = calculator.calculate
+      expect(rankings).to be_an(Array)
+    end
+  end
+
   describe "edge cases" do
     context "when there are no judges" do
       let(:contest) { create(:contest, :published, user: organizer, judging_method: :judge_only) }

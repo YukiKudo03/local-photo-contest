@@ -94,6 +94,12 @@ RSpec.describe "Organizers::DiscoveryChallenges", type: :request do
         expect(response).to redirect_to(organizers_contest_discovery_challenges_path(contest))
       end
 
+      it "renders new on invalid params" do
+        post organizers_contest_discovery_challenges_path(contest),
+             params: { discovery_challenge: { name: "", theme: "" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
       it "sets the contest association" do
         post organizers_contest_discovery_challenges_path(contest), params: valid_params
         expect(DiscoveryChallenge.last.contest).to eq(contest)
@@ -142,6 +148,12 @@ RSpec.describe "Organizers::DiscoveryChallenges", type: :request do
               params: { discovery_challenge: { name: "更新後の名前" } }
         expect(response).to redirect_to(organizers_contest_discovery_challenges_path(contest))
       end
+
+      it "renders edit on invalid update" do
+        patch organizers_contest_discovery_challenge_path(contest, challenge),
+              params: { discovery_challenge: { name: "" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
   end
 
@@ -160,6 +172,15 @@ RSpec.describe "Organizers::DiscoveryChallenges", type: :request do
       it "redirects to challenges index after deletion" do
         delete organizers_contest_discovery_challenge_path(contest, challenge)
         expect(response).to redirect_to(organizers_contest_discovery_challenges_path(contest))
+      end
+
+      it "cannot delete an active challenge" do
+        active_challenge = create(:discovery_challenge, :active, contest: contest)
+        expect {
+          delete organizers_contest_discovery_challenge_path(contest, active_challenge)
+        }.not_to change(DiscoveryChallenge, :count)
+        expect(response).to redirect_to(organizers_contest_discovery_challenges_path(contest))
+        expect(flash[:alert]).to be_present
       end
     end
   end

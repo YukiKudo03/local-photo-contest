@@ -169,5 +169,53 @@ RSpec.describe MilestoneService do
       service.check_and_award(:submit_entry)
       expect(user.achieved_milestone?("consecutive_5_contests")).to be true
     end
+
+    it "awards first_submission milestone" do
+      expect {
+        service.check_and_award(:submit_entry, { contest_id: 1 })
+      }.to change { user.milestones.where(milestone_type: "first_submission").count }.by(1)
+    end
+  end
+
+  describe "#check_and_award(:publish_contest, ...)" do
+    it "awards first_contest_published milestone" do
+      expect {
+        service.check_and_award(:publish_contest, { contest_id: 1 })
+      }.to change { user.milestones.where(milestone_type: "first_contest_published").count }.by(1)
+    end
+
+    it "unlocks features via FeatureUnlockService" do
+      expect_any_instance_of(FeatureUnlockService).to receive(:unlock_for_trigger).with(:first_contest_published)
+      service.check_and_award(:publish_contest, { contest_id: 1 })
+    end
+  end
+
+  describe "#check_and_award(:complete_contest, ...)" do
+    it "awards first_contest_completed milestone" do
+      expect {
+        service.check_and_award(:complete_contest, { contest_id: 1 })
+      }.to change { user.milestones.where(milestone_type: "first_contest_completed").count }.by(1)
+    end
+
+    it "unlocks features via FeatureUnlockService" do
+      expect_any_instance_of(FeatureUnlockService).to receive(:unlock_for_trigger).with(:first_contest_completed)
+      service.check_and_award(:complete_contest, { contest_id: 1 })
+    end
+  end
+
+  describe "#check_and_award(:complete_judging, ...)" do
+    it "awards all_entries_judged milestone" do
+      expect {
+        service.check_and_award(:complete_judging, { contest_id: 1 })
+      }.to change { user.milestones.where(milestone_type: "all_entries_judged").count }.by(1)
+    end
+  end
+
+  describe "broadcast_achievement error handling" do
+    it "does not raise when broadcast fails" do
+      allow(Turbo::StreamsChannel).to receive(:broadcast_append_to).and_raise(StandardError, "broadcast error")
+      expect(Rails.logger).to receive(:warn).with(/Failed to broadcast/).at_least(:once)
+      expect { service.check_and_award(:vote, { entry_id: 1 }) }.not_to raise_error
+    end
   end
 end

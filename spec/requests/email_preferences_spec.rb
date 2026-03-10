@@ -35,6 +35,17 @@ RSpec.describe "EmailPreferences", type: :request do
       end
     end
 
+    context "when update fails" do
+      it "renders show with unprocessable_entity" do
+        allow_any_instance_of(User).to receive(:update).and_return(false)
+
+        patch email_preference_path(token: user.unsubscribe_token),
+              params: { user: { email_on_comment: false } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     context "with invalid token" do
       it "redirects to root" do
         patch email_preference_path(token: "invalid_token"),

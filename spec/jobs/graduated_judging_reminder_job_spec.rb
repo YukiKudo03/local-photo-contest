@@ -93,6 +93,26 @@ RSpec.describe GraduatedJudgingReminderJob, type: :job do
       end
     end
 
+    context "when processing a judge fails" do
+      let(:contest) do
+        create(:contest, :accepting_entries, user: organizer, judging_method: :judge_only)
+      end
+      let!(:criterion) { create(:evaluation_criterion, contest: contest) }
+      let!(:entry) { create(:entry, contest: contest) }
+      let!(:cj) { create(:contest_judge, contest: contest, user: judge_user) }
+
+      before do
+        contest.finish!
+        contest.update_column(:judging_deadline_at, 3.days.from_now)
+        allow(NotificationMailer).to receive(:graduated_judging_reminder).and_raise(StandardError, "mail error")
+      end
+
+      it "logs error and continues" do
+        expect(Rails.logger).to receive(:error).with(/Graduated reminder failed/)
+        expect { described_class.perform_now }.not_to raise_error
+      end
+    end
+
     context "deadline day (final reminder) with escalation" do
       let(:contest) do
         create(:contest, :accepting_entries, user: organizer, judging_method: :judge_only)

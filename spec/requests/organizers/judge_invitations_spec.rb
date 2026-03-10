@@ -138,6 +138,15 @@ RSpec.describe "Organizers::JudgeInvitations", type: :request do
         follow_redirect!
         expect(response.body).to include("招待を再送信しました")
       end
+
+      it "redirects with alert when resend fails" do
+        allow_any_instance_of(JudgeInvitationService).to receive(:resend).and_raise(StandardError, "resend error")
+
+        post resend_organizers_contest_judge_invitation_path(contest, invitation)
+
+        expect(response).to redirect_to(organizers_contest_judge_invitations_path(contest))
+        expect(flash[:alert]).to eq("resend error")
+      end
     end
 
     context "when authenticated as different organizer" do

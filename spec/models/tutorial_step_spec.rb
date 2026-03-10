@@ -68,6 +68,14 @@ RSpec.describe TutorialStep, type: :model do
       it "returns correct types for admin" do
         expect(TutorialStep.types_for_role("admin")).to include("admin_onboarding")
       end
+
+      it "returns correct types for judge" do
+        expect(TutorialStep.types_for_role("judge")).to include("judge_onboarding")
+      end
+
+      it "returns empty array for unknown role" do
+        expect(TutorialStep.types_for_role("unknown")).to eq([])
+      end
     end
 
     describe ".onboarding_type_for_role" do
@@ -81,6 +89,10 @@ RSpec.describe TutorialStep, type: :model do
 
       it "returns admin_onboarding for admin" do
         expect(TutorialStep.onboarding_type_for_role("admin")).to eq("admin_onboarding")
+      end
+
+      it "returns judge_onboarding for judge" do
+        expect(TutorialStep.onboarding_type_for_role("judge")).to eq("judge_onboarding")
       end
     end
   end
@@ -129,6 +141,28 @@ RSpec.describe TutorialStep, type: :model do
 
       it "returns false when there is a next step" do
         expect(step1.last_step?).to be false
+      end
+    end
+
+    describe "#has_video?" do
+      it "returns true when video_url is present" do
+        step1.update!(video_url: "https://example.com/video")
+        expect(step1.has_video?).to be true
+      end
+
+      it "returns false when video_url is blank" do
+        expect(step1.has_video?).to be false
+      end
+    end
+
+    describe "tutorial_step_count_within_limit" do
+      it "rejects creating more than MAX_STEPS_PER_TUTORIAL steps" do
+        TutorialStep::MAX_STEPS_PER_TUTORIAL.times do |i|
+          create(:tutorial_step, tutorial_type: "voting", step_id: "s#{i}", position: i + 1)
+        end
+        extra = build(:tutorial_step, tutorial_type: "voting", step_id: "extra", position: TutorialStep::MAX_STEPS_PER_TUTORIAL + 1)
+        expect(extra).not_to be_valid
+        expect(extra.errors[:base]).to be_present
       end
     end
 

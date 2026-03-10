@@ -171,11 +171,68 @@ RSpec.describe StatisticsService do
     end
   end
 
+  describe "#date_range_preset" do
+    it "returns date range for valid preset" do
+      result = service.date_range_preset("last_7_days")
+      expect(result).to be_an(Array)
+      expect(result.size).to eq(2)
+    end
+
+    it "returns nil for invalid preset" do
+      expect(service.date_range_preset("nonexistent")).to be_nil
+    end
+  end
+
   describe "#area_distribution" do
     it "returns empty hash when contest has no area" do
       contest.update!(area: nil)
       result = service.area_distribution
       expect(result).to eq({})
+    end
+
+    context "when area_counts is empty" do
+      it "returns empty hash" do
+        area = create(:area, user: organizer)
+        contest.update!(area: area)
+        result = service.area_distribution
+        expect(result).to eq({})
+      end
+    end
+
+    context "when area has entries with spots" do
+      it "returns area distribution hash" do
+        area = create(:area, user: organizer)
+        contest.update!(area: area)
+        spot = create(:spot, contest: contest, name: "TestSpot")
+        create(:entry, contest: contest, user: create(:user, :confirmed), spot: spot)
+
+        result = service.area_distribution
+        expect(result).to be_a(Hash)
+        expect(result["TestSpot"]).to eq(1)
+      end
+    end
+  end
+
+  describe "#top_voted_entries with date range and no vote conditions" do
+    let!(:user1) { create(:user, :confirmed) }
+    let!(:entry1) { create(:entry, contest: contest, user: user1) }
+
+    it "handles date range with no vote conditions (empty)" do
+      # date range with start but no end, ensure vote filtering path
+      service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date, end_date: Date.current)
+      result = service_with_range.top_voted_entries
+      expect(result).to include(entry1)
+    end
+
+    it "handles date_range_active with empty vote_conditions (fallback branch)" do
+      service_with_range = described_class.new(contest, start_date: 6.days.ago.to_date)
+      # Stub start_date/end_date to nil but date_range_active? to true
+      allow(service_with_range).to receive(:date_range_active?).and_return(true)
+      allow(service_with_range).to receive(:start_date).and_return(nil)
+      allow(service_with_range).to receive(:end_date).and_return(nil)
+
+      result = service_with_range.top_voted_entries
+      expect(result).to include(entry1)
     end
   end
 

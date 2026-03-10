@@ -204,6 +204,11 @@ RSpec.describe TutorialProgress, type: :model do
         progress.complete!
         expect(progress.status_label).to eq("完了")
       end
+
+      it "returns skipped label" do
+        progress.skip!
+        expect(progress.status_label).to eq("スキップ済")
+      end
     end
 
     describe "#as_json_for_tutorial" do

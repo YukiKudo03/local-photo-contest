@@ -29,6 +29,15 @@ RSpec.describe "Tutorials", type: :request do
       json = JSON.parse(response.body)
       expect(json["available_types"]).to include("organizer_onboarding")
     end
+
+    it "includes existing progress data" do
+      create(:tutorial_progress, :started, user: user, tutorial_type: "organizer_onboarding")
+
+      get status_tutorials_path, as: :json
+      json = JSON.parse(response.body)
+      expect(json["progresses"]["organizer_onboarding"]).to be_present
+      expect(json["progresses"]["organizer_onboarding"]).to have_key("tutorial_type")
+    end
   end
 
   describe "GET /tutorials/:tutorial_type" do
@@ -105,6 +114,18 @@ RSpec.describe "Tutorials", type: :request do
       json = JSON.parse(response.body)
       expect(json["completed"]).to be true
     end
+
+    it "returns not_found when progress does not exist" do
+      progress.destroy!
+
+      patch tutorial_path("organizer_onboarding"),
+            params: { step_id: "step1" },
+            as: :json
+
+      expect(response).to have_http_status(:not_found)
+      json = JSON.parse(response.body)
+      expect(json["error"]).to be_present
+    end
   end
 
   describe "POST /tutorials/:tutorial_type/skip" do
@@ -113,6 +134,22 @@ RSpec.describe "Tutorials", type: :request do
     it "skips the tutorial" do
       post skip_tutorial_path("organizer_onboarding"),
            params: { skip_all: true },
+           as: :json
+      expect(response).to have_http_status(:success)
+
+      json = JSON.parse(response.body)
+      expect(json).to have_key("progress")
+    end
+
+    it "skips a specific step" do
+      post skip_tutorial_path("organizer_onboarding"),
+           params: { step_id: "step1" },
+           as: :json
+      expect(response).to have_http_status(:success)
+    end
+
+    it "skips all when no params specified" do
+      post skip_tutorial_path("organizer_onboarding"),
            as: :json
       expect(response).to have_http_status(:success)
 
@@ -154,6 +191,18 @@ RSpec.describe "Tutorials", type: :request do
       expect(user.tutorial_settings["show_tutorials"]).to be false
       expect(user.tutorial_settings["show_context_help"]).to be false
       expect(user.tutorial_settings["reduced_motion"]).to be true
+    end
+
+    it "returns error when settings update fails" do
+      allow_any_instance_of(User).to receive(:update_tutorial_settings).and_return(false)
+
+      patch settings_tutorials_path,
+            params: { show_tutorials: false },
+            as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["success"]).to be false
     end
   end
 

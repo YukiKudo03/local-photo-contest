@@ -20,6 +20,18 @@ RSpec.describe "API V1 Webhooks", type: :request do
     end
   end
 
+  describe "GET /api/v1/webhooks/:id" do
+    it "returns webhook details" do
+      webhook = create(:webhook, user: user)
+
+      get "/api/v1/webhooks/#{webhook.id}",
+          headers: api_headers(token: write_token.token)
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response["data"]["id"]).to eq(webhook.id)
+    end
+  end
+
   describe "POST /api/v1/webhooks" do
     it "creates a webhook" do
       params = {
@@ -76,6 +88,17 @@ RSpec.describe "API V1 Webhooks", type: :request do
 
       expect(response).to have_http_status(:not_found)
     end
+
+    it "returns 422 for invalid update" do
+      webhook = create(:webhook, user: user)
+
+      patch "/api/v1/webhooks/#{webhook.id}",
+            params: { webhook: { url: "http://invalid.com/hook" } }.to_json,
+            headers: api_headers(token: write_token.token)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(json_response["error"]["code"]).to eq("unprocessable_entity")
+    end
   end
 
   describe "DELETE /api/v1/webhooks/:id" do
@@ -88,6 +111,20 @@ RSpec.describe "API V1 Webhooks", type: :request do
       }.to change(Webhook, :count).by(-1)
 
       expect(response).to have_http_status(:no_content)
+    end
+  end
+
+  describe "error handling" do
+    it "returns 422 for RecordInvalid errors" do
+      webhook = create(:webhook, user: user)
+      error = ActiveRecord::RecordInvalid.new(webhook)
+      allow_any_instance_of(Webhook).to receive(:destroy!).and_raise(error)
+
+      delete "/api/v1/webhooks/#{webhook.id}",
+             headers: api_headers(token: write_token.token)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(json_response["error"]["code"]).to eq("unprocessable_entity")
     end
   end
 
